@@ -1,139 +1,114 @@
 import 'package:flutter/material.dart';
-import '../models/lookup_models.dart';
-import '../widgets/lookup_widgets.dart';
+import 'package:lucide_icons/lucide_icons.dart';
+import '../../../../design_system/design_system.dart';
+import '../providers/lookup_data_provider.dart';
+import '../widgets/category_grid_item.dart';
+import '../widgets/floating_bottom_nav.dart';
+import '../widgets/lookup_search_field.dart';
+import '../widgets/recent_lookup_tile.dart';
 
 class MedicalLookupScreen extends StatelessWidget {
-  const MedicalLookupScreen({Key? key}) : super(key: key);
+  const MedicalLookupScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final c = context.respiraColors;
+
     return Scaffold(
-      backgroundColor: const Color(0xFFF7F9F9),
+      backgroundColor: c.background, // #F7F9F9
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: ListView(
-            children: [
-              const SizedBox(height: 22),
-              // App Bar
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Icon(Icons.menu, size: 24, color: Color(0xFF0F1419)),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: const [
-                      Text(
-                        "Tra cứu",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                          color: Color(0xFF0F1419),
-                        ),
+        bottom: false, // Để Bottom Nav nổi đè lên phần dưới
+        child: Stack(
+          children: [
+            // Nội dung chính có thể cuộn
+            ListView(
+              padding: const EdgeInsets.fromLTRB(Spacing.group, 22, Spacing.group, 120),
+              children: [
+                // 1. App Bar (Custom vì dùng Menu icon thay vì Back)
+                Row(
+                  children: [
+                    InkWell(
+                      onTap: () {}, // Mở Drawer
+                      borderRadius: BorderRadius.circular(20),
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        alignment: Alignment.center,
+                        child: AppIcon(LucideIcons.menu, size: 24, color: c.iconDefault),
                       ),
-                      Text(
-                        "Tài liệu y tế dành cho bác sĩ",
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: Color(0xFF536471),
-                        ),
+                    ),
+                    const SizedBox(width: Spacing.control),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          AppText('Tra cứu', type: AppTextType.h3),
+                          const SizedBox(height: 2),
+                          AppText('Tài liệu y tế dành cho bác sĩ', type: AppTextType.caption),
+                        ],
                       ),
-                    ],
-                  ),
-                ],
-              ),
-              const SizedBox(height: 24),
-              // Search Input
-              Container(
-                height: 52,
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFEFF3F4),
-                  borderRadius: BorderRadius.circular(999),
-                ),
-                child: Row(
-                  children: const [
-                    Icon(Icons.search, size: 20, color: Color(0xFF536471)),
-                    SizedBox(width: 12),
-                    Text(
-                      "Tìm thuốc, vi khuẩn, bệnh lý...",
-                      style: TextStyle(fontSize: 15, color: Color(0xFF536471)),
                     ),
                   ],
                 ),
-              ),
-              const SizedBox(height: 24),
-              // Section: Danh mục
-              const Text(
-                "Danh mục",
-                style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Color(0xFF0F1419)),
-              ),
-              const SizedBox(height: 12),
-              GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 16,
-                  mainAxisSpacing: 12,
-                  childAspectRatio: 171 / 112,
+                const SizedBox(height: Spacing.screen),
+
+                // 2. Search Input
+                const LookupSearchField(),
+                const SizedBox(height: Spacing.section),
+
+                // 3. Section: Danh mục
+                Text(
+                  'Danh mục',
+                  style: TypographyTokens.bodyLarge(context).copyWith(
+                    fontWeight: FontWeight.w700,
+                    color: c.textPrimary,
+                  ),
                 ),
-                itemCount: mockCategories.length,
-                itemBuilder: (context, index) {
-                  return CategoryCard(category: mockCategories[index]);
-                },
-              ),
-              const SizedBox(height: 24),
-              // Section: Đã xem gần đây
-              const Text(
-                "Đã xem gần đây",
-                style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Color(0xFF0F1419)),
-              ),
-              const SizedBox(height: 12),
-              ...mockRecents.map((item) => RecentItemCard(item: item)).toList(),
-              const SizedBox(height: 100), // Khoảng trống cho Bottom Nav
-            ],
-          ),
-        ),
-      ),
-      // Bottom Navigation Bar (Design tĩnh theo Figma)
-      bottomNavigationBar: Container(
-        height: 76,
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
-          boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 18, offset: Offset(0, 4))],
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            _buildNavItem(Icons.people_outline, "Bệnh nhân", false),
-            _buildNavItem(Icons.search, "Tra cứu", true), // Active item
-            _buildNavItem(Icons.medical_services_outlined, "Chẩn đoán", false),
-            _buildNavItem(Icons.calculate_outlined, "Máy tính", false),
-            _buildNavItem(Icons.bar_chart_outlined, "Thống kê", false),
+                const SizedBox(height: Spacing.control),
+                
+                // Grid danh mục
+                GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 16,
+                    crossAxisSpacing: 12,
+                    childAspectRatio: 171 / 112, // Tỷ lệ từ Figma
+                  ),
+                  itemCount: LookupDataProvider.categories.length,
+                  itemBuilder: (context, index) {
+                    return CategoryGridItem(
+                      category: LookupDataProvider.categories[index],
+                    );
+                  },
+                ),
+                const SizedBox(height: Spacing.section),
+
+                // 4. Section: Đã xem gần đây
+                Text(
+                  'Đã xem gần đây',
+                  style: TypographyTokens.bodyLarge(context).copyWith(
+                    fontWeight: FontWeight.w700,
+                    color: c.textPrimary,
+                  ),
+                ),
+                const SizedBox(height: Spacing.control),
+
+                // Danh sách đã xem
+                ...LookupDataProvider.recentItems.map((item) => RecentLookupTile(item: item)),
+              ],
+            ),
+
+            // 5. Floating Bottom Navigation
+            const Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: SafeArea(child: FloatingBottomNav()),
+            ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildNavItem(IconData icon, String label, bool isActive) {
-    final color = isActive ? const Color(0xFF1D9BF0) : const Color(0xFF536471);
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 7),
-      decoration: BoxDecoration(
-        color: isActive ? const Color(0xFFE8F5FD) : Colors.transparent,
-        borderRadius: BorderRadius.circular(18),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 22, color: color),
-          const SizedBox(height: 4),
-          Text(label, style: TextStyle(fontSize: 9, fontWeight: isActive ? FontWeight.w600 : FontWeight.normal, color: color)),
-        ],
       ),
     );
   }
