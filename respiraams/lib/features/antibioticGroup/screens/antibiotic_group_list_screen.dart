@@ -1,7 +1,11 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import '../../../../design_system/design_system.dart';
-import '../models/antibiotic_group.dart';
-import '../providers/antibiotic_group_api.dart';
+import '../../../core/network/api_client.dart';
+import '../providers/antibiotic_group_provider.dart';
+import '../providers/antibiotic_group_service.dart';
 import 'antibiotic_group_detail_screen.dart';
 
 class AntibioticGroupListScreen extends StatefulWidget {
@@ -13,48 +17,40 @@ class AntibioticGroupListScreen extends StatefulWidget {
 
 class _AntibioticGroupListScreenState extends State<AntibioticGroupListScreen> {
   final ScrollController _scrollController = ScrollController();
-  final List<AntibioticGroup> _groups = [];
-  
-  bool _isLoading = false;
-  bool _hasMore = true;
-  int _currentPage = 1;
+  final TextEditingController _searchController = TextEditingController();
+  Timer? _debounce;
 
   @override
   void initState() {
     super.initState();
-    _fetchPage();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<AntibioticGroupProvider>().fetchPage();
+    });
+
     _scrollController.addListener(_onScroll);
   }
 
   @override
   void dispose() {
     _scrollController.dispose();
+    _searchController.dispose();
+    _debounce?.cancel();
     super.dispose();
   }
 
   void _onScroll() {
     if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
-      _fetchPage();
+      context.read<AntibioticGroupProvider>().fetchPage();
     }
   }
 
-  Future<void> _fetchPage() async {
-    if (_isLoading || !_hasMore) return;
-
-    setState(() => _isLoading = true);
-
-    try {
-      final response = await AntibioticGroupApi.fetchGroups(page: _currentPage);
-      setState(() {
-        _groups.addAll(response.items);
-        _hasMore = response.hasNextPage;
-        _currentPage++;
-      });
-    } catch (e) {
-      if (mounted) showAppToast(context, 'Lỗi tải dữ liệu');
-    } finally {
-      if (mounted) setState(() => _isLoading = false);
-    }
+  void _onSearchChanged(String query) {
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+    _debounce = Timer(const Duration(milliseconds: 500), () {
+      if (mounted) {
+        context.read<AntibioticGroupProvider>().search(query);
+      }
+    });
   }
 
   @override
@@ -74,44 +70,134 @@ class _AntibioticGroupListScreenState extends State<AntibioticGroupListScreen> {
                 onBack: () => Navigator.pop(context),
               ),
             ),
-            Expanded(
-              child: _groups.isEmpty && _isLoading
-                  ? Center(child: CircularProgressIndicator(color: c.primary))
-                  : ListView.separated(
-                      controller: _scrollController,
-                      padding: const EdgeInsets.all(Spacing.group),
-                      itemCount: _groups.length + (_hasMore ? 1 : 0),
-                      separatorBuilder: (_, __) => const SizedBox(height: Spacing.control),
-                      itemBuilder: (context, index) {
-                        if (index == _groups.length) {
-                          return Padding(
-                            padding: const EdgeInsets.all(Spacing.group),
-                            child: Center(child: CircularProgressIndicator(color: c.primary)),
-                          );
-                        }
 
-                        final item = _groups[index];
-                        return GestureDetector(
-                          onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (_) => AntibioticGroupDetailScreen(group: item)),
-                          ),
-                          child: AppSurface(
-                            padding: const EdgeInsets.symmetric(horizontal: Spacing.group, vertical: Spacing.control),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                AppText(item.name, type: AppTextType.bodyMedium, fontWeight: FontWeight.w600),
-                                if (item.parentName != null) ...[
-                                  const SizedBox(height: 4),
-                                  AppText(item.parentName!, type: AppTextType.caption),
-                                ],
-                              ],
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: Spacing.group),
+              child: TextField(
+                controller: _searchController,
+                onChanged: _onSearchChanged,
+                decoration: InputDecoration(
+                  hintText: 'Tìm kiếm nhóm...',
+                  hintStyle: TextStyle(color: c.textSecondary),
+                  prefixIcon: Icon(LucideIcons.search, color: c.iconDefault, size: 20),
+                  filled: true,
+                  fillColor: c.surface,
+                  contentPadding: const EdgeInsets.symmetric(vertical: 0),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+                style: TextStyle(color: c.textPrimary),
+              ),
+            ),
+            const SizedBox(height: Spacing.control),
+
+            Expanded(
+              child: Consumer<AntibioticGroupProvider>(
+                builder: (context, provider, child) {
+                  if (provider.errorMessage != null && provider.items.isNotEmpty) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      showAppToast(context, provider.errorMessage!);
+                      provider.clearError(); 
+                    });
+                  }
+
+                  if (provider.items.isEmpty && provider.isLoading) {
+                    return Center(child: CircularProgressIndicator(color: c.primary));
+                  }
+                  
+                  if (provider.items.isEmpty && provider.errorMessage != null) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          AppText(provider.errorMessage!, color: c.error),
+                          const SizedBox(height: 12),
+                          GestureDetector(
+                            onTap: () => provider.fetchPage(),
+                            child: AppSurface(
+                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                              child: AppText('Thử lại', color: c.primary),
                             ),
                           ),
+                        ],
+                      ),
+                    );
+                  }
+
+                  if (provider.items.isEmpty && !provider.isLoading) {
+                    return Center(
+                      child: AppText('Không tìm thấy kết quả nào.', color: c.textSecondary),
+                    );
+                  }
+
+                  return ListView.separated(
+                    controller: _scrollController,
+                    padding: const EdgeInsets.all(Spacing.group),
+                    itemCount: provider.items.length + (provider.hasMore ? 1 : 0),
+                    separatorBuilder: (_, __) => const SizedBox(height: Spacing.control),
+                    itemBuilder: (context, index) {
+                      if (index == provider.items.length) {
+                        return Padding(
+                          padding: const EdgeInsets.all(Spacing.group),
+                          child: Center(
+                            child: provider.errorMessage != null
+                                ? GestureDetector(
+                                    onTap: () => provider.fetchPage(),
+                                    child: AppText(
+                                      'Không thể tải thêm. Nhấn để thử lại',
+                                      type: AppTextType.caption,
+                                      color: c.error,
+                                    ),
+                                  )
+                                : CircularProgressIndicator(color: c.primary),
+                          ),
                         );
-                      },
-                    ),
+                      }
+
+                      final item = provider.items[index];
+                      return GestureDetector(
+                        onTap: () => {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => ChangeNotifierProvider(
+                                create: (_) {
+                                  final apiClient = ApiClient(); 
+                                  final repository = AntibioticGroupRepository(apiClient: apiClient);
+                                  return AntibioticGroupProvider(repository);
+                                },
+                                child: AntibioticGroupDetailScreen(group: item),
+                              ),
+                            ),
+                          )
+                        },
+                        child: AppSurface(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: Spacing.group,
+                            vertical: Spacing.control,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              AppText(
+                                item.name,
+                                type: AppTextType.bodyMedium,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              if (item.parentName != null) ...[
+                                const SizedBox(height: 4),
+                                AppText(item.parentName!, type: AppTextType.caption),
+                              ],
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
             ),
           ],
         ),
