@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/antibiotic.dart';
-import './antibiotic_service.dart';
+import 'antibiotic_service.dart';
 
 class AntibioticProvider extends ChangeNotifier {
   final AntibioticRepository _repository;
