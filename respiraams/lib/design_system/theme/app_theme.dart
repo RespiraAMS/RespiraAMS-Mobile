@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../tokens/sizes.dart';
 import 'theme_extensions.dart';
@@ -34,11 +35,11 @@ ThemeData _baseTheme({
     onError: colors.onPrimary,
   );
 
-  final baseText = (brightness == Brightness.light
-          ? ThemeData.light()
-          : ThemeData.dark())
-      .textTheme
-      .apply(fontFamily: 'Inter');
+  final baseText = GoogleFonts.interTextTheme(
+    brightness == Brightness.light
+        ? ThemeData.light().textTheme
+        : ThemeData.dark().textTheme,
+  );
 
   return ThemeData(
     useMaterial3: true,
