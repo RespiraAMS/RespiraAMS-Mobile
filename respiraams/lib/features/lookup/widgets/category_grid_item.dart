@@ -50,20 +50,20 @@ class CategoryGridItem extends StatelessWidget {
               ),
             ),
           );
-        } else if (category.title == 'Tác nhân gây bệnh') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => ChangeNotifierProvider(
-                create: (_) {
-                  final apiClient = ApiClient(); 
-                  final repository = PathogenRepository(apiClient: apiClient);
-                  return PathogenProvider(repository);
-                },
-                child: const PathogenListScreen(),
-              ),
-            ),
-          );
+        // } else if (category.title == 'Tác nhân gây bệnh') {
+        //   Navigator.push(
+        //     context,
+        //     MaterialPageRoute(
+        //       builder: (_) => ChangeNotifierProvider(
+        //         create: (_) {
+        //           final apiClient = ApiClient(); 
+        //           final repository = PathogenRepository(apiClient: apiClient);
+        //           return PathogenProvider(repository);
+        //         },
+        //         child: const PathogenListScreen(),
+        //       ),
+        //     ),
+        //   );
         // } else if (category.title == 'Kháng sinh đồ') {
         //   Navigator.push(
         //     context,

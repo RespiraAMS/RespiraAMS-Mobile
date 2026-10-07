@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../../../core/router/app_nav.dart';
 import '../../../../design_system/design_system.dart';
 
 /// Bottom navigation of the Tra cứu (lookup) screens.
@@ -27,13 +26,13 @@ class FloatingBottomNav extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          for (var i = 0; i < appNavItems.length; i++)
-            _NavItem(
-              icon: appNavItems[i].icon,
-              label: appNavItems[i].label,
-              isActive: i == _activeIndex,
-              onTap: () => onAppNavTap(context, i, activeIndex: _activeIndex),
-            ),
+        //   for (var i = 0; i < appNavItems.length; i++)
+        //     _NavItem(
+        //       icon: appNavItems[i].icon,
+        //       label: appNavItems[i].label,
+        //       isActive: i == _activeIndex,
+        //       onTap: () => onAppNavTap(context, i, activeIndex: _activeIndex),
+        //     ),
         ],
       ),
     );
