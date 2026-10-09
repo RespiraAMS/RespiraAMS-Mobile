@@ -3,10 +3,17 @@ import 'package:lucide_icons/lucide_icons.dart';
 import '../../../../design_system/design_system.dart';
 import '../models/pathogen.dart';
 
-class PathogenDetailScreen extends StatelessWidget {
+class PathogenDetailScreen extends StatefulWidget {
   final Pathogen pathogen;
 
   const PathogenDetailScreen({super.key, required this.pathogen});
+
+  @override
+  State<PathogenDetailScreen> createState() => _PathogenDetailScreenState();
+}
+
+class _PathogenDetailScreenState extends State<PathogenDetailScreen> {
+
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +27,7 @@ class PathogenDetailScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: Spacing.group, vertical: 8),
               child: AppAppBar(
-                title: pathogen.name,
+                title: widget.pathogen.name,
                 subtitle: 'Tác nhân gây bệnh',
                 onBack: () => Navigator.pop(context),
               ),
@@ -49,9 +56,20 @@ class PathogenDetailScreen extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              AppText(pathogen.name, type: AppTextType.h3, fontWeight: FontWeight.w700),
+                              AppText(widget.pathogen.name, type: AppTextType.h3, fontWeight: FontWeight.w700),
                               const SizedBox(height: 4),
                               AppText('Tác nhân gây bệnh', type: AppTextType.caption),
+                              if (widget.pathogen.isAtypical) ...[
+                                    const SizedBox(width: 12),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                      decoration: BoxDecoration(
+                                        color: c.warningSoft,
+                                        borderRadius: AppRadius.full,
+                                      ),
+                                      child: AppText('Không điển hình', type: AppTextType.label, color: c.warning),
+                                    ),
+                                  ]
                             ],
                           ),
                         ),
@@ -60,53 +78,19 @@ class PathogenDetailScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: Spacing.section),
 
-                  // 2. Bệnh thường gặp
-                  AppText('Bệnh thường gặp', type: AppTextType.button, fontWeight: FontWeight.w700),
+                  AppText('Mô tả', type: AppTextType.button, fontWeight: FontWeight.w700),
                   const SizedBox(height: Spacing.control),
                   AppText(
-                    pathogen.description,
+                    widget.pathogen.description,
                     type: AppTextType.body,
                     color: c.textPrimary,
                   ),
                   const SizedBox(height: Spacing.section),
-
-                  AppText('Độ nhạy tham khảo', type: AppTextType.button, fontWeight: FontWeight.w700),
-                  const SizedBox(height: Spacing.control),
-                  AppCard.divided(
-                    padding: const EdgeInsets.symmetric(vertical: 4),
-                    const [
-                      _SusceptibilityRow(label: 'Meropenem', value: 'S'),
-                      _SusceptibilityRow(label: 'Ceftriaxone', value: 'R'),
-                      _SusceptibilityRow(label: 'Amikacin', value: 'S'),
-                    ],
-                  ),
                 ],
               ),
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _SusceptibilityRow extends StatelessWidget {
-  final String label;
-  final String value;
-  const _SusceptibilityRow({required this.label, required this.value});
-
-  @override
-  Widget build(BuildContext context) {
-    final c = context.respiraColors;
-    
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 15),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          AppText(label, type: AppTextType.label, color: c.textSecondary),
-          AppText(value, type: AppTextType.label, color: c.textPrimary, fontWeight: FontWeight.w600),
-        ],
       ),
     );
   }

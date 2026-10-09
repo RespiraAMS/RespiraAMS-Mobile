@@ -8,6 +8,8 @@ import '../../antibiotic/screens/antibiotic_list_screen.dart';
 import '../../antibioticGroup/providers/antibiotic_group_provider.dart';
 import '../../antibioticGroup/providers/antibiotic_group_service.dart';
 import '../../antibioticGroup/screens/antibiotic_group_list_screen.dart';
+import '../../pathogen/providers/pathogen_provider.dart';
+import '../../pathogen/providers/pathogen_service.dart';
 import '../../pathogen/screens/pathogen_list_screen.dart';
 import '../models/lookup_category.dart';
 
@@ -50,20 +52,20 @@ class CategoryGridItem extends StatelessWidget {
               ),
             ),
           );
-        // } else if (category.title == 'Tác nhân gây bệnh') {
-        //   Navigator.push(
-        //     context,
-        //     MaterialPageRoute(
-        //       builder: (_) => ChangeNotifierProvider(
-        //         create: (_) {
-        //           final apiClient = ApiClient(); 
-        //           final repository = PathogenRepository(apiClient: apiClient);
-        //           return PathogenProvider(repository);
-        //         },
-        //         child: const PathogenListScreen(),
-        //       ),
-        //     ),
-        //   );
+        } else if (category.title == 'Tác nhân gây bệnh') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => ChangeNotifierProvider(
+                create: (_) {
+                  final apiClient = ApiClient(); 
+                  final repository = PathogenRepository(apiClient: apiClient);
+                  return PathogenProvider(repository);
+                },
+                child: const PathogenListScreen(),
+              ),
+            ),
+          );
         // } else if (category.title == 'Kháng sinh đồ') {
         //   Navigator.push(
         //     context,

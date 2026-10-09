@@ -1,7 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:lucide_icons/lucide_icons.dart';
+import 'package:provider/provider.dart';
 import '../../../../design_system/design_system.dart';
-import '../models/pathogen.dart';
-import '../providers/pathogen_api.dart';
+import '../../../core/network/api_client.dart';
+import '../providers/pathogen_provider.dart';
+import '../providers/pathogen_service.dart';
 import 'pathogen_detail_screen.dart';
 
 class PathogenListScreen extends StatefulWidget {
@@ -13,48 +18,40 @@ class PathogenListScreen extends StatefulWidget {
 
 class _PathogenListScreenState extends State<PathogenListScreen> {
   final ScrollController _scrollController = ScrollController();
-  final List<Pathogen> _pathogens = [];
-  
-  bool _isLoading = false;
-  bool _hasMore = true;
-  int _currentPage = 1;
+  final TextEditingController _searchController = TextEditingController();
+  Timer? _debounce;
 
   @override
   void initState() {
     super.initState();
-    _fetchPage();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<PathogenProvider>().fetchPage();
+    });
+
     _scrollController.addListener(_onScroll);
   }
 
   @override
   void dispose() {
     _scrollController.dispose();
+    _searchController.dispose();
+    _debounce?.cancel();
     super.dispose();
   }
 
   void _onScroll() {
     if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
-      _fetchPage();
+      context.read<PathogenProvider>().fetchPage();
     }
   }
 
-  Future<void> _fetchPage() async {
-    if (_isLoading || !_hasMore) return;
-
-    setState(() => _isLoading = true);
-
-    try {
-      final response = await PathogenApi.fetchPathogens(page: _currentPage);
-      setState(() {
-        _pathogens.addAll(response.items);
-        _hasMore = response.hasNextPage;
-        _currentPage++;
-      });
-    } catch (e) {
-      if (mounted) showAppToast(context, 'Lỗi tải dữ liệu');
-    } finally {
-      if (mounted) setState(() => _isLoading = false);
-    }
+  void _onSearchChanged(String query) {
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+    _debounce = Timer(const Duration(milliseconds: 500), () {
+      if (mounted) {
+        context.read<PathogenProvider>().search(query);
+      }
+    });
   }
 
   @override
@@ -74,47 +71,119 @@ class _PathogenListScreenState extends State<PathogenListScreen> {
                 onBack: () => Navigator.pop(context),
               ),
             ),
-            Expanded(
-              child: _pathogens.isEmpty && _isLoading
-                  ? Center(child: CircularProgressIndicator(color: c.primary))
-                  : ListView.separated(
-                      controller: _scrollController,
-                      padding: const EdgeInsets.all(Spacing.group),
-                      itemCount: _pathogens.length + (_hasMore ? 1 : 0),
-                      separatorBuilder: (_, __) => const SizedBox(height: Spacing.control),
-                      itemBuilder: (context, index) {
-                        if (index == _pathogens.length) {
-                          return Padding(
-                            padding: const EdgeInsets.all(Spacing.group),
-                            child: Center(child: CircularProgressIndicator(color: c.primary)),
-                          );
-                        }
 
-                        final item = _pathogens[index];
-                        return GestureDetector(
-                          onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (_) => PathogenDetailScreen(pathogen: item)),
-                          ),
-                          child: AppSurface(
-                            padding: const EdgeInsets.symmetric(horizontal: Spacing.group, vertical: Spacing.control),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                AppText(item.name, type: AppTextType.bodyMedium, fontWeight: FontWeight.w600),
-                                const SizedBox(height: 4),
-                                AppText(
-                                  item.description, 
-                                  type: AppTextType.caption, 
-                                  maxLines: 2, 
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ],
-                            ),
-                          ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: Spacing.group),
+              child: TextField(
+                controller: _searchController,
+                onChanged: _onSearchChanged,
+                decoration: InputDecoration(
+                  hintText: 'Tìm kiếm tác nhân...',
+                  hintStyle: TextStyle(color: c.textSecondary),
+                  prefixIcon: Icon(LucideIcons.search, color: c.iconDefault, size: 20),
+                  filled: true,
+                  fillColor: c.surface,
+                  contentPadding: const EdgeInsets.symmetric(vertical: 0),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+                style: TextStyle(color: c.textPrimary),
+              ),
+            ),
+            
+            const SizedBox(height: Spacing.control),
+            Expanded(
+              child: Consumer<PathogenProvider>(
+                builder: (context, provider, child) {
+                  if (provider.errorMessage != null) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      showAppToast(context, provider.errorMessage!);
+                      provider.clearError();
+                    });
+                  }
+
+                  if (provider.items.isEmpty && provider.isLoading) {
+                    return Center(child: CircularProgressIndicator(color: c.primary));
+                  }
+
+                  if (provider.items.isEmpty && !provider.isLoading) {
+                    return Center(
+                      child: AppText('Không tìm thấy kết quả nào.', color: c.textSecondary),
+                    );
+                  }
+
+                  return ListView.separated(
+                    controller: _scrollController,
+                    padding: const EdgeInsets.all(Spacing.group),
+                    itemCount: provider.items.length + (provider.hasMore ? 1 : 0),
+                    separatorBuilder: (_, __) => const SizedBox(height: Spacing.control),
+                    itemBuilder: (context, index) {
+                      if (index == provider.items.length) {
+                        return Padding(
+                          padding: const EdgeInsets.all(Spacing.group),
+                          child: Center(child: CircularProgressIndicator(color: c.primary)),
                         );
-                      },
-                    ),
+                      }
+
+                      final item = provider.items[index];
+                      return GestureDetector(
+                        onTap: () => {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => ChangeNotifierProvider(
+                                create: (_) {
+                                  final apiClient = ApiClient(); 
+                                  final repository = PathogenRepository(apiClient: apiClient);
+                                  return PathogenProvider(repository);
+                                },
+                                child: PathogenDetailScreen(pathogen: item),
+                              ),
+                            ),
+                          )
+                        },
+                        child: AppSurface(
+                          padding: const EdgeInsets.symmetric(horizontal: Spacing.group, vertical: Spacing.control),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    child: AppText(item.name, type: AppTextType.bodyMedium, fontWeight: FontWeight.w600),
+                                  ),
+                                  // Hiển thị tag cảnh báo nếu là Vi khuẩn không điển hình
+                                  if (item.isAtypical) ...[
+                                    const SizedBox(width: 8),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                      decoration: BoxDecoration(
+                                        color: c.warningSoft,
+                                        borderRadius: AppRadius.full,
+                                      ),
+                                      child: AppText('Không điển hình', type: AppTextType.label, color: c.warning),
+                                    ),
+                                  ],
+                                ],
+                              ),
+                              const SizedBox(height: 4),
+                              AppText(
+                                item.description, 
+                                type: AppTextType.caption, 
+                                maxLines: 2, 
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
             ),
           ],
         ),
