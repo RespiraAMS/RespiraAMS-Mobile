@@ -8,6 +8,9 @@ import '../../antibiotic/screens/antibiotic_list_screen.dart';
 import '../../antibioticGroup/providers/antibiotic_group_provider.dart';
 import '../../antibioticGroup/providers/antibiotic_group_service.dart';
 import '../../antibioticGroup/screens/antibiotic_group_list_screen.dart';
+import '../../clinical_variables/providers/clinical_variable_provider.dart';
+import '../../clinical_variables/providers/clinical_variable_service.dart';
+import '../../clinical_variables/screens/clinical_variable_list_screen.dart';
 import '../../pathogen/providers/pathogen_provider.dart';
 import '../../pathogen/providers/pathogen_service.dart';
 import '../../pathogen/screens/pathogen_list_screen.dart';
@@ -63,6 +66,20 @@ class CategoryGridItem extends StatelessWidget {
                   return PathogenProvider(repository);
                 },
                 child: const PathogenListScreen(),
+              ),
+            ),
+          );
+        } else if (category.title == 'Biến số lâm sàng') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => ChangeNotifierProvider(
+                create: (_) {
+                  final apiClient = ApiClient(); 
+                  final repository = ClinicalVariableRepository(apiClient: apiClient);
+                  return ClinicalVariableProvider(repository);
+                },
+                child: const ClinicalVariableListScreen(),
               ),
             ),
           );
