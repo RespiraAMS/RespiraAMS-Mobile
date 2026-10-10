@@ -14,6 +14,9 @@ import '../../clinical_variables/screens/clinical_variable_list_screen.dart';
 import '../../pathogen/providers/pathogen_provider.dart';
 import '../../pathogen/providers/pathogen_service.dart';
 import '../../pathogen/screens/pathogen_list_screen.dart';
+import '../../suspected_causes/providers/suspected_cause_provider.dart';
+import '../../suspected_causes/providers/suspected_cause_service.dart';
+import '../../suspected_causes/screens/suspected_cause_list_screen.dart';
 import '../models/lookup_category.dart';
 
 class CategoryGridItem extends StatelessWidget {
@@ -80,6 +83,20 @@ class CategoryGridItem extends StatelessWidget {
                   return ClinicalVariableProvider(repository);
                 },
                 child: const ClinicalVariableListScreen(),
+              ),
+            ),
+          );
+          } else if (category.title == 'Nguyên nhân nghi ngờ') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => ChangeNotifierProvider(
+                create: (_) {
+                  final apiClient = ApiClient(); 
+                  final repository = SuspectedCauseRepository(apiClient: apiClient);
+                  return SuspectedCauseProvider(repository);
+                },
+                child: const SuspectedCauseListScreen(),
               ),
             ),
           );

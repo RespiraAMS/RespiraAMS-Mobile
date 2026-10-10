@@ -8,6 +8,7 @@ class LookupDataProvider {
     LookupCategory(title: 'Kháng sinh', subtitle: 'Liều dùng và phổ tác dụng', icon: LucideIcons.pill),
     LookupCategory(title: 'Tác nhân gây bệnh', subtitle: 'Mô tả và độ nhạy', icon: LucideIcons.bug),
     LookupCategory(title: 'Biến số lâm sàng', subtitle: 'Các biến số dùng cho tiêu chí', icon: LucideIcons.activity),
+    LookupCategory(title: 'Nguyên nhân nghi ngờ', subtitle: 'Theo bệnh và mức độ', icon: LucideIcons.alertCircle),
     // LookupCategory(title: 'Phác đồ điều trị', subtitle: 'Theo bệnh và mức độ', icon: LucideIcons.clipboardList),
     // LookupCategory(title: 'Kháng sinh đồ', subtitle: 'S / I / R và MIC', icon: LucideIcons.flaskConical),
     // LookupCategory(title: 'Bệnh lý', subtitle: 'Tiêu chí và ICU score', icon: LucideIcons.activity),
