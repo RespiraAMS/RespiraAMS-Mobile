@@ -21,7 +21,6 @@ class ClinicalVariableProvider extends ChangeNotifier {
 
   int _currentPage = 1;
 
-  // Search & Filter States
   String _searchQuery = '';
   bool? _filterIsRequired;
   String? _filterValueType;
@@ -43,7 +42,8 @@ class ClinicalVariableProvider extends ChangeNotifier {
     try {
       final response = await _repository.fetchVariables(
         page: _currentPage,
-        name: _searchQuery, 
+        name: _searchQuery,
+        code: _searchQuery,
         isRequired: _filterIsRequired,
         valueType: _filterValueType,
         category: _filterCategory,
