@@ -5,6 +5,7 @@ import 'package:lucide_icons/lucide_icons.dart';
 import '../../../../design_system/design_system.dart';
 import '../providers/clinical_variable_provider.dart';
 import '../models/clinical_variable.dart';
+import 'clinical_variable_detail_screen.dart';
 
 class ClinicalVariableListScreen extends StatefulWidget {
   const ClinicalVariableListScreen({super.key});
@@ -175,12 +176,24 @@ class _ClinicalVariableListScreenState extends State<ClinicalVariableListScreen>
                       }
 
                       final item = provider.items[index];
-                      return AppSurface(
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => ChangeNotifierProvider.value(
+                                value: context.read<ClinicalVariableProvider>(),
+                                child: ClinicalVariableDetailScreen(variableId: item.id),
+                              ),
+                            ),
+                          );
+                        },
+                        child: AppSurface(
                         padding: const EdgeInsets.symmetric(horizontal: Spacing.group, vertical: Spacing.control),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
+                            Row( 
                               children: [
                                 Expanded(child: AppText(item.name, type: AppTextType.bodyMedium, fontWeight: FontWeight.w600)),
                                 if (item.isRequired)
@@ -207,6 +220,7 @@ class _ClinicalVariableListScreenState extends State<ClinicalVariableListScreen>
                             )
                           ],
                         ),
+                      ),
                       );
                     },
                   );
@@ -252,7 +266,6 @@ class _FilterBottomSheetState extends State<_FilterBottomSheet> {
   @override
   void initState() {
     super.initState();
-    // Khôi phục trạng thái bộ lọc cũ từ Provider khi mở lại BottomSheet
     _selectedIsRequired = widget.provider.filterIsRequired;
     _selectedValueType = widget.provider.filterValueType;
     _selectedCategory = widget.provider.filterCategory;

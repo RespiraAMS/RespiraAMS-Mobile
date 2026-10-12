@@ -92,4 +92,8 @@ class ClinicalVariableProvider extends ChangeNotifier {
     _errorMessage = null;
     notifyListeners();
   }
+
+  Future<ClinicalVariableDetail> fetchVariableDetail(String id) {
+    return _repository.fetchVariableDetail(id);
+  }
 }
