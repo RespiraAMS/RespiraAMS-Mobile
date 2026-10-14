@@ -13,10 +13,13 @@ import '../../clinical_variables/providers/clinical_variable_service.dart';
 import '../../clinical_variables/screens/clinical_variable_list_screen.dart';
 import '../../criteria/providers/criterion_provider.dart';
 import '../../criteria/providers/criterion_service.dart';
-import '../../criteria/screen/criterion_list_screen.dart';
+import '../../criteria/screens/criterion_list_screen.dart';
 import '../../pathogen/providers/pathogen_provider.dart';
 import '../../pathogen/providers/pathogen_service.dart';
 import '../../pathogen/screens/pathogen_list_screen.dart';
+import '../../risk_factors/providers/risk_factor_provider.dart';
+import '../../risk_factors/providers/risk_factor_service.dart';
+import '../../risk_factors/screens/risk_factor_list_screen.dart';
 import '../../suspected_causes/providers/suspected_cause_provider.dart';
 import '../../suspected_causes/providers/suspected_cause_service.dart';
 import '../../suspected_causes/screens/suspected_cause_list_screen.dart';
@@ -114,6 +117,20 @@ class CategoryGridItem extends StatelessWidget {
                   return CriterionProvider(repository);
                 },
                 child: const CriterionListScreen(),
+              ),
+            ),
+          );
+        } else if (category.title == 'Yếu tố nguy cơ') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => ChangeNotifierProvider(
+                create: (_) {
+                  final apiClient = ApiClient(); 
+                  final repository = RiskFactorRepository(apiClient: apiClient);
+                  return RiskFactorProvider(repository);
+                },
+                child: const RiskFactorListScreen(),
               ),
             ),
           );
