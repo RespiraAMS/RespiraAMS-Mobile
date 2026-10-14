@@ -4,6 +4,7 @@ import 'package:lucide_icons/lucide_icons.dart';
 import '../../../../design_system/design_system.dart';
 import '../models/clinical_variable.dart';
 import '../providers/clinical_variable_provider.dart';
+import '../widgets/formula_display_widget.dart';
 
 class ClinicalVariableDetailScreen extends StatefulWidget {
   final String variableId;
@@ -112,7 +113,7 @@ class _ClinicalVariableDetailScreenState extends State<ClinicalVariableDetailScr
                             Container(
                               width: 52, height: 52,
                               decoration: BoxDecoration(color: c.surface, shape: BoxShape.circle),
-                              child: Icon(LucideIcons.variable, color: c.iconPrimary, size: 24),
+                              child: Icon(LucideIcons.clipboardList, color: c.iconPrimary, size: 24),
                             ),
                             const SizedBox(width: Spacing.control),
                             Expanded(
@@ -150,11 +151,18 @@ class _ClinicalVariableDetailScreenState extends State<ClinicalVariableDetailScr
                             value: detail.isRequired ? 'Bắt buộc nhập' : 'Tùy chọn',
                             valueColor: detail.isRequired ? c.error : c.textPrimary,
                           ),
-                          if (detail.prerequisite != null)
-                            _InfoRow(label: 'Điều kiện tiên quyết', value: detail.prerequisite!),
                         ],
                       ),
                       const SizedBox(height: Spacing.section),
+
+                      if (detail.prerequisite != null && detail.prerequisite!.isNotEmpty) ...[
+                        AppText('Điều kiện tiên quyết', type: AppTextType.bodyLarge, fontWeight: FontWeight.w700),
+                        const SizedBox(height: Spacing.control),
+                        
+                        FormulaDisplayWidget(rawFormula: detail.prerequisite!),
+                        
+                        const SizedBox(height: Spacing.section),
+                      ],
 
                       if (detail.valueType == ValueType.numeric && (detail.acceptedRange != null || detail.normalRange != null)) ...[
                         AppText('Khoảng giá trị', type: AppTextType.bodyLarge, fontWeight: FontWeight.w700),
