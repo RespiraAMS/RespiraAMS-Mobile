@@ -11,6 +11,9 @@ import '../../antibioticGroup/screens/antibiotic_group_list_screen.dart';
 import '../../clinical_variables/providers/clinical_variable_provider.dart';
 import '../../clinical_variables/providers/clinical_variable_service.dart';
 import '../../clinical_variables/screens/clinical_variable_list_screen.dart';
+import '../../criteria/providers/criterion_provider.dart';
+import '../../criteria/providers/criterion_service.dart';
+import '../../criteria/screen/criterion_list_screen.dart';
 import '../../pathogen/providers/pathogen_provider.dart';
 import '../../pathogen/providers/pathogen_service.dart';
 import '../../pathogen/screens/pathogen_list_screen.dart';
@@ -86,7 +89,7 @@ class CategoryGridItem extends StatelessWidget {
               ),
             ),
           );
-          } else if (category.title == 'Nguyên nhân nghi ngờ') {
+        } else if (category.title == 'Nguyên nhân nghi ngờ') {
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -97,6 +100,20 @@ class CategoryGridItem extends StatelessWidget {
                   return SuspectedCauseProvider(repository);
                 },
                 child: const SuspectedCauseListScreen(),
+              ),
+            ),
+          );
+        } else if (category.title == 'Tiêu chí đánh giá') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => ChangeNotifierProvider(
+                create: (_) {
+                  final apiClient = ApiClient(); 
+                  final repository = CriterionRepository(apiClient: apiClient);
+                  return CriterionProvider(repository);
+                },
+                child: const CriterionListScreen(),
               ),
             ),
           );
