@@ -8,6 +8,9 @@ import '../../antibiotic/screens/antibiotic_list_screen.dart';
 import '../../antibioticGroup/providers/antibiotic_group_provider.dart';
 import '../../antibioticGroup/providers/antibiotic_group_service.dart';
 import '../../antibioticGroup/screens/antibiotic_group_list_screen.dart';
+import '../../clinical_metrics/providers/clinical_metric_provider.dart';
+import '../../clinical_metrics/providers/clinical_metric_service.dart';
+import '../../clinical_metrics/screens/clinical_metric_list_screen.dart';
 import '../../clinical_variables/providers/clinical_variable_provider.dart';
 import '../../clinical_variables/providers/clinical_variable_service.dart';
 import '../../clinical_variables/screens/clinical_variable_list_screen.dart';
@@ -134,34 +137,20 @@ class CategoryGridItem extends StatelessWidget {
               ),
             ),
           );
-        // } else if (category.title == 'Kháng sinh đồ') {
-        //   Navigator.push(
-        //     context,
-        //     MaterialPageRoute(
-        //       builder: (_) => ChangeNotifierProvider(
-        //         create: (_) {
-        //           final apiClient = ApiClient(); 
-        //           final repository = AntibiogramRepository(apiClient: apiClient);
-        //           return AntibiogramProvider(repository);
-        //         },
-        //         child: const AntibiogramListScreen(),
-        //       ),
-        //     ),
-        //   );
-        // } else if (category.title == 'Bệnh lý') {
-        //   Navigator.push(
-        //     context,
-        //     MaterialPageRoute(
-        //       builder: (_) => ChangeNotifierProvider(
-        //         create: (_) {
-        //           final apiClient = ApiClient(); 
-        //           final repository = DiseaseRepository(apiClient: apiClient);
-        //           return DiseaseProvider(repository);
-        //         },
-        //         child: const DiseaseListScreen(),
-        //       ),
-        //     ),
-        //   );
+        } else if (category.title == 'Thang điểm lâm sàng') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => ChangeNotifierProvider(
+                create: (_) {
+                  final apiClient = ApiClient(); 
+                  final repository = ClinicalMetricRepository(apiClient: apiClient);
+                  return ClinicalMetricProvider(repository);
+                },
+                child: const ClinicalMetricListScreen(),
+              ),
+            ),
+          );
         } else {
           showAppToast(context, 'Tính năng ${category.title} đang phát triển');
         }

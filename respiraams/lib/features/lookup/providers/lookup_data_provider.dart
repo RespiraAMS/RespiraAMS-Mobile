@@ -11,9 +11,8 @@ class LookupDataProvider {
     LookupCategory(title: 'Nguyên nhân nghi ngờ', subtitle: 'Theo bệnh và mức độ', icon: LucideIcons.alertCircle),
     LookupCategory(title: "Tiêu chí đánh giá", subtitle: 'Danh sách các tiêu chí', icon: LucideIcons.checkSquare),
     LookupCategory(title: 'Yếu tố nguy cơ', subtitle: 'Nguy cơ theo tác nhân', icon: LucideIcons.alertTriangle),
+    LookupCategory(title: 'Thang điểm lâm sàng', subtitle: 'Các bộ tiêu chí & Đánh giá', icon: LucideIcons.stethoscope),
     // LookupCategory(title: 'Phác đồ điều trị', subtitle: 'Theo bệnh và mức độ', icon: LucideIcons.clipboardList),
-    // LookupCategory(title: 'Kháng sinh đồ', subtitle: 'S / I / R và MIC', icon: LucideIcons.flaskConical),
-    // LookupCategory(title: 'Bệnh lý', subtitle: 'Tiêu chí và ICU score', icon: LucideIcons.activity),
   ];
 
   static const List<RecentItem> recentItems = [

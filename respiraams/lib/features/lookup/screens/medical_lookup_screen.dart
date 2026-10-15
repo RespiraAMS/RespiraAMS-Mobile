@@ -15,7 +15,7 @@ class MedicalLookupScreen extends StatelessWidget {
     final c = context.respiraColors;
 
     return Scaffold(
-      backgroundColor: c.background, // #F7F9F9
+      backgroundColor: c.background, 
       body: SafeArea(
         bottom: false,
         child: Stack(
@@ -50,7 +50,7 @@ class MedicalLookupScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: Spacing.screen),
 
-                const LookupSearchField(),
+                // const LookupSearchField(),
                 const SizedBox(height: Spacing.section),
 
                 Text(
@@ -69,7 +69,7 @@ class MedicalLookupScreen extends StatelessWidget {
                     crossAxisCount: 2,
                     mainAxisSpacing: 16,
                     crossAxisSpacing: 12,
-                    childAspectRatio: 171 / 112, // Tỷ lệ từ Figma
+                    childAspectRatio: 171 / 112, 
                   ),
                   itemCount: LookupDataProvider.categories.length,
                   itemBuilder: (context, index) {
@@ -80,16 +80,16 @@ class MedicalLookupScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: Spacing.section),
 
-                Text(
-                  'Đã xem gần đây',
-                  style: TypographyTokens.bodyLarge(context).copyWith(
-                    fontWeight: FontWeight.w700,
-                    color: c.textPrimary,
-                  ),
-                ),
-                const SizedBox(height: Spacing.control),
+                // Text(
+                //   'Đã xem gần đây',
+                //   style: TypographyTokens.bodyLarge(context).copyWith(
+                //     fontWeight: FontWeight.w700,
+                //     color: c.textPrimary,
+                //   ),
+                // ),
+                // const SizedBox(height: Spacing.control),
 
-                ...LookupDataProvider.recentItems.map((item) => RecentLookupTile(item: item)),
+                // ...LookupDataProvider.recentItems.map((item) => RecentLookupTile(item: item)),
               ],
             ),
 
