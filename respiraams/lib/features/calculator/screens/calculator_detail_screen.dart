@@ -18,9 +18,8 @@ class CalculatorDetailScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tabIndex = ref.watch(calculatorDetailTabControllerProvider);
-    final tabController = ref.read(
-      calculatorDetailTabControllerProvider.notifier,
-    );
+    final tabController =
+        ref.read(calculatorDetailTabControllerProvider.notifier);
     final state = ref.watch(curb65CalculatorControllerProvider);
     final controller = ref.read(curb65CalculatorControllerProvider.notifier);
 
@@ -132,9 +131,8 @@ class _InputTab extends StatelessWidget {
                     children: [
                       Text(
                         'Huyết áp',
-                        style: TypographyTokens.body(
-                          context,
-                        ).copyWith(color: context.respiraColors.textPrimary),
+                        style: TypographyTokens.body(context).copyWith(
+                            color: context.respiraColors.textPrimary),
                       ),
                       const SizedBox(height: Spacing.xxxs),
                       AppText(
@@ -218,6 +216,7 @@ class _ExplanationTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -292,9 +291,8 @@ class _ExplanationCard extends StatelessWidget {
         children: [
           Text(
             title,
-            style: TypographyTokens.bodyMedium(
-              context,
-            ).copyWith(fontWeight: FontWeight.w700),
+            style: TypographyTokens.bodyMedium(context)
+                .copyWith(fontWeight: FontWeight.w700),
           ),
           const SizedBox(height: Spacing.inline),
           ...children,

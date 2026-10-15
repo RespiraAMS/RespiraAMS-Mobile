@@ -1,37 +1,24 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:respiraams/core/router/app_router.dart';
+
 import 'package:respiraams/design_system/design_system.dart';
-import 'package:respiraams/main.dart';
 
-/// Calculator tests (ft/calculator branch): Máy tính list, CURB-65 detail
-/// (inputs → Tính → result) and the Giải thích tab.
-
-Future<void> _pumpList(WidgetTester tester) async {
-  await tester.pumpWidget(
-    ProviderScope(
-      overrides: [
-        appRouterProvider.overrideWithValue(
-          buildAppRouter(initialLocation: '/calculators'),
-        ),
-      ],
-      child: const RespiraMobileApp(),
-    ),
-  );
-  await tester.pump(const Duration(milliseconds: 100));
-  await tester.pump(const Duration(milliseconds: 100));
-}
+import 'helpers/pump_test_app.dart';
 
 Future<void> _settleNavigation(WidgetTester tester) async {
   await tester.pump(const Duration(milliseconds: 400));
   await tester.pump(const Duration(milliseconds: 400));
 }
 
+/// Calculator tests (ft/calculator branch): Máy tính list, CURB-65 detail
+/// (inputs → Tính → result) and the Giải thích tab.
+
+Future<void> _pumpList(WidgetTester tester) =>
+    pumpTestApp(tester, initialLocation: '/calculators');
+
 void main() {
-  testWidgets('renders the calculator list with all five tools', (
-    tester,
-  ) async {
+  testWidgets('renders the calculator list with all five tools',
+      (tester) async {
     await _pumpList(tester);
 
     expect(find.text('Máy tính'), findsWidgets);
@@ -43,7 +30,8 @@ void main() {
     expect(find.text('qSOFA'), findsOneWidget);
   });
 
-  testWidgets('CURB-65 flow: inputs → Tính → derived result', (tester) async {
+  testWidgets('CURB-65 flow: inputs → Tính → derived result',
+      (tester) async {
     await _pumpList(tester);
 
     await tester.tap(find.text('CURB-65'));
@@ -67,8 +55,14 @@ void main() {
     await tester.tap(find.text('Tính'));
     await tester.pump(const Duration(milliseconds: 200));
 
-    expect(find.text('3 điểm', skipOffstage: false), findsOneWidget);
-    expect(find.text('Nguy cơ cao', skipOffstage: false), findsOneWidget);
+    expect(
+      find.text('3 điểm', skipOffstage: false),
+      findsOneWidget,
+    );
+    expect(
+      find.text('Nguy cơ cao', skipOffstage: false),
+      findsOneWidget,
+    );
     expect(
       find.text('Điểm 3 → cân nhắc điều trị nội trú', skipOffstage: false),
       findsOneWidget,
@@ -90,7 +84,8 @@ void main() {
     expect(find.text('Nguy cơ thấp', skipOffstage: false), findsOneWidget);
   });
 
-  testWidgets('explanation tab shows the method description', (tester) async {
+  testWidgets('explanation tab shows the method description',
+      (tester) async {
     await _pumpList(tester);
 
     await tester.tap(find.text('CURB-65'));

@@ -60,9 +60,8 @@ class PatientCardWidget extends StatelessWidget {
                       patient.name,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: TypographyTokens.body(
-                        context,
-                      ).copyWith(fontWeight: FontWeight.w600),
+                      style: TypographyTokens.body(context)
+                          .copyWith(fontWeight: FontWeight.w600),
                     ),
                     const SizedBox(height: Spacing.xxxs),
                     AppText(
@@ -78,28 +77,22 @@ class PatientCardWidget extends StatelessWidget {
                         Container(
                           width: 7,
                           height: 7,
-                          decoration: BoxDecoration(
-                            color: dotColor,
-                            shape: BoxShape.circle,
-                          ),
+                          decoration:
+                              BoxDecoration(color: dotColor, shape: BoxShape.circle),
                         ),
                         const SizedBox(width: Spacing.xxxs + 2),
                         Text(
                           patient.status.displayName,
-                          style: TypographyTokens.label(
-                            context,
-                          ).copyWith(color: c.textPrimary),
+                          style: TypographyTokens.label(context)
+                              .copyWith(color: c.textPrimary),
                         ),
                       ],
                     ),
                   ],
                 ),
               ),
-              Icon(
-                LucideIcons.chevronRight,
-                size: ControlSize.iconSm,
-                color: c.iconMuted,
-              ),
+              Icon(LucideIcons.chevronRight,
+                  size: ControlSize.iconSm, color: c.iconMuted),
             ],
           ),
         ),

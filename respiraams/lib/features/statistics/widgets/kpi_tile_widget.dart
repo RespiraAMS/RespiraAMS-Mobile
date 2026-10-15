@@ -32,9 +32,8 @@ class KpiTileWidget extends StatelessWidget {
             stat.label,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: TypographyTokens.label(
-              context,
-            ).copyWith(color: c.textSecondary),
+            style: TypographyTokens.label(context)
+                .copyWith(color: c.textSecondary),
           ),
           const SizedBox(height: Spacing.xxxs),
           // Scale step closest to the template's 24px within the type scale.
@@ -42,9 +41,8 @@ class KpiTileWidget extends StatelessWidget {
             fit: BoxFit.scaleDown,
             child: Text(
               '${stat.value}',
-              style: TypographyTokens.h2(
-                context,
-              ).copyWith(color: c.textPrimary),
+              style: TypographyTokens.h2(context)
+                  .copyWith(color: c.textPrimary),
             ),
           ),
           const SizedBox(height: Spacing.xxxs),

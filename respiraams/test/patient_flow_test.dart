@@ -1,27 +1,14 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:respiraams/core/router/app_router.dart';
 import 'package:respiraams/design_system/design_system.dart';
 import 'package:respiraams/features/patient/routes.dart';
-import 'package:respiraams/main.dart';
+
+import 'helpers/pump_test_app.dart';
 
 /// Clinical patient-flow tests (ft/patient branch): add → detail → progress.
 
-Future<void> _pumpAt(WidgetTester tester, String initialLocation) async {
-  await tester.pumpWidget(
-    ProviderScope(
-      overrides: [
-        appRouterProvider.overrideWithValue(
-          buildAppRouter(initialLocation: initialLocation),
-        ),
-      ],
-      child: const RespiraMobileApp(),
-    ),
-  );
-  await tester.pump(const Duration(milliseconds: 100));
-  await tester.pump(const Duration(milliseconds: 100));
-}
+Future<void> _pumpAt(WidgetTester tester, String initialLocation) =>
+    pumpTestApp(tester, initialLocation: initialLocation);
 
 Future<void> _settleNavigation(WidgetTester tester) async {
   await tester.pump(const Duration(milliseconds: 400));
@@ -38,12 +25,15 @@ void main() {
     expect(find.text('Họ và tên'), findsOneWidget);
   });
 
-  testWidgets('submitting the form navigates to patient detail', (
-    tester,
-  ) async {
+  testWidgets('submitting the form navigates to patient detail',
+      (tester) async {
     await _pumpAt(tester, PatientRoutes.addPatient);
 
+    await tester.ensureVisible(find.text('Lưu hồ sơ'));
+    await tester.pump(const Duration(milliseconds: 200));
     await tester.tap(find.text('Lưu hồ sơ'));
+    // POST /patients is async now — wait for it, then for navigation.
+    await tester.pump(const Duration(milliseconds: 600));
     await _settleNavigation(tester);
 
     expect(find.text('Chi tiết bệnh nhân'), findsOneWidget);
@@ -53,10 +43,14 @@ void main() {
     expect(find.text('Tiến trình điều trị'), findsOneWidget);
   });
 
-  testWidgets('detail actions navigate to add progress screen', (tester) async {
+  testWidgets('detail actions navigate to add progress screen',
+      (tester) async {
     await _pumpAt(tester, PatientRoutes.addPatient);
 
+    await tester.ensureVisible(find.text('Lưu hồ sơ'));
+    await tester.pump(const Duration(milliseconds: 200));
     await tester.tap(find.text('Lưu hồ sơ'));
+    await tester.pump(const Duration(milliseconds: 600));
     await _settleNavigation(tester);
 
     // Bottom-pinned actions may be below the fold on the test surface.
@@ -72,44 +66,43 @@ void main() {
   });
 
   testWidgets(
-    'Chẩn đoán nav tab: create patient then start empirical treatment '
-    'for them',
-    (tester) async {
-      await _pumpAt(tester, PatientRoutes.list);
+      'Chẩn đoán nav tab: create patient then start empirical treatment '
+      'for them', (tester) async {
+    await _pumpAt(tester, PatientRoutes.list);
 
-      // 'Chẩn đoán' appears only as the nav label on the list screen.
-      await tester.tap(find.text('Chẩn đoán'));
-      await _settleNavigation(tester);
+    // 'Chẩn đoán' appears only as the nav label on the list screen.
+    await tester.tap(find.text('Chẩn đoán'));
+    await _settleNavigation(tester);
 
-      expect(find.text('Thêm bệnh nhân'), findsOneWidget);
+    expect(find.text('Thêm bệnh nhân'), findsOneWidget);
 
-      // Fill in a distinguishable patient and save.
-      await tester.enterText(
-        find.widgetWithText(AppTextField, 'Họ và tên'),
-        'Bệnh Nhân Mới',
-      );
-      await tester.pump(const Duration(milliseconds: 100));
+    // Fill in a distinguishable patient and save.
+    await tester.enterText(
+      find.widgetWithText(AppTextField, 'Họ và tên'),
+      'Bệnh Nhân Mới',
+    );
+    await tester.pump(const Duration(milliseconds: 100));
 
-      await tester.ensureVisible(find.text('Lưu hồ sơ'));
-      await tester.pump(const Duration(milliseconds: 200));
-      await tester.tap(find.text('Lưu hồ sơ'));
-      await _settleNavigation(tester);
+    await tester.ensureVisible(find.text('Lưu hồ sơ'));
+    await tester.pump(const Duration(milliseconds: 200));
+    await tester.tap(find.text('Lưu hồ sơ'));
+    await tester.pump(const Duration(milliseconds: 600));
+    await _settleNavigation(tester);
 
-      // Straight into the empirical progress flow — and the header shows
-      // the patient that was just created (active-patient propagation).
-      // The form below still holds the name as an EditableText too, so
-      // expect "at least one" rather than exactly one.
-      expect(find.text('Thêm diễn biến'), findsOneWidget);
-      expect(find.text('Ghi nhận thay đổi điều trị mới nhất'), findsOneWidget);
-      expect(find.text('Bệnh Nhân Mới'), findsWidgets);
+    // Straight into the empirical progress flow — the header shows the
+    // patient that was just created (active-patient propagation). The
+    // form below still holds the name as an EditableText too, so expect
+    // "at least one" rather than exactly one.
+    expect(find.text('Thêm diễn biến'), findsOneWidget);
+    expect(find.text('Ghi nhận thay đổi điều trị mới nhất'), findsOneWidget);
+    expect(find.text('Bệnh Nhân Mới'), findsWidgets);
 
-      // And the wizard continues for that patient.
-      await tester.ensureVisible(find.text('Lưu diễn biến'));
-      await tester.pump(const Duration(milliseconds: 200));
-      await tester.tap(find.text('Lưu diễn biến'));
-      await _settleNavigation(tester);
+    // And the wizard continues for that patient.
+    await tester.ensureVisible(find.text('Lưu diễn biến'));
+    await tester.pump(const Duration(milliseconds: 200));
+    await tester.tap(find.text('Lưu diễn biến'));
+    await _settleNavigation(tester);
 
-      expect(find.text('Bước 1/5 · Chỉ số nền'), findsOneWidget);
-    },
-  );
+    expect(find.text('Bước 1/5 · Chỉ số nền'), findsOneWidget);
+  });
 }

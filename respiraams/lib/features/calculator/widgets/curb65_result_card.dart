@@ -14,14 +14,14 @@ class Curb65ResultCard extends StatelessWidget {
   String get _riskLabel => score >= 3
       ? 'Nguy cơ cao'
       : score == 2
-      ? 'Cần theo dõi'
-      : 'Nguy cơ thấp';
+          ? 'Cần theo dõi'
+          : 'Nguy cơ thấp';
 
   String get _advice => score >= 3
       ? 'Điểm $score → cân nhắc điều trị nội trú'
       : score == 2
-      ? 'Điểm $score → cân nhắc nhập viện ngắn hạn'
-      : 'Điểm $score → có thể điều trị ngoại trú';
+          ? 'Điểm $score → cân nhắc nhập viện ngắn hạn'
+          : 'Điểm $score → có thể điều trị ngoại trú';
 
   @override
   Widget build(BuildContext context) {
@@ -42,9 +42,8 @@ class Curb65ResultCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   'CURB-65',
-                  style: TypographyTokens.body(
-                    context,
-                  ).copyWith(fontWeight: FontWeight.w700),
+                  style: TypographyTokens.body(context)
+                      .copyWith(fontWeight: FontWeight.w700),
                 ),
               ),
               Text(

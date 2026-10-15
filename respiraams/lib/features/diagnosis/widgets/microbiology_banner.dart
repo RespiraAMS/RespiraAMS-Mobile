@@ -67,16 +67,16 @@ class AntibiogramBanner extends StatelessWidget {
         children: [
           Text(
             'Kháng sinh đồ gần nhất',
-            style: TypographyTokens.label(
-              context,
-            ).copyWith(color: c.textSecondary),
+            style: TypographyTokens.label(context)
+                .copyWith(color: c.textSecondary),
           ),
           const SizedBox(height: Spacing.xxxs),
           Text(
             line,
-            style: TypographyTokens.body(
-              context,
-            ).copyWith(fontWeight: FontWeight.w700, color: c.primary),
+            style: TypographyTokens.body(context).copyWith(
+              fontWeight: FontWeight.w700,
+              color: c.primary,
+            ),
           ),
         ],
       ),

@@ -61,11 +61,8 @@ class CalculatorListScreen extends ConsumerWidget {
                           context,
                           'Đăng xuất sẽ được bổ sung sau.',
                         ),
-                        child: Icon(
-                          LucideIcons.logOut,
-                          size: ControlSize.iconXl,
-                          color: c.iconDefault,
-                        ),
+                        child: Icon(LucideIcons.logOut,
+                            size: ControlSize.iconXl, color: c.iconDefault),
                       ),
                     ),
                   ),
@@ -79,16 +76,12 @@ class CalculatorListScreen extends ConsumerWidget {
                           'Máy tính',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: TypographyTokens.h3(
-                            context,
-                          ).copyWith(color: c.textPrimary),
+                          style: TypographyTokens.h3(context)
+                              .copyWith(color: c.textPrimary),
                         ),
                         const SizedBox(height: 2),
-                        AppText(
-                          'Công cụ tính lâm sàng',
-                          type: AppTextType.caption,
-                          maxLines: 1,
-                        ),
+                        AppText('Công cụ tính lâm sàng',
+                            type: AppTextType.caption, maxLines: 1),
                       ],
                     ),
                   ),
@@ -110,10 +103,8 @@ class CalculatorListScreen extends ConsumerWidget {
                         if (entry == CalculatorId.curb65) {
                           context.push(CalculatorRoutes.curb65);
                         } else {
-                          showAppToast(
-                            context,
-                            'Máy tính "${entry.title}" sẽ được bổ sung sau.',
-                          );
+                          showAppToast(context,
+                              'Máy tính "${entry.title}" sẽ được bổ sung sau.');
                         }
                       },
                     );

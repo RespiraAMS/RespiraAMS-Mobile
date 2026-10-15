@@ -49,18 +49,19 @@ class TreatmentOptionRowWidget extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: selected ? c.primary : c.surfaceSecondary,
                   borderRadius: BorderRadius.circular(8),
-                  border: selected ? null : Border.all(color: c.borderSubtle),
+                  border: selected
+                      ? null
+                      : Border.all(color: c.borderSubtle),
                 ),
                 child: selected
-                    ? Icon(
-                        LucideIcons.check,
-                        size: ControlSize.iconSm,
-                        color: c.onPrimary,
-                      )
+                    ? Icon(LucideIcons.check,
+                        size: ControlSize.iconSm, color: c.onPrimary)
                     : null,
               ),
               const SizedBox(width: Spacing.control),
-              _SusceptibilityBadge(letter: option.susceptibility.letter),
+              _SusceptibilityBadge(
+                letter: option.susceptibility.letter,
+              ),
               const SizedBox(width: Spacing.control),
               Expanded(
                 child: Column(
@@ -71,9 +72,8 @@ class TreatmentOptionRowWidget extends StatelessWidget {
                       option.drug,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: TypographyTokens.caption(
-                        context,
-                      ).copyWith(color: c.textPrimary),
+                      style: TypographyTokens.caption(context)
+                          .copyWith(color: c.textPrimary),
                     ),
                     const SizedBox(height: Spacing.xxxs),
                     AppText(

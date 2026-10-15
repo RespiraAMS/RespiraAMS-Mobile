@@ -74,8 +74,7 @@ class _OtpInputWidgetState extends State<OtpInputWidget> {
               for (var i = 0; i < widget.boxCount; i++)
                 _OtpBox(
                   digit: i < digits.length ? digits[i] : null,
-                  isFocused:
-                      i == digits.length && digits.length < widget.boxCount,
+                  isFocused: i == digits.length && digits.length < widget.boxCount,
                   focusColor: c.primary,
                   borderColor: c.borderSubtle,
                   textColor: c.textPrimary,

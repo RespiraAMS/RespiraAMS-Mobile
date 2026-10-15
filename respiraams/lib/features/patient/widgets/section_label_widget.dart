@@ -12,9 +12,8 @@ class SectionLabelWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: TypographyTokens.label(
-        context,
-      ).copyWith(color: context.respiraColors.textPrimary),
+      style: TypographyTokens.label(context)
+          .copyWith(color: context.respiraColors.textPrimary),
     );
   }
 }

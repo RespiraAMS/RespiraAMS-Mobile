@@ -30,20 +30,19 @@ class PasswordRequirementWidget extends StatelessWidget {
             color: met ? c.successSoft : c.surfaceSecondary,
           ),
           child: met
-              ? Icon(
-                  LucideIcons.check,
-                  size: ControlSize.iconSm,
-                  color: c.success,
-                )
+              ? Icon(LucideIcons.check,
+                  size: ControlSize.iconSm, color: c.success)
               : null,
         ),
         const SizedBox(width: Spacing.control),
         Expanded(
           child: Text(
             label,
-            style: TypographyTokens.bodyMedium(
-              context,
-            ).copyWith(fontWeight: FontWeight.w500, color: c.textSecondary),
+            style:
+                TypographyTokens.bodyMedium(context).copyWith(
+              fontWeight: FontWeight.w500,
+              color: c.textSecondary,
+            ),
           ),
         ),
       ],

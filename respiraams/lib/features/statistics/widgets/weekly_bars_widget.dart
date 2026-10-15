@@ -17,9 +17,7 @@ class WeeklyBarsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.respiraColors;
-    final maxValue = bars
-        .map((b) => b.value)
-        .fold<int>(1, (a, b) => a > b ? a : b);
+    final maxValue = bars.map((b) => b.value).fold<int>(1, (a, b) => a > b ? a : b);
 
     return Container(
       height: 180,
@@ -47,7 +45,8 @@ class WeeklyBarsWidget extends StatelessWidget {
                     duration: const Duration(milliseconds: 200),
                     curve: Curves.easeOut,
                     width: 28,
-                    height: (bar.value / maxValue) * _chartAreaHeight,
+                    height:
+                        (bar.value / maxValue) * _chartAreaHeight,
                     decoration: BoxDecoration(
                       color: c.primary,
                       borderRadius: BorderRadius.circular(8),
@@ -57,9 +56,8 @@ class WeeklyBarsWidget extends StatelessWidget {
                   Text(
                     bar.label,
                     maxLines: 1,
-                    style: TypographyTokens.label(
-                      context,
-                    ).copyWith(color: c.textSecondary),
+                    style: TypographyTokens.label(context)
+                        .copyWith(color: c.textSecondary),
                   ),
                 ],
               ),

@@ -5,11 +5,7 @@ import 'package:respiraams/design_system/design_system.dart';
 
 /// Card for one recommended medicine: pill icon tile + name + regimen line.
 class MedicineCardWidget extends StatelessWidget {
-  const MedicineCardWidget({
-    super.key,
-    required this.name,
-    required this.regimenLine,
-  });
+  const MedicineCardWidget({super.key, required this.name, required this.regimenLine});
 
   final String name;
   final String regimenLine;
@@ -33,29 +29,24 @@ class MedicineCardWidget extends StatelessWidget {
               color: c.primarySoft,
               borderRadius: BorderRadius.circular(AppRadius.smValue),
             ),
-            child: Icon(
-              LucideIcons.pill,
-              size: ControlSize.iconLg,
-              color: c.primary,
-            ),
+            child:
+                Icon(LucideIcons.pill, size: ControlSize.iconLg, color: c.primary),
           ),
           const SizedBox(height: Spacing.control),
           Text(
             name,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: TypographyTokens.caption(
-              context,
-            ).copyWith(color: c.textPrimary),
+            style:
+                TypographyTokens.caption(context).copyWith(color: c.textPrimary),
           ),
           const SizedBox(height: Spacing.xxxs),
           Text(
             regimenLine,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: TypographyTokens.caption(
-              context,
-            ).copyWith(fontSize: 11, color: c.textSecondary),
+            style: TypographyTokens.caption(context)
+                .copyWith(fontSize: 11, color: c.textSecondary),
           ),
         ],
       ),

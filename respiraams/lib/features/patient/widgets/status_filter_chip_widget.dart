@@ -46,9 +46,9 @@ class StatusFilterChipWidget extends StatelessWidget {
           child: Text(
             '$label · $count',
             maxLines: 1,
-            style: TypographyTokens.label(
-              context,
-            ).copyWith(color: selected ? c.primary : contentColor),
+            style: TypographyTokens.label(context).copyWith(
+              color: selected ? c.primary : contentColor,
+            ),
           ),
         ),
       ),

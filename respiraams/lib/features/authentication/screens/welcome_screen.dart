@@ -32,7 +32,10 @@ class WelcomeScreen extends ConsumerWidget {
                       // Hero placeholder (offline-safe avatar glyph instead
                       // of the template's network images).
                       Center(
-                        child: AvatarGlyphWidget(glyph: '👨🏻‍⚕️', size: 180),
+                        child: AvatarGlyphWidget(
+                          glyph: '👨🏻‍⚕️',
+                          size: 180,
+                        ),
                       ),
                       const SizedBox(height: Spacing.group),
                       Center(
@@ -44,15 +47,13 @@ class WelcomeScreen extends ConsumerWidget {
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
                             color: c.primarySoft,
-                            borderRadius: BorderRadius.circular(
-                              AppRadius.mdValue,
-                            ),
+                            borderRadius:
+                                BorderRadius.circular(AppRadius.mdValue),
                           ),
                           child: Text(
                             'MOBILE CLINICAL WORKSPACE',
-                            style: TypographyTokens.label(
-                              context,
-                            ).copyWith(color: c.primary),
+                            style: TypographyTokens.label(context)
+                                .copyWith(color: c.primary),
                           ),
                         ),
                       ),
@@ -77,9 +78,9 @@ class WelcomeScreen extends ConsumerWidget {
                                         'Chào mừng, BS. Lê Hoàng Minh',
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
-                                        style: TypographyTokens.body(
-                                          context,
-                                        ).copyWith(fontWeight: FontWeight.w700),
+                                        style: TypographyTokens.body(context)
+                                            .copyWith(
+                                                fontWeight: FontWeight.w700),
                                       ),
                                       const SizedBox(height: Spacing.xxs),
                                       AppText(
@@ -102,9 +103,8 @@ class WelcomeScreen extends ConsumerWidget {
                       ),
                       const Spacer(),
                       Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: Spacing.lg,
-                        ),
+                        padding:
+                            const EdgeInsets.symmetric(vertical: Spacing.lg),
                         child: Column(
                           children: [
                             AppButton(
@@ -152,10 +152,13 @@ class _BulletRow extends StatelessWidget {
         Container(
           width: 8,
           height: 8,
-          decoration: BoxDecoration(color: c.primary, shape: BoxShape.circle),
+          decoration:
+              BoxDecoration(color: c.primary, shape: BoxShape.circle),
         ),
         const SizedBox(width: Spacing.xxs + 4),
-        Expanded(child: AppText(text, type: AppTextType.bodyMedium)),
+        Expanded(
+          child: AppText(text, type: AppTextType.bodyMedium),
+        ),
       ],
     );
   }

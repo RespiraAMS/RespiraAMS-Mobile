@@ -7,7 +7,6 @@ import 'package:respiraams/features/statistics/routes.dart';
 
 import '../../../../design_system/design_system.dart';
 import '../models/patient_summary.dart';
-import '../providers/patient_list_controller.dart';
 import '../providers/patient_list_provider.dart';
 import '../routes.dart';
 import '../widgets/patient_card_widget.dart';
@@ -15,27 +14,41 @@ import '../widgets/status_filter_chip_widget.dart';
 
 /// Route `/patients` — post-login workspace home: searchable, filterable
 /// roster with bottom navigation (§09.6).
-class PatientListScreen extends ConsumerWidget {
+class PatientListScreen extends ConsumerStatefulWidget {
   const PatientListScreen({super.key});
+
+  @override
+  ConsumerState<PatientListScreen> createState() => _PatientListScreenState();
+}
+
+class _PatientListScreenState extends ConsumerState<PatientListScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // First paint uses whatever is cached; the API load kicks off here.
+    Future.microtask(
+      () => ref.read(patientListControllerProvider.notifier).refresh(),
+    );
+  }
 
   void _showTabPlaceholder(BuildContext context, String label) {
     showAppToast(context, 'Tab "$label" sẽ được bổ sung sau.');
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final c = context.respiraColors;
     final state = ref.watch(patientListControllerProvider);
     final controller = ref.read(patientListControllerProvider.notifier);
-    final roster = ref.watch(patientListProvider);
+    final roster = ref.watch(patientListControllerProvider.select((s) => s.patients));
+    final loading = ref.watch(patientListControllerProvider.select((s) => s.loading));
+    final errorMessage = ref.watch(patientListControllerProvider.select((s) => s.errorMessage));
     final visible = ref.watch(visiblePatientsProvider);
 
-    final attentionCount = roster
-        .where((p) => p.status == PatientStatus.treating)
-        .length;
-    final highRiskCount = roster
-        .where((p) => p.status == PatientStatus.deceased)
-        .length;
+    final attentionCount =
+        roster.where((p) => p.status == PatientStatus.treating).length;
+    final highRiskCount =
+        roster.where((p) => p.status == PatientStatus.deceased).length;
 
     final navItems = const [
       AppBottomNavItem(icon: LucideIcons.users, label: 'Bệnh nhân'),
@@ -57,11 +70,12 @@ class PatientListScreen extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              _Header(
-                onAttentionSubtitle: '${roster.length} bệnh nhân đang theo dõi',
-              ),
+              _Header(onAttentionSubtitle: '${roster.length} bệnh nhân đang theo dõi'),
               const SizedBox(height: Spacing.section),
-              _SearchField(query: state.query, onChanged: controller.setQuery),
+              _SearchField(
+                query: state.query,
+                onChanged: controller.setQuery,
+              ),
               const SizedBox(height: Spacing.control),
               Row(
                 children: [
@@ -98,9 +112,8 @@ class PatientListScreen extends ConsumerWidget {
                   Expanded(
                     child: Text(
                       '${visible.length} bệnh nhân',
-                      style: TypographyTokens.bodyMedium(
-                        context,
-                      ).copyWith(fontWeight: FontWeight.w600),
+                      style: TypographyTokens.bodyMedium(context)
+                          .copyWith(fontWeight: FontWeight.w600),
                     ),
                   ),
                   Material(
@@ -121,17 +134,13 @@ class PatientListScreen extends ConsumerWidget {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(
-                              LucideIcons.arrowDownUp,
-                              size: ControlSize.iconSm,
-                              color: c.primary,
-                            ),
+                            Icon(LucideIcons.arrowDownUp,
+                                size: ControlSize.iconSm, color: c.primary),
                             const SizedBox(width: Spacing.xxxs),
                             Text(
                               'Ưu tiên',
-                              style: TypographyTokens.label(
-                                context,
-                              ).copyWith(color: c.primary),
+                              style: TypographyTokens.label(context)
+                                  .copyWith(color: c.primary),
                             ),
                           ],
                         ),
@@ -142,17 +151,54 @@ class PatientListScreen extends ConsumerWidget {
               ),
               const SizedBox(height: Spacing.inline),
               Expanded(
-                child: visible.isEmpty
-                    ? _EmptyState()
-                    : ListView.separated(
-                        itemCount: visible.length,
-                        separatorBuilder: (_, _) =>
-                            const SizedBox(height: Spacing.inline),
-                        itemBuilder: (context, index) => PatientCardWidget(
-                          patient: visible[index],
-                          onTap: () => context.push(PatientRoutes.detail),
-                        ),
-                      ),
+                child: loading && visible.isEmpty
+                    ? const Center(child: CircularProgressIndicator())
+                    : errorMessage != null && visible.isEmpty
+                        ? _ErrorState(message: errorMessage)
+                        : RefreshIndicator(
+                            onRefresh: controller.refresh,
+                            child: visible.isEmpty
+                                ? ListView(
+                                    physics:
+                                        const AlwaysScrollableScrollPhysics(),
+                                    children: const [
+                                      SizedBox(height: Spacing.section * 2),
+                                      _EmptyState(),
+                                    ],
+                                  )
+                                : ListView.separated(
+                                    physics:
+                                        const AlwaysScrollableScrollPhysics(),
+                                    itemCount:
+                                        visible.length + (state.hasMore ? 1 : 0),
+                                    separatorBuilder: (_, _) => const SizedBox(
+                                        height: Spacing.inline),
+                                    itemBuilder: (context, index) {
+                                      if (index >= visible.length) {
+                                        controller.loadMore();
+                                        return const Padding(
+                                          padding: EdgeInsets.all(
+                                              Spacing.control),
+                                          child: Center(
+                                            child: SizedBox(
+                                              width: 24,
+                                              height: 24,
+                                              child:
+                                                  CircularProgressIndicator(
+                                                strokeWidth: 2,
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                      return PatientCardWidget(
+                                        patient: visible[index],
+                        onTap: () => context.push(
+                            '${PatientRoutes.detail}?id=${Uri.encodeComponent(visible[index].id)}'),
+                                      );
+                                    },
+                                  ),
+                          ),
               ),
               const SizedBox(height: Spacing.inline),
               AppBottomNavigation(
@@ -196,7 +242,10 @@ class _Header extends ConsumerWidget {
           background: c.surfaceSecondary,
           foreground: c.iconDefault,
           semanticLabel: 'Đăng xuất',
-          onTap: () => showAppToast(context, 'Đăng xuất sẽ được bổ sung sau.'),
+          onTap: () => showAppToast(
+            context,
+            'Đăng xuất sẽ được bổ sung sau.',
+          ),
         ),
         const SizedBox(width: Spacing.group),
         Expanded(
@@ -208,16 +257,12 @@ class _Header extends ConsumerWidget {
                 'Danh sách bệnh nhân',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: TypographyTokens.h3(
-                  context,
-                ).copyWith(color: c.textPrimary),
+                style: TypographyTokens.h3(context)
+                    .copyWith(color: c.textPrimary),
               ),
               const SizedBox(height: 2),
-              AppText(
-                onAttentionSubtitle,
-                type: AppTextType.caption,
-                maxLines: 1,
-              ),
+              AppText(onAttentionSubtitle,
+                  type: AppTextType.caption, maxLines: 1),
             ],
           ),
         ),
@@ -261,12 +306,8 @@ class _CircleAction extends StatelessWidget {
         child: InkWell(
           onTap: onTap,
           child: Center(
-            child: AppIcon(
-              icon,
-              size: ControlSize.iconXl,
-              color: foreground,
-              semanticLabel: semanticLabel,
-            ),
+            child: AppIcon(icon, size: ControlSize.iconXl, color: foreground,
+                semanticLabel: semanticLabel),
           ),
         ),
       ),
@@ -294,11 +335,8 @@ class _SearchField extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(
-            LucideIcons.search,
-            size: ControlSize.iconMd,
-            color: c.textSecondary,
-          ),
+          Icon(LucideIcons.search,
+              size: ControlSize.iconMd, color: c.textSecondary),
           const SizedBox(width: Spacing.control),
           Expanded(
             child: TextField(
@@ -319,6 +357,29 @@ class _SearchField extends StatelessWidget {
   }
 }
 
+class _ErrorState extends StatelessWidget {
+  const _ErrorState({required this.message});
+
+  final String message;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.respiraColors;
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(LucideIcons.cloudOff,
+              size: ControlSize.iconBase * 2, color: c.iconMuted),
+          const SizedBox(height: Spacing.control),
+          AppText(message,
+              type: AppTextType.caption, textAlign: TextAlign.center),
+        ],
+      ),
+    );
+  }
+}
+
 class _EmptyState extends StatelessWidget {
   const _EmptyState();
 
@@ -330,17 +391,12 @@ class _EmptyState extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            LucideIcons.searchX,
-            size: ControlSize.iconBase * 2,
-            color: c.iconMuted,
-          ),
+          Icon(LucideIcons.searchX,
+              size: ControlSize.iconBase * 2, color: c.iconMuted),
           const SizedBox(height: Spacing.control),
-          AppText(
-            'Không tìm thấy bệnh nhân phù hợp.',
-            type: AppTextType.caption,
-            textAlign: TextAlign.center,
-          ),
+          AppText('Không tìm thấy bệnh nhân phù hợp.',
+              type: AppTextType.caption,
+              textAlign: TextAlign.center),
         ],
       ),
     );

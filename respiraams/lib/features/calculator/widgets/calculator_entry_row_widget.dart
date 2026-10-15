@@ -49,11 +49,8 @@ class CalculatorEntryRowWidget extends StatelessWidget {
                   color: c.primarySoft,
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Icon(
-                  LucideIcons.layoutGrid,
-                  size: ControlSize.iconMd,
-                  color: c.iconPrimary,
-                ),
+                child: Icon(LucideIcons.layoutGrid,
+                    size: ControlSize.iconMd, color: c.iconPrimary),
               ),
               const SizedBox(width: Spacing.group),
               Expanded(
@@ -65,9 +62,8 @@ class CalculatorEntryRowWidget extends StatelessWidget {
                       calculator.title,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: TypographyTokens.bodyMedium(
-                        context,
-                      ).copyWith(fontWeight: FontWeight.w600),
+                      style: TypographyTokens.bodyMedium(context)
+                          .copyWith(fontWeight: FontWeight.w600),
                     ),
                     const SizedBox(height: Spacing.xxxs),
                     AppText(
@@ -79,11 +75,8 @@ class CalculatorEntryRowWidget extends StatelessWidget {
                   ],
                 ),
               ),
-              Icon(
-                LucideIcons.chevronRight,
-                size: ControlSize.iconSm,
-                color: c.iconMuted,
-              ),
+              Icon(LucideIcons.chevronRight,
+                  size: ControlSize.iconSm, color: c.iconMuted),
             ],
           ),
         ),

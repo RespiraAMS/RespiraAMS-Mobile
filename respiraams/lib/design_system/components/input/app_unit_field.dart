@@ -47,9 +47,8 @@ class AppUnitField extends StatefulWidget {
 }
 
 class _AppUnitFieldState extends State<AppUnitField> {
-  late final TextEditingController _controller = TextEditingController(
-    text: widget.initialValue,
-  );
+  late final TextEditingController _controller =
+      TextEditingController(text: widget.initialValue);
 
   @override
   void didUpdateWidget(covariant AppUnitField oldWidget) {
@@ -86,9 +85,8 @@ class _AppUnitFieldState extends State<AppUnitField> {
                 widget.label,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: TypographyTokens.body(
-                  context,
-                ).copyWith(color: c.textPrimary),
+                style: TypographyTokens.body(context)
+                    .copyWith(color: c.textPrimary),
               ),
               if (widget.description != null) ...[
                 const SizedBox(height: Spacing.xxxs),
@@ -96,9 +94,8 @@ class _AppUnitFieldState extends State<AppUnitField> {
                   widget.description!,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: TypographyTokens.caption(
-                    context,
-                  ).copyWith(color: c.textSecondary),
+                  style: TypographyTokens.caption(context)
+                      .copyWith(color: c.textSecondary),
                 ),
               ],
             ],
@@ -124,8 +121,7 @@ class _AppUnitFieldState extends State<AppUnitField> {
                   onChanged: widget.onChanged,
                   enabled: widget.enabled,
                   keyboardType: const TextInputType.numberWithOptions(
-                    decimal: true,
-                  ),
+                      decimal: true),
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
                   ],
@@ -135,7 +131,8 @@ class _AppUnitFieldState extends State<AppUnitField> {
                     isCollapsed: true,
                     border: InputBorder.none,
                     hintText: widget.hintText,
-                    hintStyle: TextStyle(fontSize: 15, color: c.textSecondary),
+                    hintStyle:
+                        TextStyle(fontSize: 15, color: c.textSecondary),
                   ),
                 ),
               ),
@@ -143,9 +140,8 @@ class _AppUnitFieldState extends State<AppUnitField> {
                 const SizedBox(width: Spacing.xxs),
                 Text(
                   widget.unit,
-                  style: TypographyTokens.label(
-                    context,
-                  ).copyWith(color: c.textSecondary),
+                  style: TypographyTokens.label(context)
+                      .copyWith(color: c.textSecondary),
                 ),
               ],
             ],

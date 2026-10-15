@@ -35,11 +35,8 @@ class ReferenceRowWidget extends StatelessWidget {
               color: c.primarySoft,
               borderRadius: BorderRadius.circular(AppRadius.smValue),
             ),
-            child: Icon(
-              LucideIcons.bookOpen,
-              size: ControlSize.iconMd,
-              color: c.primary,
-            ),
+            child: Icon(LucideIcons.bookOpen,
+                size: ControlSize.iconMd, color: c.primary),
           ),
           const SizedBox(width: Spacing.control),
           Expanded(
@@ -51,20 +48,16 @@ class ReferenceRowWidget extends StatelessWidget {
                   source,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: TypographyTokens.bodyMedium(
-                    context,
-                  ).copyWith(fontWeight: FontWeight.w600),
+                  style: TypographyTokens.bodyMedium(context)
+                      .copyWith(fontWeight: FontWeight.w600),
                 ),
                 const SizedBox(height: Spacing.xxxs),
                 AppText(detail, type: AppTextType.caption, maxLines: 1),
               ],
             ),
           ),
-          Icon(
-            LucideIcons.chevronRight,
-            size: ControlSize.iconSm,
-            color: c.iconMuted,
-          ),
+          Icon(LucideIcons.chevronRight,
+              size: ControlSize.iconSm, color: c.iconMuted),
         ],
       ),
     );
