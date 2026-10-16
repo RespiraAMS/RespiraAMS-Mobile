@@ -43,7 +43,7 @@ class ClinicalVariableProvider extends ChangeNotifier {
       final response = await _repository.fetchVariables(
         page: _currentPage,
         name: _searchQuery,
-        code: _searchQuery.isNotEmpty ? _searchQuery : null,
+        // code: _searchQuery.isNotEmpty ? _searchQuery : null,
         isRequired: _filterIsRequired,
         valueType: _filterValueType,
         category: _filterCategory,
