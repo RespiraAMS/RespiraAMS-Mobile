@@ -18,36 +18,40 @@ const String kApiVersion = '1';
 /// 2. Single-flight 401/403 recovery: POST /auth/refresh then retry once
 final Provider<Dio> apiClientProvider = Provider<Dio>((ref) {
   final storage = TokenStorage(ref.watch(sharedPreferencesProvider));
-  final dio = Dio(BaseOptions(
-    baseUrl: kApiBaseUrl,
-    connectTimeout: const Duration(seconds: 15),
-    receiveTimeout: const Duration(seconds: 20),
-    headers: {'Accept': 'application/json'},
-  ));
+  final dio = Dio(
+    BaseOptions(
+      baseUrl: kApiBaseUrl,
+      connectTimeout: const Duration(seconds: 15),
+      receiveTimeout: const Duration(seconds: 20),
+      headers: {'Accept': 'application/json'},
+    ),
+  );
 
-  dio.interceptors.add(InterceptorsWrapper(
-    onRequest: (options, handler) {
-      final token = storage.accessToken;
-      // Login/refresh/verify-email must go out unauthenticated.
-      final isAuthRoute = options.path.contains('/auth/');
-      if (token != null && !isAuthRoute) {
-        options.headers['Authorization'] = 'Bearer $token';
-      }
-      handler.next(options);
-    },
-    onError: (error, handler) async {
-      final status = error.response?.statusCode;
-      final isAuthRoute = error.requestOptions.path.contains('/auth/');
+  dio.interceptors.add(
+    InterceptorsWrapper(
+      onRequest: (options, handler) {
+        final token = storage.accessToken;
+        // Login/refresh/verify-email must go out unauthenticated.
+        final isAuthRoute = options.path.contains('/auth/');
+        if (token != null && !isAuthRoute) {
+          options.headers['Authorization'] = 'Bearer $token';
+        }
+        handler.next(options);
+      },
+      onError: (error, handler) async {
+        final status = error.response?.statusCode;
+        final isAuthRoute = error.requestOptions.path.contains('/auth/');
 
-      if ((status == 401 || status == 403) &&
-          !isAuthRoute &&
-          storage.refreshToken != null) {
-        final retried = await _refreshAndRetry(dio, storage, error);
-        return handler.resolve(retried);
-      }
-      handler.next(error);
-    },
-  ));
+        if ((status == 401 || status == 403) &&
+            !isAuthRoute &&
+            storage.refreshToken != null) {
+          final retried = await _refreshAndRetry(dio, storage, error);
+          return handler.resolve(retried);
+        }
+        handler.next(error);
+      },
+    ),
+  );
 
   return dio;
 });
@@ -91,10 +95,7 @@ Future<Response<dynamic>> _refreshAndRetry(
   }
 }
 
-Future<Response<dynamic>> _performRefresh(
-  Dio dio,
-  TokenStorage storage,
-) {
+Future<Response<dynamic>> _performRefresh(Dio dio, TokenStorage storage) {
   final refreshDio = Dio(BaseOptions(baseUrl: kApiBaseUrl));
   return refreshDio.post(
     '/api/$kApiVersion/auth/refresh',
