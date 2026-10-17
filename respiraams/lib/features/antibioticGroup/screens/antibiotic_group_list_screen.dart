@@ -6,6 +6,7 @@ import '../../../../design_system/design_system.dart';
 import '../../../core/network/api_client.dart';
 import '../providers/antibiotic_group_provider.dart';
 import '../providers/antibiotic_group_service.dart';
+import '../models/antibiotic_group_summary.dart';
 import 'antibiotic_group_detail_screen.dart';
 
 class AntibioticGroupListScreen extends StatefulWidget {
@@ -53,6 +54,23 @@ class _AntibioticGroupListScreenState extends State<AntibioticGroupListScreen> {
     });
   }
 
+  void _showFilterBottomSheet() {
+    FocusScope.of(context).unfocus();
+    
+    final provider = context.read<AntibioticGroupProvider>();
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: context.respiraColors.background,
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+      builder: (context) => _FilterBottomSheet(provider: provider),
+    ).then((_) {
+      if (provider.hasActiveFilters) {
+        _searchController.clear();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final c = context.respiraColors;
@@ -73,22 +91,50 @@ class _AntibioticGroupListScreenState extends State<AntibioticGroupListScreen> {
 
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: Spacing.group),
-              child: TextField(
-                controller: _searchController,
-                onChanged: _onSearchChanged,
-                decoration: InputDecoration(
-                  hintText: 'Tìm kiếm nhóm...',
-                  hintStyle: TextStyle(color: c.textSecondary),
-                  prefixIcon: Icon(LucideIcons.search, color: c.iconDefault, size: 20),
-                  filled: true,
-                  fillColor: c.surface,
-                  contentPadding: const EdgeInsets.symmetric(vertical: 0),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide.none,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _searchController,
+                      onChanged: _onSearchChanged,
+                      decoration: InputDecoration(
+                        hintText: 'Tìm kiếm nhóm...',
+                        hintStyle: TextStyle(color: c.textSecondary),
+                        prefixIcon: Icon(LucideIcons.search, color: c.iconDefault, size: 20),
+                        filled: true,
+                        fillColor: c.surface,
+                        contentPadding: const EdgeInsets.symmetric(vertical: 0),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
+                      style: TextStyle(color: c.textPrimary),
+                    ),
                   ),
-                ),
-                style: TextStyle(color: c.textPrimary),
+                  const SizedBox(width: 12),
+                  // NÚT FILTER
+                  Consumer<AntibioticGroupProvider>(
+                    builder: (context, provider, child) {
+                      final hasFilter = provider.hasActiveFilters;
+                      return GestureDetector(
+                        onTap: _showFilterBottomSheet,
+                        child: Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: hasFilter ? c.primary : c.surface,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Icon(
+                            LucideIcons.listFilter, 
+                            color: hasFilter ? Colors.white : c.iconPrimary, 
+                            size: 24,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: Spacing.control),
@@ -201,6 +247,122 @@ class _AntibioticGroupListScreenState extends State<AntibioticGroupListScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _FilterBottomSheet extends StatefulWidget {
+  final AntibioticGroupProvider provider;
+
+  const _FilterBottomSheet({required this.provider});
+
+  @override
+  State<_FilterBottomSheet> createState() => _FilterBottomSheetState();
+}
+
+class _FilterBottomSheetState extends State<_FilterBottomSheet> {
+  String? _selectedParentId;
+  late Future<List<AntibioticGroupSummary>> _groupsFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedParentId = widget.provider.filterParentId;
+    _groupsFuture = widget.provider.fetchGroupList();
+  }
+
+  void _apply() {
+    widget.provider.applyFilter(parentId: _selectedParentId);
+    Navigator.pop(context);
+  }
+
+  void _reset() {
+    widget.provider.clearFilters();
+    Navigator.pop(context);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.respiraColors;
+    
+    return Padding(
+      padding: const EdgeInsets.all(Spacing.group),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Center(
+            child: Container(width: 40, height: 4, decoration: BoxDecoration(color: c.borderSubtle, borderRadius: BorderRadius.circular(2))),
+          ),
+          const SizedBox(height: Spacing.section),
+          AppText('Bộ lọc dữ liệu', type: AppTextType.h3, fontWeight: FontWeight.bold),
+          const SizedBox(height: Spacing.section),
+
+          AppText('Nhóm kháng sinh cha (Parent)', type: AppTextType.bodyMedium, fontWeight: FontWeight.w600),
+          const SizedBox(height: 8),
+          FutureBuilder<List<AntibioticGroupSummary>>(
+            future: _groupsFuture,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (snapshot.hasError) {
+                return AppText('Không tải được danh sách nhóm', color: c.error);
+              }
+              
+              final groups = snapshot.data ?? [];
+              
+              return Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                decoration: BoxDecoration(
+                  color: c.surface,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String?>(
+                    isExpanded: true,
+                    value: _selectedParentId,
+                    hint: AppText('Tất cả', color: c.textSecondary),
+                    dropdownColor: c.surface,
+                    icon: Icon(LucideIcons.chevronDown, color: c.iconDefault),
+                    items: [
+                      DropdownMenuItem(
+                        value: null,
+                        child: AppText('Tất cả'),
+                      ),
+                      ...groups.map((p) => DropdownMenuItem(
+                        value: p.id,
+                        child: AppText(p.name),
+                      )),
+                    ],
+                    onChanged: (val) => setState(() => _selectedParentId = val),
+                  ),
+                ),
+              );
+            },
+          ),
+          const SizedBox(height: Spacing.section),
+
+          Row(
+            children: [
+              Expanded(
+                child: AppButton(
+                  label: 'Xóa bộ lọc',
+                  onPressed: _reset,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: AppButton(
+                  label: 'Áp dụng',
+                  onPressed: _apply,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 24), 
+        ],
       ),
     );
   }
