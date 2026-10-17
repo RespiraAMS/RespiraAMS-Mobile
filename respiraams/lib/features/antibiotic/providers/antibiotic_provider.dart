@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/antibiotic.dart';
+import '../models/antibiotic_group_summary.dart';
 import 'antibiotic_service.dart';
 
 class AntibioticProvider extends ChangeNotifier {
@@ -22,6 +23,14 @@ class AntibioticProvider extends ChangeNotifier {
   int _currentPage = 1;
   String _searchQuery = '';
 
+  // States bộ lọc
+  String? _filterGroupId;
+  String? _filterClassification;
+
+  bool get hasActiveFilters => _filterGroupId != null || _filterClassification != null;
+  String? get filterGroupId => _filterGroupId;
+  String? get filterClassification => _filterClassification;
+
   Future<void> fetchPage() async {
     if (_isLoading || !_hasMore) return;
 
@@ -30,7 +39,21 @@ class AntibioticProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final response = await _repository.fetchAntibiotics(page: _currentPage, name: _searchQuery);
+      PaginatedAntibioticResponse response;
+      
+      if (_searchQuery.isNotEmpty) {
+        response = await _repository.searchAntibiotics(
+          page: _currentPage,
+          searchTerm: _searchQuery,
+        );
+      } 
+      else {
+        response = await _repository.fetchAntibiotics(
+          page: _currentPage,
+          groupId: _filterGroupId,
+          classification: _filterClassification,
+        );
+      }
       
       _items.addAll(response.items);
       _hasMore = response.hasNextPage;
@@ -44,14 +67,46 @@ class AntibioticProvider extends ChangeNotifier {
   }
 
   void search(String query) {
-    if (_searchQuery == query) return;
-    
-    _searchQuery = query;
+    final trimmedQuery = query.trim();
+
+    if (_searchQuery == trimmedQuery) return;
+
+    if (trimmedQuery.isNotEmpty) {
+      if (trimmedQuery.length < 2) {
+        _errorMessage = 'Vui lòng nhập ít nhất 2 ký tự.';
+        notifyListeners();
+        return;
+      }
+      
+      if (!RegExp(r'^[\p{L}0-9\s\-]+$', unicode: true).hasMatch(trimmedQuery)) {
+        _errorMessage = 'Từ khóa chỉ được chứa chữ, số, khoảng trắng và gạch ngang.';
+        notifyListeners();
+        return;
+      }
+    }
+
+    _searchQuery = trimmedQuery;
+    _resetAndFetch();
+  }
+
+  void applyFilter({String? groupId, String? classification}) {
+    _filterGroupId = groupId;
+    _filterClassification = classification;
+    _searchQuery = ''; 
+    _resetAndFetch();
+  }
+
+  void clearFilters() {
+    _filterGroupId = null;
+    _filterClassification = null;
+    _resetAndFetch();
+  }
+
+  void _resetAndFetch() {
     _currentPage = 1;
     _items.clear();
     _hasMore = true;
     _isLoading = false; 
-    
     fetchPage();
   }
 
@@ -62,5 +117,9 @@ class AntibioticProvider extends ChangeNotifier {
 
   Future<AntibioticDetail> fetchAntibioticDetail(String id) {
     return _repository.fetchAntibioticDetail(id);
+  }
+
+  Future<List<AntibioticGroupSummary>> fetchAntibioticGroupsList() {
+    return _repository.fetchAntibioticGroupsList();
   }
 }
