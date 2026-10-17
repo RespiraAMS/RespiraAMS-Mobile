@@ -1,8 +1,7 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:lucide_icons/lucide_icons.dart';
 import 'package:provider/provider.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import '../../../../design_system/design_system.dart';
 import '../../../core/network/api_client.dart';
 import '../providers/pathogen_provider.dart';
@@ -54,6 +53,23 @@ class _PathogenListScreenState extends State<PathogenListScreen> {
     });
   }
 
+  void _showFilterBottomSheet() {
+    FocusScope.of(context).unfocus();
+    
+    final provider = context.read<PathogenProvider>();
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: context.respiraColors.background,
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+      builder: (context) => _FilterBottomSheet(provider: provider),
+    ).then((_) {
+      if (provider.hasActiveFilters) {
+        _searchController.clear();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final c = context.respiraColors;
@@ -74,22 +90,50 @@ class _PathogenListScreenState extends State<PathogenListScreen> {
 
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: Spacing.group),
-              child: TextField(
-                controller: _searchController,
-                onChanged: _onSearchChanged,
-                decoration: InputDecoration(
-                  hintText: 'Tìm kiếm tác nhân...',
-                  hintStyle: TextStyle(color: c.textSecondary),
-                  prefixIcon: Icon(LucideIcons.search, color: c.iconDefault, size: 20),
-                  filled: true,
-                  fillColor: c.surface,
-                  contentPadding: const EdgeInsets.symmetric(vertical: 0),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide.none,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _searchController,
+                      onChanged: _onSearchChanged,
+                      decoration: InputDecoration(
+                        hintText: 'Tìm kiếm tác nhân...',
+                        hintStyle: TextStyle(color: c.textSecondary),
+                        prefixIcon: Icon(LucideIcons.search, color: c.iconDefault, size: 20),
+                        filled: true,
+                        fillColor: c.surface,
+                        contentPadding: const EdgeInsets.symmetric(vertical: 0),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
+                      style: TextStyle(color: c.textPrimary),
+                    ),
                   ),
-                ),
-                style: TextStyle(color: c.textPrimary),
+                  const SizedBox(width: 12),
+                  // NÚT BỘ LỌC (FILTER)
+                  Consumer<PathogenProvider>(
+                    builder: (context, provider, child) {
+                      final hasFilter = provider.hasActiveFilters;
+                      return GestureDetector(
+                        onTap: _showFilterBottomSheet,
+                        child: Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: hasFilter ? c.primary : c.surface,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Icon(
+                            LucideIcons.listFilter, 
+                            color: hasFilter ? Colors.white : c.iconPrimary, 
+                            size: 24,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ],
               ),
             ),
             
@@ -97,7 +141,8 @@ class _PathogenListScreenState extends State<PathogenListScreen> {
             Expanded(
               child: Consumer<PathogenProvider>(
                 builder: (context, provider, child) {
-                  if (provider.errorMessage != null) {
+                  // Xử lý báo lỗi
+                  if (provider.errorMessage != null && provider.items.isNotEmpty) {
                     WidgetsBinding.instance.addPostFrameCallback((_) {
                       showAppToast(context, provider.errorMessage!);
                       provider.clearError();
@@ -106,6 +151,25 @@ class _PathogenListScreenState extends State<PathogenListScreen> {
 
                   if (provider.items.isEmpty && provider.isLoading) {
                     return Center(child: CircularProgressIndicator(color: c.primary));
+                  }
+                  
+                  if (provider.items.isEmpty && provider.errorMessage != null) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          AppText(provider.errorMessage!, color: c.error),
+                          const SizedBox(height: 12),
+                          GestureDetector(
+                            onTap: () => provider.fetchPage(),
+                            child: AppSurface(
+                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                              child: AppText('Thử lại', color: c.primary),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
                   }
 
                   if (provider.items.isEmpty && !provider.isLoading) {
@@ -123,7 +187,14 @@ class _PathogenListScreenState extends State<PathogenListScreen> {
                       if (index == provider.items.length) {
                         return Padding(
                           padding: const EdgeInsets.all(Spacing.group),
-                          child: Center(child: CircularProgressIndicator(color: c.primary)),
+                          child: Center(
+                            child: provider.errorMessage != null
+                                ? GestureDetector(
+                                    onTap: () => provider.fetchPage(),
+                                    child: AppText('Không thể tải thêm. Nhấn để thử lại', type: AppTextType.caption, color: c.error),
+                                  )
+                                : CircularProgressIndicator(color: c.primary),
+                          ),
                         );
                       }
 
@@ -155,7 +226,6 @@ class _PathogenListScreenState extends State<PathogenListScreen> {
                                   Expanded(
                                     child: AppText(item.name, type: AppTextType.bodyMedium, fontWeight: FontWeight.w600),
                                   ),
-                                  // Hiển thị tag cảnh báo nếu là Vi khuẩn không điển hình
                                   if (item.isAtypical) ...[
                                     const SizedBox(width: 8),
                                     Container(
@@ -187,6 +257,103 @@ class _PathogenListScreenState extends State<PathogenListScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _FilterBottomSheet extends StatefulWidget {
+  final PathogenProvider provider;
+
+  const _FilterBottomSheet({required this.provider});
+
+  @override
+  State<_FilterBottomSheet> createState() => _FilterBottomSheetState();
+}
+
+class _FilterBottomSheetState extends State<_FilterBottomSheet> {
+  bool? _selectedIsAtypical;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedIsAtypical = widget.provider.filterIsAtypical;
+  }
+
+  void _apply() {
+    widget.provider.applyFilter(isAtypical: _selectedIsAtypical);
+    Navigator.pop(context);
+  }
+
+  void _reset() {
+    widget.provider.clearFilters();
+    Navigator.pop(context);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.respiraColors;
+    
+    return Padding(
+      padding: const EdgeInsets.all(Spacing.group),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Center(
+            child: Container(width: 40, height: 4, decoration: BoxDecoration(color: c.borderSubtle, borderRadius: BorderRadius.circular(2))),
+          ),
+          const SizedBox(height: Spacing.section),
+          AppText('Bộ lọc tác nhân', type: AppTextType.h3, fontWeight: FontWeight.bold),
+          const SizedBox(height: Spacing.section),
+
+          AppText('Phân loại tác nhân', type: AppTextType.bodyMedium, fontWeight: FontWeight.w600),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 8,
+            children: [
+              _buildChoiceChip('Tất cả', _selectedIsAtypical == null, () => setState(() => _selectedIsAtypical = null)),
+              _buildChoiceChip('Vi khuẩn điển hình', _selectedIsAtypical == false, () => setState(() => _selectedIsAtypical = false)),
+              _buildChoiceChip('Không điển hình', _selectedIsAtypical == true, () => setState(() => _selectedIsAtypical = true)),
+            ],
+          ),
+          const SizedBox(height: Spacing.section),
+
+          Row(
+            children: [
+              Expanded(
+                child: AppButton(
+                  label: 'Xóa bộ lọc',
+                  onPressed: _reset,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: AppButton(
+                  label: 'Áp dụng',
+                  onPressed: _apply,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 24), 
+        ],
+      ),
+    );
+  }
+
+  Widget _buildChoiceChip(String label, bool isSelected, VoidCallback onTap) {
+    final c = context.respiraColors;
+    return ChoiceChip(
+      label: AppText(label, color: isSelected ? Colors.white : c.textPrimary),
+      selected: isSelected,
+      onSelected: (_) => onTap(),
+      selectedColor: c.primary,
+      backgroundColor: c.surface,
+      showCheckmark: false,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        side: BorderSide(color: isSelected ? c.primary : c.borderSubtle),
       ),
     );
   }
