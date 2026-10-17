@@ -20,8 +20,8 @@ class ClinicalVariableProvider extends ChangeNotifier {
   String? get errorMessage => _errorMessage;
 
   int _currentPage = 1;
-
   String _searchQuery = '';
+
   bool? _filterIsRequired;
   String? _filterValueType;
   String? _filterCategory;
@@ -40,14 +40,23 @@ class ClinicalVariableProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final response = await _repository.fetchVariables(
-        page: _currentPage,
-        name: _searchQuery,
-        // code: _searchQuery.isNotEmpty ? _searchQuery : null,
-        isRequired: _filterIsRequired,
-        valueType: _filterValueType,
-        category: _filterCategory,
-      );
+      PaginatedClinicalVariableResponse response;
+
+      // Nếu có query -> Gọi API search
+      if (_searchQuery.isNotEmpty) {
+        response = await _repository.searchVariables(
+          page: _currentPage,
+          searchTerm: _searchQuery,
+        );
+      } 
+      else {
+        response = await _repository.fetchVariables(
+          page: _currentPage,
+          isRequired: _filterIsRequired,
+          valueType: _filterValueType,
+          category: _filterCategory,
+        );
+      }
       
       _items.addAll(response.items);
       _hasMore = response.hasNextPage;
@@ -61,8 +70,24 @@ class ClinicalVariableProvider extends ChangeNotifier {
   }
 
   void search(String query) {
-    if (_searchQuery == query) return;
-    _searchQuery = query;
+    final trimmedQuery = query.trim();
+
+    if (_searchQuery == trimmedQuery) return;
+
+    if (trimmedQuery.isNotEmpty) {
+      if (trimmedQuery.length < 2) {
+        _errorMessage = 'Vui lòng nhập ít nhất 2 ký tự.';
+        notifyListeners();
+        return;
+      }
+      if (!RegExp(r'^[\p{L}0-9\s\-]+$', unicode: true).hasMatch(trimmedQuery)) {
+        _errorMessage = 'Từ khóa chỉ được chứa chữ, số, khoảng trắng và gạch ngang.';
+        notifyListeners();
+        return;
+      }
+    }
+
+    _searchQuery = trimmedQuery;
     _resetAndFetch();
   }
 
@@ -70,6 +95,8 @@ class ClinicalVariableProvider extends ChangeNotifier {
     _filterIsRequired = isRequired;
     _filterValueType = valueType;
     _filterCategory = category;
+    
+    _searchQuery = ''; 
     _resetAndFetch();
   }
 

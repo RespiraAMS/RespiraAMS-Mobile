@@ -52,6 +52,8 @@ class _ClinicalVariableListScreenState extends State<ClinicalVariableListScreen>
   }
 
   void _showFilterBottomSheet() {
+    FocusScope.of(context).unfocus();
+
     final provider = context.read<ClinicalVariableProvider>();
     showModalBottomSheet(
       context: context,
@@ -59,7 +61,11 @@ class _ClinicalVariableListScreenState extends State<ClinicalVariableListScreen>
       backgroundColor: context.respiraColors.background,
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
       builder: (context) => _FilterBottomSheet(provider: provider),
-    );
+    ).then((_) {
+      if (provider.hasActiveFilters) {
+        _searchController.clear();
+      }
+    });
   }
 
   String _translateValueType(ValueType type) {
@@ -158,6 +164,25 @@ class _ClinicalVariableListScreenState extends State<ClinicalVariableListScreen>
                     return Center(child: CircularProgressIndicator(color: c.primary));
                   }
 
+                  if (provider.items.isEmpty && provider.errorMessage != null) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          AppText(provider.errorMessage!, color: c.error),
+                          const SizedBox(height: 12),
+                          GestureDetector(
+                            onTap: () => provider.fetchPage(),
+                            child: AppSurface(
+                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                              child: AppText('Thử lại', color: c.primary),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+
                   if (provider.items.isEmpty && !provider.isLoading) {
                     return Center(child: AppText('Không tìm thấy kết quả nào.', color: c.textSecondary));
                   }
@@ -171,7 +196,18 @@ class _ClinicalVariableListScreenState extends State<ClinicalVariableListScreen>
                       if (index == provider.items.length) {
                         return Padding(
                           padding: const EdgeInsets.all(Spacing.group),
-                          child: Center(child: CircularProgressIndicator(color: c.primary)),
+                          child: Center(
+                            child: provider.errorMessage != null
+                                ? GestureDetector(
+                                    onTap: () => provider.fetchPage(),
+                                    child: AppText(
+                                      'Không thể tải thêm. Nhấn để thử lại',
+                                      type: AppTextType.caption,
+                                      color: c.error,
+                                    ),
+                                  )
+                                : CircularProgressIndicator(color: c.primary),
+                          ),
                         );
                       }
 
@@ -342,7 +378,6 @@ class _FilterBottomSheetState extends State<_FilterBottomSheet> {
           ),
           const SizedBox(height: Spacing.section),
 
-          // Nút bấm
           Row(
             children: [
               Expanded(
