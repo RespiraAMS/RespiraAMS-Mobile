@@ -4,8 +4,6 @@ import '../../../../design_system/design_system.dart';
 import '../providers/lookup_data_provider.dart';
 import '../widgets/category_grid_item.dart';
 import '../widgets/floating_bottom_nav.dart';
-import '../widgets/lookup_search_field.dart';
-import '../widgets/recent_lookup_tile.dart';
 
 class MedicalLookupScreen extends StatelessWidget {
   const MedicalLookupScreen({super.key});

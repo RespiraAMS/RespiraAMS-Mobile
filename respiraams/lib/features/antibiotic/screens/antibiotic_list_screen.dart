@@ -149,7 +149,7 @@ class _AntibioticListScreenState extends State<AntibioticListScreen> {
                     controller: _scrollController,
                     padding: const EdgeInsets.all(Spacing.group),
                     itemCount: provider.items.length + (provider.hasMore ? 1 : 0),
-                    separatorBuilder: (_, __) => const SizedBox(height: Spacing.control),
+                    separatorBuilder: (_, _) => const SizedBox(height: Spacing.control),
                     itemBuilder: (context, index) {
                       if (index == provider.items.length) {
                         return Padding(

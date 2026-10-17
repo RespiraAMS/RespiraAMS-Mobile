@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 import 'package:respiraams/features/calculator/routes.dart';
+import 'package:respiraams/features/lookup/lookup_route.dart';
 import 'package:respiraams/features/patient/routes.dart';
 import 'package:respiraams/features/patient/widgets/section_label_widget.dart';
 import 'package:respiraams/features/statistics/routes.dart';
@@ -118,6 +119,9 @@ class CalculatorListScreen extends ConsumerWidget {
                 onTap: (index) {
                   if (index == 0) {
                     context.go(PatientRoutes.list);
+                  } else if (index == 1) {
+                    // Tra cứu entry: medical lookup catalogue.
+                    context.push(LookupRoutes.lookup);
                   } else if (index == 2) {
                     context.push(PatientRoutes.addPatientForDiagnosis);
                   } else if (index == 4) {

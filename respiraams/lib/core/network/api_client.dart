@@ -105,3 +105,65 @@ Future<Response<dynamic>> _performRefresh(Dio dio, TokenStorage storage) {
 
 /// Builds a Dio pre-configured for an unauthenticated call (login).
 Dio unauthenticatedDio() => Dio(BaseOptions(baseUrl: kApiBaseUrl));
+
+/// Compatibility client for lookup-feature repositories
+/// (`AntibioticRepository`, `PathogenRepository`, …).
+///
+/// Builds a [Dio] with the `/api/1` base appended so their relative paths
+/// (`/antibiotics`, `/pathogens`, …) resolve against the gateway. The
+/// default instance is auth-aware — bearer injection plus single-flight
+/// 401/403 refresh recovery — because the lookup screens construct it
+/// outside any Riverpod scope.
+class ApiClient {
+  ApiClient({Dio? dioOverride}) : dio = dioOverride ?? _buildDio();
+
+  final Dio dio;
+
+  static Dio _buildDio() {
+    final dio = Dio(
+      BaseOptions(
+        baseUrl: '$kApiBaseUrl/api/$kApiVersion',
+        connectTimeout: const Duration(seconds: 15),
+        receiveTimeout: const Duration(seconds: 20),
+        headers: {'Accept': 'application/json'},
+      ),
+    );
+
+    dio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) async {
+          final token = (await _loadStorage()).accessToken;
+          // Login/refresh/verify-email must go out unauthenticated.
+          final isAuthRoute = options.path.contains('/auth/');
+          if (token != null && token.isNotEmpty && !isAuthRoute) {
+            options.headers['Authorization'] = 'Bearer $token';
+          }
+          handler.next(options);
+        },
+        onError: (error, handler) async {
+          final status = error.response?.statusCode;
+          final isAuthRoute = error.requestOptions.path.contains('/auth/');
+
+          if ((status == 401 || status == 403) && !isAuthRoute) {
+            final storage = await _loadStorage();
+            if (storage.refreshToken != null) {
+              try {
+                final retried = await _refreshAndRetry(dio, storage, error);
+                return handler.resolve(retried);
+              } on DioException {
+                // Refresh failed — tokens were cleared; surface the
+                // original error instead.
+              }
+            }
+          }
+          handler.next(error);
+        },
+      ),
+    );
+
+    return dio;
+  }
+
+  static Future<TokenStorage> _loadStorage() async =>
+      TokenStorage(await SharedPreferences.getInstance());
+}

@@ -105,7 +105,7 @@ class FormulaDisplayWidget extends StatelessWidget {
         decoration: BoxDecoration(
           color: c.successSoft,
           borderRadius: BorderRadius.circular(6),
-          border: Border.all(color: c.success.withOpacity(0.3)),
+          border: Border.all(color: c.success.withValues(alpha: 0.3)),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,

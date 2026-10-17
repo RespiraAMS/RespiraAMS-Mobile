@@ -134,7 +134,7 @@ class _SuspectedCauseListScreenState extends State<SuspectedCauseListScreen> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(LucideIcons.folderSearch, size: 48, color: c.textSecondary.withOpacity(0.5)),
+                          Icon(LucideIcons.folderSearch, size: 48, color: c.textSecondary.withValues(alpha: 0.5)),
                           const SizedBox(height: 16),
                           AppText('Không tìm thấy kết quả nào.', color: c.textSecondary),
                         ],
@@ -146,7 +146,7 @@ class _SuspectedCauseListScreenState extends State<SuspectedCauseListScreen> {
                     controller: _scrollController,
                     padding: const EdgeInsets.all(Spacing.group),
                     itemCount: provider.items.length + (provider.hasMore ? 1 : 0),
-                    separatorBuilder: (_, __) => const SizedBox(height: Spacing.control),
+                    separatorBuilder: (_, _) => const SizedBox(height: Spacing.control),
                     itemBuilder: (context, index) {
                       if (index == provider.items.length) {
                         return Padding(
