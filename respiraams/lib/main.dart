@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -8,6 +9,12 @@ import 'design_system/design_system.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // Load `.env` (bundled asset) so `kApiBaseUrl` can read API_BASE_URL.
+  // Missing/misconfigured file must not crash the app; the getter falls
+  // back to its built-in gateway default.
+  try {
+    await dotenv.load();
+  } catch (_) {}
   final prefs = await SharedPreferences.getInstance();
   runApp(ProviderScope(
     overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
