@@ -67,11 +67,23 @@ abstract final class TypographyTokens {
     required double height,
     FontWeight? fontWeight,
   }) {
+    final color = Theme.of(context).colorScheme.onSurface;
+    final weight = fontWeight ?? FontWeight.w400;
+    // When runtime fetching is disabled (offline / widget tests) skip
+    // google_fonts entirely so no unresolved font load is attempted.
+    if (!GoogleFonts.config.allowRuntimeFetching) {
+      return TextStyle(
+        fontSize: fontSize,
+        height: height,
+        fontWeight: weight,
+        color: color,
+      );
+    }
     return GoogleFonts.inter(
       fontSize: fontSize,
       height: height,
-      fontWeight: fontWeight ?? FontWeight.w400,
-      color: Theme.of(context).colorScheme.onSurface,
+      fontWeight: weight,
+      color: color,
     );
   }
 }
