@@ -241,16 +241,7 @@ class _Header extends ConsumerWidget {
 
     return Row(
       children: [
-        _CircleAction(
-          icon: LucideIcons.logOut,
-          background: c.surfaceSecondary,
-          foreground: c.iconDefault,
-          semanticLabel: 'Đăng xuất',
-          onTap: () => showAppToast(
-            context,
-            'Đăng xuất sẽ được bổ sung sau.',
-          ),
-        ),
+        const AppMenuButton(),
         const SizedBox(width: Spacing.group),
         Expanded(
           child: Column(

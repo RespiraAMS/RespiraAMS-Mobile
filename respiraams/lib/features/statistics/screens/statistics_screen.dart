@@ -156,23 +156,7 @@ class _Header extends ConsumerWidget {
 
     return Row(
       children: [
-        Material(
-          color: c.surfaceSecondary,
-          shape: const CircleBorder(),
-          clipBehavior: Clip.antiAlias,
-          child: SizedBox(
-            width: ControlSize.touchTargetMin,
-            height: ControlSize.touchTargetMin,
-            child: InkWell(
-              onTap: () => showAppToast(
-                context,
-                'Đăng xuất sẽ được bổ sung sau.',
-              ),
-              child: Icon(LucideIcons.logOut,
-                  size: ControlSize.iconXl, color: c.iconDefault),
-            ),
-          ),
-        ),
+        const AppMenuButton(),
         const SizedBox(width: Spacing.group),
         Expanded(
           child: Column(
