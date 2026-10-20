@@ -23,10 +23,13 @@ PatientListItemDto _$PatientListItemDtoFromJson(Map<String, dynamic> json) {
 mixin _$PatientListItemDto {
   String get id => throw _privateConstructorUsedError;
   String get fullName => throw _privateConstructorUsedError;
+  String get dateOfBirth => throw _privateConstructorUsedError;
   int get age => throw _privateConstructorUsedError;
-  bool get isMale => throw _privateConstructorUsedError;
+
+  /// `Male` | `Female`.
+  String get gender => throw _privateConstructorUsedError;
   String get medicalRecordCode => throw _privateConstructorUsedError;
-  PatientStatusDto get status => throw _privateConstructorUsedError;
+  PatientStatusDto get treatmentOutcome => throw _privateConstructorUsedError;
 
   /// Serializes this PatientListItemDto to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -48,10 +51,11 @@ abstract class $PatientListItemDtoCopyWith<$Res> {
   $Res call({
     String id,
     String fullName,
+    String dateOfBirth,
     int age,
-    bool isMale,
+    String gender,
     String medicalRecordCode,
-    PatientStatusDto status,
+    PatientStatusDto treatmentOutcome,
   });
 }
 
@@ -72,10 +76,11 @@ class _$PatientListItemDtoCopyWithImpl<$Res, $Val extends PatientListItemDto>
   $Res call({
     Object? id = null,
     Object? fullName = null,
+    Object? dateOfBirth = null,
     Object? age = null,
-    Object? isMale = null,
+    Object? gender = null,
     Object? medicalRecordCode = null,
-    Object? status = null,
+    Object? treatmentOutcome = null,
   }) {
     return _then(
       _value.copyWith(
@@ -87,21 +92,25 @@ class _$PatientListItemDtoCopyWithImpl<$Res, $Val extends PatientListItemDto>
                 ? _value.fullName
                 : fullName // ignore: cast_nullable_to_non_nullable
                       as String,
+            dateOfBirth: null == dateOfBirth
+                ? _value.dateOfBirth
+                : dateOfBirth // ignore: cast_nullable_to_non_nullable
+                      as String,
             age: null == age
                 ? _value.age
                 : age // ignore: cast_nullable_to_non_nullable
                       as int,
-            isMale: null == isMale
-                ? _value.isMale
-                : isMale // ignore: cast_nullable_to_non_nullable
-                      as bool,
+            gender: null == gender
+                ? _value.gender
+                : gender // ignore: cast_nullable_to_non_nullable
+                      as String,
             medicalRecordCode: null == medicalRecordCode
                 ? _value.medicalRecordCode
                 : medicalRecordCode // ignore: cast_nullable_to_non_nullable
                       as String,
-            status: null == status
-                ? _value.status
-                : status // ignore: cast_nullable_to_non_nullable
+            treatmentOutcome: null == treatmentOutcome
+                ? _value.treatmentOutcome
+                : treatmentOutcome // ignore: cast_nullable_to_non_nullable
                       as PatientStatusDto,
           )
           as $Val,
@@ -121,10 +130,11 @@ abstract class _$$PatientListItemDtoImplCopyWith<$Res>
   $Res call({
     String id,
     String fullName,
+    String dateOfBirth,
     int age,
-    bool isMale,
+    String gender,
     String medicalRecordCode,
-    PatientStatusDto status,
+    PatientStatusDto treatmentOutcome,
   });
 }
 
@@ -144,10 +154,11 @@ class __$$PatientListItemDtoImplCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? fullName = null,
+    Object? dateOfBirth = null,
     Object? age = null,
-    Object? isMale = null,
+    Object? gender = null,
     Object? medicalRecordCode = null,
-    Object? status = null,
+    Object? treatmentOutcome = null,
   }) {
     return _then(
       _$PatientListItemDtoImpl(
@@ -159,21 +170,25 @@ class __$$PatientListItemDtoImplCopyWithImpl<$Res>
             ? _value.fullName
             : fullName // ignore: cast_nullable_to_non_nullable
                   as String,
+        dateOfBirth: null == dateOfBirth
+            ? _value.dateOfBirth
+            : dateOfBirth // ignore: cast_nullable_to_non_nullable
+                  as String,
         age: null == age
             ? _value.age
             : age // ignore: cast_nullable_to_non_nullable
                   as int,
-        isMale: null == isMale
-            ? _value.isMale
-            : isMale // ignore: cast_nullable_to_non_nullable
-                  as bool,
+        gender: null == gender
+            ? _value.gender
+            : gender // ignore: cast_nullable_to_non_nullable
+                  as String,
         medicalRecordCode: null == medicalRecordCode
             ? _value.medicalRecordCode
             : medicalRecordCode // ignore: cast_nullable_to_non_nullable
                   as String,
-        status: null == status
-            ? _value.status
-            : status // ignore: cast_nullable_to_non_nullable
+        treatmentOutcome: null == treatmentOutcome
+            ? _value.treatmentOutcome
+            : treatmentOutcome // ignore: cast_nullable_to_non_nullable
                   as PatientStatusDto,
       ),
     );
@@ -186,10 +201,11 @@ class _$PatientListItemDtoImpl implements _PatientListItemDto {
   const _$PatientListItemDtoImpl({
     required this.id,
     required this.fullName,
+    required this.dateOfBirth,
     required this.age,
-    required this.isMale,
+    required this.gender,
     required this.medicalRecordCode,
-    required this.status,
+    required this.treatmentOutcome,
   });
 
   factory _$PatientListItemDtoImpl.fromJson(Map<String, dynamic> json) =>
@@ -200,17 +216,21 @@ class _$PatientListItemDtoImpl implements _PatientListItemDto {
   @override
   final String fullName;
   @override
-  final int age;
+  final String dateOfBirth;
   @override
-  final bool isMale;
+  final int age;
+
+  /// `Male` | `Female`.
+  @override
+  final String gender;
   @override
   final String medicalRecordCode;
   @override
-  final PatientStatusDto status;
+  final PatientStatusDto treatmentOutcome;
 
   @override
   String toString() {
-    return 'PatientListItemDto(id: $id, fullName: $fullName, age: $age, isMale: $isMale, medicalRecordCode: $medicalRecordCode, status: $status)';
+    return 'PatientListItemDto(id: $id, fullName: $fullName, dateOfBirth: $dateOfBirth, age: $age, gender: $gender, medicalRecordCode: $medicalRecordCode, treatmentOutcome: $treatmentOutcome)';
   }
 
   @override
@@ -221,11 +241,14 @@ class _$PatientListItemDtoImpl implements _PatientListItemDto {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.fullName, fullName) ||
                 other.fullName == fullName) &&
+            (identical(other.dateOfBirth, dateOfBirth) ||
+                other.dateOfBirth == dateOfBirth) &&
             (identical(other.age, age) || other.age == age) &&
-            (identical(other.isMale, isMale) || other.isMale == isMale) &&
+            (identical(other.gender, gender) || other.gender == gender) &&
             (identical(other.medicalRecordCode, medicalRecordCode) ||
                 other.medicalRecordCode == medicalRecordCode) &&
-            (identical(other.status, status) || other.status == status));
+            (identical(other.treatmentOutcome, treatmentOutcome) ||
+                other.treatmentOutcome == treatmentOutcome));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -234,10 +257,11 @@ class _$PatientListItemDtoImpl implements _PatientListItemDto {
     runtimeType,
     id,
     fullName,
+    dateOfBirth,
     age,
-    isMale,
+    gender,
     medicalRecordCode,
-    status,
+    treatmentOutcome,
   );
 
   /// Create a copy of PatientListItemDto
@@ -261,10 +285,11 @@ abstract class _PatientListItemDto implements PatientListItemDto {
   const factory _PatientListItemDto({
     required final String id,
     required final String fullName,
+    required final String dateOfBirth,
     required final int age,
-    required final bool isMale,
+    required final String gender,
     required final String medicalRecordCode,
-    required final PatientStatusDto status,
+    required final PatientStatusDto treatmentOutcome,
   }) = _$PatientListItemDtoImpl;
 
   factory _PatientListItemDto.fromJson(Map<String, dynamic> json) =
@@ -275,13 +300,17 @@ abstract class _PatientListItemDto implements PatientListItemDto {
   @override
   String get fullName;
   @override
-  int get age;
+  String get dateOfBirth;
   @override
-  bool get isMale;
+  int get age;
+
+  /// `Male` | `Female`.
+  @override
+  String get gender;
   @override
   String get medicalRecordCode;
   @override
-  PatientStatusDto get status;
+  PatientStatusDto get treatmentOutcome;
 
   /// Create a copy of PatientListItemDto
   /// with the given fields replaced by the non-null parameter values.
@@ -446,6 +475,391 @@ abstract class _CreatedPatientDto implements CreatedPatientDto {
       throw _privateConstructorUsedError;
 }
 
+NextOfKinItemDto _$NextOfKinItemDtoFromJson(Map<String, dynamic> json) {
+  return _NextOfKinItemDto.fromJson(json);
+}
+
+/// @nodoc
+mixin _$NextOfKinItemDto {
+  String get id => throw _privateConstructorUsedError;
+  String get fullName => throw _privateConstructorUsedError;
+  String get phoneNumber => throw _privateConstructorUsedError;
+  String get relationship => throw _privateConstructorUsedError;
+
+  /// Serializes this NextOfKinItemDto to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of NextOfKinItemDto
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $NextOfKinItemDtoCopyWith<NextOfKinItemDto> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $NextOfKinItemDtoCopyWith<$Res> {
+  factory $NextOfKinItemDtoCopyWith(
+    NextOfKinItemDto value,
+    $Res Function(NextOfKinItemDto) then,
+  ) = _$NextOfKinItemDtoCopyWithImpl<$Res, NextOfKinItemDto>;
+  @useResult
+  $Res call({
+    String id,
+    String fullName,
+    String phoneNumber,
+    String relationship,
+  });
+}
+
+/// @nodoc
+class _$NextOfKinItemDtoCopyWithImpl<$Res, $Val extends NextOfKinItemDto>
+    implements $NextOfKinItemDtoCopyWith<$Res> {
+  _$NextOfKinItemDtoCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of NextOfKinItemDto
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? fullName = null,
+    Object? phoneNumber = null,
+    Object? relationship = null,
+  }) {
+    return _then(
+      _value.copyWith(
+            id: null == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as String,
+            fullName: null == fullName
+                ? _value.fullName
+                : fullName // ignore: cast_nullable_to_non_nullable
+                      as String,
+            phoneNumber: null == phoneNumber
+                ? _value.phoneNumber
+                : phoneNumber // ignore: cast_nullable_to_non_nullable
+                      as String,
+            relationship: null == relationship
+                ? _value.relationship
+                : relationship // ignore: cast_nullable_to_non_nullable
+                      as String,
+          )
+          as $Val,
+    );
+  }
+}
+
+/// @nodoc
+abstract class _$$NextOfKinItemDtoImplCopyWith<$Res>
+    implements $NextOfKinItemDtoCopyWith<$Res> {
+  factory _$$NextOfKinItemDtoImplCopyWith(
+    _$NextOfKinItemDtoImpl value,
+    $Res Function(_$NextOfKinItemDtoImpl) then,
+  ) = __$$NextOfKinItemDtoImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({
+    String id,
+    String fullName,
+    String phoneNumber,
+    String relationship,
+  });
+}
+
+/// @nodoc
+class __$$NextOfKinItemDtoImplCopyWithImpl<$Res>
+    extends _$NextOfKinItemDtoCopyWithImpl<$Res, _$NextOfKinItemDtoImpl>
+    implements _$$NextOfKinItemDtoImplCopyWith<$Res> {
+  __$$NextOfKinItemDtoImplCopyWithImpl(
+    _$NextOfKinItemDtoImpl _value,
+    $Res Function(_$NextOfKinItemDtoImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of NextOfKinItemDto
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? fullName = null,
+    Object? phoneNumber = null,
+    Object? relationship = null,
+  }) {
+    return _then(
+      _$NextOfKinItemDtoImpl(
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as String,
+        fullName: null == fullName
+            ? _value.fullName
+            : fullName // ignore: cast_nullable_to_non_nullable
+                  as String,
+        phoneNumber: null == phoneNumber
+            ? _value.phoneNumber
+            : phoneNumber // ignore: cast_nullable_to_non_nullable
+                  as String,
+        relationship: null == relationship
+            ? _value.relationship
+            : relationship // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$NextOfKinItemDtoImpl implements _NextOfKinItemDto {
+  const _$NextOfKinItemDtoImpl({
+    required this.id,
+    required this.fullName,
+    required this.phoneNumber,
+    required this.relationship,
+  });
+
+  factory _$NextOfKinItemDtoImpl.fromJson(Map<String, dynamic> json) =>
+      _$$NextOfKinItemDtoImplFromJson(json);
+
+  @override
+  final String id;
+  @override
+  final String fullName;
+  @override
+  final String phoneNumber;
+  @override
+  final String relationship;
+
+  @override
+  String toString() {
+    return 'NextOfKinItemDto(id: $id, fullName: $fullName, phoneNumber: $phoneNumber, relationship: $relationship)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$NextOfKinItemDtoImpl &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.fullName, fullName) ||
+                other.fullName == fullName) &&
+            (identical(other.phoneNumber, phoneNumber) ||
+                other.phoneNumber == phoneNumber) &&
+            (identical(other.relationship, relationship) ||
+                other.relationship == relationship));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, id, fullName, phoneNumber, relationship);
+
+  /// Create a copy of NextOfKinItemDto
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$NextOfKinItemDtoImplCopyWith<_$NextOfKinItemDtoImpl> get copyWith =>
+      __$$NextOfKinItemDtoImplCopyWithImpl<_$NextOfKinItemDtoImpl>(
+        this,
+        _$identity,
+      );
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$NextOfKinItemDtoImplToJson(this);
+  }
+}
+
+abstract class _NextOfKinItemDto implements NextOfKinItemDto {
+  const factory _NextOfKinItemDto({
+    required final String id,
+    required final String fullName,
+    required final String phoneNumber,
+    required final String relationship,
+  }) = _$NextOfKinItemDtoImpl;
+
+  factory _NextOfKinItemDto.fromJson(Map<String, dynamic> json) =
+      _$NextOfKinItemDtoImpl.fromJson;
+
+  @override
+  String get id;
+  @override
+  String get fullName;
+  @override
+  String get phoneNumber;
+  @override
+  String get relationship;
+
+  /// Create a copy of NextOfKinItemDto
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$NextOfKinItemDtoImplCopyWith<_$NextOfKinItemDtoImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+TreatmentItemDto _$TreatmentItemDtoFromJson(Map<String, dynamic> json) {
+  return _TreatmentItemDto.fromJson(json);
+}
+
+/// @nodoc
+mixin _$TreatmentItemDto {
+  String get id => throw _privateConstructorUsedError;
+
+  /// Serializes this TreatmentItemDto to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of TreatmentItemDto
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $TreatmentItemDtoCopyWith<TreatmentItemDto> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $TreatmentItemDtoCopyWith<$Res> {
+  factory $TreatmentItemDtoCopyWith(
+    TreatmentItemDto value,
+    $Res Function(TreatmentItemDto) then,
+  ) = _$TreatmentItemDtoCopyWithImpl<$Res, TreatmentItemDto>;
+  @useResult
+  $Res call({String id});
+}
+
+/// @nodoc
+class _$TreatmentItemDtoCopyWithImpl<$Res, $Val extends TreatmentItemDto>
+    implements $TreatmentItemDtoCopyWith<$Res> {
+  _$TreatmentItemDtoCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of TreatmentItemDto
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({Object? id = null}) {
+    return _then(
+      _value.copyWith(
+            id: null == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as String,
+          )
+          as $Val,
+    );
+  }
+}
+
+/// @nodoc
+abstract class _$$TreatmentItemDtoImplCopyWith<$Res>
+    implements $TreatmentItemDtoCopyWith<$Res> {
+  factory _$$TreatmentItemDtoImplCopyWith(
+    _$TreatmentItemDtoImpl value,
+    $Res Function(_$TreatmentItemDtoImpl) then,
+  ) = __$$TreatmentItemDtoImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({String id});
+}
+
+/// @nodoc
+class __$$TreatmentItemDtoImplCopyWithImpl<$Res>
+    extends _$TreatmentItemDtoCopyWithImpl<$Res, _$TreatmentItemDtoImpl>
+    implements _$$TreatmentItemDtoImplCopyWith<$Res> {
+  __$$TreatmentItemDtoImplCopyWithImpl(
+    _$TreatmentItemDtoImpl _value,
+    $Res Function(_$TreatmentItemDtoImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of TreatmentItemDto
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({Object? id = null}) {
+    return _then(
+      _$TreatmentItemDtoImpl(
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$TreatmentItemDtoImpl implements _TreatmentItemDto {
+  const _$TreatmentItemDtoImpl({required this.id});
+
+  factory _$TreatmentItemDtoImpl.fromJson(Map<String, dynamic> json) =>
+      _$$TreatmentItemDtoImplFromJson(json);
+
+  @override
+  final String id;
+
+  @override
+  String toString() {
+    return 'TreatmentItemDto(id: $id)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$TreatmentItemDtoImpl &&
+            (identical(other.id, id) || other.id == id));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, id);
+
+  /// Create a copy of TreatmentItemDto
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$TreatmentItemDtoImplCopyWith<_$TreatmentItemDtoImpl> get copyWith =>
+      __$$TreatmentItemDtoImplCopyWithImpl<_$TreatmentItemDtoImpl>(
+        this,
+        _$identity,
+      );
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$TreatmentItemDtoImplToJson(this);
+  }
+}
+
+abstract class _TreatmentItemDto implements TreatmentItemDto {
+  const factory _TreatmentItemDto({required final String id}) =
+      _$TreatmentItemDtoImpl;
+
+  factory _TreatmentItemDto.fromJson(Map<String, dynamic> json) =
+      _$TreatmentItemDtoImpl.fromJson;
+
+  @override
+  String get id;
+
+  /// Create a copy of TreatmentItemDto
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$TreatmentItemDtoImplCopyWith<_$TreatmentItemDtoImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
 PatientDetailDto _$PatientDetailDtoFromJson(Map<String, dynamic> json) {
   return _PatientDetailDto.fromJson(json);
 }
@@ -454,16 +868,19 @@ PatientDetailDto _$PatientDetailDtoFromJson(Map<String, dynamic> json) {
 mixin _$PatientDetailDto {
   String get id => throw _privateConstructorUsedError;
   String get fullName => throw _privateConstructorUsedError;
+  String get phoneNumber => throw _privateConstructorUsedError;
   String get dateOfBirth => throw _privateConstructorUsedError;
-  bool get isMale => throw _privateConstructorUsedError;
+  String get gender => throw _privateConstructorUsedError; // Male | Female
+  double get height => throw _privateConstructorUsedError; // cm
+  double get weight => throw _privateConstructorUsedError; // kg
   String get medicalRecordCode => throw _privateConstructorUsedError;
-  String get healthInsuranceCardNumber => throw _privateConstructorUsedError;
+  String get healthInsuranceCard => throw _privateConstructorUsedError;
   String get address => throw _privateConstructorUsedError;
   String get city => throw _privateConstructorUsedError;
-  String get country => throw _privateConstructorUsedError;
   String get admission => throw _privateConstructorUsedError;
   String? get discharge => throw _privateConstructorUsedError;
-  PatientStatusDto get status => throw _privateConstructorUsedError;
+  PatientStatusDto get treatmentOutcome => throw _privateConstructorUsedError;
+  List<NextOfKinItemDto> get nextOfKins => throw _privateConstructorUsedError;
   List<TreatmentItemDto> get treatments => throw _privateConstructorUsedError;
 
   /// Serializes this PatientDetailDto to a JSON map.
@@ -486,16 +903,19 @@ abstract class $PatientDetailDtoCopyWith<$Res> {
   $Res call({
     String id,
     String fullName,
+    String phoneNumber,
     String dateOfBirth,
-    bool isMale,
+    String gender,
+    double height,
+    double weight,
     String medicalRecordCode,
-    String healthInsuranceCardNumber,
+    String healthInsuranceCard,
     String address,
     String city,
-    String country,
     String admission,
     String? discharge,
-    PatientStatusDto status,
+    PatientStatusDto treatmentOutcome,
+    List<NextOfKinItemDto> nextOfKins,
     List<TreatmentItemDto> treatments,
   });
 }
@@ -517,16 +937,19 @@ class _$PatientDetailDtoCopyWithImpl<$Res, $Val extends PatientDetailDto>
   $Res call({
     Object? id = null,
     Object? fullName = null,
+    Object? phoneNumber = null,
     Object? dateOfBirth = null,
-    Object? isMale = null,
+    Object? gender = null,
+    Object? height = null,
+    Object? weight = null,
     Object? medicalRecordCode = null,
-    Object? healthInsuranceCardNumber = null,
+    Object? healthInsuranceCard = null,
     Object? address = null,
     Object? city = null,
-    Object? country = null,
     Object? admission = null,
     Object? discharge = freezed,
-    Object? status = null,
+    Object? treatmentOutcome = null,
+    Object? nextOfKins = null,
     Object? treatments = null,
   }) {
     return _then(
@@ -539,21 +962,33 @@ class _$PatientDetailDtoCopyWithImpl<$Res, $Val extends PatientDetailDto>
                 ? _value.fullName
                 : fullName // ignore: cast_nullable_to_non_nullable
                       as String,
+            phoneNumber: null == phoneNumber
+                ? _value.phoneNumber
+                : phoneNumber // ignore: cast_nullable_to_non_nullable
+                      as String,
             dateOfBirth: null == dateOfBirth
                 ? _value.dateOfBirth
                 : dateOfBirth // ignore: cast_nullable_to_non_nullable
                       as String,
-            isMale: null == isMale
-                ? _value.isMale
-                : isMale // ignore: cast_nullable_to_non_nullable
-                      as bool,
+            gender: null == gender
+                ? _value.gender
+                : gender // ignore: cast_nullable_to_non_nullable
+                      as String,
+            height: null == height
+                ? _value.height
+                : height // ignore: cast_nullable_to_non_nullable
+                      as double,
+            weight: null == weight
+                ? _value.weight
+                : weight // ignore: cast_nullable_to_non_nullable
+                      as double,
             medicalRecordCode: null == medicalRecordCode
                 ? _value.medicalRecordCode
                 : medicalRecordCode // ignore: cast_nullable_to_non_nullable
                       as String,
-            healthInsuranceCardNumber: null == healthInsuranceCardNumber
-                ? _value.healthInsuranceCardNumber
-                : healthInsuranceCardNumber // ignore: cast_nullable_to_non_nullable
+            healthInsuranceCard: null == healthInsuranceCard
+                ? _value.healthInsuranceCard
+                : healthInsuranceCard // ignore: cast_nullable_to_non_nullable
                       as String,
             address: null == address
                 ? _value.address
@@ -563,10 +998,6 @@ class _$PatientDetailDtoCopyWithImpl<$Res, $Val extends PatientDetailDto>
                 ? _value.city
                 : city // ignore: cast_nullable_to_non_nullable
                       as String,
-            country: null == country
-                ? _value.country
-                : country // ignore: cast_nullable_to_non_nullable
-                      as String,
             admission: null == admission
                 ? _value.admission
                 : admission // ignore: cast_nullable_to_non_nullable
@@ -575,10 +1006,14 @@ class _$PatientDetailDtoCopyWithImpl<$Res, $Val extends PatientDetailDto>
                 ? _value.discharge
                 : discharge // ignore: cast_nullable_to_non_nullable
                       as String?,
-            status: null == status
-                ? _value.status
-                : status // ignore: cast_nullable_to_non_nullable
+            treatmentOutcome: null == treatmentOutcome
+                ? _value.treatmentOutcome
+                : treatmentOutcome // ignore: cast_nullable_to_non_nullable
                       as PatientStatusDto,
+            nextOfKins: null == nextOfKins
+                ? _value.nextOfKins
+                : nextOfKins // ignore: cast_nullable_to_non_nullable
+                      as List<NextOfKinItemDto>,
             treatments: null == treatments
                 ? _value.treatments
                 : treatments // ignore: cast_nullable_to_non_nullable
@@ -601,16 +1036,19 @@ abstract class _$$PatientDetailDtoImplCopyWith<$Res>
   $Res call({
     String id,
     String fullName,
+    String phoneNumber,
     String dateOfBirth,
-    bool isMale,
+    String gender,
+    double height,
+    double weight,
     String medicalRecordCode,
-    String healthInsuranceCardNumber,
+    String healthInsuranceCard,
     String address,
     String city,
-    String country,
     String admission,
     String? discharge,
-    PatientStatusDto status,
+    PatientStatusDto treatmentOutcome,
+    List<NextOfKinItemDto> nextOfKins,
     List<TreatmentItemDto> treatments,
   });
 }
@@ -631,16 +1069,19 @@ class __$$PatientDetailDtoImplCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? fullName = null,
+    Object? phoneNumber = null,
     Object? dateOfBirth = null,
-    Object? isMale = null,
+    Object? gender = null,
+    Object? height = null,
+    Object? weight = null,
     Object? medicalRecordCode = null,
-    Object? healthInsuranceCardNumber = null,
+    Object? healthInsuranceCard = null,
     Object? address = null,
     Object? city = null,
-    Object? country = null,
     Object? admission = null,
     Object? discharge = freezed,
-    Object? status = null,
+    Object? treatmentOutcome = null,
+    Object? nextOfKins = null,
     Object? treatments = null,
   }) {
     return _then(
@@ -653,21 +1094,33 @@ class __$$PatientDetailDtoImplCopyWithImpl<$Res>
             ? _value.fullName
             : fullName // ignore: cast_nullable_to_non_nullable
                   as String,
+        phoneNumber: null == phoneNumber
+            ? _value.phoneNumber
+            : phoneNumber // ignore: cast_nullable_to_non_nullable
+                  as String,
         dateOfBirth: null == dateOfBirth
             ? _value.dateOfBirth
             : dateOfBirth // ignore: cast_nullable_to_non_nullable
                   as String,
-        isMale: null == isMale
-            ? _value.isMale
-            : isMale // ignore: cast_nullable_to_non_nullable
-                  as bool,
+        gender: null == gender
+            ? _value.gender
+            : gender // ignore: cast_nullable_to_non_nullable
+                  as String,
+        height: null == height
+            ? _value.height
+            : height // ignore: cast_nullable_to_non_nullable
+                  as double,
+        weight: null == weight
+            ? _value.weight
+            : weight // ignore: cast_nullable_to_non_nullable
+                  as double,
         medicalRecordCode: null == medicalRecordCode
             ? _value.medicalRecordCode
             : medicalRecordCode // ignore: cast_nullable_to_non_nullable
                   as String,
-        healthInsuranceCardNumber: null == healthInsuranceCardNumber
-            ? _value.healthInsuranceCardNumber
-            : healthInsuranceCardNumber // ignore: cast_nullable_to_non_nullable
+        healthInsuranceCard: null == healthInsuranceCard
+            ? _value.healthInsuranceCard
+            : healthInsuranceCard // ignore: cast_nullable_to_non_nullable
                   as String,
         address: null == address
             ? _value.address
@@ -677,10 +1130,6 @@ class __$$PatientDetailDtoImplCopyWithImpl<$Res>
             ? _value.city
             : city // ignore: cast_nullable_to_non_nullable
                   as String,
-        country: null == country
-            ? _value.country
-            : country // ignore: cast_nullable_to_non_nullable
-                  as String,
         admission: null == admission
             ? _value.admission
             : admission // ignore: cast_nullable_to_non_nullable
@@ -689,10 +1138,14 @@ class __$$PatientDetailDtoImplCopyWithImpl<$Res>
             ? _value.discharge
             : discharge // ignore: cast_nullable_to_non_nullable
                   as String?,
-        status: null == status
-            ? _value.status
-            : status // ignore: cast_nullable_to_non_nullable
+        treatmentOutcome: null == treatmentOutcome
+            ? _value.treatmentOutcome
+            : treatmentOutcome // ignore: cast_nullable_to_non_nullable
                   as PatientStatusDto,
+        nextOfKins: null == nextOfKins
+            ? _value._nextOfKins
+            : nextOfKins // ignore: cast_nullable_to_non_nullable
+                  as List<NextOfKinItemDto>,
         treatments: null == treatments
             ? _value._treatments
             : treatments // ignore: cast_nullable_to_non_nullable
@@ -708,18 +1161,22 @@ class _$PatientDetailDtoImpl implements _PatientDetailDto {
   const _$PatientDetailDtoImpl({
     required this.id,
     required this.fullName,
+    required this.phoneNumber,
     required this.dateOfBirth,
-    required this.isMale,
+    required this.gender,
+    required this.height,
+    required this.weight,
     required this.medicalRecordCode,
-    required this.healthInsuranceCardNumber,
+    required this.healthInsuranceCard,
     required this.address,
     required this.city,
-    required this.country,
     required this.admission,
     this.discharge,
-    required this.status,
+    required this.treatmentOutcome,
+    final List<NextOfKinItemDto> nextOfKins = const [],
     final List<TreatmentItemDto> treatments = const [],
-  }) : _treatments = treatments;
+  }) : _nextOfKins = nextOfKins,
+       _treatments = treatments;
 
   factory _$PatientDetailDtoImpl.fromJson(Map<String, dynamic> json) =>
       _$$PatientDetailDtoImplFromJson(json);
@@ -729,25 +1186,41 @@ class _$PatientDetailDtoImpl implements _PatientDetailDto {
   @override
   final String fullName;
   @override
+  final String phoneNumber;
+  @override
   final String dateOfBirth;
   @override
-  final bool isMale;
+  final String gender;
+  // Male | Female
+  @override
+  final double height;
+  // cm
+  @override
+  final double weight;
+  // kg
   @override
   final String medicalRecordCode;
   @override
-  final String healthInsuranceCardNumber;
+  final String healthInsuranceCard;
   @override
   final String address;
   @override
   final String city;
   @override
-  final String country;
-  @override
   final String admission;
   @override
   final String? discharge;
   @override
-  final PatientStatusDto status;
+  final PatientStatusDto treatmentOutcome;
+  final List<NextOfKinItemDto> _nextOfKins;
+  @override
+  @JsonKey()
+  List<NextOfKinItemDto> get nextOfKins {
+    if (_nextOfKins is EqualUnmodifiableListView) return _nextOfKins;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_nextOfKins);
+  }
+
   final List<TreatmentItemDto> _treatments;
   @override
   @JsonKey()
@@ -759,7 +1232,7 @@ class _$PatientDetailDtoImpl implements _PatientDetailDto {
 
   @override
   String toString() {
-    return 'PatientDetailDto(id: $id, fullName: $fullName, dateOfBirth: $dateOfBirth, isMale: $isMale, medicalRecordCode: $medicalRecordCode, healthInsuranceCardNumber: $healthInsuranceCardNumber, address: $address, city: $city, country: $country, admission: $admission, discharge: $discharge, status: $status, treatments: $treatments)';
+    return 'PatientDetailDto(id: $id, fullName: $fullName, phoneNumber: $phoneNumber, dateOfBirth: $dateOfBirth, gender: $gender, height: $height, weight: $weight, medicalRecordCode: $medicalRecordCode, healthInsuranceCard: $healthInsuranceCard, address: $address, city: $city, admission: $admission, discharge: $discharge, treatmentOutcome: $treatmentOutcome, nextOfKins: $nextOfKins, treatments: $treatments)';
   }
 
   @override
@@ -770,24 +1243,29 @@ class _$PatientDetailDtoImpl implements _PatientDetailDto {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.fullName, fullName) ||
                 other.fullName == fullName) &&
+            (identical(other.phoneNumber, phoneNumber) ||
+                other.phoneNumber == phoneNumber) &&
             (identical(other.dateOfBirth, dateOfBirth) ||
                 other.dateOfBirth == dateOfBirth) &&
-            (identical(other.isMale, isMale) || other.isMale == isMale) &&
+            (identical(other.gender, gender) || other.gender == gender) &&
+            (identical(other.height, height) || other.height == height) &&
+            (identical(other.weight, weight) || other.weight == weight) &&
             (identical(other.medicalRecordCode, medicalRecordCode) ||
                 other.medicalRecordCode == medicalRecordCode) &&
-            (identical(
-                  other.healthInsuranceCardNumber,
-                  healthInsuranceCardNumber,
-                ) ||
-                other.healthInsuranceCardNumber == healthInsuranceCardNumber) &&
+            (identical(other.healthInsuranceCard, healthInsuranceCard) ||
+                other.healthInsuranceCard == healthInsuranceCard) &&
             (identical(other.address, address) || other.address == address) &&
             (identical(other.city, city) || other.city == city) &&
-            (identical(other.country, country) || other.country == country) &&
             (identical(other.admission, admission) ||
                 other.admission == admission) &&
             (identical(other.discharge, discharge) ||
                 other.discharge == discharge) &&
-            (identical(other.status, status) || other.status == status) &&
+            (identical(other.treatmentOutcome, treatmentOutcome) ||
+                other.treatmentOutcome == treatmentOutcome) &&
+            const DeepCollectionEquality().equals(
+              other._nextOfKins,
+              _nextOfKins,
+            ) &&
             const DeepCollectionEquality().equals(
               other._treatments,
               _treatments,
@@ -800,16 +1278,19 @@ class _$PatientDetailDtoImpl implements _PatientDetailDto {
     runtimeType,
     id,
     fullName,
+    phoneNumber,
     dateOfBirth,
-    isMale,
+    gender,
+    height,
+    weight,
     medicalRecordCode,
-    healthInsuranceCardNumber,
+    healthInsuranceCard,
     address,
     city,
-    country,
     admission,
     discharge,
-    status,
+    treatmentOutcome,
+    const DeepCollectionEquality().hash(_nextOfKins),
     const DeepCollectionEquality().hash(_treatments),
   );
 
@@ -834,16 +1315,19 @@ abstract class _PatientDetailDto implements PatientDetailDto {
   const factory _PatientDetailDto({
     required final String id,
     required final String fullName,
+    required final String phoneNumber,
     required final String dateOfBirth,
-    required final bool isMale,
+    required final String gender,
+    required final double height,
+    required final double weight,
     required final String medicalRecordCode,
-    required final String healthInsuranceCardNumber,
+    required final String healthInsuranceCard,
     required final String address,
     required final String city,
-    required final String country,
     required final String admission,
     final String? discharge,
-    required final PatientStatusDto status,
+    required final PatientStatusDto treatmentOutcome,
+    final List<NextOfKinItemDto> nextOfKins,
     final List<TreatmentItemDto> treatments,
   }) = _$PatientDetailDtoImpl;
 
@@ -855,25 +1339,31 @@ abstract class _PatientDetailDto implements PatientDetailDto {
   @override
   String get fullName;
   @override
+  String get phoneNumber;
+  @override
   String get dateOfBirth;
   @override
-  bool get isMale;
+  String get gender; // Male | Female
+  @override
+  double get height; // cm
+  @override
+  double get weight; // kg
   @override
   String get medicalRecordCode;
   @override
-  String get healthInsuranceCardNumber;
+  String get healthInsuranceCard;
   @override
   String get address;
   @override
   String get city;
   @override
-  String get country;
-  @override
   String get admission;
   @override
   String? get discharge;
   @override
-  PatientStatusDto get status;
+  PatientStatusDto get treatmentOutcome;
+  @override
+  List<NextOfKinItemDto> get nextOfKins;
   @override
   List<TreatmentItemDto> get treatments;
 
@@ -882,223 +1372,5 @@ abstract class _PatientDetailDto implements PatientDetailDto {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$PatientDetailDtoImplCopyWith<_$PatientDetailDtoImpl> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-TreatmentItemDto _$TreatmentItemDtoFromJson(Map<String, dynamic> json) {
-  return _TreatmentItemDto.fromJson(json);
-}
-
-/// @nodoc
-mixin _$TreatmentItemDto {
-  String get id => throw _privateConstructorUsedError;
-  String get start => throw _privateConstructorUsedError;
-  String get treatmentType => throw _privateConstructorUsedError;
-  String get status => throw _privateConstructorUsedError;
-
-  /// Serializes this TreatmentItemDto to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of TreatmentItemDto
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $TreatmentItemDtoCopyWith<TreatmentItemDto> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $TreatmentItemDtoCopyWith<$Res> {
-  factory $TreatmentItemDtoCopyWith(
-    TreatmentItemDto value,
-    $Res Function(TreatmentItemDto) then,
-  ) = _$TreatmentItemDtoCopyWithImpl<$Res, TreatmentItemDto>;
-  @useResult
-  $Res call({String id, String start, String treatmentType, String status});
-}
-
-/// @nodoc
-class _$TreatmentItemDtoCopyWithImpl<$Res, $Val extends TreatmentItemDto>
-    implements $TreatmentItemDtoCopyWith<$Res> {
-  _$TreatmentItemDtoCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  /// Create a copy of TreatmentItemDto
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? id = null,
-    Object? start = null,
-    Object? treatmentType = null,
-    Object? status = null,
-  }) {
-    return _then(
-      _value.copyWith(
-            id: null == id
-                ? _value.id
-                : id // ignore: cast_nullable_to_non_nullable
-                      as String,
-            start: null == start
-                ? _value.start
-                : start // ignore: cast_nullable_to_non_nullable
-                      as String,
-            treatmentType: null == treatmentType
-                ? _value.treatmentType
-                : treatmentType // ignore: cast_nullable_to_non_nullable
-                      as String,
-            status: null == status
-                ? _value.status
-                : status // ignore: cast_nullable_to_non_nullable
-                      as String,
-          )
-          as $Val,
-    );
-  }
-}
-
-/// @nodoc
-abstract class _$$TreatmentItemDtoImplCopyWith<$Res>
-    implements $TreatmentItemDtoCopyWith<$Res> {
-  factory _$$TreatmentItemDtoImplCopyWith(
-    _$TreatmentItemDtoImpl value,
-    $Res Function(_$TreatmentItemDtoImpl) then,
-  ) = __$$TreatmentItemDtoImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({String id, String start, String treatmentType, String status});
-}
-
-/// @nodoc
-class __$$TreatmentItemDtoImplCopyWithImpl<$Res>
-    extends _$TreatmentItemDtoCopyWithImpl<$Res, _$TreatmentItemDtoImpl>
-    implements _$$TreatmentItemDtoImplCopyWith<$Res> {
-  __$$TreatmentItemDtoImplCopyWithImpl(
-    _$TreatmentItemDtoImpl _value,
-    $Res Function(_$TreatmentItemDtoImpl) _then,
-  ) : super(_value, _then);
-
-  /// Create a copy of TreatmentItemDto
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? id = null,
-    Object? start = null,
-    Object? treatmentType = null,
-    Object? status = null,
-  }) {
-    return _then(
-      _$TreatmentItemDtoImpl(
-        id: null == id
-            ? _value.id
-            : id // ignore: cast_nullable_to_non_nullable
-                  as String,
-        start: null == start
-            ? _value.start
-            : start // ignore: cast_nullable_to_non_nullable
-                  as String,
-        treatmentType: null == treatmentType
-            ? _value.treatmentType
-            : treatmentType // ignore: cast_nullable_to_non_nullable
-                  as String,
-        status: null == status
-            ? _value.status
-            : status // ignore: cast_nullable_to_non_nullable
-                  as String,
-      ),
-    );
-  }
-}
-
-/// @nodoc
-@JsonSerializable()
-class _$TreatmentItemDtoImpl implements _TreatmentItemDto {
-  const _$TreatmentItemDtoImpl({
-    required this.id,
-    required this.start,
-    required this.treatmentType,
-    required this.status,
-  });
-
-  factory _$TreatmentItemDtoImpl.fromJson(Map<String, dynamic> json) =>
-      _$$TreatmentItemDtoImplFromJson(json);
-
-  @override
-  final String id;
-  @override
-  final String start;
-  @override
-  final String treatmentType;
-  @override
-  final String status;
-
-  @override
-  String toString() {
-    return 'TreatmentItemDto(id: $id, start: $start, treatmentType: $treatmentType, status: $status)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$TreatmentItemDtoImpl &&
-            (identical(other.id, id) || other.id == id) &&
-            (identical(other.start, start) || other.start == start) &&
-            (identical(other.treatmentType, treatmentType) ||
-                other.treatmentType == treatmentType) &&
-            (identical(other.status, status) || other.status == status));
-  }
-
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, start, treatmentType, status);
-
-  /// Create a copy of TreatmentItemDto
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$TreatmentItemDtoImplCopyWith<_$TreatmentItemDtoImpl> get copyWith =>
-      __$$TreatmentItemDtoImplCopyWithImpl<_$TreatmentItemDtoImpl>(
-        this,
-        _$identity,
-      );
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$TreatmentItemDtoImplToJson(this);
-  }
-}
-
-abstract class _TreatmentItemDto implements TreatmentItemDto {
-  const factory _TreatmentItemDto({
-    required final String id,
-    required final String start,
-    required final String treatmentType,
-    required final String status,
-  }) = _$TreatmentItemDtoImpl;
-
-  factory _TreatmentItemDto.fromJson(Map<String, dynamic> json) =
-      _$TreatmentItemDtoImpl.fromJson;
-
-  @override
-  String get id;
-  @override
-  String get start;
-  @override
-  String get treatmentType;
-  @override
-  String get status;
-
-  /// Create a copy of TreatmentItemDto
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$TreatmentItemDtoImplCopyWith<_$TreatmentItemDtoImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

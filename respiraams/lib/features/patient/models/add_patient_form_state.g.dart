@@ -9,27 +9,33 @@ part of 'add_patient_form_state.dart';
 _$AddPatientFormStateImpl _$$AddPatientFormStateImplFromJson(
   Map<String, dynamic> json,
 ) => _$AddPatientFormStateImpl(
-  name: json['name'] as String? ?? '',
+  lastName: json['lastName'] as String? ?? '',
+  firstName: json['firstName'] as String? ?? '',
   code: json['code'] as String? ?? '',
   dob: json['dob'] as String? ?? '',
   gender: $enumDecodeNullable(_$GenderEnumMap, json['gender']) ?? Gender.nam,
   insurance: json['insurance'] as String? ?? '',
+  phoneNumber: json['phoneNumber'] as String? ?? '',
+  heightCm: json['heightCm'] as String? ?? '',
+  weightKg: json['weightKg'] as String? ?? '',
   address: json['address'] as String? ?? '',
   city: json['city'] as String? ?? '',
-  country: json['country'] as String? ?? '',
 );
 
 Map<String, dynamic> _$$AddPatientFormStateImplToJson(
   _$AddPatientFormStateImpl instance,
 ) => <String, dynamic>{
-  'name': instance.name,
+  'lastName': instance.lastName,
+  'firstName': instance.firstName,
   'code': instance.code,
   'dob': instance.dob,
   'gender': _$GenderEnumMap[instance.gender]!,
   'insurance': instance.insurance,
+  'phoneNumber': instance.phoneNumber,
+  'heightCm': instance.heightCm,
+  'weightKg': instance.weightKg,
   'address': instance.address,
   'city': instance.city,
-  'country': instance.country,
 };
 
 const _$GenderEnumMap = {Gender.nam: 'nam', Gender.nu: 'nu'};

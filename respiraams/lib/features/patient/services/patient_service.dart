@@ -10,21 +10,43 @@ class PatientService {
 
   final Dio _dio;
 
-  /// `GET /patients` — paged roster, optional name / record-code filter.
+  /// `GET /patients` — paged roster. The backend only supports the
+  /// `Gender` / `MinAge` / `MaxAge` filters here (name lookup lives in
+  /// [searchPatients]).
   Future<Paged<PatientListItemDto>> getPatients({
     int page = 1,
     int size = 10,
-    String? fullName,
-    String? medicalRecordCode,
+    String? gender,
+    int? minAge,
+    int? maxAge,
   }) async {
     final res = await _dio.get(
       '/api/1/patients',
       queryParameters: {
         'page': page,
         'size': size,
-        if (fullName != null && fullName.isNotEmpty) 'fullName': fullName,
-        if (medicalRecordCode != null && medicalRecordCode.isNotEmpty)
-          'medicalRecordCode': medicalRecordCode,
+        if (gender != null && gender.isNotEmpty) 'gender': gender,
+        'minAge': ?minAge,
+        'maxAge': ?maxAge,
+      },
+    );
+    final json = unwrapEnvelope(res);
+    return Paged.fromJson(json, PatientListItemDto.fromJson);
+  }
+
+  /// `GET /patients/search` — relevance-ranked free-text search over the
+  /// full name / medical record code.
+  Future<Paged<PatientListItemDto>> searchPatients({
+    required String searchTerm,
+    int page = 1,
+    int size = 10,
+  }) async {
+    final res = await _dio.get(
+      '/api/1/patients/search',
+      queryParameters: {
+        'searchTerm': searchTerm,
+        'page': page,
+        'size': size,
       },
     );
     final json = unwrapEnvelope(res);
@@ -42,26 +64,32 @@ class PatientService {
 
   /// `POST /patients` — returns the created patient's ID.
   Future<String> createPatient({
-    required String fullName,
+    required String firstName,
+    required String lastName,
+    required String phoneNumber,
     required String dateOfBirth, // yyyy-MM-dd
-    required bool isMale,
+    required String gender, // Male | Female
+    required double height, // cm
+    required double weight, // kg
     required String medicalRecordCode,
-    required String healthInsuranceCardNumber,
+    required String healthInsuranceCard,
     required String address,
     required String city,
-    required String country,
   }) async {
     final res = await _dio.post(
       '/api/1/patients',
       data: {
-        'fullName': fullName,
+        'firstName': firstName,
+        'lastName': lastName,
+        'phoneNumber': phoneNumber,
         'dateOfBirth': dateOfBirth,
-        'isMale': isMale,
+        'gender': gender,
+        'height': height,
+        'weight': weight,
         'medicalRecordCode': medicalRecordCode,
-        'healthInsuranceCardNumber': healthInsuranceCardNumber,
+        'healthInsuranceCard': healthInsuranceCard,
         'address': address,
         'city': city,
-        'country': country,
       },
     );
     final created = unwrapData(
@@ -69,17 +97,5 @@ class PatientService {
       (json) => CreatedPatientDto.fromJson(json),
     );
     return created.id;
-  }
-
-  /// `POST /patients/{patientId}/treatments` — persists one diagnosis
-  /// record (202-style NoContent / empty body on success).
-  Future<void> createTreatment(
-    String patientId,
-    CreateTreatmentRequest request,
-  ) async {
-    await _dio.post(
-      '/api/1/patients/$patientId/treatments',
-      data: request.toJson(),
-    );
   }
 }

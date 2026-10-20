@@ -15,6 +15,8 @@ _$PatientImpl _$$PatientImplFromJson(Map<String, dynamic> json) =>
       gender: $enumDecode(_$GenderEnumMap, json['gender']),
       insurance: json['insurance'] as String,
       address: json['address'] as String,
+      heightCm: (json['heightCm'] as num?)?.toDouble(),
+      weightKg: (json['weightKg'] as num?)?.toDouble(),
     );
 
 Map<String, dynamic> _$$PatientImplToJson(_$PatientImpl instance) =>
@@ -26,6 +28,8 @@ Map<String, dynamic> _$$PatientImplToJson(_$PatientImpl instance) =>
       'gender': _$GenderEnumMap[instance.gender]!,
       'insurance': instance.insurance,
       'address': instance.address,
+      'heightCm': instance.heightCm,
+      'weightKg': instance.weightKg,
     };
 
 const _$GenderEnumMap = {Gender.nam: 'nam', Gender.nu: 'nu'};

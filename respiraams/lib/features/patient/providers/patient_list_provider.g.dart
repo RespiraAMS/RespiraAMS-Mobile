@@ -6,7 +6,7 @@ part of 'patient_list_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$visiblePatientsHash() => r'03decea0e877725f6cbae738bce58214b8c3ffae';
+String _$visiblePatientsHash() => r'8cc5a7e2a4f35c6b14d001d6315e7e70a9f01305';
 
 /// Applies the triage chips + priority sort over the loaded roster.
 ///
@@ -27,7 +27,7 @@ final visiblePatientsProvider =
 // ignore: unused_element
 typedef VisiblePatientsRef = AutoDisposeProviderRef<List<PatientSummary>>;
 String _$patientListControllerHash() =>
-    r'5e763266134afb00247399e3c9f502023b58b366';
+    r'3efb63bbbc54312306036479e2cedb04ef51d921';
 
 /// See also [PatientListController].
 @ProviderFor(PatientListController)

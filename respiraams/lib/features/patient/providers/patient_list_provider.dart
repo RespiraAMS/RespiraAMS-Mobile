@@ -4,6 +4,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/network/api_client.dart';
 import '../../../core/network/api_response.dart';
+import '../../../core/network/pagination_dto.dart';
 import '../models/patient_dtos.dart';
 import '../models/patient_summary.dart';
 import '../services/patient_service.dart';
@@ -14,10 +15,11 @@ part 'patient_list_provider.g.dart';
 /// Triage filter chips of the patient list screen.
 enum PatientListFilter { all, attention, highRisk }
 
-/// Paged + filtered roster state backed by `GET /patients`.
+/// Paged + filtered roster state backed by `GET /patients` (and
+/// `GET /patients/search` when a query is present).
 ///
-/// The backend only filters by name / record code; the triage chips are
-/// applied client-side over the loaded pages (user-approved limitation).
+/// The backend does not support triage filtering; the chips are applied
+/// client-side over the loaded pages (user-approved limitation).
 @freezed
 class PatientListState with _$PatientListState {
   const factory PatientListState({
@@ -56,10 +58,7 @@ class PatientListController extends _$PatientListController {
   Future<void> refresh() async {
     state = state.copyWith(loading: true, errorMessage: null, page: 1);
     try {
-      final paged = await _service.getPatients(
-        fullName: state.query,
-        medicalRecordCode: state.query,
-      );
+      final paged = await _fetch(page: 1);
       state = state.copyWith(
         loading: false,
         patients: _map(paged.items),
@@ -68,10 +67,10 @@ class PatientListController extends _$PatientListController {
       );
     } on ApiException catch (e) {
       state = state.copyWith(loading: false, errorMessage: e.message);
-    } on DioException {
+    } on DioException catch (e) {
       state = state.copyWith(
         loading: false,
-        errorMessage: 'Không thể kết nối máy chủ.',
+        errorMessage: dioErrorMessage(e),
       );
     }
   }
@@ -82,11 +81,7 @@ class PatientListController extends _$PatientListController {
     state = state.copyWith(loadingMore: true);
     try {
       final nextPage = state.page + 1;
-      final paged = await _service.getPatients(
-        page: nextPage,
-        fullName: state.query,
-        medicalRecordCode: state.query,
-      );
+      final paged = await _fetch(page: nextPage);
       state = state.copyWith(
         loadingMore: false,
         page: nextPage,
@@ -98,18 +93,28 @@ class PatientListController extends _$PatientListController {
     }
   }
 
+  /// Empty query → `GET /patients`; otherwise `GET /patients/search`.
+  Future<Paged<PatientListItemDto>> _fetch({required int page}) {
+    final query = state.query.trim();
+    if (query.isEmpty) {
+      return _service.getPatients(page: page);
+    }
+    return _service.searchPatients(searchTerm: query, page: page);
+  }
+
   List<PatientSummary> _map(Iterable<PatientListItemDto> items) =>
       items.map((dto) {
-        final status = switch (dto.status) {
+        final status = switch (dto.treatmentOutcome) {
           PatientStatusDto.inTreatment => PatientStatus.treating,
           PatientStatusDto.recovered => PatientStatus.recovered,
           PatientStatusDto.death => PatientStatus.deceased,
+          PatientStatusDto.outOfScope => PatientStatus.recovered,
         };
         return PatientSummary(
           id: dto.id,
           name: dto.fullName,
           code: dto.medicalRecordCode,
-          genderLabel: dto.isMale ? 'Nam' : 'Nữ',
+          genderLabel: dto.gender == 'Male' ? 'Nam' : 'Nữ',
           age: dto.age,
           status: status,
         );
@@ -120,18 +125,13 @@ class PatientListController extends _$PatientListController {
 @riverpod
 List<PatientSummary> visiblePatients(VisiblePatientsRef ref) {
   final listState = ref.watch(patientListControllerProvider);
-  final query = listState.query.trim().toLowerCase();
 
   var patients = listState.patients.where((p) {
-    final matchesFilter = switch (listState.filter) {
+    return switch (listState.filter) {
       PatientListFilter.all => true,
       PatientListFilter.attention => p.status == PatientStatus.treating,
       PatientListFilter.highRisk => p.status == PatientStatus.deceased,
     };
-    final matchesQuery = query.isEmpty ||
-        p.name.toLowerCase().contains(query) ||
-        p.code.toLowerCase().contains(query);
-    return matchesFilter && matchesQuery;
   }).toList();
 
   if (listState.prioritySort) {

@@ -7,42 +7,44 @@ import '../models/patient.dart';
 import '../services/patient_service.dart';
 import 'active_patient_provider.dart';
 import 'add_patient_saving_provider.dart';
+import 'patient_list_provider.dart';
 
 part 'add_patient_controller.g.dart';
 
 /// Holds the "Thêm bệnh nhân" form state and submits it to
 /// `POST /patients` (guidelines §2.1 Riverpod codegen).
 ///
-/// Pre-filled with the sample patient, mirroring the React prototype's
-/// `useState(patient)`.
+/// Starts empty; every field is entered by the user.
 @Riverpod(keepAlive: true)
 class AddPatientController extends _$AddPatientController {
   PatientService get _service => PatientService(ref.watch(apiClientProvider));
 
   @override
-  AddPatientFormState build() => AddPatientFormState(
-        name: samplePatient.name,
-        code: samplePatient.code,
-        dob: samplePatient.dob,
-        gender: samplePatient.gender,
-        insurance: samplePatient.insurance,
-        address: samplePatient.address,
+  AddPatientFormState build() => const AddPatientFormState(
+        address: 'Ninh Kiều',
+        city: 'Cần Thơ',
       );
 
-  void setName(String value) => state = state.copyWith(name: value);
+  void setLastName(String value) => state = state.copyWith(lastName: value);
+
+  void setFirstName(String value) => state = state.copyWith(firstName: value);
 
   void setCode(String value) => state = state.copyWith(code: value);
 
   void setDob(String value) => state = state.copyWith(dob: value);
 
-  void setInsurance(String value) =>
-      state = state.copyWith(insurance: value);
+  void setInsurance(String value) => state = state.copyWith(insurance: value);
+
+  void setPhoneNumber(String value) =>
+      state = state.copyWith(phoneNumber: value);
+
+  void setHeightCm(String value) => state = state.copyWith(heightCm: value);
+
+  void setWeightKg(String value) => state = state.copyWith(weightKg: value);
 
   void setAddress(String value) => state = state.copyWith(address: value);
 
   void setCity(String value) => state = state.copyWith(city: value);
-
-  void setCountry(String value) => state = state.copyWith(country: value);
 
   void setGender(Gender gender) {
     state = state.copyWith(gender: gender);
@@ -59,31 +61,40 @@ class AddPatientController extends _$AddPatientController {
     try {
       final form = state;
       // dd/MM/yyyy (prototype format) → yyyy-MM-dd (API DateOnly).
-      final parts = form.dob.split('/');
-      final dobIso = parts.length == 3
-          ? '${parts[2]}-${parts[1].padLeft(2, '0')}-${parts[0].padLeft(2, '0')}'
-          : form.dob;
+      final dobIso = ddMmYyyyToIsoDate(form.dob) ?? form.dob;
+
+      final height = double.tryParse(form.heightCm.trim().replaceAll(',', '.')) ?? 0;
+      final weight = double.tryParse(form.weightKg.trim().replaceAll(',', '.')) ?? 0;
 
       final id = await _service.createPatient(
-        fullName: form.name,
+        firstName: form.firstName.trim(),
+        lastName: form.lastName.trim(),
+        phoneNumber: form.phoneNumber.trim(),
         dateOfBirth: dobIso,
-        isMale: form.gender == Gender.nam,
-        medicalRecordCode: form.code,
-        healthInsuranceCardNumber: form.insurance,
-        address: form.address,
-        city: form.city,
-        country: form.country,
+        gender: form.gender == Gender.nam ? 'Male' : 'Female',
+        height: height,
+        weight: weight,
+        medicalRecordCode: form.code.trim(),
+        healthInsuranceCard: form.insurance.trim(),
+        address: form.address.trim(),
+        city: form.city.trim(),
       );
 
       final patient = Patient(
-        name: form.name,
-        code: form.code,
+        id: id,
+        name: '${form.lastName} ${form.firstName}'.trim(),
+        code: form.code.trim(),
         dob: form.dob,
         gender: form.gender,
-        insurance: form.insurance,
-        address: form.address,
+        insurance: form.insurance.trim(),
+        address: form.address.trim(),
+        heightCm: height > 0 ? height : null,
+        weightKg: weight > 0 ? weight : null,
       );
       ref.read(activePatientControllerProvider.notifier).set(patient);
+      // The roster is keep-alive; refresh it so the new patient appears when
+      // the user returns to the list (fire-and-forget).
+      ref.read(patientListControllerProvider.notifier).refresh();
       return id;
     } finally {
       saving.set(false);

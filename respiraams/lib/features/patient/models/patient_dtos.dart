@@ -3,7 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'patient_dtos.freezed.dart';
 part 'patient_dtos.g.dart';
 
-/// `Domain.Enums.PatientStatus` (string-serialized, PascalCase on the wire).
+/// `Domain.Enums.TreatmentOutcome` (string-serialized, PascalCase on the wire).
 enum PatientStatusDto {
   @JsonValue('InTreatment')
   inTreatment,
@@ -11,6 +11,8 @@ enum PatientStatusDto {
   recovered,
   @JsonValue('Death')
   death,
+  @JsonValue('OutOfScope')
+  outOfScope,
 }
 
 /// Row of `GET /patients` (`PagedPatientItem`).
@@ -19,10 +21,13 @@ class PatientListItemDto with _$PatientListItemDto {
   const factory PatientListItemDto({
     required String id,
     required String fullName,
+    required String dateOfBirth,
     required int age,
-    required bool isMale,
+
+    /// `Male` | `Female`.
+    required String gender,
     required String medicalRecordCode,
-    required PatientStatusDto status,
+    required PatientStatusDto treatmentOutcome,
   }) = _PatientListItemDto;
 
   factory PatientListItemDto.fromJson(Map<String, dynamic> json) =>
@@ -38,83 +43,51 @@ class CreatedPatientDto with _$CreatedPatientDto {
       _$CreatedPatientDtoFromJson(json);
 }
 
-/// Result of `GET /patients/{id}` (`PatientResult` incl. treatments).
+/// Next-of-kin entry of `GET /patients/{id}` (`NextOfKinItem`).
 @freezed
-class PatientDetailDto with _$PatientDetailDto {
-  const factory PatientDetailDto({
+class NextOfKinItemDto with _$NextOfKinItemDto {
+  const factory NextOfKinItemDto({
     required String id,
     required String fullName,
-    required String dateOfBirth,
-    required bool isMale,
-    required String medicalRecordCode,
-    required String healthInsuranceCardNumber,
-    required String address,
-    required String city,
-    required String country,
-    required String admission,
-    String? discharge,
-    required PatientStatusDto status,
-    @Default([]) List<TreatmentItemDto> treatments,
-  }) = _PatientDetailDto;
+    required String phoneNumber,
+    required String relationship,
+  }) = _NextOfKinItemDto;
 
-  factory PatientDetailDto.fromJson(Map<String, dynamic> json) =>
-      _$PatientDetailDtoFromJson(json);
+  factory NextOfKinItemDto.fromJson(Map<String, dynamic> json) =>
+      _$NextOfKinItemDtoFromJson(json);
 }
 
-/// One treatment in the patient's timeline (`TreatmentResult`).
+/// One treatment reference in the patient's timeline (`TreatmentItem`).
 @freezed
 class TreatmentItemDto with _$TreatmentItemDto {
-  const factory TreatmentItemDto({
-    required String id,
-    required String start,
-    required String treatmentType,
-    required String status,
-  }) = _TreatmentItemDto;
+  const factory TreatmentItemDto({required String id}) = _TreatmentItemDto;
 
   factory TreatmentItemDto.fromJson(Map<String, dynamic> json) =>
       _$TreatmentItemDtoFromJson(json);
 }
 
-/// Body of `POST /patients/{id}/treatments` (`CreateTreatmentRequestDto`).
-class CreateTreatmentRequest {
-  CreateTreatmentRequest({
-    required this.doctorId,
-    required this.treatmentType,
-    required this.crcl,
-    required this.systemRecommendedMedicines,
-    required this.doctorChosenMedicines,
-    this.severity,
-    this.treatmentSite,
-    this.infectionProbabilityRecords = const [],
-    this.pathogen,
-    this.reasonForDifferentChoice,
-  });
+/// Result of `GET /patients/{id}` (`PatientResult`).
+@freezed
+class PatientDetailDto with _$PatientDetailDto {
+  const factory PatientDetailDto({
+    required String id,
+    required String fullName,
+    required String phoneNumber,
+    required String dateOfBirth,
+    required String gender, // Male | Female
+    required double height, // cm
+    required double weight, // kg
+    required String medicalRecordCode,
+    required String healthInsuranceCard,
+    required String address,
+    required String city,
+    required String admission,
+    String? discharge,
+    required PatientStatusDto treatmentOutcome,
+    @Default([]) List<NextOfKinItemDto> nextOfKins,
+    @Default([]) List<TreatmentItemDto> treatments,
+  }) = _PatientDetailDto;
 
-  final String doctorId;
-  final String treatmentType; // EmpiricalTherapy | TargetedTherapy
-  final double crcl;
-  final List<Map<String, dynamic>> systemRecommendedMedicines;
-  final List<Map<String, dynamic>> doctorChosenMedicines;
-  final String? severity;
-  final String? treatmentSite;
-  final List<Map<String, dynamic>> infectionProbabilityRecords;
-  final Map<String, dynamic>? pathogen;
-  final String? reasonForDifferentChoice;
-
-  Map<String, dynamic> toJson() => {
-        'doctorId': doctorId,
-        'treatmentType': treatmentType,
-        'diagnosisRecord': {
-          'crcl': crcl,
-          'systemRecommendedMedicines': systemRecommendedMedicines,
-          'doctorChosenMedicines': doctorChosenMedicines,
-          if (severity != null) 'severity': severity,
-          if (treatmentSite != null) 'treatmentSite': treatmentSite,
-          if (infectionProbabilityRecords.isNotEmpty)
-            'infectionProbabilityRecords': infectionProbabilityRecords,
-          if (pathogen != null) 'pathogen': pathogen,
-          if (reasonForDifferentChoice != null)
-            'reasonForDifferentChoice': reasonForDifferentChoice,
-        },
-      };
+  factory PatientDetailDto.fromJson(Map<String, dynamic> json) =>
+      _$PatientDetailDtoFromJson(json);
 }

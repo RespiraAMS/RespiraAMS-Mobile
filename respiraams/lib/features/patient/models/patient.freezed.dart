@@ -33,6 +33,12 @@ mixin _$Patient {
   String get insurance => throw _privateConstructorUsedError;
   String get address => throw _privateConstructorUsedError;
 
+  /// Height in centimeters, from `GET /patients/{id}`.
+  double? get heightCm => throw _privateConstructorUsedError;
+
+  /// Weight in kilograms, from `GET /patients/{id}`.
+  double? get weightKg => throw _privateConstructorUsedError;
+
   /// Serializes this Patient to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
@@ -55,6 +61,8 @@ abstract class $PatientCopyWith<$Res> {
     Gender gender,
     String insurance,
     String address,
+    double? heightCm,
+    double? weightKg,
   });
 }
 
@@ -80,6 +88,8 @@ class _$PatientCopyWithImpl<$Res, $Val extends Patient>
     Object? gender = null,
     Object? insurance = null,
     Object? address = null,
+    Object? heightCm = freezed,
+    Object? weightKg = freezed,
   }) {
     return _then(
       _value.copyWith(
@@ -111,6 +121,14 @@ class _$PatientCopyWithImpl<$Res, $Val extends Patient>
                 ? _value.address
                 : address // ignore: cast_nullable_to_non_nullable
                       as String,
+            heightCm: freezed == heightCm
+                ? _value.heightCm
+                : heightCm // ignore: cast_nullable_to_non_nullable
+                      as double?,
+            weightKg: freezed == weightKg
+                ? _value.weightKg
+                : weightKg // ignore: cast_nullable_to_non_nullable
+                      as double?,
           )
           as $Val,
     );
@@ -133,6 +151,8 @@ abstract class _$$PatientImplCopyWith<$Res> implements $PatientCopyWith<$Res> {
     Gender gender,
     String insurance,
     String address,
+    double? heightCm,
+    double? weightKg,
   });
 }
 
@@ -157,6 +177,8 @@ class __$$PatientImplCopyWithImpl<$Res>
     Object? gender = null,
     Object? insurance = null,
     Object? address = null,
+    Object? heightCm = freezed,
+    Object? weightKg = freezed,
   }) {
     return _then(
       _$PatientImpl(
@@ -188,6 +210,14 @@ class __$$PatientImplCopyWithImpl<$Res>
             ? _value.address
             : address // ignore: cast_nullable_to_non_nullable
                   as String,
+        heightCm: freezed == heightCm
+            ? _value.heightCm
+            : heightCm // ignore: cast_nullable_to_non_nullable
+                  as double?,
+        weightKg: freezed == weightKg
+            ? _value.weightKg
+            : weightKg // ignore: cast_nullable_to_non_nullable
+                  as double?,
       ),
     );
   }
@@ -204,6 +234,8 @@ class _$PatientImpl implements _Patient {
     required this.gender,
     required this.insurance,
     required this.address,
+    this.heightCm,
+    this.weightKg,
   });
 
   factory _$PatientImpl.fromJson(Map<String, dynamic> json) =>
@@ -229,9 +261,17 @@ class _$PatientImpl implements _Patient {
   @override
   final String address;
 
+  /// Height in centimeters, from `GET /patients/{id}`.
+  @override
+  final double? heightCm;
+
+  /// Weight in kilograms, from `GET /patients/{id}`.
+  @override
+  final double? weightKg;
+
   @override
   String toString() {
-    return 'Patient(id: $id, name: $name, code: $code, dob: $dob, gender: $gender, insurance: $insurance, address: $address)';
+    return 'Patient(id: $id, name: $name, code: $code, dob: $dob, gender: $gender, insurance: $insurance, address: $address, heightCm: $heightCm, weightKg: $weightKg)';
   }
 
   @override
@@ -246,13 +286,27 @@ class _$PatientImpl implements _Patient {
             (identical(other.gender, gender) || other.gender == gender) &&
             (identical(other.insurance, insurance) ||
                 other.insurance == insurance) &&
-            (identical(other.address, address) || other.address == address));
+            (identical(other.address, address) || other.address == address) &&
+            (identical(other.heightCm, heightCm) ||
+                other.heightCm == heightCm) &&
+            (identical(other.weightKg, weightKg) ||
+                other.weightKg == weightKg));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, name, code, dob, gender, insurance, address);
+  int get hashCode => Object.hash(
+    runtimeType,
+    id,
+    name,
+    code,
+    dob,
+    gender,
+    insurance,
+    address,
+    heightCm,
+    weightKg,
+  );
 
   /// Create a copy of Patient
   /// with the given fields replaced by the non-null parameter values.
@@ -277,6 +331,8 @@ abstract class _Patient implements Patient {
     required final Gender gender,
     required final String insurance,
     required final String address,
+    final double? heightCm,
+    final double? weightKg,
   }) = _$PatientImpl;
 
   factory _Patient.fromJson(Map<String, dynamic> json) = _$PatientImpl.fromJson;
@@ -299,6 +355,14 @@ abstract class _Patient implements Patient {
   String get insurance;
   @override
   String get address;
+
+  /// Height in centimeters, from `GET /patients/{id}`.
+  @override
+  double? get heightCm;
+
+  /// Weight in kilograms, from `GET /patients/{id}`.
+  @override
+  double? get weightKg;
 
   /// Create a copy of Patient
   /// with the given fields replaced by the non-null parameter values.

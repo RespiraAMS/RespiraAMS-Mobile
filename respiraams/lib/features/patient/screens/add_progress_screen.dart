@@ -5,11 +5,11 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/utils/context_extensions.dart';
 import '../../../../design_system/design_system.dart';
 import 'package:respiraams/features/diagnosis/models/microbiology_result.dart';
-import 'package:respiraams/features/diagnosis/providers/diagnosis_flow_provider.dart';
 import 'package:respiraams/features/diagnosis/providers/microbiology_provider.dart';
 import 'package:respiraams/features/diagnosis/routes.dart';
 import 'package:respiraams/features/diagnosis/widgets/microbiology_banner.dart';
 import '../models/add_progress_form_state.dart';
+import '../models/patient.dart';
 import '../providers/add_progress_controller.dart';
 import '../providers/current_patient_provider.dart';
 import '../routes.dart';
@@ -27,15 +27,6 @@ class AddProgressScreen extends ConsumerStatefulWidget {
 }
 
 class _AddProgressScreenState extends ConsumerState<AddProgressScreen> {
-  @override
-  void initState() {
-    super.initState();
-    // Load disease + criteria for the wizard steps (steps 3–5 render them).
-    Future.microtask(
-      () => ref.read(diagnosisFlowControllerProvider.notifier).loadDiseaseContext(),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final form = ref.watch(addProgressControllerProvider);
@@ -65,9 +56,9 @@ class _AddProgressScreenState extends ConsumerState<AddProgressScreen> {
                       const SizedBox(height: Spacing.section),
                       PatientHeader(
                         variant: PatientHeaderVariant.nested,
-                        name: patient.name,
-                        metadata: '${patient.code} · Điều trị ngày 4',
-                        avatarGlyph: '👩🏾',
+                        name: patient?.name ?? 'Chưa chọn bệnh nhân',
+                        metadata: patient?.code ?? '',
+                        avatarGlyph: patient?.gender == Gender.nu ? '👩🏾' : '👨🏻',
                       ),
                       const SizedBox(height: Spacing.section),
                       SectionLabelWidget(
@@ -111,7 +102,7 @@ class _AddProgressScreenState extends ConsumerState<AddProgressScreen> {
                           onPressed: () => context.push(
                             isTargeted
                                 ? DiagnosisRoutes.targetedTreatment
-                                : DiagnosisRoutes.vitals,
+                                : DiagnosisRoutes.wizard,
                           ),
                         ),
                       ),
