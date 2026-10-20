@@ -3,38 +3,128 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'clinical_dtos.freezed.dart';
 part 'clinical_dtos.g.dart';
 
-/// `GET /diseases/list` item.
+/// `range` payload of numeric clinical variables (`Range`).
 @freezed
-class DiseaseItemDto with _$DiseaseItemDto {
-  const factory DiseaseItemDto({required String id, required String name}) =
-      _DiseaseItemDto;
+class RangeDto with _$RangeDto {
+  const factory RangeDto({
+    required num min,
+    @Default(false) bool isMinExclusive,
+    required num max,
+    @Default(false) bool isMaxExclusive,
+    String? unit,
+  }) = _RangeDto;
 
-  factory DiseaseItemDto.fromJson(Map<String, dynamic> json) =>
-      _$DiseaseItemDtoFromJson(json);
+  factory RangeDto.fromJson(Map<String, dynamic> json) =>
+      _$RangeDtoFromJson(json);
 }
 
-/// One criterion of a disease's wizard steps (`CriterionItem`).
+/// `GET /diagnose/empirical` variable (`ClinicalVariableResult`).
+///
+/// [valueType] is one of `Numeric | Boolean | Categorical`; [category] is
+/// one of `PersonalInformation | Paraclinical | Clinical`.
 @freezed
-class CriterionItemDto with _$CriterionItemDto {
-  const factory CriterionItemDto({required String id, required String name}) =
-      _CriterionItemDto;
+class ClinicalVariableDto with _$ClinicalVariableDto {
+  const factory ClinicalVariableDto({
+    required String id,
+    required String name,
+    @Default('') String description,
+    required String code,
+    required String valueType,
+    String? canonicalUnit,
+    @Default(false) bool isRequired,
+    required String category,
+    @Default([]) List<String> acceptedValues,
+    RangeDto? normalRange,
+    RangeDto? acceptedRange,
+  }) = _ClinicalVariableDto;
 
-  factory CriterionItemDto.fromJson(Map<String, dynamic> json) =>
-      _$CriterionItemDtoFromJson(json);
+  factory ClinicalVariableDto.fromJson(Map<String, dynamic> json) =>
+      _$ClinicalVariableDtoFromJson(json);
 }
 
-/// `GET /diseases/{id}/criteria` — the three wizard check-lists.
+/// `GET /diagnose/empirical` response (`GetDiagnosisFormResult`).
 @freezed
-class DiseaseCriteriaDto with _$DiseaseCriteriaDto {
-  const factory DiseaseCriteriaDto({
-    @Default([]) List<CriterionItemDto> icuHospitalizeCriteria,
-    @Default([]) List<CriterionItemDto> resistanceRiskFactorCriteria,
-    @Default([]) List<CriterionItemDto> otherCriteria,
-  }) = _DiseaseCriteriaDto;
+class DiagnosisFormDto with _$DiagnosisFormDto {
+  const factory DiagnosisFormDto({
+    @Default([]) List<ClinicalVariableDto> variables,
+  }) = _DiagnosisFormDto;
 
-  factory DiseaseCriteriaDto.fromJson(Map<String, dynamic> json) =>
-      _$DiseaseCriteriaDtoFromJson(json);
+  factory DiagnosisFormDto.fromJson(Map<String, dynamic> json) =>
+      _$DiagnosisFormDtoFromJson(json);
 }
+
+/// `POST /diagnose/empirical` leaf pathogen/antibiotic reference
+/// (`PathogenResult` / `AntibioticResult`).
+@freezed
+class NamedRefDto with _$NamedRefDto {
+  const factory NamedRefDto({required String id, required String name}) =
+      _NamedRefDto;
+
+  factory NamedRefDto.fromJson(Map<String, dynamic> json) =>
+      _$NamedRefDtoFromJson(json);
+}
+
+/// Missing-variable reference on the diagnose result
+/// (`ClinicalVariableResult`).
+@freezed
+class VariableRefDto with _$VariableRefDto {
+  const factory VariableRefDto({
+    required String id,
+    required String name,
+    @Default('') String code,
+  }) = _VariableRefDto;
+
+  factory VariableRefDto.fromJson(Map<String, dynamic> json) =>
+      _$VariableRefDtoFromJson(json);
+}
+
+/// One evaluated criterion (`Evidence`). Unused keys are ignored.
+@freezed
+class EvidenceDto with _$EvidenceDto {
+  const factory EvidenceDto({
+    @Default('') String source,
+    @Default('') String formula,
+    Object? evaluatedValue,
+    num? score,
+    bool? isMajor,
+    @Default([]) List<VariableRefDto> missingVariables,
+  }) = _EvidenceDto;
+
+  factory EvidenceDto.fromJson(Map<String, dynamic> json) =>
+      _$EvidenceDtoFromJson(json);
+}
+
+/// `POST /diagnose/empirical` response (`DiagnoseResult`).
+@freezed
+class DiagnoseResultDto with _$DiagnoseResultDto {
+  const factory DiagnoseResultDto({
+    required String severity, // Mild | Moderate | Severe
+    required String treatmentSite, // Outpatient | Inpatient | IntensiveCareUnit
+    @Default([]) List<NamedRefDto> worthSuspected,
+    @Default([]) List<NamedRefDto> heavySuspected,
+    @Default([]) List<EvidenceDto> evidences,
+    @Default([]) List<VariableRefDto> missingVariables,
+    @Default([]) List<NamedRefDto> allergies,
+    @Default(false) bool isPatientPregnantOrInLactationPhase,
+  }) = _DiagnoseResultDto;
+
+  factory DiagnoseResultDto.fromJson(Map<String, dynamic> json) =>
+      _$DiagnoseResultDtoFromJson(json);
+}
+
+/// Body of `POST /diagnose/empirical` (`Observation`).
+class ObservationDto {
+  const ObservationDto({required this.variableId, required this.value});
+
+  final String variableId;
+  final String value;
+
+  Map<String, dynamic> toJson() => {'variableId': variableId, 'value': value};
+}
+
+// ── Targeted (vi sinh) demo types ──────────────────────────────────────
+// The mobile app keeps a demo targeted-therapy flow until the backend
+// exposes `POST /diagnose/target`.
 
 /// `GET /pathogens/list` item.
 @freezed
@@ -46,14 +136,14 @@ class PathogenItemDto with _$PathogenItemDto {
       _$PathogenItemDtoFromJson(json);
 }
 
-/// One recommended antibiotic (`AntibioticResult`).
+/// One recommended antibiotic for the targeted demo.
 @freezed
 class AntibioticResultDto with _$AntibioticResultDto {
   const factory AntibioticResultDto({
     required String id,
     required String name,
-    required String antibioticGroupName,
-    required String classification,
+    @Default('') String antibioticGroupName,
+    @Default('') String classification,
     @Default([]) List<DosageDto> dosages,
   }) = _AntibioticResultDto;
 
@@ -73,175 +163,14 @@ class DosageDto with _$DosageDto {
       _$DosageDtoFromJson(json);
 }
 
-/// Infection probability (`InfectionProbability`).
-@freezed
-class InfectionProbabilityDto with _$InfectionProbabilityDto {
-  const factory InfectionProbabilityDto({
-    required String pathogenId,
-    required String pathogenName,
-    required double probability,
-  }) = _InfectionProbabilityDto;
-
-  factory InfectionProbabilityDto.fromJson(Map<String, dynamic> json) =>
-      _$InfectionProbabilityDtoFromJson(json);
-}
-
-/// Reference protocol (`EmpiricalTreatmentProtocolResult`).
-@freezed
-class ReferenceDto with _$ReferenceDto {
-  const factory ReferenceDto({
-    required String id,
-    required String name,
-    required String issuer,
-    required int version,
-  }) = _ReferenceDto;
-
-  factory ReferenceDto.fromJson(Map<String, dynamic> json) =>
-      _$ReferenceDtoFromJson(json);
-}
-
-/// `POST /diagnose/empirical` response.
-@freezed
-class EmpiricalDiagnoseResultDto with _$EmpiricalDiagnoseResultDto {
-  const factory EmpiricalDiagnoseResultDto({
-    required double crcl,
-    required String severity, // Mild | Moderate | Severe
-    required String treatmentSite, // Outpatient | Inpatient | IntensiveCareUnit
-    @Default([]) List<AntibioticResultDto> recommendations,
-    @Default([]) List<AntibioticResultDto> medicines,
-    @Default([]) List<InfectionProbabilityDto> infectionProbabilities,
-    @Default([]) List<ReferenceDto> references,
-  }) = _EmpiricalDiagnoseResultDto;
-
-  factory EmpiricalDiagnoseResultDto.fromJson(Map<String, dynamic> json) =>
-      _$EmpiricalDiagnoseResultDtoFromJson(json);
-}
-
-/// `POST /diagnose/target` response.
+/// Demo targeted-diagnosis result.
 @freezed
 class TargetedDiagnoseResultDto with _$TargetedDiagnoseResultDto {
   const factory TargetedDiagnoseResultDto({
-    required double crcl,
+    @Default(0) double crcl,
     @Default([]) List<AntibioticResultDto> recommendations,
   }) = _TargetedDiagnoseResultDto;
 
   factory TargetedDiagnoseResultDto.fromJson(Map<String, dynamic> json) =>
       _$TargetedDiagnoseResultDtoFromJson(json);
-}
-
-/// Body of `POST /diagnose/empirical` (`EmpiricalDiagnoseQuery`).
-class EmpiricalDiagnoseRequest {
-  EmpiricalDiagnoseRequest({
-    required this.diseaseId,
-    required this.dateOfBirth, // yyyy-MM-dd
-    required this.isMale,
-    required this.weight, // kg
-    required this.height, // meters
-    required this.serumCreatine,
-    required this.confusion,
-    required this.respiratory,
-    required this.systolicBloodPressure,
-    required this.diastolicBloodPressure,
-    required this.icuHospitalizeCriteria,
-    required this.resistanceRiskFactors,
-    required this.otherCriteria,
-    this.urea,
-  });
-
-  final String diseaseId;
-  final String dateOfBirth;
-  final bool isMale;
-  final double weight;
-  final double height;
-  final double serumCreatine;
-  final bool confusion;
-  final double? urea;
-  final int respiratory;
-  final double systolicBloodPressure;
-  final double diastolicBloodPressure;
-  final List<String> icuHospitalizeCriteria;
-  final List<String> resistanceRiskFactors;
-  final List<String> otherCriteria;
-
-  Map<String, dynamic> toJson() => {
-        'diseaseId': diseaseId,
-        'dateOfBirth': dateOfBirth,
-        'isMale': isMale,
-        'weight': weight,
-        'height': height,
-        'serumCreatine': serumCreatine,
-        'confusion': confusion,
-        if (urea != null) 'urea': urea,
-        'respiratory': respiratory,
-        'systolicBloodPressure': systolicBloodPressure,
-        'diastolicBloodPressure': diastolicBloodPressure,
-        'icuHospitalizeCriteria': icuHospitalizeCriteria,
-        'resistanceRiskFactors': resistanceRiskFactors,
-        'otherCriteria': otherCriteria,
-      };
-}
-
-/// Body of `POST /diagnose/target` (`TargetedDiagnoseQuery`).
-class TargetedDiagnoseRequest {
-  TargetedDiagnoseRequest({
-    required this.pathogenId,
-    required this.dateOfBirth, // yyyy-MM-dd
-    required this.isMale,
-    required this.weight, // kg
-    required this.height, // meters
-    required this.serumCreatine,
-  });
-
-  final String pathogenId;
-  final String dateOfBirth;
-  final bool isMale;
-  final double weight;
-  final double height;
-  final double serumCreatine;
-
-  Map<String, dynamic> toJson() => {
-        'pathogenId': pathogenId,
-        'dateOfBirth': dateOfBirth,
-        'isMale': isMale,
-        'weight': weight,
-        'height': height,
-        'serumCreatine': serumCreatine,
-      };
-}
-
-/// Body of `POST /patients/{id}/treatments` `pathogen` field
-/// (`PathogenRecord`).
-class PathogenRecordDto {
-  PathogenRecordDto({required this.id, required this.name});
-
-  final String id;
-  final String name;
-
-  Map<String, dynamic> toJson() => {'id': id, 'name': name};
-}
-
-/// Body of `POST /patients/{id}/treatments` medicine record
-/// (`MedicineRecord`).
-class MedicineRecordDto {
-  MedicineRecordDto({
-    required this.id,
-    required this.name,
-    required this.classification,
-    required this.routeOfAdministration,
-    required this.dose,
-  });
-
-  final String id;
-  final String name;
-  final String classification;
-  final String routeOfAdministration;
-  final String dose;
-
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'name': name,
-        'classification': classification,
-        'routeOfAdministration': routeOfAdministration,
-        'dose': dose,
-      };
 }

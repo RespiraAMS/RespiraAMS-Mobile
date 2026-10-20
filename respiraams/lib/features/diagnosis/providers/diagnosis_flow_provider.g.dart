@@ -6,11 +6,30 @@ part of 'diagnosis_flow_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$diagnosisFlowControllerHash() =>
-    r'4172ec3136b6d2aa3d900ad2d12a1599ee0cc466';
+String _$diagnosisFormHash() => r'761f7b10af623e8815e7fb48d1ac6c72a996b9c2';
 
-/// Orchestrates the API-backed diagnosis flow: disease + criteria
-/// loading, empirical diagnosis, treatment persistence.
+/// Dynamic form catalog from `GET /diagnose/empirical`.
+///
+/// Copied from [diagnosisForm].
+@ProviderFor(diagnosisForm)
+final diagnosisFormProvider =
+    FutureProvider<List<ClinicalVariableDto>>.internal(
+      diagnosisForm,
+      name: r'diagnosisFormProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$diagnosisFormHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef DiagnosisFormRef = FutureProviderRef<List<ClinicalVariableDto>>;
+String _$diagnosisFlowControllerHash() =>
+    r'3b41c2c2272f9f6b00e782bfb228bf6da66572bf';
+
+/// Orchestrates the API-backed empirical diagnosis flow.
 ///
 /// Copied from [DiagnosisFlowController].
 @ProviderFor(DiagnosisFlowController)

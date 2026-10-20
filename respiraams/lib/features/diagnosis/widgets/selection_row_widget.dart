@@ -11,13 +11,13 @@ class SelectionRowWidget extends StatelessWidget {
   const SelectionRowWidget({
     super.key,
     required this.title,
-    required this.description,
+    this.description,
     required this.selected,
     required this.onTap,
   });
 
   final String title;
-  final String description;
+  final String? description;
   final bool selected;
   final VoidCallback onTap;
 
@@ -58,13 +58,15 @@ class SelectionRowWidget extends StatelessWidget {
                       style: TypographyTokens.body(context)
                           .copyWith(fontWeight: FontWeight.w600),
                     ),
-                    const SizedBox(height: Spacing.xxxs),
-                    AppText(
-                      description,
-                      type: AppTextType.caption,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                    if (description != null && description!.isNotEmpty) ...[
+                      const SizedBox(height: Spacing.xxxs),
+                      AppText(
+                        description!,
+                        type: AppTextType.caption,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
                   ],
                 ),
               ),

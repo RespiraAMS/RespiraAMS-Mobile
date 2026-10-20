@@ -6,9 +6,10 @@ part of 'targeted_treatment_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$pathogenListHash() => r'c86a3f5a4c2c7f48ee986ecf9d8f77542ee78804';
+String _$pathogenListHash() => r'b6236e93192bba8e6464ff02d236be2ee9d8c19e';
 
-/// Real pathogen list from `GET /pathogens/list`.
+/// Demo pathogen list. The backend does not expose a targeted-therapy
+/// contract yet, so the app keeps this flow on local demo data.
 ///
 /// Copied from [pathogenList].
 @ProviderFor(pathogenList)
@@ -26,7 +27,7 @@ final pathogenListProvider = FutureProvider<List<PathogenItemDto>>.internal(
 // ignore: unused_element
 typedef PathogenListRef = FutureProviderRef<List<PathogenItemDto>>;
 String _$targetedDiagnoseResultHash() =>
-    r'5cd5e2ac022ded02cf809dfaa3430f1d125c6e23';
+    r'4924919baf2ec2c125396956cad664bc43ec7a98';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -49,27 +50,23 @@ class _SystemHash {
   }
 }
 
-/// Real targeted diagnosis from `POST /diagnose/target` for the given
-/// pathogen, using the active patient's demographics.
+/// Demo targeted diagnosis for the given pathogen.
 ///
 /// Copied from [targetedDiagnoseResult].
 @ProviderFor(targetedDiagnoseResult)
 const targetedDiagnoseResultProvider = TargetedDiagnoseResultFamily();
 
-/// Real targeted diagnosis from `POST /diagnose/target` for the given
-/// pathogen, using the active patient's demographics.
+/// Demo targeted diagnosis for the given pathogen.
 ///
 /// Copied from [targetedDiagnoseResult].
 class TargetedDiagnoseResultFamily
     extends Family<AsyncValue<TargetedDiagnoseResultDto>> {
-  /// Real targeted diagnosis from `POST /diagnose/target` for the given
-  /// pathogen, using the active patient's demographics.
+  /// Demo targeted diagnosis for the given pathogen.
   ///
   /// Copied from [targetedDiagnoseResult].
   const TargetedDiagnoseResultFamily();
 
-  /// Real targeted diagnosis from `POST /diagnose/target` for the given
-  /// pathogen, using the active patient's demographics.
+  /// Demo targeted diagnosis for the given pathogen.
   ///
   /// Copied from [targetedDiagnoseResult].
   TargetedDiagnoseResultProvider call(String pathogenId) {
@@ -98,14 +95,12 @@ class TargetedDiagnoseResultFamily
   String? get name => r'targetedDiagnoseResultProvider';
 }
 
-/// Real targeted diagnosis from `POST /diagnose/target` for the given
-/// pathogen, using the active patient's demographics.
+/// Demo targeted diagnosis for the given pathogen.
 ///
 /// Copied from [targetedDiagnoseResult].
 class TargetedDiagnoseResultProvider
     extends FutureProvider<TargetedDiagnoseResultDto> {
-  /// Real targeted diagnosis from `POST /diagnose/target` for the given
-  /// pathogen, using the active patient's demographics.
+  /// Demo targeted diagnosis for the given pathogen.
   ///
   /// Copied from [targetedDiagnoseResult].
   TargetedDiagnoseResultProvider(String pathogenId)

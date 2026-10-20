@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../../core/utils/context_extensions.dart';
 import '../../../../design_system/design_system.dart';
-import '../../../../features/patient/routes.dart';
+import '../../../../features/patient/models/patient.dart';
+import '../../../../features/patient/providers/current_patient_provider.dart';
 import '../models/clinical_dtos.dart';
 import '../models/microbiology_result.dart';
 import '../providers/microbiology_provider.dart';
@@ -22,6 +22,7 @@ class TargetedTreatmentScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final c = context.respiraColors;
     final micro = ref.watch(microbiologyResultProvider);
+    final patient = ref.watch(currentPatientProvider);
     final pathogensAsync = ref.watch(pathogenListProvider);
     final pathogens = pathogensAsync.value ?? const [];
     final pathogen = pathogens.isNotEmpty ? pathogens.first : null;
@@ -79,7 +80,11 @@ class TargetedTreatmentScreen extends ConsumerWidget {
                                   ),
                                   child: Row(
                                     children: [
-                                      const AvatarGlyphWidget(glyph: '👨🏻'),
+                                      AvatarGlyphWidget(
+                                        glyph: patient?.gender == Gender.nu
+                                            ? '👩🏾'
+                                            : '👨🏻',
+                                      ),
                                       const SizedBox(width: Spacing.group),
                                       Expanded(
                                         child: Column(
@@ -88,7 +93,8 @@ class TargetedTreatmentScreen extends ConsumerWidget {
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
                                             Text(
-                                              'Nguyễn Minh Khôi',
+                                              patient?.name ??
+                                                  'Chưa chọn bệnh nhân',
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
                                               style: TypographyTokens.body(
@@ -99,7 +105,7 @@ class TargetedTreatmentScreen extends ConsumerWidget {
                                             ),
                                             const SizedBox(
                                                 height: Spacing.xxxs),
-                                            AppText('BA-2026-0231 · 55 tuổi',
+                                            AppText(patient?.code ?? '',
                                                 type: AppTextType.caption),
                                           ],
                                         ),
@@ -220,39 +226,10 @@ class TargetedTreatmentScreen extends ConsumerWidget {
                 child: AppButton(
                   label: 'Lưu điều trị đích',
                   expand: true,
-                  onPressed: pathogen == null || result == null
-                      ? null
-                      : () async {
-                          final ok = await saveTargetedTreatment(
-                            ref,
-                            pathogenId: pathogen.id,
-                            pathogenName: pathogen.name,
-                            crcl: result.crcl,
-                            medicines: selectedDrugs
-                                .map((m) => MedicineRecordDto(
-                                      id: m.id,
-                                      name: m.name,
-                                      classification: m.classification,
-                                      routeOfAdministration: m
-                                              .dosages.isEmpty
-                                          ? 'Oral'
-                                          : m.dosages.first
-                                              .routeOfAdministration,
-                                      dose: m.dosages.isEmpty
-                                          ? ''
-                                          : m.dosages.first.dose,
-                                    ))
-                                .toList(),
-                          );
-                          if (!context.mounted) return;
-                          showAppToast(
-                            context,
-                            ok
-                                ? 'Đã lưu điều trị đích.'
-                                : 'Lưu thất bại. Vui lòng thử lại.',
-                          );
-                          if (ok) context.go(PatientRoutes.detail);
-                        },
+                  onPressed: () => showAppToast(
+                    context,
+                    'Tính năng đang phát triển.',
+                  ),
                 ),
               ),
             ],
