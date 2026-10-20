@@ -2,10 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/network/api_client.dart';
-import '../../../core/network/api_response.dart';
 import '../../../core/network/token_storage.dart';
 import '../services/auth_service.dart';
-import '../services/doctor_service.dart';
 
 part 'session_provider.g.dart';
 
@@ -37,48 +35,30 @@ class SessionController extends _$SessionController {
     return DoctorProfile(id: id, name: name ?? id);
   }
 
-  /// Calls the API, persists tokens, resolves the doctorId from the JWT
-  /// `X-ID` claim and enriches the profile via the Doctor service.
-  /// Throws [ApiException] on failure (guidelines Rule 3).
+  /// Persists a local session (any non-empty email/password succeeds) and
+  /// resolves the doctor profile from [TokenStorage].
   Future<DoctorProfile> login({
     required String email,
     required String password,
   }) async {
-    final service = AuthService(
-      ref.read(apiClientProvider),
-      TokenStorage(ref.read(sharedPreferencesProvider)),
-    );
-    final fallbackName = await service.login(email: email, password: password);
-
     final storage = TokenStorage(ref.read(sharedPreferencesProvider));
+    final fallbackName = await AuthService(
+      storage,
+    ).login(email: email, password: password);
+
     final doctorId = storage.doctorId ?? '';
-
-    // Enrich with the real profile (best-effort — fall back to email).
-    var name = fallbackName;
-    String? avatar;
-    try {
-      final profile = await ref
-          .read(doctorServiceProvider)
-          .getDoctor(doctorId);
-      name = '${profile.firstName} ${profile.lastName}'.trim();
-      avatar = profile.url;
-    } on Exception {
-      // Keep the email fallback.
-    }
-
-    await storage.saveDoctor(id: doctorId, name: name);
-    final profile = DoctorProfile(id: doctorId, name: name, avatarUrl: avatar);
+    final profile = DoctorProfile(
+      id: doctorId,
+      name: storage.doctorName ?? fallbackName,
+    );
     state = profile;
     return profile;
   }
 
-  /// Revokes the session server-side and resets local state.
+  /// Ends the local session.
   Future<void> logout() async {
-    final service = AuthService(
-      ref.read(apiClientProvider),
-      TokenStorage(ref.read(sharedPreferencesProvider)),
-    );
-    await service.logout();
+    final storage = TokenStorage(ref.read(sharedPreferencesProvider));
+    await AuthService(storage).logout();
     state = null;
   }
 }

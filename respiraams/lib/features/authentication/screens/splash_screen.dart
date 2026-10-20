@@ -43,34 +43,41 @@ class _SplashScreenState extends State<SplashScreen> {
           padding: const EdgeInsets.symmetric(horizontal: Spacing.group),
           child: Column(
             children: [
-              const Spacer(flex: 3),
-              RespiraLogoMarkWidget(size: 96),
-              const SizedBox(height: Spacing.xl),
-              Text(
-                'RespiraAMS',
-                style: TypographyTokens.h1(
-                  context,
-                ).copyWith(color: c.textPrimary),
+              Expanded(
+                child: Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      RespiraLogoMarkWidget(size: 96),
+                      const SizedBox(height: Spacing.xl),
+                      Text(
+                        'RespiraAMS',
+                        style: TypographyTokens.h1(
+                          context,
+                        ).copyWith(color: c.textPrimary),
+                      ),
+                      const SizedBox(height: Spacing.inline),
+                      AppText(
+                        'Clinical workspace for respiratory care',
+                        type: AppTextType.caption,
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: Spacing.xl),
+                      // Page indicator dots (template: soft · primary · soft).
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          _Dot(size: 8, color: c.primarySoft),
+                          const SizedBox(width: Spacing.inline),
+                          _Dot(size: 10, color: c.primary),
+                          const SizedBox(width: Spacing.inline),
+                          _Dot(size: 8, color: c.primarySoft),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
               ),
-              const SizedBox(height: Spacing.inline),
-              AppText(
-                'Clinical workspace for respiratory care',
-                type: AppTextType.caption,
-                textAlign: TextAlign.center,
-              ),
-              const Spacer(flex: 4),
-              // Page indicator dots (template: soft · primary · soft).
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _Dot(size: 8, color: c.primarySoft),
-                  const SizedBox(width: Spacing.inline),
-                  _Dot(size: 10, color: c.primary),
-                  const SizedBox(width: Spacing.inline),
-                  _Dot(size: 8, color: c.primarySoft),
-                ],
-              ),
-              const Spacer(),
             ],
           ),
         ),
