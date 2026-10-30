@@ -37,7 +37,7 @@ String get kApiBaseUrl {
   return _kDefaultBaseUrl;
 }
 
-const String kApiVersion = '1';
+const String kApiVersion = 'v1';
 
 /// Base options shared by every Dio instance in the app.
 BaseOptions gatewayBaseOptions({String? baseUrl}) => BaseOptions(
