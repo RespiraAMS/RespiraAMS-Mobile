@@ -28,12 +28,19 @@ class RespiraLogoMarkWidget extends StatelessWidget {
       ),
       child: Text(
         'R.',
-        style: GoogleFonts.playfairDisplay(
-          color: c.onPrimary,
-          fontSize: size * 0.56,
-          fontWeight: FontWeight.w900,
-          height: 1,
-        ),
+        style: GoogleFonts.config.allowRuntimeFetching
+            ? GoogleFonts.playfairDisplay(
+                color: c.onPrimary,
+                fontSize: size * 0.56,
+                fontWeight: FontWeight.w900,
+                height: 1,
+              )
+            : TextStyle(
+                color: c.onPrimary,
+                fontSize: size * 0.56,
+                fontWeight: FontWeight.w900,
+                height: 1,
+              ),
       ),
     );
   }

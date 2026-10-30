@@ -34,7 +34,10 @@ class StatTileWidget extends StatelessWidget {
         horizontal: Spacing.control,
         vertical: Spacing.control - 2,
       ),
-      decoration: BoxDecoration(color: bg, borderRadius: AppRadius.sm),
+      decoration: BoxDecoration(
+        color: bg,
+        borderRadius: AppRadius.sm,
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,9 +46,8 @@ class StatTileWidget extends StatelessWidget {
             label,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: TypographyTokens.caption(
-              context,
-            ).copyWith(color: c.textSecondary),
+            style: TypographyTokens.caption(context)
+                .copyWith(color: c.textSecondary),
           ),
           const SizedBox(height: Spacing.xxxs),
           FittedBox(
@@ -53,9 +55,8 @@ class StatTileWidget extends StatelessWidget {
             child: Text(
               value,
               maxLines: 1,
-              style: TypographyTokens.bodyLarge(
-                context,
-              ).copyWith(fontWeight: FontWeight.w700, color: valueColor),
+              style: TypographyTokens.bodyLarge(context)
+                  .copyWith(fontWeight: FontWeight.w700, color: valueColor),
             ),
           ),
         ],

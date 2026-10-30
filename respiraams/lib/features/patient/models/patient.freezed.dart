@@ -21,6 +21,7 @@ Patient _$PatientFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Patient {
+  String get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String get code => throw _privateConstructorUsedError;
 
@@ -31,6 +32,12 @@ mixin _$Patient {
   /// Health insurance number (Số thẻ BHYT).
   String get insurance => throw _privateConstructorUsedError;
   String get address => throw _privateConstructorUsedError;
+
+  /// Height in centimeters, from `GET /patients/{id}`.
+  double? get heightCm => throw _privateConstructorUsedError;
+
+  /// Weight in kilograms, from `GET /patients/{id}`.
+  double? get weightKg => throw _privateConstructorUsedError;
 
   /// Serializes this Patient to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -47,12 +54,15 @@ abstract class $PatientCopyWith<$Res> {
       _$PatientCopyWithImpl<$Res, Patient>;
   @useResult
   $Res call({
+    String id,
     String name,
     String code,
     String dob,
     Gender gender,
     String insurance,
     String address,
+    double? heightCm,
+    double? weightKg,
   });
 }
 
@@ -71,15 +81,22 @@ class _$PatientCopyWithImpl<$Res, $Val extends Patient>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? name = null,
     Object? code = null,
     Object? dob = null,
     Object? gender = null,
     Object? insurance = null,
     Object? address = null,
+    Object? heightCm = freezed,
+    Object? weightKg = freezed,
   }) {
     return _then(
       _value.copyWith(
+            id: null == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as String,
             name: null == name
                 ? _value.name
                 : name // ignore: cast_nullable_to_non_nullable
@@ -104,6 +121,14 @@ class _$PatientCopyWithImpl<$Res, $Val extends Patient>
                 ? _value.address
                 : address // ignore: cast_nullable_to_non_nullable
                       as String,
+            heightCm: freezed == heightCm
+                ? _value.heightCm
+                : heightCm // ignore: cast_nullable_to_non_nullable
+                      as double?,
+            weightKg: freezed == weightKg
+                ? _value.weightKg
+                : weightKg // ignore: cast_nullable_to_non_nullable
+                      as double?,
           )
           as $Val,
     );
@@ -119,12 +144,15 @@ abstract class _$$PatientImplCopyWith<$Res> implements $PatientCopyWith<$Res> {
   @override
   @useResult
   $Res call({
+    String id,
     String name,
     String code,
     String dob,
     Gender gender,
     String insurance,
     String address,
+    double? heightCm,
+    double? weightKg,
   });
 }
 
@@ -142,15 +170,22 @@ class __$$PatientImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? name = null,
     Object? code = null,
     Object? dob = null,
     Object? gender = null,
     Object? insurance = null,
     Object? address = null,
+    Object? heightCm = freezed,
+    Object? weightKg = freezed,
   }) {
     return _then(
       _$PatientImpl(
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as String,
         name: null == name
             ? _value.name
             : name // ignore: cast_nullable_to_non_nullable
@@ -175,6 +210,14 @@ class __$$PatientImplCopyWithImpl<$Res>
             ? _value.address
             : address // ignore: cast_nullable_to_non_nullable
                   as String,
+        heightCm: freezed == heightCm
+            ? _value.heightCm
+            : heightCm // ignore: cast_nullable_to_non_nullable
+                  as double?,
+        weightKg: freezed == weightKg
+            ? _value.weightKg
+            : weightKg // ignore: cast_nullable_to_non_nullable
+                  as double?,
       ),
     );
   }
@@ -184,17 +227,23 @@ class __$$PatientImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$PatientImpl implements _Patient {
   const _$PatientImpl({
+    this.id = '',
     required this.name,
     required this.code,
     required this.dob,
     required this.gender,
     required this.insurance,
     required this.address,
+    this.heightCm,
+    this.weightKg,
   });
 
   factory _$PatientImpl.fromJson(Map<String, dynamic> json) =>
       _$$PatientImplFromJson(json);
 
+  @override
+  @JsonKey()
+  final String id;
   @override
   final String name;
   @override
@@ -212,9 +261,17 @@ class _$PatientImpl implements _Patient {
   @override
   final String address;
 
+  /// Height in centimeters, from `GET /patients/{id}`.
+  @override
+  final double? heightCm;
+
+  /// Weight in kilograms, from `GET /patients/{id}`.
+  @override
+  final double? weightKg;
+
   @override
   String toString() {
-    return 'Patient(name: $name, code: $code, dob: $dob, gender: $gender, insurance: $insurance, address: $address)';
+    return 'Patient(id: $id, name: $name, code: $code, dob: $dob, gender: $gender, insurance: $insurance, address: $address, heightCm: $heightCm, weightKg: $weightKg)';
   }
 
   @override
@@ -222,19 +279,34 @@ class _$PatientImpl implements _Patient {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$PatientImpl &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.code, code) || other.code == code) &&
             (identical(other.dob, dob) || other.dob == dob) &&
             (identical(other.gender, gender) || other.gender == gender) &&
             (identical(other.insurance, insurance) ||
                 other.insurance == insurance) &&
-            (identical(other.address, address) || other.address == address));
+            (identical(other.address, address) || other.address == address) &&
+            (identical(other.heightCm, heightCm) ||
+                other.heightCm == heightCm) &&
+            (identical(other.weightKg, weightKg) ||
+                other.weightKg == weightKg));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, name, code, dob, gender, insurance, address);
+  int get hashCode => Object.hash(
+    runtimeType,
+    id,
+    name,
+    code,
+    dob,
+    gender,
+    insurance,
+    address,
+    heightCm,
+    weightKg,
+  );
 
   /// Create a copy of Patient
   /// with the given fields replaced by the non-null parameter values.
@@ -252,16 +324,21 @@ class _$PatientImpl implements _Patient {
 
 abstract class _Patient implements Patient {
   const factory _Patient({
+    final String id,
     required final String name,
     required final String code,
     required final String dob,
     required final Gender gender,
     required final String insurance,
     required final String address,
+    final double? heightCm,
+    final double? weightKg,
   }) = _$PatientImpl;
 
   factory _Patient.fromJson(Map<String, dynamic> json) = _$PatientImpl.fromJson;
 
+  @override
+  String get id;
   @override
   String get name;
   @override
@@ -278,6 +355,14 @@ abstract class _Patient implements Patient {
   String get insurance;
   @override
   String get address;
+
+  /// Height in centimeters, from `GET /patients/{id}`.
+  @override
+  double? get heightCm;
+
+  /// Weight in kilograms, from `GET /patients/{id}`.
+  @override
+  double? get weightKg;
 
   /// Create a copy of Patient
   /// with the given fields replaced by the non-null parameter values.

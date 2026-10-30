@@ -5,7 +5,11 @@ import 'package:respiraams/design_system/design_system.dart';
 /// Semantic status pill ("Nguy cơ cao"): dot + label — never color alone
 /// (§12). [isHigh] picks the warning pair; otherwise the success pair.
 class RiskPillWidget extends StatelessWidget {
-  const RiskPillWidget({super.key, required this.label, required this.isHigh});
+  const RiskPillWidget({
+    super.key,
+    required this.label,
+    required this.isHigh,
+  });
 
   final String label;
   final bool isHigh;
@@ -37,9 +41,8 @@ class RiskPillWidget extends StatelessWidget {
           const SizedBox(width: Spacing.inline),
           Text(
             label,
-            style: TypographyTokens.label(
-              context,
-            ).copyWith(color: c.textPrimary),
+            style: TypographyTokens.label(context)
+                .copyWith(color: c.textPrimary),
           ),
         ],
       ),

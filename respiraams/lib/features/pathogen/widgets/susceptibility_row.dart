@@ -4,7 +4,7 @@ import '../../../../design_system/design_system.dart';
 class SusceptibilityRow extends StatelessWidget {
   final String label;
   final String value;
-  const SusceptibilityRow({required this.label, required this.value});
+  const SusceptibilityRow({super.key, required this.label, required this.value});
 
   @override
   Widget build(BuildContext context) {

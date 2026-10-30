@@ -70,7 +70,9 @@ class _TimelineItem extends StatelessWidget {
                   ),
                 ),
                 if (!isLast)
-                  Expanded(child: Container(width: 2, color: c.borderSubtle)),
+                  Expanded(
+                    child: Container(width: 2, color: c.borderSubtle),
+                  ),
               ],
             ),
           ),
@@ -81,19 +83,15 @@ class _TimelineItem extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  AppText(
-                    entry.dateLabel,
-                    type: AppTextType.label,
-                    color: c.primary,
-                  ),
+                  AppText(entry.dateLabel,
+                      type: AppTextType.label, color: c.primary),
                   const SizedBox(height: Spacing.xxxs),
                   Text(
                     entry.title,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: TypographyTokens.body(
-                      context,
-                    ).copyWith(fontWeight: FontWeight.w600),
+                    style: TypographyTokens.body(context)
+                        .copyWith(fontWeight: FontWeight.w600),
                   ),
                   const SizedBox(height: Spacing.xxxs),
                   AppText(entry.status, type: AppTextType.caption),

@@ -1,12 +1,15 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../models/patient.dart';
+import 'active_patient_provider.dart';
 
 part 'current_patient_provider.g.dart';
 
-/// The patient shown on detail/progress screens.
+/// The patient shown on detail/progress/wizard screens — mirrors the
+/// [activePatientControllerProvider] so a freshly created or selected
+/// patient flows through the whole diagnosis journey.
 ///
-/// Backed by the demo record; swap the body for a repository call once the
-/// networking layer (dio + retrofit) is in place.
+/// `null` until a patient is selected or created.
 @riverpod
-Patient currentPatient(CurrentPatientRef ref) => samplePatient;
+Patient? currentPatient(CurrentPatientRef ref) =>
+    ref.watch(activePatientControllerProvider);

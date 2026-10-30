@@ -21,7 +21,7 @@ const String _kDefaultBaseUrl = 'https://localhost:7283';
 
 /// Base URL of the RespiraAMS gateway (YARP).
 ///
-/// Precedence: `--dart-define` → `API_BASE_URL` in `env/.env` → the
+/// Precedence: `--dart-define` → `API_BASE_URL` in `.env` → the
 /// gateway's HTTPS default (its HTTP port only 307-redirects back here,
 /// and the Aspire dev certificate `CN=localhost` is trusted on developer
 /// machines). Debug builds additionally accept self-signed certs so

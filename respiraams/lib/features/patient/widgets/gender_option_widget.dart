@@ -30,7 +30,8 @@ class GenderOptionWidget extends StatelessWidget {
           onTap: onTap,
           child: Container(
             height: ControlSize.touchTargetMin,
-            padding: const EdgeInsets.symmetric(horizontal: Spacing.xxs),
+            padding:
+                const EdgeInsets.symmetric(horizontal: Spacing.xxs),
             decoration: BoxDecoration(
               borderRadius: AppRadius.sm,
               border: Border.all(color: c.borderSubtle),

@@ -4,24 +4,35 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/utils/context_extensions.dart';
 import '../../../../design_system/design_system.dart';
+import 'package:respiraams/features/diagnosis/models/microbiology_result.dart';
+import 'package:respiraams/features/diagnosis/providers/microbiology_provider.dart';
 import 'package:respiraams/features/diagnosis/routes.dart';
-
+import 'package:respiraams/features/diagnosis/widgets/microbiology_banner.dart';
 import '../models/add_progress_form_state.dart';
+import '../models/patient.dart';
 import '../providers/add_progress_controller.dart';
 import '../providers/current_patient_provider.dart';
+import '../routes.dart';
 import '../widgets/section_label_widget.dart';
 import '../widgets/selection_row_widget.dart';
-import '../routes.dart';
 
-/// Route `/patient/progress` — record a new treatment change.
-class AddProgressScreen extends ConsumerWidget {
+/// Route `/patient/progress` — record a treatment change. The form
+/// switches between the empirical variant (reason checkboxes) and the
+/// targeted variant (microbiology-based) via the treatment-type tabs.
+class AddProgressScreen extends ConsumerStatefulWidget {
   const AddProgressScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<AddProgressScreen> createState() => _AddProgressScreenState();
+}
+
+class _AddProgressScreenState extends ConsumerState<AddProgressScreen> {
+  @override
+  Widget build(BuildContext context) {
     final form = ref.watch(addProgressControllerProvider);
     final controller = ref.read(addProgressControllerProvider.notifier);
     final patient = ref.watch(currentPatientProvider);
+    final isTargeted = form.treatmentType == TreatmentType.targeted;
 
     return Scaffold(
       body: SafeArea(
@@ -37,18 +48,24 @@ class AddProgressScreen extends ConsumerWidget {
                     children: [
                       AppAppBar(
                         title: 'Thêm diễn biến',
-                        subtitle: 'Ghi nhận thay đổi điều trị mới nhất',
+                        subtitle: isTargeted
+                            ? 'Dựa trên kết quả vi sinh đã có'
+                            : 'Ghi nhận thay đổi điều trị mới nhất',
                         onBack: () => context.goBackOr(PatientRoutes.detail),
                       ),
                       const SizedBox(height: Spacing.section),
                       PatientHeader(
                         variant: PatientHeaderVariant.nested,
-                        name: patient.name,
-                        metadata: '${patient.code} · Điều trị ngày 4',
-                        avatarGlyph: '👩🏾',
+                        name: patient?.name ?? 'Chưa chọn bệnh nhân',
+                        metadata: patient?.code ?? '',
+                        avatarGlyph: patient?.gender == Gender.nu ? '👩🏾' : '👨🏻',
                       ),
                       const SizedBox(height: Spacing.section),
-                      const SectionLabelWidget('Loại điều trị'),
+                      SectionLabelWidget(
+                        isTargeted
+                            ? 'Loại điều trị tiếp theo'
+                            : 'Loại điều trị',
+                      ),
                       const SizedBox(height: Spacing.xxxs),
                       AppSegmentedTabs<TreatmentType>(
                         segments: [
@@ -65,37 +82,28 @@ class AddProgressScreen extends ConsumerWidget {
                         onChanged: controller.selectTreatment,
                       ),
                       const SizedBox(height: Spacing.section),
-                      const SectionLabelWidget('Lý do thay đổi'),
-                      const SizedBox(height: Spacing.xxxs),
-                      SelectionRowWidget(
-                        title: 'Có kết quả vi sinh',
-                        description: 'Chuyển sang điều trị đích khi phù hợp.',
-                        selected: form.microbiologyResult,
-                        onTap: controller.toggleMicrobiologyResult,
-                      ),
-                      const SizedBox(height: Spacing.control),
-                      SelectionRowWidget(
-                        title: 'Đáp ứng kém',
-                        description:
-                            'Triệu chứng không cải thiện sau theo dõi.',
-                        selected: form.poorResponse,
-                        onTap: controller.togglePoorResponse,
-                      ),
-                      const SizedBox(height: Spacing.section),
-                      const ClinicalAlert(
-                        severity: ClinicalSeverity.needsAttention,
-                        title: 'Không thể chỉnh sửa sau khi lưu',
-                        description: 'Tạo diễn biến mới nếu cần cập nhật tiếp.',
-                      ),
+                      if (isTargeted)
+                        _TargetedBody(micro: ref.watch(microbiologyResultProvider))
+                      else
+                        _EmpiricalBody(
+                          form: form,
+                          controller: controller,
+                        ),
                       const Spacer(),
                       Padding(
                         padding: const EdgeInsets.symmetric(
                           vertical: Spacing.lg,
                         ),
                         child: AppButton(
-                          label: 'Lưu diễn biến',
+                          label: isTargeted
+                              ? 'Tiếp tục điều trị đích'
+                              : 'Lưu diễn biến',
                           expand: true,
-                          onPressed: () => context.push(DiagnosisRoutes.curb65),
+                          onPressed: () => context.push(
+                            isTargeted
+                                ? DiagnosisRoutes.targetedTreatment
+                                : DiagnosisRoutes.wizard,
+                          ),
                         ),
                       ),
                     ],
@@ -106,6 +114,70 @@ class AddProgressScreen extends ConsumerWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+/// Empirical variant: reason checkboxes + editability warning.
+class _EmpiricalBody extends StatelessWidget {
+  const _EmpiricalBody({required this.form, required this.controller});
+
+  final AddProgressFormState form;
+  final AddProgressController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        const SectionLabelWidget('Lý do thay đổi'),
+        const SizedBox(height: Spacing.xxxs),
+        SelectionRowWidget(
+          title: 'Có kết quả vi sinh',
+          description: 'Chuyển sang điều trị đích khi phù hợp.',
+          selected: form.microbiologyResult,
+          onTap: controller.toggleMicrobiologyResult,
+        ),
+        const SizedBox(height: Spacing.control),
+        SelectionRowWidget(
+          title: 'Đáp ứng kém',
+          description: 'Triệu chứng không cải thiện sau theo dõi.',
+          selected: form.poorResponse,
+          onTap: controller.togglePoorResponse,
+        ),
+        const SizedBox(height: Spacing.section),
+        const ClinicalAlert(
+          severity: ClinicalSeverity.needsAttention,
+          title: 'Không thể chỉnh sửa sau khi lưu',
+          description: 'Tạo diễn biến mới nếu cần cập nhật tiếp.',
+        ),
+      ],
+    );
+  }
+}
+
+/// Targeted variant: identified bacteria + latest antibiogram + warning
+/// to verify the antibiogram before choosing drugs.
+class _TargetedBody extends StatelessWidget {
+  const _TargetedBody({required this.micro});
+
+  final MicrobiologyResult micro;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        BacteriaDisplayField(bacteria: micro.bacteria),
+        const SizedBox(height: Spacing.control),
+        AntibiogramBanner(line: micro.antibiogramLine),
+        const SizedBox(height: Spacing.section),
+        const ClinicalAlert(
+          severity: ClinicalSeverity.needsAttention,
+          title: 'Điều trị đích dựa trên kết quả vi sinh',
+          description: 'Kiểm tra tác nhân và kháng sinh đồ trước khi chọn thuốc.',
+        ),
+      ],
     );
   }
 }

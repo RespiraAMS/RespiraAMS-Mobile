@@ -1,48 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../core/utils/context_extensions.dart';
 import '../../../../design_system/design_system.dart';
+import '../models/clinical_dtos.dart';
 import '../models/diagnosis_result.dart';
-import '../providers/diagnosis_result_provider.dart';
+import '../providers/diagnosis_flow_provider.dart';
 import '../providers/diagnosis_tab_controller.dart';
-import '../widgets/medicine_card_widget.dart';
-import '../widgets/reference_row_widget.dart';
 import '../widgets/risk_pill_widget.dart';
 import '../widgets/stat_tile_widget.dart';
 
 import '../routes.dart';
 
-/// Route `/diagnosis/result` — wizard output with three tabs
-/// (result summary · recommended medicines · guideline references).
+/// Route `/diagnosis-result` — wizard output (result summary · suspected
+/// pathogens · evidences), rendered from the real `POST /diagnose/empirical`
+/// response.
 class DiagnosisResultScreen extends ConsumerWidget {
   const DiagnosisResultScreen({super.key});
 
-  Future<void> _confirmSave(BuildContext context, WidgetRef ref) async {
-    final result = ref.read(currentDiagnosisResultProvider);
-
-    final confirmed = await showAppConfirmDialog(
-      context,
-      icon: LucideIcons.save,
-      title: 'Lưu kết quả chẩn đoán?',
-      description:
-          'Sau khi lưu, nội dung chỉ có thể xem và không được chỉnh sửa trực tiếp.',
-      infoLabel: result.confirmationSummaryLabel,
-      confirmLabel: 'Xác nhận lưu',
-    );
-
-    if (confirmed != true || !context.mounted) return;
-    showAppToast(context, 'Đã lưu kết quả chẩn đoán.');
-    context.go('/patient/detail');
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final result = ref.watch(currentDiagnosisResultProvider);
+    final result = ref.watch(diagnosisFlowControllerProvider).result;
     final tab = ref.watch(diagnosisTabControllerProvider);
     final tabController = ref.read(diagnosisTabControllerProvider.notifier);
+
+    if (result == null) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
 
     return Scaffold(
       body: SafeArea(
@@ -58,10 +42,8 @@ class DiagnosisResultScreen extends ConsumerWidget {
                     children: [
                       AppAppBar(
                         title: 'Kết quả chẩn đoán',
-                        subtitle:
-                            '${result.modeLabel} · ${result.diagnosisName}',
-                        onBack: () =>
-                            context.goBackOr(DiagnosisRoutes.otherCriteria),
+                        subtitle: 'Kinh nghiệm · Viêm phổi cộng đồng',
+                        onBack: () => context.goBackOr(DiagnosisRoutes.wizard),
                       ),
                       const SizedBox(height: Spacing.inline + 4),
                       AppSegmentedTabs<DiagnosisTab>(
@@ -74,12 +56,10 @@ class DiagnosisResultScreen extends ConsumerWidget {
                       const SizedBox(height: Spacing.section),
                       switch (tab) {
                         DiagnosisTab.result => _ResultTab(result: result),
-                        DiagnosisTab.medicines => _MedicinesTab(
-                          medicines: result.medicines,
-                        ),
-                        DiagnosisTab.references => _ReferencesTab(
-                          references: result.references,
-                        ),
+                        DiagnosisTab.suspected =>
+                          _SuspectedTab(result: result),
+                        DiagnosisTab.evidences =>
+                          _EvidencesTab(evidences: result.evidences),
                       },
                       const Spacer(),
                       Padding(
@@ -90,7 +70,10 @@ class DiagnosisResultScreen extends ConsumerWidget {
                         child: AppButton(
                           label: 'Lưu kết quả',
                           expand: true,
-                          onPressed: () => _confirmSave(context, ref),
+                          onPressed: () => showAppToast(
+                            context,
+                            'Tính năng đang phát triển.',
+                          ),
                         ),
                       ),
                     ],
@@ -121,14 +104,28 @@ class _SectionTitle extends StatelessWidget {
   }
 }
 
+String _severityLabel(String severity) => switch (severity) {
+      'Mild' => 'Nhẹ',
+      'Moderate' => 'Trung bình',
+      'Severe' => 'Nặng',
+      _ => severity,
+    };
+
+String _siteLabel(String site) => switch (site) {
+      'Inpatient' => 'Nội trú',
+      'IntensiveCareUnit' => 'ICU',
+      _ => 'Ngoại trú',
+    };
+
 class _ResultTab extends StatelessWidget {
   const _ResultTab({required this.result});
 
-  final DiagnosisResult result;
+  final DiagnoseResultDto result;
 
   @override
   Widget build(BuildContext context) {
     final c = context.respiraColors;
+    final severityIsHigh = result.severity == 'Severe';
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -144,16 +141,12 @@ class _ResultTab extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                result.diagnosisName,
-                style: TypographyTokens.h3(
-                  context,
-                ).copyWith(color: c.textPrimary),
+                'Viêm phổi cộng đồng',
+                style:
+                    TypographyTokens.h3(context).copyWith(color: c.textPrimary),
               ),
               const SizedBox(height: Spacing.xxxs),
-              AppText(
-                'Chẩn đoán ${result.modeLabel.toLowerCase()}',
-                type: AppTextType.caption,
-              ),
+              AppText('Chẩn đoán kinh nghiệm', type: AppTextType.caption),
             ],
           ),
         ),
@@ -164,32 +157,44 @@ class _ResultTab extends StatelessWidget {
           children: [
             Expanded(
               child: StatTileWidget(
-                label: 'CURB-65',
-                value: '${result.curbScore}',
+                label: 'Mức độ',
+                value: _severityLabel(result.severity),
                 tone: StatTileTone.primary,
               ),
             ),
             const SizedBox(width: Spacing.group),
             Expanded(
               child: StatTileWidget(
-                label: 'Mức độ',
-                value: result.severityLabel,
-                tone: result.severityIsHigh
-                    ? StatTileTone.warning
-                    : StatTileTone.neutral,
-              ),
-            ),
-            const SizedBox(width: Spacing.group),
-            Expanded(
-              child: StatTileWidget(
                 label: 'Điều trị',
-                value: result.careSettingLabel,
+                value: _siteLabel(result.treatmentSite),
               ),
             ),
           ],
         ),
         const SizedBox(height: Spacing.block - 4),
-        RiskPillWidget(label: result.riskLabel, isHigh: result.severityIsHigh),
+        RiskPillWidget(
+          label: severityIsHigh ? 'Nguy cơ cao' : 'Nguy cơ thấp',
+          isHigh: severityIsHigh,
+        ),
+        if (result.isPatientPregnantOrInLactationPhase) ...[
+          const SizedBox(height: Spacing.control),
+          const ClinicalAlert(
+            severity: ClinicalSeverity.needsAttention,
+            title: 'Bệnh nhân đang mang thai / cho con bú',
+            description: 'Cân nhắc kỹ trước khi chỉ định kháng sinh.',
+          ),
+        ],
+        if (result.missingVariables.isNotEmpty) ...[
+          const SizedBox(height: Spacing.control),
+          ClinicalAlert(
+            severity: ClinicalSeverity.needsAttention,
+            title: 'Thiếu thông tin cần thiết',
+            description: result.missingVariables
+                .map((v) => v.name)
+                .take(6)
+                .join(', '),
+          ),
+        ],
         const SizedBox(height: Spacing.control + 4),
         AppText(
           'Kết quả cần được bác sĩ xác nhận trước khi áp dụng điều trị.',
@@ -200,84 +205,104 @@ class _ResultTab extends StatelessWidget {
   }
 }
 
-class _MedicinesTab extends StatelessWidget {
-  const _MedicinesTab({required this.medicines});
+class _SuspectedTab extends StatelessWidget {
+  const _SuspectedTab({required this.result});
 
-  final List<DiagnosisMedicine> medicines;
+  final DiagnoseResultDto result;
 
   @override
   Widget build(BuildContext context) {
-    // Plain rows instead of GridView: shrink-wrap viewports cannot live
-    // inside IntrinsicHeight (the pinned-bottom-CTA pattern).
-    final rows = <List<DiagnosisMedicine>>[
-      for (var i = 0; i < medicines.length; i += 2)
-        medicines.skip(i).take(2).toList(),
-    ];
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const _SectionTitle('Thuốc khuyến nghị'),
+        const _SectionTitle('Căn nguyên nghi ngờ cao'),
         const SizedBox(height: Spacing.control + 4),
-        AppText(
-          'Liều và đường dùng: theo phác đồ đã chọn.',
-          type: AppTextType.caption,
-        ),
-        const SizedBox(height: Spacing.block - 4),
-        for (var r = 0; r < rows.length; r++) ...[
-          Row(
-            // No stretch here: inside IntrinsicHeight it would pass an
-            // unbounded cross-axis to children.
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              for (var i = 0; i < rows[r].length; i++) ...[
-                if (i > 0) const SizedBox(width: Spacing.group),
-                Expanded(
-                  child: MedicineCardWidget(
-                    name: rows[r][i].name,
-                    regimenLine: rows[r][i].regimenLine,
-                  ),
-                ),
-              ],
-              // Keep card widths equal on incomplete rows.
-              if (rows[r].length == 1) ...[
-                const SizedBox(width: Spacing.group),
-                const Expanded(child: SizedBox.shrink()),
-              ],
-            ],
-          ),
-          if (r != rows.length - 1) const SizedBox(height: Spacing.group),
-        ],
+        if (result.heavySuspected.isEmpty)
+          const AppText('Không có dữ liệu.', type: AppTextType.caption)
+        else
+          AppCard.divided([
+            for (final pathogen in result.heavySuspected)
+              _RefRow(title: pathogen.name),
+          ]),
+        const SizedBox(height: Spacing.section),
+        const _SectionTitle('Căn nguyên cần lưu ý'),
+        const SizedBox(height: Spacing.control + 4),
+        if (result.worthSuspected.isEmpty)
+          const AppText('Không có dữ liệu.', type: AppTextType.caption)
+        else
+          AppCard.divided([
+            for (final pathogen in result.worthSuspected)
+              _RefRow(title: pathogen.name),
+          ]),
       ],
     );
   }
 }
 
-class _ReferencesTab extends StatelessWidget {
-  const _ReferencesTab({required this.references});
+class _RefRow extends StatelessWidget {
+  const _RefRow({required this.title, this.trailing});
 
-  final List<DiagnosisReference> references;
+  final String title;
+  final String? trailing;
 
   @override
   Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: Spacing.control,
+        vertical: Spacing.group,
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              title,
+              style: TypographyTokens.body(context)
+                  .copyWith(fontWeight: FontWeight.w600),
+            ),
+          ),
+          if (trailing != null)
+            AppText(trailing!, type: AppTextType.caption),
+        ],
+      ),
+    );
+  }
+}
+
+class _EvidencesTab extends StatelessWidget {
+  const _EvidencesTab({required this.evidences});
+
+  final List<EvidenceDto> evidences;
+
+  @override
+  Widget build(BuildContext context) {
+    // Only criteria that actually contributed points are meaningful here.
+    final scored = evidences
+        .where((e) => e.score != null && e.score != 0)
+        .toList();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const _SectionTitle('Tài liệu tham khảo'),
+        const _SectionTitle('Bằng chứng lâm sàng'),
         const SizedBox(height: Spacing.control + 4),
-        AppCard.divided([
-          for (final reference in references)
-            ReferenceRowWidget(
-              source: reference.source,
-              detail: reference.detail,
-            ),
-        ]),
-        const SizedBox(height: Spacing.section),
-        AppText(
-          'Nguồn tham khảo của phác đồ được đề xuất.',
-          type: AppTextType.caption,
-        ),
+        if (scored.isEmpty)
+          const AppText('Không có dữ liệu.', type: AppTextType.caption)
+        else
+          AppCard.divided([
+            for (final evidence in scored)
+              _RefRow(
+                title: evidence.source,
+                trailing: _evidenceTrailing(evidence),
+              ),
+          ]),
       ],
     );
+  }
+
+  String? _evidenceTrailing(EvidenceDto evidence) {
+    if (evidence.score != null) return 'Điểm ${evidence.score}';
+    if (evidence.isMajor == true) return 'Chính';
+    if (evidence.isMajor == false) return 'Phụ';
+    return null;
   }
 }

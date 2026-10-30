@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:respiraams/features/calculator/routes.dart';
+import 'package:respiraams/features/lookup/lookup_route.dart';
+import 'package:respiraams/features/statistics/routes.dart';
 
 import '../../../../design_system/design_system.dart';
 import '../models/patient_summary.dart';
-import '../providers/patient_list_controller.dart';
 import '../providers/patient_list_provider.dart';
 import '../routes.dart';
 import '../widgets/patient_card_widget.dart';
@@ -13,19 +15,35 @@ import '../widgets/status_filter_chip_widget.dart';
 
 /// Route `/patients` — post-login workspace home: searchable, filterable
 /// roster with bottom navigation (§09.6).
-class PatientListScreen extends ConsumerWidget {
+class PatientListScreen extends ConsumerStatefulWidget {
   const PatientListScreen({super.key});
+
+  @override
+  ConsumerState<PatientListScreen> createState() => _PatientListScreenState();
+}
+
+class _PatientListScreenState extends ConsumerState<PatientListScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // First paint uses whatever is cached; the API load kicks off here.
+    Future.microtask(
+      () => ref.read(patientListControllerProvider.notifier).refresh(),
+    );
+  }
 
   void _showTabPlaceholder(BuildContext context, String label) {
     showAppToast(context, 'Tab "$label" sẽ được bổ sung sau.');
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final c = context.respiraColors;
     final state = ref.watch(patientListControllerProvider);
     final controller = ref.read(patientListControllerProvider.notifier);
-    final roster = ref.watch(patientListProvider);
+    final roster = ref.watch(patientListControllerProvider.select((s) => s.patients));
+    final loading = ref.watch(patientListControllerProvider.select((s) => s.loading));
+    final errorMessage = ref.watch(patientListControllerProvider.select((s) => s.errorMessage));
     final visible = ref.watch(visiblePatientsProvider);
 
     final attentionCount =
@@ -134,24 +152,72 @@ class PatientListScreen extends ConsumerWidget {
               ),
               const SizedBox(height: Spacing.inline),
               Expanded(
-                child: visible.isEmpty
-                    ? _EmptyState()
-                    : ListView.separated(
-                        itemCount: visible.length,
-                        separatorBuilder: (_, _) =>
-                            const SizedBox(height: Spacing.inline),
-                        itemBuilder: (context, index) => PatientCardWidget(
-                          patient: visible[index],
-                          onTap: () => context.push(PatientRoutes.detail),
-                        ),
-                      ),
+                child: loading && visible.isEmpty
+                    ? const Center(child: CircularProgressIndicator())
+                    : errorMessage != null && visible.isEmpty
+                        ? _ErrorState(message: errorMessage)
+                        : RefreshIndicator(
+                            onRefresh: controller.refresh,
+                            child: visible.isEmpty
+                                ? ListView(
+                                    physics:
+                                        const AlwaysScrollableScrollPhysics(),
+                                    children: const [
+                                      SizedBox(height: Spacing.section * 2),
+                                      _EmptyState(),
+                                    ],
+                                  )
+                                : ListView.separated(
+                                    physics:
+                                        const AlwaysScrollableScrollPhysics(),
+                                    itemCount:
+                                        visible.length + (state.hasMore ? 1 : 0),
+                                    separatorBuilder: (_, _) => const SizedBox(
+                                        height: Spacing.inline),
+                                    itemBuilder: (context, index) {
+                                      if (index >= visible.length) {
+                                        controller.loadMore();
+                                        return const Padding(
+                                          padding: EdgeInsets.all(
+                                              Spacing.control),
+                                          child: Center(
+                                            child: SizedBox(
+                                              width: 24,
+                                              height: 24,
+                                              child:
+                                                  CircularProgressIndicator(
+                                                strokeWidth: 2,
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                      return PatientCardWidget(
+                                        patient: visible[index],
+                        onTap: () => context.push(
+                            '${PatientRoutes.detail}?id=${Uri.encodeComponent(visible[index].id)}'),
+                                      );
+                                    },
+                                  ),
+                          ),
               ),
               const SizedBox(height: Spacing.inline),
               AppBottomNavigation(
                 items: navItems,
                 activeIndex: 0,
                 onTap: (index) {
-                  if (index != 0) {
+                  if (index == 1) {
+                    // Tra cứu entry: medical lookup catalogue.
+                    context.push(LookupRoutes.lookup);
+                  } else if (index == 2) {
+                    // Diagnosis entry: create a patient, then continue with
+                    // the empirical-treatment flow for them.
+                    context.push(PatientRoutes.addPatientForDiagnosis);
+                  } else if (index == 3) {
+                    context.push(CalculatorRoutes.list);
+                  } else if (index == 4) {
+                    context.push(StatisticsRoutes.overview);
+                  } else if (index != 0) {
                     _showTabPlaceholder(context, navItems[index].label);
                   }
                 },
@@ -175,16 +241,7 @@ class _Header extends ConsumerWidget {
 
     return Row(
       children: [
-        _CircleAction(
-          icon: LucideIcons.logOut,
-          background: c.surfaceSecondary,
-          foreground: c.iconDefault,
-          semanticLabel: 'Đăng xuất',
-          onTap: () => showAppToast(
-            context,
-            'Đăng xuất sẽ được bổ sung sau.',
-          ),
-        ),
+        const AppMenuButton(),
         const SizedBox(width: Spacing.group),
         Expanded(
           child: Column(
@@ -289,6 +346,29 @@ class _SearchField extends StatelessWidget {
               ),
             ),
           ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ErrorState extends StatelessWidget {
+  const _ErrorState({required this.message});
+
+  final String message;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.respiraColors;
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(LucideIcons.cloudOff,
+              size: ControlSize.iconBase * 2, color: c.iconMuted),
+          const SizedBox(height: Spacing.control),
+          AppText(message,
+              type: AppTextType.caption, textAlign: TextAlign.center),
         ],
       ),
     );

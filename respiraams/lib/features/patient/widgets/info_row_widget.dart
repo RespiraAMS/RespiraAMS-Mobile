@@ -6,7 +6,11 @@ import 'package:respiraams/design_system/design_system.dart';
 ///
 /// Dividers between rows are drawn by [AppCard.divided].
 class InfoRowWidget extends StatelessWidget {
-  const InfoRowWidget({super.key, required this.label, required this.value});
+  const InfoRowWidget({
+    super.key,
+    required this.label,
+    required this.value,
+  });
 
   final String label;
   final String value;
@@ -36,9 +40,8 @@ class InfoRowWidget extends StatelessWidget {
               textAlign: TextAlign.right,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: TypographyTokens.bodyMedium(
-                context,
-              ).copyWith(fontWeight: FontWeight.w600),
+              style: TypographyTokens.bodyMedium(context)
+                  .copyWith(fontWeight: FontWeight.w600),
             ),
           ),
         ],

@@ -8,22 +8,28 @@ part of 'patient.dart';
 
 _$PatientImpl _$$PatientImplFromJson(Map<String, dynamic> json) =>
     _$PatientImpl(
+      id: json['id'] as String? ?? '',
       name: json['name'] as String,
       code: json['code'] as String,
       dob: json['dob'] as String,
       gender: $enumDecode(_$GenderEnumMap, json['gender']),
       insurance: json['insurance'] as String,
       address: json['address'] as String,
+      heightCm: (json['heightCm'] as num?)?.toDouble(),
+      weightKg: (json['weightKg'] as num?)?.toDouble(),
     );
 
 Map<String, dynamic> _$$PatientImplToJson(_$PatientImpl instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'name': instance.name,
       'code': instance.code,
       'dob': instance.dob,
       'gender': _$GenderEnumMap[instance.gender]!,
       'insurance': instance.insurance,
       'address': instance.address,
+      'heightCm': instance.heightCm,
+      'weightKg': instance.weightKg,
     };
 
 const _$GenderEnumMap = {Gender.nam: 'nam', Gender.nu: 'nu'};

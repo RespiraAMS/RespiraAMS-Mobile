@@ -11,13 +11,13 @@ class SelectionRowWidget extends StatelessWidget {
   const SelectionRowWidget({
     super.key,
     required this.title,
-    required this.description,
+    this.description,
     required this.selected,
     required this.onTap,
   });
 
   final String title;
-  final String description;
+  final String? description;
   final bool selected;
   final VoidCallback onTap;
 
@@ -32,7 +32,8 @@ class SelectionRowWidget extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         child: Container(
-          constraints: const BoxConstraints(minHeight: ControlSize.rowHeight),
+          constraints:
+              const BoxConstraints(minHeight: ControlSize.rowHeight),
           padding: const EdgeInsets.symmetric(
             horizontal: Spacing.control,
             vertical: Spacing.control,
@@ -54,17 +55,18 @@ class SelectionRowWidget extends StatelessWidget {
                       title,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: TypographyTokens.body(
-                        context,
-                      ).copyWith(fontWeight: FontWeight.w600),
+                      style: TypographyTokens.body(context)
+                          .copyWith(fontWeight: FontWeight.w600),
                     ),
-                    const SizedBox(height: Spacing.xxxs),
-                    AppText(
-                      description,
-                      type: AppTextType.caption,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                    if (description != null && description!.isNotEmpty) ...[
+                      const SizedBox(height: Spacing.xxxs),
+                      AppText(
+                        description!,
+                        type: AppTextType.caption,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
                   ],
                 ),
               ),
@@ -96,11 +98,8 @@ class _CheckboxControl extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
       ),
       child: selected
-          ? Icon(
-              LucideIcons.check,
-              size: ControlSize.iconMd,
-              color: c.onPrimary,
-            )
+          ? Icon(LucideIcons.check,
+              size: ControlSize.iconMd, color: c.onPrimary)
           : null,
     );
   }
