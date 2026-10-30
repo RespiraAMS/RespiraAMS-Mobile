@@ -1,0 +1,212 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../../../design_system/design_system.dart';
+import '../../../core/network/api_client.dart';
+import '../../antibiotic/providers/antibiotic_provider.dart';
+import '../../antibiotic/providers/antibiotic_service.dart';
+import '../../antibiotic/screens/antibiotic_list_screen.dart';
+import '../../antibioticGroup/providers/antibiotic_group_provider.dart';
+import '../../antibioticGroup/providers/antibiotic_group_service.dart';
+import '../../antibioticGroup/screens/antibiotic_group_list_screen.dart';
+import '../../clinical_metrics/providers/clinical_metric_provider.dart';
+import '../../clinical_metrics/providers/clinical_metric_service.dart';
+import '../../clinical_metrics/screens/clinical_metric_list_screen.dart';
+import '../../clinical_variables/providers/clinical_variable_provider.dart';
+import '../../clinical_variables/providers/clinical_variable_service.dart';
+import '../../clinical_variables/screens/clinical_variable_list_screen.dart';
+import '../../criteria/providers/criterion_provider.dart';
+import '../../criteria/providers/criterion_service.dart';
+import '../../criteria/screens/criterion_list_screen.dart';
+import '../../pathogen/providers/pathogen_provider.dart';
+import '../../pathogen/providers/pathogen_service.dart';
+import '../../pathogen/screens/pathogen_list_screen.dart';
+import '../../risk_factors/providers/risk_factor_provider.dart';
+import '../../risk_factors/providers/risk_factor_service.dart';
+import '../../risk_factors/screens/risk_factor_list_screen.dart';
+import '../../suspected_causes/providers/suspected_cause_provider.dart';
+import '../../suspected_causes/providers/suspected_cause_service.dart';
+import '../../suspected_causes/screens/suspected_cause_list_screen.dart';
+import '../models/lookup_category.dart';
+
+class CategoryGridItem extends StatelessWidget {
+  final LookupCategory category;
+
+  const CategoryGridItem({super.key, required this.category});
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.respiraColors;
+
+    return GestureDetector(
+      onTap: () {
+        if (category.title == 'Kháng sinh') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => ChangeNotifierProvider(
+                create: (_) {
+                  final apiClient = ApiClient(); 
+                  final repository = AntibioticRepository(apiClient: apiClient);
+                  return AntibioticProvider(repository);
+                },
+                child: const AntibioticListScreen(),
+              ),
+            ),
+          );
+        } else if (category.title == 'Nhóm kháng sinh') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => ChangeNotifierProvider(
+                create: (_) {
+                  final apiClient = ApiClient(); 
+                  final repository = AntibioticGroupRepository(apiClient: apiClient);
+                  return AntibioticGroupProvider(repository);
+                },
+                child: const AntibioticGroupListScreen(),
+              ),
+            ),
+          );
+        } else if (category.title == 'Tác nhân gây bệnh') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => ChangeNotifierProvider(
+                create: (_) {
+                  final apiClient = ApiClient(); 
+                  final repository = PathogenRepository(apiClient: apiClient);
+                  return PathogenProvider(repository);
+                },
+                child: const PathogenListScreen(),
+              ),
+            ),
+          );
+        } else if (category.title == 'Biến số lâm sàng') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => ChangeNotifierProvider(
+                create: (_) {
+                  final apiClient = ApiClient(); 
+                  final repository = ClinicalVariableRepository(apiClient: apiClient);
+                  return ClinicalVariableProvider(repository);
+                },
+                child: const ClinicalVariableListScreen(),
+              ),
+            ),
+          );
+        } else if (category.title == 'Nguyên nhân nghi ngờ') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => ChangeNotifierProvider(
+                create: (_) {
+                  final apiClient = ApiClient(); 
+                  final repository = SuspectedCauseRepository(apiClient: apiClient);
+                  return SuspectedCauseProvider(repository);
+                },
+                child: const SuspectedCauseListScreen(),
+              ),
+            ),
+          );
+        } else if (category.title == 'Tiêu chí đánh giá') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => ChangeNotifierProvider(
+                create: (_) {
+                  final apiClient = ApiClient(); 
+                  final repository = CriterionRepository(apiClient: apiClient);
+                  return CriterionProvider(repository);
+                },
+                child: const CriterionListScreen(),
+              ),
+            ),
+          );
+        } else if (category.title == 'Yếu tố nguy cơ') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => ChangeNotifierProvider(
+                create: (_) {
+                  final apiClient = ApiClient(); 
+                  final repository = RiskFactorRepository(apiClient: apiClient);
+                  return RiskFactorProvider(repository);
+                },
+                child: const RiskFactorListScreen(),
+              ),
+            ),
+          );
+        } else if (category.title == 'Thang điểm lâm sàng') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => ChangeNotifierProvider(
+                create: (_) {
+                  final apiClient = ApiClient(); 
+                  final repository = ClinicalMetricRepository(apiClient: apiClient);
+                  return ClinicalMetricProvider(repository);
+                },
+                child: const ClinicalMetricListScreen(),
+              ),
+            ),
+          );
+        } else {
+          showAppToast(context, 'Tính năng ${category.title} đang phát triển');
+        }
+      },
+      child: AppSurface(
+        radius: AppRadius.mdValue,
+        padding: const EdgeInsets.fromLTRB(14, 14, 14, 6),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            // Icon Container
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: c.primarySoft,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Center(
+                child: AppIcon(
+                  category.icon,
+                  size: ControlSize.iconXl,
+                  color: c.iconPrimary,
+                ),
+              ),
+            ),
+
+            // Texts
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  category.title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TypographyTokens.caption(
+                    context,
+                  ).copyWith(fontWeight: FontWeight.w600, color: c.textPrimary),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  category.subtitle,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 10,
+                    height: 12 / 10,
+                    color: c.textSecondary,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

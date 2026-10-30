@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 /// Inter type scale. Source: RESPIRAAMS_DESIGN_SYSTEM.md · 03 Typography.
 abstract final class TypographyTokens {
@@ -66,12 +67,23 @@ abstract final class TypographyTokens {
     required double height,
     FontWeight? fontWeight,
   }) {
-    return TextStyle(
-      fontFamily: 'Inter',
+    final color = Theme.of(context).colorScheme.onSurface;
+    final weight = fontWeight ?? FontWeight.w400;
+    // When runtime fetching is disabled (offline / widget tests) skip
+    // google_fonts entirely so no unresolved font load is attempted.
+    if (!GoogleFonts.config.allowRuntimeFetching) {
+      return TextStyle(
+        fontSize: fontSize,
+        height: height,
+        fontWeight: weight,
+        color: color,
+      );
+    }
+    return GoogleFonts.inter(
       fontSize: fontSize,
       height: height,
-      fontWeight: fontWeight ?? FontWeight.w400,
-      color: Theme.of(context).colorScheme.onSurface,
+      fontWeight: weight,
+      color: color,
     );
   }
 }
