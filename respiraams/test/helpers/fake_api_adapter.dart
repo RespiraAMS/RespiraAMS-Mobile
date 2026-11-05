@@ -48,9 +48,12 @@ class FakeApiAdapter implements HttpClientAdapter {
     }
     return ResponseBody.fromString(
       jsonEncode({
-        'statusCode': 404,
-        'success': false,
-        'message': 'Not mocked: ${options.method} ${options.path}',
+        'statusCode': 'FAILURE-RESOURCE-NOT-FOUND',
+        'error': {
+          'statusCode': 'FAILURE-RESOURCE-NOT-FOUND',
+          'description': 'Not mocked: ${options.method} ${options.path}',
+        },
+        'data': null,
       }),
       404,
       headers: _jsonHeaders,
@@ -61,55 +64,34 @@ class FakeApiAdapter implements HttpClientAdapter {
     Headers.contentTypeHeader: [Headers.jsonContentType],
   };
 
-  static Map<String, dynamic> envelope(Map<String, dynamic> data,
-      {int code = 200}) =>
-      {
-        'statusCode': code,
-        'success': true,
+  static Map<String, dynamic> envelope(Map<String, dynamic> data) => {
+        'statusCode': 'SUCCESS',
+        'error': null,
         'data': data,
       };
 
   // ── Default demo dataset (mirrors the retired demo providers) ──────
 
-  static const _sampleDoctorId = '3fa85f64-5717-4562-b3fc-2c963f66afa6';
-
   static final Map<String, MockedResponse> _defaultHandlers = {
-    'POST /api/1/auth/login': MockedResponse(
+    // Placed before the list handler: `GET /api/1/patients` is a substring
+    // of both the detail and search paths, and the first match wins.
+    'GET /api/1/patients/search': MockedResponse(
       200,
       envelope({
-        'accessToken':
-            'header.${base64Url.encode(utf8.encode(jsonEncode({'X-ID': _sampleDoctorId})))}.sig',
-        'refreshToken': 'fake-refresh-token',
+        'metadata': {
+          'hasNextPage': false,
+          'hasPreviousPage': false,
+          'totalItemCount': 1,
+          'pageCount': 1,
+          'currentPage': 1,
+          'pageSize': 10,
+        },
+        'items': [_patient('An', 'BA-2026-0002', 47, 'InTreatment')],
       }),
     ),
-    'POST /api/1/auth/logout': MockedResponse(
+    'GET /api/1/patients/patient-': MockedResponse(
       200,
-      envelope({'message': 'Logout successful'}),
-    ),
-    'POST /api/1/auth/refresh': MockedResponse(
-      200,
-      envelope({
-        'accessToken': 'fake-access-2',
-        'refreshToken': 'fake-refresh-2',
-      }),
-    ),
-    'GET /api/1/doctors/': MockedResponse(
-      200,
-      envelope({
-        'email': 'bs.minh@respira.vn',
-        'phone': '0900000000',
-        'role': 'Doctor',
-        'isEmailConfirmed': true,
-        'status': 'Active',
-        'firstName': 'Lê Hoàng',
-        'lastName': 'Minh',
-        'degrees': [],
-        'academicTitle': 'BS.',
-        'position': 'Doctor',
-        'gender': 'Male',
-        'citizenIdentificationNumber': '012345678901',
-        'address': 'Cần Thơ',
-      }),
+      envelope(_patientDetail()),
     ),
     'GET /api/1/patients': MockedResponse(
       200,
@@ -134,60 +116,13 @@ class FakeApiAdapter implements HttpClientAdapter {
         'id': '11111111-1111-1111-1111-111111111111',
       }),
     ),
-    'GET /api/1/diseases/list': MockedResponse(
+    'GET /api/1/diagnose/empirical': MockedResponse(
       200,
-      envelope({
-        'diseases': [
-          {'id': 'disease-1', 'name': 'Viêm phổi cộng đồng'},
-        ],
-      }),
-    ),
-    'GET /api/1/diseases/disease-1/criteria': MockedResponse(
-      200,
-      envelope({
-        'icuHospitalizeCriteria': [
-          {'id': 'icu-1', 'name': 'Cần thở máy xâm nhập', 'type': 'Boolean'},
-          {'id': 'icu-2', 'name': 'Sốc nhiễm khuẩn', 'type': 'Boolean'},
-        ],
-        'resistanceRiskFactorCriteria': [
-          {
-            'id': 'rrf-1',
-            'name': 'Dùng kháng sinh 90 ngày gần đây',
-            'type': 'Boolean',
-          },
-          {'id': 'rrf-2', 'name': 'Nằm viện ≥ 5 ngày', 'type': 'Boolean'},
-        ],
-        'otherCriteria': [
-          {'id': 'other-1', 'name': 'Không dung nạp thuốc', 'type': 'Boolean'},
-        ],
-      }),
-    ),
-    'POST /api/1/patients/': MockedResponse(
-      204,
-      envelope({}),
+      envelope(_diagnosisForm()),
     ),
     'POST /api/1/diagnose/empirical': MockedResponse(
       200,
       envelope(_empiricalResult()),
-    ),
-    'POST /api/1/diagnose/target': MockedResponse(
-      200,
-      envelope({
-        'crcl': 92.5,
-        'recommendations': [
-          _medicine('Meropenem', 'Intravenous'),
-          _medicine('Amoxicillin', 'Oral'),
-          _medicine('Amikacin', 'Intravenous'),
-        ],
-      }),
-    ),
-    'GET /api/1/pathogens/list': MockedResponse(
-      200,
-      envelope({
-        'pathogens': [
-          {'id': 'k-pneumoniae-id', 'name': 'Klebsiella pneumoniae'},
-        ],
-      }),
     ),
   };
 
@@ -195,57 +130,111 @@ class FakeApiAdapter implements HttpClientAdapter {
     String name,
     String code,
     int age,
-    String status,
+    String outcome,
   ) =>
       {
         'id': 'patient-$code',
         'fullName': name,
+        'dateOfBirth': '1971-04-12',
         'age': age,
-        'isMale': true,
+        'gender': 'Male',
         'medicalRecordCode': code,
-        'status': status,
+        'treatmentOutcome': outcome,
       };
 
-  static Map<String, dynamic> _medicine(
-    String name,
-    String route,
-  ) =>
-      {
-        'id': 'med-$name',
-        'name': name,
-        'antibioticGroupId': 'group-1',
-        'antibioticGroupName': 'Beta-lactam',
-        'classification': 'Access',
-        'dosages': [
-          {'routeOfAdministration': route, 'dose': '1 g mỗi 8 giờ'},
-        ],
+  static Map<String, dynamic> _patientDetail() => {
+        'id': 'patient-BA-2026-0001',
+        'fullName': 'Khoa',
+        'phoneNumber': '0900000000',
+        'dateOfBirth': '1971-04-12',
+        'gender': 'Male',
+        'height': 170.0,
+        'weight': 65.0,
+        'medicalRecordCode': 'BA-2026-0001',
+        'healthInsuranceCard': '0123456789',
+        'address': 'Cần Thơ',
+        'city': 'Cần Thơ',
+        'admission': '2026-01-02',
+        'treatmentOutcome': 'InTreatment',
+        'nextOfKins': <Map<String, dynamic>>[],
+        'treatments': <Map<String, dynamic>>[],
       };
 
   static Map<String, dynamic> _empiricalResult() => {
-        'crcl': 84.2,
         'severity': 'Severe',
         'treatmentSite': 'Inpatient',
-        'medicines': [
-          _medicine('Meropenem', 'Intravenous'),
-          _medicine('Amoxicillin', 'Oral'),
+        'worthSuspected': [
+          {'id': 'pathogen-1', 'name': 'Klebsiella pneumoniae'},
         ],
-        'recommendations': [
-          _medicine('Meropenem', 'Intravenous'),
+        'heavySuspected': [
+          {'id': 'pathogen-2', 'name': 'Streptococcus pneumoniae'},
         ],
-        'infectionProbabilities': [
+        'evidences': [
+          {'source': 'CURB-65', 'formula': 'Confusion + Urea', 'score': 3},
+        ],
+        'missingVariables': <Map<String, dynamic>>[],
+        'allergies': <Map<String, dynamic>>[],
+        'isPatientPregnantOrInLactationPhase': false,
+      };
+
+  static Map<String, dynamic> _diagnosisForm() => {
+        'variables': [
           {
-            'pathogenId': 'k-pneumoniae-id',
-            'pathogenName': 'Klebsiella pneumoniae',
-            'probability': 0.72,
+            'id': 'var-age',
+            'name': 'Tuổi',
+            'description': '',
+            'code': 'AGE',
+            'valueType': 'Numeric',
+            'canonicalUnit': 'tuổi',
+            'isRequired': true,
+            'category': 'PersonalInformation',
+            'acceptedValues': <String>[],
           },
-        ],
-        'references': [
           {
-            'id': 'ref-1',
-            'name': 'Phác đồ A · Viêm phổi cộng đồng',
-            'issuer': 'Bộ Y tế',
-            'issueDate': '2024-01-01',
-            'version': 3,
+            'id': 'var-gender',
+            'name': 'Giới tính',
+            'description': '',
+            'code': 'GENDER',
+            'valueType': 'Categorical',
+            'isRequired': true,
+            'category': 'PersonalInformation',
+            'acceptedValues': ['Male', 'Female'],
+          },
+          {
+            'id': 'var-rr',
+            'name': 'Nhịp thở',
+            'description': '',
+            'code': 'RR',
+            'valueType': 'Numeric',
+            'canonicalUnit': 'lần/phút',
+            'isRequired': true,
+            'category': 'Clinical',
+            'acceptedRange': {
+              'min': 12,
+              'max': 20,
+              'unit': 'lần/phút',
+              'isMinExclusive': false,
+              'isMaxExclusive': false,
+            },
+          },
+          {
+            'id': 'var-confusion',
+            'name': 'Lú lẫn mới xuất hiện',
+            'description': '',
+            'code': 'CONFUSION',
+            'valueType': 'Boolean',
+            'isRequired': false,
+            'category': 'Clinical',
+          },
+          {
+            'id': 'var-wbc',
+            'name': 'Bạch cầu',
+            'description': '',
+            'code': 'WBC',
+            'valueType': 'Numeric',
+            'canonicalUnit': 'G/L',
+            'isRequired': false,
+            'category': 'Paraclinical',
           },
         ],
       };

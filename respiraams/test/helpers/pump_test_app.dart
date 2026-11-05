@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:respiraams/core/network/api_client.dart';
@@ -15,7 +16,11 @@ Future<void> pumpTestApp(
   WidgetTester tester, {
   String initialLocation = '/splash',
   Map<String, MockedResponse> overrides = const {},
+  List<Override> providerOverrides = const [],
 }) async {
+  // Widget tests never hit the network; google_fonts otherwise tries to
+  // download Inter at first theme build and throws after the test ends.
+  GoogleFonts.config.allowRuntimeFetching = false;
   SharedPreferences.setMockInitialValues({});
   final prefs = await SharedPreferences.getInstance();
 
@@ -29,6 +34,7 @@ Future<void> pumpTestApp(
         apiClientProvider.overrideWithValue(dio),
         appRouterProvider
             .overrideWithValue(buildAppRouter(initialLocation: initialLocation)),
+        ...providerOverrides,
       ],
       child: const RespiraMobileApp(),
     ),

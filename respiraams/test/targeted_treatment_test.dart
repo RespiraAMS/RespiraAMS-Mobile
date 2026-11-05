@@ -1,16 +1,62 @@
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:respiraams/features/patient/models/patient.dart';
+import 'package:respiraams/features/patient/providers/active_patient_provider.dart';
+
 import 'helpers/pump_test_app.dart';
 
 /// Targeted-treatment flow tests: switching the treatment-type tab, the
 /// targeted variant, the Chẩn đoán vi sinh screen and its selection chips.
 
-Future<void> _pumpProgress(WidgetTester tester) =>
-    pumpTestApp(tester, initialLocation: '/patient/progress');
+/// Seeds the active patient the progress/diagnosis flow works on (the demo
+/// `samplePatient` seed was removed in favour of real API data).
+class _SeededActivePatient extends ActivePatientController {
+  _SeededActivePatient(this._patient);
+
+  final Patient _patient;
+
+  @override
+  Patient? build() => _patient;
+}
+
+final _seedPatient = Patient(
+  id: 'patient-BA-2026-0231',
+  name: 'Nguyễn Minh Khôi',
+  code: 'BA-2026-0231',
+  dob: '12/04/1971',
+  gender: Gender.nam,
+  insurance: '0123456789',
+  address: 'Cần Thơ',
+);
+
+Future<void> _pumpProgress(WidgetTester tester) => pumpTestApp(
+      tester,
+      initialLocation: '/patient/progress',
+      providerOverrides: [
+        activePatientControllerProvider
+            .overrideWith(() => _SeededActivePatient(_seedPatient)),
+      ],
+    );
 
 Future<void> _settleNavigation(WidgetTester tester) async {
   await tester.pump(const Duration(milliseconds: 400));
   await tester.pump(const Duration(milliseconds: 400));
+}
+
+Future<void> _openTargetedDiagnosis(WidgetTester tester) async {
+  await _pumpProgress(tester);
+
+  await tester.tap(find.text('Điều trị đích'));
+  await tester.pump(const Duration(milliseconds: 200));
+
+  await tester.ensureVisible(find.text('Tiếp tục điều trị đích'));
+  await tester.pump(const Duration(milliseconds: 200));
+  await tester.tap(find.text('Tiếp tục điều trị đích'));
+  await _settleNavigation(tester);
+  for (var i = 0; i < 12; i++) {
+    await settleApi(tester);
+    await tester.pump(const Duration(milliseconds: 100));
+  }
 }
 
 void main() {
@@ -38,27 +84,15 @@ void main() {
 
   testWidgets('targeted CTA opens Chẩn đoán vi sinh with derived chips',
       (tester) async {
-    await _pumpProgress(tester);
-
-    await tester.tap(find.text('Điều trị đích'));
-    await tester.pump(const Duration(milliseconds: 200));
-
-    await tester.ensureVisible(find.text('Tiếp tục điều trị đích'));
-    await tester.pump(const Duration(milliseconds: 200));
-    await tester.tap(find.text('Tiếp tục điều trị đích'));
-    await _settleNavigation(tester);
-    for (var i = 0; i < 12; i++) {
-      await settleApi(tester);
-      await tester.pump(const Duration(milliseconds: 100));
-    }
+    await _openTargetedDiagnosis(tester);
 
     expect(find.text('Chẩn đoán vi sinh'), findsOneWidget);
     expect(
         find.text('Mỗi đường dùng là một lựa chọn thuốc riêng'),
         findsOneWidget);
-    // Recommendations from POST /diagnose/target (mock).
+    // Demo recommendations.
     expect(find.text('Meropenem'), findsOneWidget);
-    expect(find.text('Amikacin'), findsOneWidget);
+    expect(find.text('Ciprofloxacin'), findsOneWidget);
 
     // Nothing selected initially → no chips. Select Meropenem → P1 chip.
     expect(
@@ -68,29 +102,18 @@ void main() {
     expect(
         find.text('P1 · Meropenem · TM', skipOffstage: false), findsOneWidget);
 
-    // Select Amikacin → P2 chip appears.
-    await tester.ensureVisible(find.text('Amikacin'));
+    // Select Ciprofloxacin → P2 chip appears.
+    await tester.ensureVisible(find.text('Ciprofloxacin'));
     await tester.pump(const Duration(milliseconds: 200));
-    await tester.tap(find.text('Amikacin'));
+    await tester.tap(find.text('Ciprofloxacin'));
     await tester.pump(const Duration(milliseconds: 200));
     expect(
-        find.text('P2 · Amikacin · TM', skipOffstage: false), findsOneWidget);
+        find.text('P2 · Ciprofloxacin · Uống', skipOffstage: false),
+        findsOneWidget);
   });
 
-  testWidgets('saving targeted treatment lands on patient detail',
-      (tester) async {
-    await _pumpProgress(tester);
-
-    await tester.tap(find.text('Điều trị đích'));
-    await tester.pump(const Duration(milliseconds: 200));
-    await tester.ensureVisible(find.text('Tiếp tục điều trị đích'));
-    await tester.pump(const Duration(milliseconds: 200));
-    await tester.tap(find.text('Tiếp tục điều trị đích'));
-    await _settleNavigation(tester);
-    for (var i = 0; i < 12; i++) {
-      await settleApi(tester);
-      await tester.pump(const Duration(milliseconds: 100));
-    }
+  testWidgets('saving targeted treatment is not available yet', (tester) async {
+    await _openTargetedDiagnosis(tester);
 
     await tester.tap(find.text('Meropenem'));
     await tester.pump(const Duration(milliseconds: 200));
@@ -98,11 +121,10 @@ void main() {
     await tester.ensureVisible(find.text('Lưu điều trị đích'));
     await tester.pump(const Duration(milliseconds: 200));
     await tester.tap(find.text('Lưu điều trị đích'));
-    await tester.pump(const Duration(milliseconds: 600));
-    await _settleNavigation(tester);
+    await tester.pump(const Duration(milliseconds: 300));
 
-    expect(find.text('Đã lưu điều trị đích.'), findsOneWidget);
-    expect(find.text('Chi tiết bệnh nhân'), findsOneWidget);
+    expect(find.text('Tính năng đang phát triển.'), findsOneWidget);
+    expect(find.text('Chẩn đoán vi sinh'), findsOneWidget);
 
     // Flush the toast auto-dismiss timer before the test ends.
     await tester.pump(const Duration(seconds: 3));
