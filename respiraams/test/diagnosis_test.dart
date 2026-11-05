@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:respiraams/core/network/api_client.dart';
 import 'package:respiraams/core/theme/theme_mode_provider.dart';
 import 'package:respiraams/design_system/design_system.dart';
 import 'package:respiraams/features/diagnosis/routes.dart';
@@ -113,7 +115,11 @@ void main() {
   testWidgets('theme mode defaults to system and can be forced', (
     tester,
   ) async {
-    final container = ProviderContainer();
+    SharedPreferences.setMockInitialValues({});
+    final prefs = await SharedPreferences.getInstance();
+    final container = ProviderContainer(
+      overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
+    );
     addTearDown(container.dispose);
 
     final themeMode = container.read(themeModeControllerProvider);
@@ -121,6 +127,7 @@ void main() {
 
     container.read(themeModeControllerProvider.notifier).setDark();
     expect(container.read(themeModeControllerProvider), ThemeMode.dark);
+    expect(prefs.getString('settings.themeMode'), 'dark');
   });
 
   testWidgets('input text is vertically centered inside its field box', (

@@ -7,6 +7,7 @@ import '../../../../design_system/design_system.dart';
 import '../../../../features/calculator/routes.dart';
 import '../../../../features/lookup/lookup_route.dart';
 import '../../../../features/patient/routes.dart';
+import '../../settings/settings_menu_button.dart';
 import '../models/statistics_view.dart';
 import '../providers/statistics_provider.dart';
 import '../widgets/kpi_tile_widget.dart';
@@ -156,7 +157,7 @@ class _Header extends ConsumerWidget {
 
     return Row(
       children: [
-        const AppMenuButton(),
+        const SettingsMenuButton(),
         const SizedBox(width: Spacing.group),
         Expanded(
           child: Column(

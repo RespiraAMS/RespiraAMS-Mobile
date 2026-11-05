@@ -7,6 +7,7 @@ import 'package:respiraams/features/calculator/routes.dart';
 import 'package:respiraams/features/lookup/lookup_route.dart';
 import 'package:respiraams/features/patient/routes.dart';
 import 'package:respiraams/features/patient/widgets/section_label_widget.dart';
+import 'package:respiraams/features/settings/settings_menu_button.dart';
 import 'package:respiraams/features/statistics/routes.dart';
 
 import '../../../../design_system/design_system.dart';
@@ -50,7 +51,7 @@ class CalculatorListScreen extends ConsumerWidget {
             children: [
               Row(
                 children: [
-                  const AppMenuButton(),
+                  const SettingsMenuButton(),
                   const SizedBox(width: Spacing.group),
                   Expanded(
                     child: Column(

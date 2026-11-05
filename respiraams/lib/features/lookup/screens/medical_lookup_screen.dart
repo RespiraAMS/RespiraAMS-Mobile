@@ -5,6 +5,7 @@ import 'package:lucide_icons/lucide_icons.dart';
 import '../../../../design_system/design_system.dart';
 import '../../calculator/routes.dart';
 import '../../patient/routes.dart';
+import '../../settings/settings_menu_button.dart';
 import '../../statistics/routes.dart';
 import '../providers/lookup_data_provider.dart';
 import '../widgets/category_grid_item.dart';
@@ -39,7 +40,7 @@ class MedicalLookupScreen extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  const AppMenuButton(),
+                  const SettingsMenuButton(),
                   const SizedBox(width: Spacing.control),
                   Expanded(
                     child: Column(
