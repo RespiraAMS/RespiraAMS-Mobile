@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/network/api_response.dart';
 import '../models/clinical_metric.dart';
 import 'clinical_metric_service.dart';
 
@@ -40,7 +41,8 @@ class ClinicalMetricProvider extends ChangeNotifier {
       _hasMore = response.hasNextPage;
       _currentPage++;
     } catch (e) {
-      _errorMessage = 'Lỗi tải dữ liệu: ${e.toString()}';
+      debugPrint('Failed to load clinical metrics: $e');
+      _errorMessage = LocalApiError.loadData;
     } finally {
       _isLoading = false;
       notifyListeners();

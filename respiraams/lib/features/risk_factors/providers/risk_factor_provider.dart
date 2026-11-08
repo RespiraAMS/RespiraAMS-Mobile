@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/network/api_response.dart';
 import '../models/risk_factor.dart';
 import '../../suspected_causes/models/pathogen_summary.dart';
 import 'risk_factor_service.dart';
@@ -45,7 +46,8 @@ class RiskFactorProvider extends ChangeNotifier {
       _hasMore = response.hasNextPage;
       _currentPage++;
     } catch (e) {
-      _errorMessage = 'Lỗi tải dữ liệu: ${e.toString()}';
+      debugPrint('Failed to load risk factors: $e');
+      _errorMessage = LocalApiError.loadData;
     } finally {
       _isLoading = false;
       notifyListeners();

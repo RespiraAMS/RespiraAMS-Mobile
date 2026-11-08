@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
+import '../../../../core/navigation/app_nav_items.dart';
 import '../../../../design_system/design_system.dart';
+import '../../../../l10n/l10n.dart';
 import '../../../../features/calculator/routes.dart';
 import '../../../../features/lookup/lookup_route.dart';
 import '../../../../features/patient/routes.dart';
@@ -19,12 +21,13 @@ class StatisticsScreen extends ConsumerWidget {
   const StatisticsScreen({super.key});
 
   void _showTabPlaceholder(BuildContext context, String label) {
-    showAppToast(context, 'Tab "$label" sẽ được bổ sung sau.');
+    showAppToast(context, context.l10n.commonTabComingSoon(label));
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final c = context.respiraColors;
+    final l10n = context.l10n;
     final period = ref.watch(statisticsPeriodControllerProvider);
     final periodController =
         ref.read(statisticsPeriodControllerProvider.notifier);
@@ -32,13 +35,7 @@ class StatisticsScreen extends ConsumerWidget {
     final maxPathogenCount =
         view.pathogens.fold<int>(1, (a, p) => p.count > a ? p.count : a);
 
-    final navItems = const [
-      AppBottomNavItem(icon: LucideIcons.users, label: 'Bệnh nhân'),
-      AppBottomNavItem(icon: LucideIcons.search, label: 'Tra cứu'),
-      AppBottomNavItem(icon: LucideIcons.stethoscope, label: 'Chẩn đoán'),
-      AppBottomNavItem(icon: LucideIcons.calculator, label: 'Máy tính'),
-      AppBottomNavItem(icon: LucideIcons.barChart2, label: 'Thống kê'),
-    ];
+    final navItems = appBottomNavItems(context);
 
     return Scaffold(
       body: SafeArea(
@@ -57,7 +54,7 @@ class StatisticsScreen extends ConsumerWidget {
               AppSegmentedTabs<PeriodRange>(
                 segments: [
                   for (final range in PeriodRange.values)
-                    (range, range.displayName),
+                    (range, range.label(l10n)),
                 ],
                 selected: period,
                 onChanged: periodController.setPeriod,
@@ -80,7 +77,7 @@ class StatisticsScreen extends ConsumerWidget {
                       ),
                       const SizedBox(height: Spacing.section),
                       Text(
-                        'Chẩn đoán theo tuần',
+                        l10n.statisticsWeekly,
                         style: TypographyTokens.bodyMedium(context)
                             .copyWith(fontWeight: FontWeight.w600),
                       ),
@@ -88,7 +85,7 @@ class StatisticsScreen extends ConsumerWidget {
                       WeeklyBarsWidget(bars: view.bars),
                       const SizedBox(height: Spacing.section),
                       Text(
-                        'Tác nhân thường gặp',
+                        l10n.statisticsTopPathogens,
                         style: TypographyTokens.bodyLarge(context)
                             .copyWith(fontWeight: FontWeight.w700),
                       ),
@@ -154,6 +151,7 @@ class _Header extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final c = context.respiraColors;
+    final l10n = context.l10n;
 
     return Row(
       children: [
@@ -165,14 +163,14 @@ class _Header extends ConsumerWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'Thống kê',
+                l10n.statisticsTitle,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style:
                     TypographyTokens.h3(context).copyWith(color: c.textPrimary),
               ),
               const SizedBox(height: 2),
-              AppText('Tổng quan hoạt động điều trị',
+              AppText(l10n.statisticsSubtitle,
                   type: AppTextType.caption, maxLines: 1),
             ],
           ),
@@ -188,6 +186,7 @@ class _SyncBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.respiraColors;
+    final l10n = context.l10n;
 
     return Container(
       padding: const EdgeInsets.all(Spacing.xxs + 2),
@@ -212,12 +211,12 @@ class _SyncBanner extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  'Dữ liệu đã đồng bộ',
+                  l10n.statisticsSynced,
                   style: TypographyTokens.label(context)
                       .copyWith(color: c.textPrimary),
                 ),
                 const SizedBox(height: 2),
-                AppText('Cập nhật lúc 19:28 hôm nay',
+                AppText(l10n.statisticsUpdated,
                     type: AppTextType.caption, maxLines: 1),
               ],
             ),

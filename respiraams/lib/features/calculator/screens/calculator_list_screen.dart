@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lucide_icons/lucide_icons.dart';
 
 import 'package:respiraams/features/calculator/routes.dart';
 import 'package:respiraams/features/lookup/lookup_route.dart';
@@ -10,7 +9,9 @@ import 'package:respiraams/features/patient/widgets/section_label_widget.dart';
 import 'package:respiraams/features/settings/settings_menu_button.dart';
 import 'package:respiraams/features/statistics/routes.dart';
 
+import '../../../../core/navigation/app_nav_items.dart';
 import '../../../../design_system/design_system.dart';
+import '../../../../l10n/l10n.dart';
 import '../models/calculator.dart';
 import '../providers/calculator_providers.dart';
 import '../widgets/calculator_entry_row_widget.dart';
@@ -21,21 +22,16 @@ class CalculatorListScreen extends ConsumerWidget {
   const CalculatorListScreen({super.key});
 
   void _showTabPlaceholder(BuildContext context, String label) {
-    showAppToast(context, 'Tab "$label" sẽ được bổ sung sau.');
+    showAppToast(context, context.l10n.commonTabComingSoon(label));
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final c = context.respiraColors;
+    final l10n = context.l10n;
     final entries = ref.watch(calculatorListProvider);
 
-    final navItems = const [
-      AppBottomNavItem(icon: LucideIcons.users, label: 'Bệnh nhân'),
-      AppBottomNavItem(icon: LucideIcons.search, label: 'Tra cứu'),
-      AppBottomNavItem(icon: LucideIcons.stethoscope, label: 'Chẩn đoán'),
-      AppBottomNavItem(icon: LucideIcons.calculator, label: 'Máy tính'),
-      AppBottomNavItem(icon: LucideIcons.barChart2, label: 'Thống kê'),
-    ];
+    final navItems = appBottomNavItems(context);
 
     return Scaffold(
       body: SafeArea(
@@ -59,14 +55,14 @@ class CalculatorListScreen extends ConsumerWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          'Máy tính',
+                          l10n.calculatorTitle,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TypographyTokens.h3(context)
                               .copyWith(color: c.textPrimary),
                         ),
                         const SizedBox(height: 2),
-                        AppText('Công cụ tính lâm sàng',
+                        AppText(l10n.calculatorSubtitle,
                             type: AppTextType.caption, maxLines: 1),
                       ],
                     ),
@@ -74,7 +70,7 @@ class CalculatorListScreen extends ConsumerWidget {
                 ],
               ),
               const SizedBox(height: Spacing.section),
-              const SectionLabelWidget('Công cụ thường dùng'),
+              SectionLabelWidget(l10n.calculatorCommonTools),
               const SizedBox(height: Spacing.control),
               Expanded(
                 child: ListView.separated(
@@ -90,7 +86,7 @@ class CalculatorListScreen extends ConsumerWidget {
                           context.push(CalculatorRoutes.curb65);
                         } else {
                           showAppToast(context,
-                              'Máy tính "${entry.title}" sẽ được bổ sung sau.');
+                              l10n.calculatorComingSoon(entry.title));
                         }
                       },
                     );

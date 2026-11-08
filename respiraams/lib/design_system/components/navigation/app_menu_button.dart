@@ -12,11 +12,11 @@ class AppMenuButton extends StatelessWidget {
   const AppMenuButton({
     super.key,
     this.onTap,
-    this.semanticLabel = 'Mở menu',
+    this.semanticLabel,
   });
 
   final VoidCallback? onTap;
-  final String semanticLabel;
+  final String? semanticLabel;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,8 @@ class AppMenuButton extends StatelessWidget {
         child: AppIcon(
           LucideIcons.menu,
           size: ControlSize.iconBase,
-          semanticLabel: semanticLabel,
+          semanticLabel:
+              semanticLabel ?? MaterialLocalizations.of(context).showMenuTooltip,
         ),
       ),
     );

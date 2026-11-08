@@ -24,7 +24,7 @@ mixin _$PatientSummary {
   String get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String get code => throw _privateConstructorUsedError;
-  String get genderLabel => throw _privateConstructorUsedError;
+  Gender get gender => throw _privateConstructorUsedError;
   int get age => throw _privateConstructorUsedError;
   PatientStatus get status => throw _privateConstructorUsedError;
 
@@ -49,7 +49,7 @@ abstract class $PatientSummaryCopyWith<$Res> {
     String id,
     String name,
     String code,
-    String genderLabel,
+    Gender gender,
     int age,
     PatientStatus status,
   });
@@ -73,7 +73,7 @@ class _$PatientSummaryCopyWithImpl<$Res, $Val extends PatientSummary>
     Object? id = null,
     Object? name = null,
     Object? code = null,
-    Object? genderLabel = null,
+    Object? gender = null,
     Object? age = null,
     Object? status = null,
   }) {
@@ -91,10 +91,10 @@ class _$PatientSummaryCopyWithImpl<$Res, $Val extends PatientSummary>
                 ? _value.code
                 : code // ignore: cast_nullable_to_non_nullable
                       as String,
-            genderLabel: null == genderLabel
-                ? _value.genderLabel
-                : genderLabel // ignore: cast_nullable_to_non_nullable
-                      as String,
+            gender: null == gender
+                ? _value.gender
+                : gender // ignore: cast_nullable_to_non_nullable
+                      as Gender,
             age: null == age
                 ? _value.age
                 : age // ignore: cast_nullable_to_non_nullable
@@ -122,7 +122,7 @@ abstract class _$$PatientSummaryImplCopyWith<$Res>
     String id,
     String name,
     String code,
-    String genderLabel,
+    Gender gender,
     int age,
     PatientStatus status,
   });
@@ -145,7 +145,7 @@ class __$$PatientSummaryImplCopyWithImpl<$Res>
     Object? id = null,
     Object? name = null,
     Object? code = null,
-    Object? genderLabel = null,
+    Object? gender = null,
     Object? age = null,
     Object? status = null,
   }) {
@@ -163,10 +163,10 @@ class __$$PatientSummaryImplCopyWithImpl<$Res>
             ? _value.code
             : code // ignore: cast_nullable_to_non_nullable
                   as String,
-        genderLabel: null == genderLabel
-            ? _value.genderLabel
-            : genderLabel // ignore: cast_nullable_to_non_nullable
-                  as String,
+        gender: null == gender
+            ? _value.gender
+            : gender // ignore: cast_nullable_to_non_nullable
+                  as Gender,
         age: null == age
             ? _value.age
             : age // ignore: cast_nullable_to_non_nullable
@@ -187,7 +187,7 @@ class _$PatientSummaryImpl implements _PatientSummary {
     required this.id,
     required this.name,
     required this.code,
-    required this.genderLabel,
+    required this.gender,
     required this.age,
     required this.status,
   });
@@ -202,7 +202,7 @@ class _$PatientSummaryImpl implements _PatientSummary {
   @override
   final String code;
   @override
-  final String genderLabel;
+  final Gender gender;
   @override
   final int age;
   @override
@@ -210,7 +210,7 @@ class _$PatientSummaryImpl implements _PatientSummary {
 
   @override
   String toString() {
-    return 'PatientSummary(id: $id, name: $name, code: $code, genderLabel: $genderLabel, age: $age, status: $status)';
+    return 'PatientSummary(id: $id, name: $name, code: $code, gender: $gender, age: $age, status: $status)';
   }
 
   @override
@@ -221,8 +221,7 @@ class _$PatientSummaryImpl implements _PatientSummary {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.code, code) || other.code == code) &&
-            (identical(other.genderLabel, genderLabel) ||
-                other.genderLabel == genderLabel) &&
+            (identical(other.gender, gender) || other.gender == gender) &&
             (identical(other.age, age) || other.age == age) &&
             (identical(other.status, status) || other.status == status));
   }
@@ -230,7 +229,7 @@ class _$PatientSummaryImpl implements _PatientSummary {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, id, name, code, genderLabel, age, status);
+      Object.hash(runtimeType, id, name, code, gender, age, status);
 
   /// Create a copy of PatientSummary
   /// with the given fields replaced by the non-null parameter values.
@@ -254,7 +253,7 @@ abstract class _PatientSummary implements PatientSummary {
     required final String id,
     required final String name,
     required final String code,
-    required final String genderLabel,
+    required final Gender gender,
     required final int age,
     required final PatientStatus status,
   }) = _$PatientSummaryImpl;
@@ -269,7 +268,7 @@ abstract class _PatientSummary implements PatientSummary {
   @override
   String get code;
   @override
-  String get genderLabel;
+  Gender get gender;
   @override
   int get age;
   @override

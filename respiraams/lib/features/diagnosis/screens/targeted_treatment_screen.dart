@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/utils/context_extensions.dart';
 import '../../../../design_system/design_system.dart';
+import '../../../../l10n/l10n.dart';
 import '../../../../features/patient/models/patient.dart';
 import '../../../../features/patient/providers/current_patient_provider.dart';
 import '../models/clinical_dtos.dart';
@@ -21,6 +22,7 @@ class TargetedTreatmentScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final c = context.respiraColors;
+    final l10n = context.l10n;
     final micro = ref.watch(microbiologyResultProvider);
     final patient = ref.watch(currentPatientProvider);
     final pathogensAsync = ref.watch(pathogenListProvider);
@@ -37,8 +39,7 @@ class TargetedTreatmentScreen extends ConsumerWidget {
         : result.recommendations
             .where((r) => selection.contains(r.id))
             .toList();
-    String abbrev(String route) =>
-        route == 'Intravenous' ? 'TM' : route == 'Oral' ? 'Uống' : route;
+    String abbrev(String route) => routeAbbrev(route, l10n);
     final chips = selectedDrugs
         .asMap()
         .entries
@@ -54,8 +55,8 @@ class TargetedTreatmentScreen extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               AppAppBar(
-                title: 'Chẩn đoán vi sinh',
-                subtitle: 'Mỗi đường dùng là một lựa chọn thuốc riêng',
+                title: l10n.targetedTitle,
+                subtitle: l10n.targetedSubtitle,
                 onBack: () => context.goBackOr('/patient/progress'),
               ),
               const SizedBox(height: Spacing.section),
@@ -64,8 +65,7 @@ class TargetedTreatmentScreen extends ConsumerWidget {
                     ? const Center(child: CircularProgressIndicator())
                     : diagnoseAsync.hasError
                         ? _ErrorView(
-                            message:
-                                'Không thể tải khuyến nghị. Vui lòng thử lại.')
+                            message: l10n.targetedLoadError)
                         : SingleChildScrollView(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -94,7 +94,7 @@ class TargetedTreatmentScreen extends ConsumerWidget {
                                           children: [
                                             Text(
                                               patient?.name ??
-                                                  'Chưa chọn bệnh nhân',
+                                                  l10n.patientNoSelection,
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
                                               style: TypographyTokens.body(
@@ -121,7 +121,7 @@ class TargetedTreatmentScreen extends ConsumerWidget {
                                     line: micro.antibiogramLine),
                                 const SizedBox(height: Spacing.section),
                                 Text(
-                                  'Chọn thuốc + đường dùng',
+                                  l10n.targetedSelectDrugs,
                                   style: TypographyTokens.caption(context)
                                       .copyWith(color: c.textPrimary),
                                 ),
@@ -134,18 +134,14 @@ class TargetedTreatmentScreen extends ConsumerWidget {
                                       final apiRoute = dosages.isEmpty
                                           ? 'Oral'
                                           : dosages.first.routeOfAdministration;
-                                      final routeAbbrev = apiRoute ==
-                                              'Intravenous'
-                                          ? 'TM'
-                                          : apiRoute == 'Oral'
-                                              ? 'Uống'
-                                              : apiRoute;
+                                      final abbreviated =
+                                          routeAbbrev(apiRoute, l10n);
                                       return TreatmentOptionRowWidget(
                                         option: TreatmentOption(
                                           id: recommendation.id,
                                           drug: recommendation.name,
                                           route: apiRoute,
-                                          routeAbbrev: routeAbbrev,
+                                          routeAbbrev: abbreviated,
                                           dosage: dosages.isEmpty
                                               ? ''
                                               : dosages.first.dose,
@@ -181,7 +177,7 @@ class TargetedTreatmentScreen extends ConsumerWidget {
                                         CrossAxisAlignment.start,
                                     children: [
                                       AppText(
-                                          'Đã chọn theo thuốc + đường dùng',
+                                          l10n.targetedSelectedSummary,
                                           type: AppTextType.caption),
                                       const SizedBox(
                                           height: Spacing.inline),
@@ -224,11 +220,11 @@ class TargetedTreatmentScreen extends ConsumerWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: Spacing.lg),
                 child: AppButton(
-                  label: 'Lưu điều trị đích',
+                  label: l10n.targetedSave,
                   expand: true,
                   onPressed: () => showAppToast(
                     context,
-                    'Tính năng đang phát triển.',
+                    l10n.commonComingSoon,
                   ),
                 ),
               ),

@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/utils/context_extensions.dart';
 import '../../../../design_system/design_system.dart';
+import '../../../../l10n/l10n.dart';
 import '../models/new_password_form_state.dart';
 import '../providers/new_password_controller.dart';
 import '../widgets/brand_header_widget.dart';
@@ -19,6 +20,7 @@ class NewPasswordScreen extends ConsumerWidget {
     final form = ref.watch(newPasswordControllerProvider);
     final controller = ref.read(newPasswordControllerProvider.notifier);
     final c = context.respiraColors;
+    final l10n = context.l10n;
 
     return Scaffold(
       body: SafeArea(
@@ -36,18 +38,18 @@ class NewPasswordScreen extends ConsumerWidget {
                       const BrandHeaderWidget(),
                       const SizedBox(height: Spacing.section + 4),
                       Text(
-                        'Tạo mật khẩu mới',
+                        l10n.authNewPasswordTitle,
                         style: TypographyTokens.h1(
                           context,
                         ).copyWith(color: c.textPrimary),
                       ),
                       const SizedBox(height: Spacing.inline),
                       AppText(
-                        'Chọn mật khẩu mạnh để bảo vệ dữ liệu bệnh nhân và phiên làm việc.',
+                        l10n.authNewPasswordBody,
                       ),
                       const SizedBox(height: Spacing.section),
                       AppTextField(
-                        label: 'Mật khẩu mới',
+                        label: l10n.authNewPasswordLabel,
                         initialValue: form.password,
                         onChanged: controller.setPassword,
                         obscureText: true,
@@ -55,7 +57,7 @@ class NewPasswordScreen extends ConsumerWidget {
                       ),
                       const SizedBox(height: Spacing.group),
                       AppTextField(
-                        label: 'Xác nhận mật khẩu',
+                        label: l10n.authConfirmPasswordLabel,
                         initialValue: form.confirmPassword,
                         onChanged: controller.setConfirmPassword,
                         obscureText: true,
@@ -71,24 +73,24 @@ class NewPasswordScreen extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Mật khẩu cần có',
+                              l10n.authPasswordRequirements,
                               style: TypographyTokens.body(
                                 context,
                               ).copyWith(fontWeight: FontWeight.w700),
                             ),
                             const SizedBox(height: Spacing.control - 4),
                             PasswordRequirementWidget(
-                              label: 'Tối thiểu 8 ký tự',
+                              label: l10n.authMinLength,
                               met: form.hasMinLength,
                             ),
                             const SizedBox(height: Spacing.inline - 4),
                             PasswordRequirementWidget(
-                              label: 'Ít nhất 1 chữ in hoa',
+                              label: l10n.authUppercase,
                               met: form.hasUppercase,
                             ),
                             const SizedBox(height: Spacing.inline - 4),
                             PasswordRequirementWidget(
-                              label: 'Ít nhất 1 số hoặc ký tự đặc biệt',
+                              label: l10n.authDigitOrSpecial,
                               met: form.hasDigitOrSpecial,
                             ),
                           ],
@@ -99,7 +101,7 @@ class NewPasswordScreen extends ConsumerWidget {
                         const SizedBox(height: Spacing.control),
                         // Error never relies on color alone (§12).
                         Text(
-                          'Mật khẩu xác nhận chưa khớp.',
+                          l10n.authPasswordMismatch,
                           style: TypographyTokens.caption(
                             context,
                           ).copyWith(color: c.error),
@@ -111,7 +113,7 @@ class NewPasswordScreen extends ConsumerWidget {
                         child: Column(
                           children: [
                             AppButton(
-                              label: 'Cập nhật mật khẩu',
+                              label: l10n.authUpdatePassword,
                               expand: true,
                               onPressed: form.canSubmit
                                   ? () => context.push(
@@ -121,7 +123,7 @@ class NewPasswordScreen extends ConsumerWidget {
                             ),
                             const SizedBox(height: Spacing.control),
                             AppButton(
-                              label: 'Hủy và quay lại',
+                              label: l10n.authCancelBack,
                               type: AppButtonType.secondary,
                               expand: true,
                               onPressed: () =>
@@ -131,7 +133,7 @@ class NewPasswordScreen extends ConsumerWidget {
                         ),
                       ),
                       AppText(
-                        'Bước 2/2 · Thiết lập mật khẩu',
+                        l10n.authStepPassword,
                         type: AppTextType.caption,
                         color: c.textTertiary,
                         textAlign: TextAlign.center,

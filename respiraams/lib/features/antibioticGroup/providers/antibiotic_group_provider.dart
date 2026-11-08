@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/network/api_response.dart';
 import '../../antibiotic/models/antibiotic.dart';
 import '../models/antibiotic_group.dart';
 import 'antibiotic_group_service.dart';
@@ -37,7 +38,8 @@ class AntibioticGroupProvider extends ChangeNotifier {
       _hasMore = response.hasNextPage;
       _currentPage++;
     } catch (e) {
-      _errorMessage = 'Lỗi tải dữ liệu: ${e.toString()}';
+      debugPrint('Failed to load antibiotic groups: $e');
+      _errorMessage = LocalApiError.loadData;
     } finally {
       _isLoading = false;
       notifyListeners();

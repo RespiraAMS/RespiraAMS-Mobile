@@ -5,15 +5,8 @@ import 'patient_dtos.dart';
 part 'patient.freezed.dart';
 part 'patient.g.dart';
 
-/// Patient gender with Vietnamese display labels.
-enum Gender {
-  nam('Nam'),
-  nu('Nữ');
-
-  const Gender(this.displayName);
-
-  final String displayName;
-}
+/// Patient gender. Display labels are provided by `l10n_labels.dart`.
+enum Gender { nam, nu }
 
 @freezed
 class Patient with _$Patient {

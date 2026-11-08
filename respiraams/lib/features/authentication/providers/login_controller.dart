@@ -18,6 +18,7 @@ class LoginUiState with _$LoginUiState {
     @Default('') String password,
     @Default(false) bool submitting,
     String? errorMessage,
+    @Default(false) bool networkError,
   }) = _LoginUiState;
 }
 
@@ -26,11 +27,17 @@ class LoginController extends _$LoginController {
   @override
   LoginUiState build() => const LoginUiState();
 
-  void setIdentifier(String value) =>
-      state = state.copyWith(identifier: value, errorMessage: null);
+  void setIdentifier(String value) => state = state.copyWith(
+        identifier: value,
+        errorMessage: null,
+        networkError: false,
+      );
 
-  void setPassword(String value) =>
-      state = state.copyWith(password: value, errorMessage: null);
+  void setPassword(String value) => state = state.copyWith(
+        password: value,
+        errorMessage: null,
+        networkError: false,
+      );
 
   bool get canSubmit =>
       state.identifier.trim().isNotEmpty && state.password.isNotEmpty;
@@ -38,7 +45,11 @@ class LoginController extends _$LoginController {
   /// Returns true on success; on failure sets [LoginUiState.errorMessage].
   Future<bool> submit() async {
     if (!canSubmit || state.submitting) return false;
-    state = state.copyWith(submitting: true, errorMessage: null);
+    state = state.copyWith(
+      submitting: true,
+      errorMessage: null,
+      networkError: false,
+    );
     try {
       await ref
           .read(sessionControllerProvider.notifier)
@@ -51,7 +62,7 @@ class LoginController extends _$LoginController {
     } catch (_) {
       state = state.copyWith(
         submitting: false,
-        errorMessage: 'Không thể kết nối máy chủ. Vui lòng thử lại.',
+        networkError: true,
       );
       return false;
     }

@@ -16,7 +16,7 @@ class AppAppBar extends StatelessWidget {
     required this.title,
     required this.subtitle,
     this.onBack,
-    this.backSemanticLabel = 'Quay lại',
+    this.backSemanticLabel,
   });
 
   final String title;
@@ -24,7 +24,7 @@ class AppAppBar extends StatelessWidget {
 
   /// When null the back button is hidden.
   final VoidCallback? onBack;
-  final String backSemanticLabel;
+  final String? backSemanticLabel;
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +48,8 @@ class AppAppBar extends StatelessWidget {
                     child: AppIcon(
                       LucideIcons.arrowLeft,
                       size: ControlSize.iconXl,
-                      semanticLabel: backSemanticLabel,
+                      semanticLabel: backSemanticLabel ??
+                          MaterialLocalizations.of(context).backButtonTooltip,
                     ),
                   ),
                 ),

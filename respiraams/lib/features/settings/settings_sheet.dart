@@ -5,8 +5,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
+import '../../core/localization/language_provider.dart';
 import '../../core/theme/theme_mode_provider.dart';
 import '../../design_system/design_system.dart';
+import '../../l10n/l10n.dart';
 import '../authentication/providers/session_provider.dart';
 import '../authentication/routes.dart';
 import 'providers/app_settings_provider.dart';
@@ -21,13 +23,17 @@ Future<void> showSettingsDrawer(BuildContext context) async {
   final loggedOut = await Navigator.of(
     context,
     rootNavigator: true,
-  ).push<bool>(_SettingsDrawerRoute());
+  ).push<bool>(_SettingsDrawerRoute(context.l10n.settingsClose));
   if (loggedOut == true && context.mounted) {
     context.go(AuthenticationRoutes.login);
   }
 }
 
 class _SettingsDrawerRoute extends PopupRoute<bool> {
+  _SettingsDrawerRoute(this._barrierLabel);
+
+  final String _barrierLabel;
+
   @override
   Color? get barrierColor => Colors.black.withValues(alpha: 0.32);
 
@@ -35,7 +41,7 @@ class _SettingsDrawerRoute extends PopupRoute<bool> {
   bool get barrierDismissible => true;
 
   @override
-  String? get barrierLabel => 'Đóng cài đặt';
+  String? get barrierLabel => _barrierLabel;
 
   @override
   Duration get transitionDuration => const Duration(milliseconds: 260);
@@ -80,12 +86,14 @@ class SettingsSheet extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final c = context.respiraColors;
+    final l10n = context.l10n;
     final themeMode = ref.watch(themeModeControllerProvider);
     final textScale = ref.watch(appTextScaleControllerProvider);
+    final language = ref.watch(languageControllerProvider);
     final session = ref.watch(sessionDoctorProvider);
     final name = (session?.name.trim().isNotEmpty ?? false)
         ? session!.name.trim()
-        : 'Bác sĩ';
+        : l10n.settingsDoctorFallback;
 
     final width = math.min(MediaQuery.sizeOf(context).width * 0.9, 400.0);
 
@@ -109,38 +117,38 @@ class SettingsSheet extends ConsumerWidget {
                   const SizedBox(height: Spacing.section),
                   _ProfileCard(name: name),
                   const SizedBox(height: Spacing.section),
-                  const _SectionTitle('Giao diện'),
+                  _SectionTitle(l10n.settingsAppearance),
                   const SizedBox(height: Spacing.inline),
                   _SettingsGroup(
                     children: [
                       _SettingsRow(
                         icon: LucideIcons.monitor,
-                        title: 'Giao diện',
-                        subtitle: 'Sáng hoặc tối',
+                        title: l10n.settingsTheme,
+                        subtitle: l10n.settingsThemeSubtitle,
                         trailing: _ThemePill(themeMode),
                         onTap: () => _selectTheme(context, ref, themeMode),
                       ),
                       const _GroupDivider(),
                       _SettingsRow(
                         icon: LucideIcons.type,
-                        title: 'Cỡ chữ',
-                        subtitle: textScale.label,
+                        title: l10n.settingsFontSize,
+                        subtitle: textScaleLabel(l10n, textScale),
                         trailing: const _Chevron(),
                         onTap: () => _selectTextScale(context, ref, textScale),
                       ),
                       const _GroupDivider(),
                       _SettingsRow(
                         icon: LucideIcons.languages,
-                        title: 'Ngôn ngữ',
-                        subtitle: 'Tiếng Việt',
+                        title: l10n.settingsLanguage,
+                        subtitle: language.nativeName,
                         trailing: const _Chevron(),
-                        onTap: () => _showLanguageInfo(context),
+                        onTap: () => _selectLanguage(context, ref, language),
                       ),
                     ],
                   ),
                   const SizedBox(height: Spacing.section),
                   AppButton(
-                    label: 'Đăng xuất',
+                    label: l10n.settingsLogout,
                     type: AppButtonType.destructive,
                     expand: true,
                     onPressed: () => _confirmLogout(context, ref),
@@ -160,24 +168,25 @@ Future<void> _selectTheme(
   WidgetRef ref,
   ThemeMode current,
 ) async {
+  final l10n = context.l10n;
   final selected = await _showOptionSheet<ThemeMode>(
     context,
-    title: 'Chế độ hiển thị',
+    title: l10n.settingsThemeSheetTitle,
     selected: current,
-    options: const [
+    options: [
       _SettingsOption(
         value: ThemeMode.system,
-        label: 'Hệ thống',
+        label: l10n.settingsThemeSystem,
         icon: LucideIcons.monitor,
       ),
       _SettingsOption(
         value: ThemeMode.light,
-        label: 'Sáng',
+        label: l10n.settingsThemeLight,
         icon: LucideIcons.sun,
       ),
       _SettingsOption(
         value: ThemeMode.dark,
-        label: 'Tối',
+        label: l10n.settingsThemeDark,
         icon: LucideIcons.moon,
       ),
     ],
@@ -187,20 +196,28 @@ Future<void> _selectTheme(
   }
 }
 
+String textScaleLabel(AppLocalizations l10n, AppTextScale scale) =>
+    switch (scale) {
+      AppTextScale.small => l10n.settingsTextSmall,
+      AppTextScale.standard => l10n.settingsTextStandard,
+      AppTextScale.large => l10n.settingsTextLarge,
+    };
+
 Future<void> _selectTextScale(
   BuildContext context,
   WidgetRef ref,
   AppTextScale current,
 ) async {
+  final l10n = context.l10n;
   final selected = await _showOptionSheet<AppTextScale>(
     context,
-    title: 'Cỡ chữ',
+    title: l10n.settingsFontSize,
     selected: current,
     options: [
       for (final scale in AppTextScale.values)
         _SettingsOption(
           value: scale,
-          label: scale.label,
+          label: textScaleLabel(l10n, scale),
           icon: LucideIcons.type,
         ),
     ],
@@ -210,29 +227,38 @@ Future<void> _selectTextScale(
   }
 }
 
-Future<void> _showLanguageInfo(BuildContext context) async {
-  await _showOptionSheet<String>(
+Future<void> _selectLanguage(
+  BuildContext context,
+  WidgetRef ref,
+  AppLanguage current,
+) async {
+  final l10n = context.l10n;
+  final selected = await _showOptionSheet<AppLanguage>(
     context,
-    title: 'Ngôn ngữ',
-    selected: 'vi',
-    note: 'Hiện chỉ hỗ trợ tiếng Việt.',
-    options: const [
-      _SettingsOption(
-        value: 'vi',
-        label: 'Tiếng Việt',
-        icon: LucideIcons.languages,
-      ),
+    title: l10n.settingsLanguage,
+    selected: current,
+    options: [
+      for (final language in AppLanguage.values)
+        _SettingsOption(
+          value: language,
+          label: language.nativeName,
+          icon: LucideIcons.languages,
+        ),
     ],
   );
+  if (selected != null) {
+    ref.read(languageControllerProvider.notifier).setLanguage(selected);
+  }
 }
 
 Future<void> _confirmLogout(BuildContext context, WidgetRef ref) async {
+  final l10n = context.l10n;
   final confirmed = await showAppConfirmDialog(
     context,
-    title: 'Đăng xuất?',
-    description: 'Bạn sẽ cần đăng nhập lại để tiếp tục sử dụng RespiraAMS.',
+    title: l10n.settingsLogoutConfirmTitle,
+    description: l10n.settingsLogoutConfirmBody,
     icon: LucideIcons.logOut,
-    confirmLabel: 'Đăng xuất',
+    confirmLabel: l10n.settingsLogout,
   );
   if (confirmed != true) return;
 
@@ -245,23 +271,25 @@ class _SheetHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Expanded(
+        Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
               AppText(
-                'Cài đặt',
+                l10n.settingsTitle,
                 type: AppTextType.h3,
                 fontWeight: FontWeight.w700,
                 maxLines: 1,
               ),
-              SizedBox(height: 2),
+              const SizedBox(height: 2),
               AppText(
-                'Cá nhân hóa trải nghiệm',
+                l10n.settingsSubtitle,
                 type: AppTextType.caption,
                 maxLines: 1,
               ),
@@ -269,7 +297,7 @@ class _SheetHeader extends StatelessWidget {
           ),
         ),
         const SizedBox(width: Spacing.control),
-        _CloseButton(),
+        const _CloseButton(),
       ],
     );
   }
@@ -284,7 +312,7 @@ class _CloseButton extends StatelessWidget {
 
     return Semantics(
       button: true,
-      label: 'Đóng cài đặt',
+      label: context.l10n.settingsClose,
       child: Material(
         color: c.surfaceSecondary,
         shape: const CircleBorder(),
@@ -330,8 +358,8 @@ class _ProfileCard extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 3),
-                const AppText(
-                  'Chuyên khoa Hô hấp',
+                AppText(
+                  context.l10n.settingsProfileSpecialty,
                   type: AppTextType.caption,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -476,10 +504,11 @@ class _ThemePill extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.respiraColors;
+    final l10n = context.l10n;
     final (icon, label) = switch (mode) {
-      ThemeMode.system => (LucideIcons.monitor, 'Hệ thống'),
-      ThemeMode.light => (LucideIcons.sun, 'Sáng'),
-      ThemeMode.dark => (LucideIcons.moon, 'Tối'),
+      ThemeMode.system => (LucideIcons.monitor, l10n.settingsThemeSystem),
+      ThemeMode.light => (LucideIcons.sun, l10n.settingsThemeLight),
+      ThemeMode.dark => (LucideIcons.moon, l10n.settingsThemeDark),
     };
 
     return Container(

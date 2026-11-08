@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../design_system/design_system.dart';
+import '../../../../l10n/l10n.dart';
 import '../providers/login_controller.dart';
 import '../widgets/brand_header_widget.dart';
 import '../routes.dart';
@@ -17,10 +18,11 @@ class LoginScreen extends ConsumerWidget {
     final form = ref.watch(loginControllerProvider);
     final controller = ref.read(loginControllerProvider.notifier);
     final c = context.respiraColors;
+    final l10n = context.l10n;
 
     Future<void> submit() async {
       if (!controller.canSubmit) {
-        showAppToast(context, 'Vui lòng nhập email/mã nhân viên và mật khẩu.');
+        showAppToast(context, l10n.authMissingCredentials);
         return;
       }
       final ok = await controller.submit();
@@ -48,16 +50,16 @@ class LoginScreen extends ConsumerWidget {
                       const BrandHeaderWidget(),
                       const SizedBox(height: Spacing.section + 4),
                       Text(
-                        'Đăng nhập',
+                        l10n.authLoginTitle,
                         style: TypographyTokens.h1(
                           context,
                         ).copyWith(color: c.textPrimary),
                       ),
                       const SizedBox(height: Spacing.inline),
-                      AppText('Tiếp tục vào không gian làm việc RespiraAMS.'),
+                      AppText(l10n.authLoginSubtitle),
                       const SizedBox(height: Spacing.section),
                       AppTextField(
-                        label: 'Email hoặc mã nhân viên',
+                        label: l10n.authEmailLabel,
                         initialValue: form.identifier,
                         onChanged: controller.setIdentifier,
                         keyboardType: TextInputType.emailAddress,
@@ -66,14 +68,14 @@ class LoginScreen extends ConsumerWidget {
                       ),
                       const SizedBox(height: Spacing.group),
                       AppTextField(
-                        label: 'Mật khẩu',
+                        label: l10n.authPasswordLabel,
                         initialValue: form.password,
                         onChanged: controller.setPassword,
                         obscureText: true,
                         textInputAction: TextInputAction.done,
                         hintText: '••••••••',
                       ),
-                      if (form.errorMessage != null) ...[
+                      if (form.networkError || form.errorMessage != null) ...[
                         const SizedBox(height: Spacing.inline),
                         // Error = text + icon semantics, never color alone (§12).
                         Row(
@@ -83,7 +85,9 @@ class LoginScreen extends ConsumerWidget {
                             const SizedBox(width: Spacing.xxs),
                             Expanded(
                               child: Text(
-                                form.errorMessage!,
+                                form.networkError
+                                    ? l10n.authServerUnreachable
+                                    : form.errorMessage!,
                                 style: TypographyTokens.caption(context)
                                     .copyWith(color: c.error),
                               ),
@@ -95,29 +99,29 @@ class LoginScreen extends ConsumerWidget {
                       Align(
                         alignment: Alignment.centerRight,
                         child: AppLinkText(
-                          'Quên mật khẩu?',
+                          l10n.authForgotPassword,
                           onPressed: () =>
                               context.push(AuthenticationRoutes.forgotPassword),
                         ),
                       ),
                       const SizedBox(height: Spacing.block - 4),
                       AppButton(
-                        label: 'Đăng nhập',
+                        label: l10n.authLoginButton,
                         expand: true,
                         loading: form.submitting,
                         onPressed: controller.canSubmit ? submit : null,
                       ),
                       const SizedBox(height: Spacing.section),
-                      _DividerWithLabel(label: 'hoặc'),
+                      _DividerWithLabel(label: l10n.authOr),
                       const SizedBox(height: Spacing.control),
                       AppButton(
-                        label: 'Dùng mã nhân viên',
+                        label: l10n.authUseStaffCode,
                         type: AppButtonType.outline,
                         expand: true,
                         // Staff-code sign-in flow is not designed yet.
                         onPressed: () => showAppToast(
                           context,
-                          'Đăng nhập bằng mã nhân viên sẽ được bổ sung sau.',
+                          l10n.authStaffCodeComingSoon,
                         ),
                       ),
                       const SizedBox(height: Spacing.section),
@@ -148,14 +152,14 @@ class LoginScreen extends ConsumerWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Phiên đăng nhập an toàn',
+                                    l10n.authSecureSessionTitle,
                                     style: TypographyTokens.body(
                                       context,
                                     ).copyWith(fontWeight: FontWeight.w700),
                                   ),
                                   const SizedBox(height: Spacing.xxs - 4),
                                   AppText(
-                                    'Tự động khóa khi không hoạt động và bảo vệ theo vai trò.',
+                                    l10n.authSecureSessionBody,
                                     type: AppTextType.caption,
                                   ),
                                 ],
@@ -168,7 +172,7 @@ class LoginScreen extends ConsumerWidget {
                       Padding(
                         padding: const EdgeInsets.only(bottom: Spacing.inline),
                         child: AppText(
-                          'Cần hỗ trợ? Liên hệ quản trị viên bệnh viện.',
+                          l10n.authSupportFooter,
                           type: AppTextType.caption,
                           color: c.textTertiary,
                           textAlign: TextAlign.center,

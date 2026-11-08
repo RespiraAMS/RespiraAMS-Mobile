@@ -21,18 +21,19 @@ Future<bool?> showAppConfirmDialog(
   String? infoLabel,
   Color? infoBackground,
   required String confirmLabel,
-  String cancelLabel = 'Hủy',
+  String? cancelLabel,
 }) {
   return showDialog<bool>(
     context: context,
-    builder: (_) => _ConfirmDialog(
+    builder: (dialogContext) => _ConfirmDialog(
       title: title,
       description: description,
       icon: icon,
       infoLabel: infoLabel,
       infoBackground: infoBackground,
       confirmLabel: confirmLabel,
-      cancelLabel: cancelLabel,
+      cancelLabel: cancelLabel ??
+          MaterialLocalizations.of(dialogContext).cancelButtonLabel,
     ),
   );
 }

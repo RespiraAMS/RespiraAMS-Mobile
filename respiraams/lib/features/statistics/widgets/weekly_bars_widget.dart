@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:respiraams/design_system/design_system.dart';
+import 'package:respiraams/l10n/l10n.dart';
 
 import '../models/statistics_view.dart';
 
@@ -54,7 +55,7 @@ class WeeklyBarsWidget extends StatelessWidget {
                   ),
                   const SizedBox(height: Spacing.inline),
                   Text(
-                    bar.label,
+                    localizedWeekLabel(bar.label, context.l10n),
                     maxLines: 1,
                     style: TypographyTokens.label(context)
                         .copyWith(color: c.textSecondary),

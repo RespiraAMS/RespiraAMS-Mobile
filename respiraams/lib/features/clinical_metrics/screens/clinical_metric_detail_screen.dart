@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../../../../design_system/design_system.dart';
+import '../../../../l10n/l10n.dart';
 import '../models/clinical_metric.dart';
 import '../providers/clinical_metric_provider.dart';
 // Import Widget hiển thị Formula từ phần trước
@@ -28,6 +29,7 @@ class _ClinicalMetricDetailScreenState extends State<ClinicalMetricDetailScreen>
   @override
   Widget build(BuildContext context) {
     final c = context.respiraColors;
+    final l10n = context.l10n;
 
     return Scaffold(
       backgroundColor: c.background,
@@ -41,8 +43,8 @@ class _ClinicalMetricDetailScreenState extends State<ClinicalMetricDetailScreen>
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: Spacing.group, vertical: 8),
                     child: AppAppBar(
-                      title: 'Chi tiết thang điểm',
-                      subtitle: 'Đang tải...',
+                      title: l10n.clinicalMetricDetailTitle,
+                      subtitle: l10n.commonLoading,
                       onBack: () => Navigator.pop(context),
                     ),
                   ),
@@ -57,12 +59,12 @@ class _ClinicalMetricDetailScreenState extends State<ClinicalMetricDetailScreen>
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: Spacing.group, vertical: 8),
                     child: AppAppBar(
-                      title: 'Chi tiết thang điểm',
-                      subtitle: 'Lỗi tải dữ liệu',
+                      title: l10n.clinicalMetricDetailTitle,
+                      subtitle: l10n.commonLoadFailedShort,
                       onBack: () => Navigator.pop(context),
                     ),
                   ),
-                  Expanded(child: Center(child: AppText('Không tải được thông tin: ${snapshot.error}', color: c.error))),
+                  Expanded(child: Center(child: AppText(l10n.commonLoadInfoError, color: c.error))),
                 ],
               );
             }
@@ -78,7 +80,7 @@ class _ClinicalMetricDetailScreenState extends State<ClinicalMetricDetailScreen>
                   padding: const EdgeInsets.symmetric(horizontal: Spacing.group, vertical: 8),
                   child: AppAppBar(
                     title: detail.code,
-                    subtitle: 'Thang điểm đánh giá',
+                    subtitle: l10n.clinicalMetricDetailSubtitle,
                     onBack: () => Navigator.pop(context),
                   ),
                 ),
@@ -107,13 +109,13 @@ class _ClinicalMetricDetailScreenState extends State<ClinicalMetricDetailScreen>
                                 children: [
                                   AppText(detail.name, type: AppTextType.h3, fontWeight: FontWeight.w700),
                                   const SizedBox(height: 4),
-                                  AppText('Phiên bản: ${detail.version}', type: AppTextType.caption),
+                                  AppText(l10n.clinicalMetricVersion(detail.version), type: AppTextType.caption),
                                   if (detail.isApplied) ...[
                                     const SizedBox(height: 8),
                                     Container(
                                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                                       decoration: BoxDecoration(color: c.successSoft, borderRadius: AppRadius.full),
-                                      child: AppText('Đang áp dụng', type: AppTextType.caption, color: c.success),
+                                      child: AppText(l10n.clinicalMetricApplied, type: AppTextType.caption, color: c.success),
                                     )
                                   ]
                                 ],
@@ -124,21 +126,21 @@ class _ClinicalMetricDetailScreenState extends State<ClinicalMetricDetailScreen>
                       ),
                       const SizedBox(height: Spacing.section),
 
-                      AppText('Thông tin chung', type: AppTextType.bodyLarge, fontWeight: FontWeight.w700),
+                      AppText(l10n.clinicalMetricGeneral, type: AppTextType.bodyLarge, fontWeight: FontWeight.w700),
                       const SizedBox(height: Spacing.control),
                       AppCard.divided(
                         padding: const EdgeInsets.symmetric(vertical: 4),
                         [
-                          _InfoRow(label: 'Mã', value: detail.code),
-                          _InfoRow(label: 'Phát hành', value: detail.publisher),
+                          _InfoRow(label: l10n.clinicalMetricCode, value: detail.code),
+                          _InfoRow(label: l10n.clinicalMetricPublisher, value: detail.publisher),
                           if (detail.description.isNotEmpty)
-                          _InfoRow(label: 'Mô tả', value: detail.description),
+                          _InfoRow(label: l10n.clinicalMetricDescription, value: detail.description),
                         ],
                       ),
                       const SizedBox(height: Spacing.section),
 
                       if (majorRules.isNotEmpty) ...[
-                        AppText('Tiêu chí chính', type: AppTextType.bodyLarge, fontWeight: FontWeight.w700),
+                        AppText(l10n.clinicalMetricMajor, type: AppTextType.bodyLarge, fontWeight: FontWeight.w700),
                         const SizedBox(height: Spacing.control),
                         ...majorRules.map((rule) => Padding(
                           padding: const EdgeInsets.only(bottom: Spacing.control),
@@ -149,8 +151,8 @@ class _ClinicalMetricDetailScreenState extends State<ClinicalMetricDetailScreen>
 
                       if (minorRules.isNotEmpty) ...[
                         AppText(
-                          majorRules.isNotEmpty ? 'Tiêu chí phụ' : 'Các tiêu chí tính điểm', 
-                          type: AppTextType.bodyLarge, 
+                          majorRules.isNotEmpty ? l10n.clinicalMetricMinor : l10n.clinicalMetricScoring,
+                          type: AppTextType.bodyLarge,
                           fontWeight: FontWeight.w700
                         ),
                         const SizedBox(height: Spacing.control),
@@ -181,6 +183,7 @@ class _RuleCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.respiraColors;
+    final l10n = context.l10n;
     
     return AppSurface(
       padding: const EdgeInsets.all(Spacing.group),
@@ -199,8 +202,8 @@ class _RuleCard extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(color: c.surfaceSecondary, borderRadius: BorderRadius.circular(6)),
                   child: AppText(
-                    '+ ${rule.scoreFunction} điểm', 
-                    type: AppTextType.label, 
+                    l10n.clinicalMetricPoints(rule.scoreFunction!),
+                    type: AppTextType.label,
                     color: c.primary,
                   ),
                 ),

@@ -76,34 +76,6 @@ class VariableRange {
     );
   }
 
-  String _formatNum(num value) {
-    if (value is int || value == value.roundToDouble()) {
-      return value.toInt().toString();
-    }
-    return value.toString();
-  }
-
-  String formatDisplay() {
-    final minSymbol = isMinExclusive ? '>' : '≥';
-    final maxSymbol = isMaxExclusive ? '<' : '≤';
-    final unitStr = (unit != null && unit!.isNotEmpty) ? ' $unit' : '';
-    
-    final bool hasNoMax = max >= 7e28;
-    final bool hasNoMin = min <= -7e28;
-
-    final String minText = _formatNum(min);
-    final String maxText = _formatNum(max);
-
-    if (hasNoMin && hasNoMax) {
-      return 'Không giới hạn$unitStr';
-    } else if (hasNoMin) {
-      return 'Giá trị $maxSymbol $maxText$unitStr';
-    } else if (hasNoMax) {
-      return 'Giá trị $minSymbol $minText$unitStr';
-    } else {
-      return 'Giá trị $minSymbol $minText và $maxSymbol $maxText$unitStr';
-    }
-  }
 }
 
 class ClinicalVariableDetail extends ClinicalVariable {

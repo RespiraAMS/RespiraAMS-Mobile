@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/utils/context_extensions.dart';
 import '../../../../design_system/design_system.dart';
+import '../../../../l10n/l10n.dart';
 import '../../patient/models/patient.dart';
 import '../../patient/providers/current_patient_provider.dart';
 import '../../patient/routes.dart';
@@ -32,6 +33,7 @@ class _DiagnosisWizardScreenState extends ConsumerState<DiagnosisWizardScreen> {
   @override
   Widget build(BuildContext context) {
     final formAsync = ref.watch(diagnosisFormProvider);
+    final l10n = context.l10n;
 
     return Scaffold(
       body: SafeArea(
@@ -50,9 +52,9 @@ class _DiagnosisWizardScreenState extends ConsumerState<DiagnosisWizardScreen> {
                   (_) => _prefill(variables),
                 );
               }
-              final steps = _buildSteps(variables);
+              final steps = _buildSteps(variables, l10n);
               if (steps.isEmpty) {
-                return const Center(child: Text('Không có dữ liệu biểu mẫu.'));
+                return Center(child: Text(l10n.diagnosisEmptyForm));
               }
               final step = steps[_step.clamp(0, steps.length - 1)];
               final isLast = _step >= steps.length - 1;
@@ -61,8 +63,12 @@ class _DiagnosisWizardScreenState extends ConsumerState<DiagnosisWizardScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   AppAppBar(
-                    title: 'Chẩn đoán kinh nghiệm',
-                    subtitle: 'Bước ${_step + 1}/${steps.length} · ${step.title}',
+                    title: l10n.diagnosisTitle,
+                    subtitle: l10n.diagnosisStepProgress(
+                      _step + 1,
+                      steps.length,
+                      step.title,
+                    ),
                     onBack: () => _back(steps.length),
                   ),
                   const SizedBox(height: Spacing.section),
@@ -86,7 +92,7 @@ class _DiagnosisWizardScreenState extends ConsumerState<DiagnosisWizardScreen> {
                         if (_step > 0) ...[
                           Expanded(
                             child: AppButton(
-                              label: 'Quay lại',
+                              label: l10n.diagnosisBack,
                               type: AppButtonType.secondary,
                               onPressed: () => setState(() => _step -= 1),
                             ),
@@ -95,7 +101,9 @@ class _DiagnosisWizardScreenState extends ConsumerState<DiagnosisWizardScreen> {
                         ],
                         Expanded(
                           child: AppButton(
-                            label: isLast ? 'Chẩn đoán' : 'Tiếp tục',
+                            label: isLast
+                                ? l10n.diagnosisRun
+                                : l10n.diagnosisContinue,
                             loading:
                                 ref.watch(diagnosisFlowControllerProvider)
                                     .diagnosing,
@@ -161,11 +169,14 @@ class _DiagnosisWizardScreenState extends ConsumerState<DiagnosisWizardScreen> {
     if (flow.result != null) {
       context.push(DiagnosisRoutes.diagnosisResult);
     } else if (flow.errorMessage != null) {
-      showAppToast(context, flow.errorMessage!);
+      showAppToast(context, flow.errorMessage!.localizedError(context.l10n));
     }
   }
 
-  List<_Step> _buildSteps(List<ClinicalVariableDto> variables) {
+  List<_Step> _buildSteps(
+    List<ClinicalVariableDto> variables,
+    AppLocalizations l10n,
+  ) {
     List<ClinicalVariableDto> where(bool Function(ClinicalVariableDto) test) =>
         variables.where(test).toList();
 
@@ -194,13 +205,13 @@ class _DiagnosisWizardScreenState extends ConsumerState<DiagnosisWizardScreen> {
 
     final steps = <_Step>[
       _Step(
-        'Thông tin cá nhân',
+        l10n.diagnosisPersonalInfo,
         where((v) => v.category == 'PersonalInformation'),
       ),
-      _Step('Chỉ số sinh tồn', clinicalNumeric),
-      _Step('Kết quả xét nghiệm', paraclinicalNumeric),
+      _Step(l10n.diagnosisVitalSigns, clinicalNumeric),
+      _Step(l10n.diagnosisLabResults, paraclinicalNumeric),
       _Step(
-        'Bệnh nền & nguy cơ',
+        l10n.diagnosisComorbidities,
         where((v) => v.valueType != 'Numeric' && v.category != 'PersonalInformation'),
       ),
     ];
@@ -324,19 +335,20 @@ class _ErrorView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.respiraColors;
+    final l10n = context.l10n;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        AppAppBar(title: 'Chẩn đoán kinh nghiệm', subtitle: '', onBack: onBack),
+        AppAppBar(title: l10n.diagnosisTitle, subtitle: '', onBack: onBack),
         const Spacer(),
         Center(
           child: Text(
-            'Không thể tải biểu mẫu chẩn đoán.',
+            l10n.diagnosisFormLoadFailed,
             style: TypographyTokens.caption(context).copyWith(color: c.error),
           ),
         ),
         const SizedBox(height: Spacing.group),
-        AppButton(label: 'Thử lại', expand: true, onPressed: onRetry),
+        AppButton(label: l10n.commonTryAgain, expand: true, onPressed: onRetry),
         const Spacer(),
       ],
     );

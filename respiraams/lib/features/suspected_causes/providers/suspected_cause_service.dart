@@ -51,10 +51,10 @@ class SuspectedCauseRepository {
       if (e.response != null) {
         throw Exception('Lỗi server: ${e.response?.statusCode}');
       } else {
-        throw Exception('Lỗi kết nối mạng: Vui lòng kiểm tra internet');
+        throw Exception('Network error: please check your connection');
       }
     } catch (e) {
-      throw Exception('Lỗi xử lý dữ liệu: $e');
+      throw Exception('Failed to process data: $e');
     }
   }
 
@@ -69,7 +69,7 @@ class SuspectedCauseRepository {
       return pathogensJson.map((item) => PathogenSummary.fromJson(item)).toList();
     } catch (e) {
       // Bắt mọi lỗi để không crash ứng dụng nếu filter hỏng
-      throw Exception('Không tải được danh sách tác nhân');
+      throw Exception('Failed to load pathogen list');
     }
   }
 }

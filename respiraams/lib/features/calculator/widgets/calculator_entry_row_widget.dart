@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 import 'package:respiraams/design_system/design_system.dart';
+import 'package:respiraams/l10n/l10n.dart';
 
 import '../models/calculator.dart';
 
@@ -67,7 +68,7 @@ class CalculatorEntryRowWidget extends StatelessWidget {
                     ),
                     const SizedBox(height: Spacing.xxxs),
                     AppText(
-                      calculator.description,
+                      calculator.description(context.l10n),
                       type: AppTextType.caption,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,

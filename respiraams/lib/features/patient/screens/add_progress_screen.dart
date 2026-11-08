@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/utils/context_extensions.dart';
 import '../../../../design_system/design_system.dart';
+import '../../../../l10n/l10n.dart';
 import 'package:respiraams/features/diagnosis/models/microbiology_result.dart';
 import 'package:respiraams/features/diagnosis/providers/microbiology_provider.dart';
 import 'package:respiraams/features/diagnosis/routes.dart';
@@ -29,6 +30,7 @@ class AddProgressScreen extends ConsumerStatefulWidget {
 class _AddProgressScreenState extends ConsumerState<AddProgressScreen> {
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final form = ref.watch(addProgressControllerProvider);
     final controller = ref.read(addProgressControllerProvider.notifier);
     final patient = ref.watch(currentPatientProvider);
@@ -47,35 +49,35 @@ class _AddProgressScreenState extends ConsumerState<AddProgressScreen> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       AppAppBar(
-                        title: 'Thêm diễn biến',
+                        title: l10n.progressTitle,
                         subtitle: isTargeted
-                            ? 'Dựa trên kết quả vi sinh đã có'
-                            : 'Ghi nhận thay đổi điều trị mới nhất',
+                            ? l10n.progressSubtitleTargeted
+                            : l10n.progressSubtitleEmpirical,
                         onBack: () => context.goBackOr(PatientRoutes.detail),
                       ),
                       const SizedBox(height: Spacing.section),
                       PatientHeader(
                         variant: PatientHeaderVariant.nested,
-                        name: patient?.name ?? 'Chưa chọn bệnh nhân',
+                        name: patient?.name ?? l10n.patientNoSelection,
                         metadata: patient?.code ?? '',
                         avatarGlyph: patient?.gender == Gender.nu ? '👩🏾' : '👨🏻',
                       ),
                       const SizedBox(height: Spacing.section),
                       SectionLabelWidget(
                         isTargeted
-                            ? 'Loại điều trị tiếp theo'
-                            : 'Loại điều trị',
+                            ? l10n.progressTreatmentTypeNext
+                            : l10n.progressTreatmentType,
                       ),
                       const SizedBox(height: Spacing.xxxs),
                       AppSegmentedTabs<TreatmentType>(
                         segments: [
                           (
                             TreatmentType.empirical,
-                            TreatmentType.empirical.displayName,
+                            TreatmentType.empirical.label(l10n),
                           ),
                           (
                             TreatmentType.targeted,
-                            TreatmentType.targeted.displayName,
+                            TreatmentType.targeted.label(l10n),
                           ),
                         ],
                         selected: form.treatmentType,
@@ -96,8 +98,8 @@ class _AddProgressScreenState extends ConsumerState<AddProgressScreen> {
                         ),
                         child: AppButton(
                           label: isTargeted
-                              ? 'Tiếp tục điều trị đích'
-                              : 'Lưu diễn biến',
+                              ? l10n.progressContinueTargeted
+                              : l10n.progressSave,
                           expand: true,
                           onPressed: () => context.push(
                             isTargeted
@@ -127,29 +129,30 @@ class _EmpiricalBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const SectionLabelWidget('Lý do thay đổi'),
+        SectionLabelWidget(l10n.progressReason),
         const SizedBox(height: Spacing.xxxs),
         SelectionRowWidget(
-          title: 'Có kết quả vi sinh',
-          description: 'Chuyển sang điều trị đích khi phù hợp.',
+          title: l10n.progressHasMicro,
+          description: l10n.progressHasMicroDesc,
           selected: form.microbiologyResult,
           onTap: controller.toggleMicrobiologyResult,
         ),
         const SizedBox(height: Spacing.control),
         SelectionRowWidget(
-          title: 'Đáp ứng kém',
-          description: 'Triệu chứng không cải thiện sau theo dõi.',
+          title: l10n.progressPoorResponse,
+          description: l10n.progressPoorResponseDesc,
           selected: form.poorResponse,
           onTap: controller.togglePoorResponse,
         ),
         const SizedBox(height: Spacing.section),
-        const ClinicalAlert(
+        ClinicalAlert(
           severity: ClinicalSeverity.needsAttention,
-          title: 'Không thể chỉnh sửa sau khi lưu',
-          description: 'Tạo diễn biến mới nếu cần cập nhật tiếp.',
+          title: l10n.progressLockTitle,
+          description: l10n.progressLockDesc,
         ),
       ],
     );
@@ -165,6 +168,7 @@ class _TargetedBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -172,10 +176,10 @@ class _TargetedBody extends StatelessWidget {
         const SizedBox(height: Spacing.control),
         AntibiogramBanner(line: micro.antibiogramLine),
         const SizedBox(height: Spacing.section),
-        const ClinicalAlert(
+        ClinicalAlert(
           severity: ClinicalSeverity.needsAttention,
-          title: 'Điều trị đích dựa trên kết quả vi sinh',
-          description: 'Kiểm tra tác nhân và kháng sinh đồ trước khi chọn thuốc.',
+          title: l10n.progressTargetedAlertTitle,
+          description: l10n.progressTargetedAlertDesc,
         ),
       ],
     );

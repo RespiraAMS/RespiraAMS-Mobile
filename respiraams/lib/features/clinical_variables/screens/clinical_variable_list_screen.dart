@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../../../../design_system/design_system.dart';
+import '../../../../l10n/l10n.dart';
 import '../providers/clinical_variable_provider.dart';
-import '../models/clinical_variable.dart';
 import 'clinical_variable_detail_screen.dart';
 
 class ClinicalVariableListScreen extends StatefulWidget {
@@ -62,27 +62,10 @@ class _ClinicalVariableListScreenState extends State<ClinicalVariableListScreen>
     );
   }
 
-  String _translateValueType(ValueType type) {
-    switch (type) {
-      case ValueType.numeric: return 'Nhập số';
-      case ValueType.boolean: return 'Có / Không';
-      case ValueType.categorical: return 'Phân loại';
-      default: return 'Khác';
-    }
-  }
-
-  String _translateCategory(VariableCategory cat) {
-    switch (cat) {
-      case VariableCategory.personalInformation: return 'Cá nhân';
-      case VariableCategory.paraclinical: return 'Cận lâm sàng';
-      case VariableCategory.clinical: return 'Lâm sàng';
-      default: return 'Khác';
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final c = context.respiraColors;
+    final l10n = context.l10n;
 
     return Scaffold(
       backgroundColor: c.background,
@@ -92,8 +75,8 @@ class _ClinicalVariableListScreenState extends State<ClinicalVariableListScreen>
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: Spacing.group, vertical: 8),
               child: AppAppBar(
-                title: 'Biến số lâm sàng',
-                subtitle: 'Quản lý tham số',
+                title: l10n.clinicalVariableTitle,
+                subtitle: l10n.clinicalVariableSubtitle,
                 onBack: () => Navigator.pop(context),
               ),
             ),
@@ -107,7 +90,7 @@ class _ClinicalVariableListScreenState extends State<ClinicalVariableListScreen>
                       controller: _searchController,
                       onChanged: _onSearchChanged,
                       decoration: InputDecoration(
-                        hintText: 'Tìm kiếm tên hoặc mã...',
+                        hintText: l10n.clinicalVariableSearchHint,
                         hintStyle: TextStyle(color: c.textSecondary),
                         prefixIcon: Icon(LucideIcons.search, color: c.iconDefault, size: 20),
                         filled: true,
@@ -149,7 +132,7 @@ class _ClinicalVariableListScreenState extends State<ClinicalVariableListScreen>
                 builder: (context, provider, child) {
                   if (provider.errorMessage != null && provider.items.isNotEmpty) {
                     WidgetsBinding.instance.addPostFrameCallback((_) {
-                      showAppToast(context, provider.errorMessage!);
+                      showAppToast(context, provider.errorMessage!.localizedError(l10n));
                       provider.clearError();
                     });
                   }
@@ -159,7 +142,7 @@ class _ClinicalVariableListScreenState extends State<ClinicalVariableListScreen>
                   }
 
                   if (provider.items.isEmpty && !provider.isLoading) {
-                    return Center(child: AppText('Không tìm thấy kết quả nào.', color: c.textSecondary));
+                    return Center(child: AppText(l10n.commonNoResults, color: c.textSecondary));
                   }
 
                   return ListView.separated(
@@ -200,7 +183,7 @@ class _ClinicalVariableListScreenState extends State<ClinicalVariableListScreen>
                                   Container(
                                     padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                                     decoration: BoxDecoration(color: c.errorSoft, borderRadius: BorderRadius.circular(4)),
-                                    child: AppText('Bắt buộc', type: AppTextType.caption, color: c.error),
+                                    child: AppText(l10n.clinicalVariableRequired, type: AppTextType.caption, color: c.error),
                                   )
                               ],
                             ),
@@ -209,9 +192,9 @@ class _ClinicalVariableListScreenState extends State<ClinicalVariableListScreen>
                             const SizedBox(height: 12),
                             Row(
                               children: [
-                                _buildTag(c, LucideIcons.layers, _translateCategory(item.category)),
+                                _buildTag(c, LucideIcons.layers, item.category.shortLabel(l10n)),
                                 const SizedBox(width: 8),
-                                _buildTag(c, LucideIcons.type, _translateValueType(item.valueType)),
+                                _buildTag(c, LucideIcons.type, item.valueType.label(l10n)),
                                 if (item.canonicalUnit != null) ...[
                                   const SizedBox(width: 8),
                                   _buildTag(c, LucideIcons.ruler, item.canonicalUnit!),
@@ -288,6 +271,7 @@ class _FilterBottomSheetState extends State<_FilterBottomSheet> {
   @override
   Widget build(BuildContext context) {
     final c = context.respiraColors;
+    final l10n = context.l10n;
     
     return Padding(
       padding: const EdgeInsets.all(Spacing.group),
@@ -299,45 +283,45 @@ class _FilterBottomSheetState extends State<_FilterBottomSheet> {
             child: Container(width: 40, height: 4, decoration: BoxDecoration(color: c.borderSubtle, borderRadius: BorderRadius.circular(2))),
           ),
           const SizedBox(height: Spacing.section),
-          AppText('Bộ lọc dữ liệu', type: AppTextType.h3, fontWeight: FontWeight.bold),
+          AppText(l10n.filterTitle, type: AppTextType.h3, fontWeight: FontWeight.bold),
           const SizedBox(height: Spacing.section),
 
-          AppText('Tính bắt buộc', type: AppTextType.bodyMedium, fontWeight: FontWeight.w600),
+          AppText(l10n.filterRequired, type: AppTextType.bodyMedium, fontWeight: FontWeight.w600),
           const SizedBox(height: 8),
           Wrap(
             spacing: 8,
             children: [
-              _buildChoiceChip('Tất cả', _selectedIsRequired == null, () => setState(() => _selectedIsRequired = null)),
-              _buildChoiceChip('Bắt buộc', _selectedIsRequired == true, () => setState(() => _selectedIsRequired = true)),
-              _buildChoiceChip('Không bắt buộc', _selectedIsRequired == false, () => setState(() => _selectedIsRequired = false)),
+              _buildChoiceChip(l10n.commonAll, _selectedIsRequired == null, () => setState(() => _selectedIsRequired = null)),
+              _buildChoiceChip(l10n.filterRequiredYes, _selectedIsRequired == true, () => setState(() => _selectedIsRequired = true)),
+              _buildChoiceChip(l10n.filterRequiredNo, _selectedIsRequired == false, () => setState(() => _selectedIsRequired = false)),
             ],
           ),
           const SizedBox(height: Spacing.section),
 
-          AppText('Phân loại', type: AppTextType.bodyMedium, fontWeight: FontWeight.w600),
+          AppText(l10n.filterCategory, type: AppTextType.bodyMedium, fontWeight: FontWeight.w600),
           const SizedBox(height: 8),
           Wrap(
             spacing: 8,
             runSpacing: 8,
             children: [
-              _buildChoiceChip('Tất cả', _selectedCategory == null, () => setState(() => _selectedCategory = null)),
-              _buildChoiceChip('Lâm sàng', _selectedCategory == 'Clinical', () => setState(() => _selectedCategory = 'Clinical')),
-              _buildChoiceChip('Cận lâm sàng', _selectedCategory == 'Paraclinical', () => setState(() => _selectedCategory = 'Paraclinical')),
-              _buildChoiceChip('Cá nhân', _selectedCategory == 'PersonalInformation', () => setState(() => _selectedCategory = 'PersonalInformation')),
+              _buildChoiceChip(l10n.commonAll, _selectedCategory == null, () => setState(() => _selectedCategory = null)),
+              _buildChoiceChip(l10n.variableCategoryClinical, _selectedCategory == 'Clinical', () => setState(() => _selectedCategory = 'Clinical')),
+              _buildChoiceChip(l10n.variableCategoryParaclinical, _selectedCategory == 'Paraclinical', () => setState(() => _selectedCategory = 'Paraclinical')),
+              _buildChoiceChip(l10n.variableCategoryPersonalShort, _selectedCategory == 'PersonalInformation', () => setState(() => _selectedCategory = 'PersonalInformation')),
             ],
           ),
           const SizedBox(height: Spacing.section),
 
-          AppText('Loại giá trị', type: AppTextType.bodyMedium, fontWeight: FontWeight.w600),
+          AppText(l10n.filterValueType, type: AppTextType.bodyMedium, fontWeight: FontWeight.w600),
           const SizedBox(height: 8),
           Wrap(
             spacing: 8,
             runSpacing: 8,
             children: [
-              _buildChoiceChip('Tất cả', _selectedValueType == null, () => setState(() => _selectedValueType = null)),
-              _buildChoiceChip('Nhập số', _selectedValueType == 'Numeric', () => setState(() => _selectedValueType = 'Numeric')),
-              _buildChoiceChip('Có/Không', _selectedValueType == 'Boolean', () => setState(() => _selectedValueType = 'Boolean')),
-              _buildChoiceChip('Phân loại', _selectedValueType == 'Categorical', () => setState(() => _selectedValueType = 'Categorical')),
+              _buildChoiceChip(l10n.commonAll, _selectedValueType == null, () => setState(() => _selectedValueType = null)),
+              _buildChoiceChip(l10n.valueTypeNumeric, _selectedValueType == 'Numeric', () => setState(() => _selectedValueType = 'Numeric')),
+              _buildChoiceChip(l10n.valueTypeBoolean, _selectedValueType == 'Boolean', () => setState(() => _selectedValueType = 'Boolean')),
+              _buildChoiceChip(l10n.valueTypeCategorical, _selectedValueType == 'Categorical', () => setState(() => _selectedValueType = 'Categorical')),
             ],
           ),
           const SizedBox(height: Spacing.section),
@@ -347,14 +331,14 @@ class _FilterBottomSheetState extends State<_FilterBottomSheet> {
             children: [
               Expanded(
                 child: AppButton(
-                  label: 'Xóa bộ lọc',
+                  label: l10n.filterClear,
                   onPressed: _reset,
                 ),
               ),
               const SizedBox(width: 16),
               Expanded(
                 child: AppButton(
-                  label: 'Áp dụng',
+                  label: l10n.filterApply,
                   onPressed: _apply,
                 ),
               ),

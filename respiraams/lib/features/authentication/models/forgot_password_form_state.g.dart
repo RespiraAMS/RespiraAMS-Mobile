@@ -10,12 +10,12 @@ _$ForgotPasswordFormStateImpl _$$ForgotPasswordFormStateImplFromJson(
   Map<String, dynamic> json,
 ) => _$ForgotPasswordFormStateImpl(
   email: json['email'] as String? ?? '',
-  errorMessage: json['errorMessage'] as String?,
+  emailInvalid: json['emailInvalid'] as bool? ?? false,
 );
 
 Map<String, dynamic> _$$ForgotPasswordFormStateImplToJson(
   _$ForgotPasswordFormStateImpl instance,
 ) => <String, dynamic>{
   'email': instance.email,
-  'errorMessage': instance.errorMessage,
+  'emailInvalid': instance.emailInvalid,
 };

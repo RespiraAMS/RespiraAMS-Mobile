@@ -12,7 +12,7 @@ class ForgotPasswordController extends _$ForgotPasswordController {
 
   void setEmail(String value) {
     // Clear the error as soon as the user edits again.
-    state = state.copyWith(email: value, errorMessage: null);
+    state = state.copyWith(email: value, emailInvalid: false);
   }
 
   /// Validates the email; returns true when the code can be "sent".
@@ -20,11 +20,8 @@ class ForgotPasswordController extends _$ForgotPasswordController {
     final email = state.email.trim();
     final valid = email.contains('@') && email.contains('.');
     state = valid
-        ? state.copyWith(email: email, errorMessage: null)
-        : state.copyWith(
-            email: email,
-            errorMessage: 'Email chưa đúng định dạng.',
-          );
+        ? state.copyWith(email: email, emailInvalid: false)
+        : state.copyWith(email: email, emailInvalid: true);
     return valid;
   }
 }

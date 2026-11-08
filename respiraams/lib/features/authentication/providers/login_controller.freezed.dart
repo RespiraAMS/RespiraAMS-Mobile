@@ -21,6 +21,7 @@ mixin _$LoginUiState {
   String get password => throw _privateConstructorUsedError;
   bool get submitting => throw _privateConstructorUsedError;
   String? get errorMessage => throw _privateConstructorUsedError;
+  bool get networkError => throw _privateConstructorUsedError;
 
   /// Create a copy of LoginUiState
   /// with the given fields replaced by the non-null parameter values.
@@ -41,6 +42,7 @@ abstract class $LoginUiStateCopyWith<$Res> {
     String password,
     bool submitting,
     String? errorMessage,
+    bool networkError,
   });
 }
 
@@ -63,6 +65,7 @@ class _$LoginUiStateCopyWithImpl<$Res, $Val extends LoginUiState>
     Object? password = null,
     Object? submitting = null,
     Object? errorMessage = freezed,
+    Object? networkError = null,
   }) {
     return _then(
       _value.copyWith(
@@ -82,6 +85,10 @@ class _$LoginUiStateCopyWithImpl<$Res, $Val extends LoginUiState>
                 ? _value.errorMessage
                 : errorMessage // ignore: cast_nullable_to_non_nullable
                       as String?,
+            networkError: null == networkError
+                ? _value.networkError
+                : networkError // ignore: cast_nullable_to_non_nullable
+                      as bool,
           )
           as $Val,
     );
@@ -102,6 +109,7 @@ abstract class _$$LoginUiStateImplCopyWith<$Res>
     String password,
     bool submitting,
     String? errorMessage,
+    bool networkError,
   });
 }
 
@@ -123,6 +131,7 @@ class __$$LoginUiStateImplCopyWithImpl<$Res>
     Object? password = null,
     Object? submitting = null,
     Object? errorMessage = freezed,
+    Object? networkError = null,
   }) {
     return _then(
       _$LoginUiStateImpl(
@@ -142,6 +151,10 @@ class __$$LoginUiStateImplCopyWithImpl<$Res>
             ? _value.errorMessage
             : errorMessage // ignore: cast_nullable_to_non_nullable
                   as String?,
+        networkError: null == networkError
+            ? _value.networkError
+            : networkError // ignore: cast_nullable_to_non_nullable
+                  as bool,
       ),
     );
   }
@@ -155,6 +168,7 @@ class _$LoginUiStateImpl implements _LoginUiState {
     this.password = '',
     this.submitting = false,
     this.errorMessage,
+    this.networkError = false,
   });
 
   @override
@@ -168,10 +182,13 @@ class _$LoginUiStateImpl implements _LoginUiState {
   final bool submitting;
   @override
   final String? errorMessage;
+  @override
+  @JsonKey()
+  final bool networkError;
 
   @override
   String toString() {
-    return 'LoginUiState(identifier: $identifier, password: $password, submitting: $submitting, errorMessage: $errorMessage)';
+    return 'LoginUiState(identifier: $identifier, password: $password, submitting: $submitting, errorMessage: $errorMessage, networkError: $networkError)';
   }
 
   @override
@@ -186,12 +203,20 @@ class _$LoginUiStateImpl implements _LoginUiState {
             (identical(other.submitting, submitting) ||
                 other.submitting == submitting) &&
             (identical(other.errorMessage, errorMessage) ||
-                other.errorMessage == errorMessage));
+                other.errorMessage == errorMessage) &&
+            (identical(other.networkError, networkError) ||
+                other.networkError == networkError));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, identifier, password, submitting, errorMessage);
+  int get hashCode => Object.hash(
+    runtimeType,
+    identifier,
+    password,
+    submitting,
+    errorMessage,
+    networkError,
+  );
 
   /// Create a copy of LoginUiState
   /// with the given fields replaced by the non-null parameter values.
@@ -208,6 +233,7 @@ abstract class _LoginUiState implements LoginUiState {
     final String password,
     final bool submitting,
     final String? errorMessage,
+    final bool networkError,
   }) = _$LoginUiStateImpl;
 
   @override
@@ -218,6 +244,8 @@ abstract class _LoginUiState implements LoginUiState {
   bool get submitting;
   @override
   String? get errorMessage;
+  @override
+  bool get networkError;
 
   /// Create a copy of LoginUiState
   /// with the given fields replaced by the non-null parameter values.

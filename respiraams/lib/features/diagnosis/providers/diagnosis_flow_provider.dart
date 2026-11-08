@@ -56,7 +56,7 @@ class DiagnosisFlowController extends _$DiagnosisFlowController {
   Future<void> runEmpiricalDiagnosis() async {
     final patient = ref.read(currentPatientProvider);
     if (patient == null) {
-      state = state.copyWith(errorMessage: 'Chưa chọn bệnh nhân.');
+      state = state.copyWith(errorMessage: LocalApiError.noPatient);
       return;
     }
 
@@ -64,7 +64,7 @@ class DiagnosisFlowController extends _$DiagnosisFlowController {
     try {
       variables = await ref.read(diagnosisFormProvider.future);
     } on Exception {
-      state = state.copyWith(errorMessage: 'Không thể tải biểu mẫu chẩn đoán.');
+      state = state.copyWith(errorMessage: LocalApiError.formLoadFailed);
       return;
     }
 
@@ -92,7 +92,8 @@ class DiagnosisFlowController extends _$DiagnosisFlowController {
 
     if (missingRequired.isNotEmpty) {
       state = state.copyWith(
-        errorMessage: 'Thiếu thông tin bắt buộc: ${missingRequired.join(', ')}.',
+        errorMessage:
+            '${LocalApiError.missingRequiredPrefix}${missingRequired.join(', ')}',
       );
       return;
     }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../theme/theme_extensions.dart';
+import '../../../l10n/l10n.dart';
 import '../../tokens/radius.dart';
 import '../../tokens/sizes.dart';
 import '../../tokens/spacing.dart';
@@ -21,7 +22,7 @@ class AppUnitField extends StatefulWidget {
     required this.onChanged,
     this.unit = '',
     this.initialValue = '',
-    this.hintText = 'Nhập số',
+    this.hintText,
     this.description,
     this.enabled = true,
     this.semanticLabel,
@@ -37,7 +38,7 @@ class AppUnitField extends StatefulWidget {
   /// mirrors it through [onChanged]) — avoids cursor jumps on rebuilds.
   final String initialValue;
   final ValueChanged<String> onChanged;
-  final String hintText;
+  final String? hintText;
   final bool enabled;
 
   final String? semanticLabel;
@@ -130,7 +131,7 @@ class _AppUnitFieldState extends State<AppUnitField> {
                   decoration: InputDecoration(
                     isCollapsed: true,
                     border: InputBorder.none,
-                    hintText: widget.hintText,
+                    hintText: widget.hintText ?? context.l10n.commonEnterNumber,
                     hintStyle:
                         TextStyle(fontSize: 15, color: c.textSecondary),
                   ),

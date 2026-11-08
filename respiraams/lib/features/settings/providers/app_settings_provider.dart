@@ -10,13 +10,12 @@ part 'app_settings_provider.g.dart';
 /// The factor is applied on top of the platform text scale in `main.dart`,
 /// so the choice still respects the OS accessibility setting.
 enum AppTextScale {
-  small(label: 'Nhỏ', factor: 0.9),
-  standard(label: 'Mặc định', factor: 1.0),
-  large(label: 'Lớn', factor: 1.15);
+  small(0.9),
+  standard(1.0),
+  large(1.15);
 
-  const AppTextScale({required this.label, required this.factor});
+  const AppTextScale(this.factor);
 
-  final String label;
   final double factor;
 }
 

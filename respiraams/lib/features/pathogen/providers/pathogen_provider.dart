@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/network/api_response.dart';
 import '../models/pathogen.dart';
 import 'pathogen_service.dart';
 
@@ -39,7 +40,8 @@ class PathogenProvider extends ChangeNotifier {
       _hasMore = response.hasNextPage;
       _currentPage++;
     } catch (e) {
-      _errorMessage = 'Lỗi tải dữ liệu: ${e.toString()}';
+      debugPrint('Failed to load pathogens: $e');
+      _errorMessage = LocalApiError.loadData;
     } finally {
       _isLoading = false;
       notifyListeners();

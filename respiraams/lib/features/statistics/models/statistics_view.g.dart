@@ -8,17 +8,23 @@ part of 'statistics_view.dart';
 
 _$KpiStatImpl _$$KpiStatImplFromJson(Map<String, dynamic> json) =>
     _$KpiStatImpl(
-      label: json['label'] as String,
+      id: $enumDecode(_$KpiIdEnumMap, json['id']),
       value: (json['value'] as num).toInt(),
       deltaPercent: (json['deltaPercent'] as num).toInt(),
     );
 
 Map<String, dynamic> _$$KpiStatImplToJson(_$KpiStatImpl instance) =>
     <String, dynamic>{
-      'label': instance.label,
+      'id': _$KpiIdEnumMap[instance.id]!,
       'value': instance.value,
       'deltaPercent': instance.deltaPercent,
     };
+
+const _$KpiIdEnumMap = {
+  KpiId.diagnoses: 'diagnoses',
+  KpiId.saved: 'saved',
+  KpiId.microbiology: 'microbiology',
+};
 
 _$WeeklyBarImpl _$$WeeklyBarImplFromJson(Map<String, dynamic> json) =>
     _$WeeklyBarImpl(

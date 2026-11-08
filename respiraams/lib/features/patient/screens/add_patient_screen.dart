@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/utils/context_extensions.dart';
 import '../../../../design_system/design_system.dart';
 import '../../../../core/network/api_response.dart';
+import '../../../../l10n/l10n.dart';
 import '../models/add_patient_form_state.dart';
 import '../models/patient.dart';
 import '../providers/add_patient_controller.dart';
@@ -28,48 +29,49 @@ class AddPatientScreen extends ConsumerWidget {
       RegExp(r'^(0[35789]|84[35789]|\+84[35789])\d{8}$');
   static final _insurancePattern = RegExp(r'^\d{10}$');
 
-  String? _validate(AddPatientFormState form) {
+  String? _validate(AddPatientFormState form, AppLocalizations l10n) {
     if (form.lastName.trim().isEmpty || form.firstName.trim().isEmpty) {
-      return 'Vui lòng nhập họ và tên.';
+      return l10n.patientErrName;
     }
     if (form.code.trim().isEmpty) {
-      return 'Vui lòng nhập mã bệnh án.';
+      return l10n.patientErrCode;
     }
     if (form.dob.trim().isEmpty) {
-      return 'Vui lòng nhập ngày sinh.';
+      return l10n.patientErrDob;
     }
     if (ddMmYyyyToIsoDate(form.dob) == null) {
-      return 'Ngày sinh không hợp lệ (định dạng dd/MM/yyyy).';
+      return l10n.patientErrDobFormat;
     }
     if (!_phonePattern.hasMatch(form.phoneNumber.trim())) {
-      return 'Số điện thoại không hợp lệ.';
+      return l10n.patientErrPhone;
     }
     if (!_insurancePattern.hasMatch(form.insurance.trim())) {
-      return 'Số thẻ BHYT phải gồm 10 chữ số.';
+      return l10n.patientErrInsurance;
     }
     if ((double.tryParse(form.heightCm.trim().replaceAll(',', '.')) ?? 0) <= 0) {
-      return 'Chiều cao phải lớn hơn 0.';
+      return l10n.patientErrHeight;
     }
     if ((double.tryParse(form.weightKg.trim().replaceAll(',', '.')) ?? 0) <= 0) {
-      return 'Cân nặng phải lớn hơn 0.';
+      return l10n.patientErrWeight;
     }
     if (form.address.trim().isEmpty) {
-      return 'Vui lòng nhập địa chỉ.';
+      return l10n.patientErrAddress;
     }
     if (form.city.trim().isEmpty) {
-      return 'Vui lòng nhập tỉnh/thành phố.';
+      return l10n.patientErrCity;
     }
     return null;
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.l10n;
     final form = ref.watch(addPatientControllerProvider);
     final controller = ref.read(addPatientControllerProvider.notifier);
     final saving = ref.watch(addPatientSavingProvider);
 
     Future<void> save(BuildContext context) async {
-      final error = _validate(form);
+      final error = _validate(form, l10n);
       if (error != null) {
         showAppToast(context, error);
         return;
@@ -85,9 +87,9 @@ class AddPatientScreen extends ConsumerWidget {
       } on ApiException catch (e) {
         showAppToast(context, e.message);
       } on DioException catch (e) {
-        showAppToast(context, dioErrorMessage(e));
+        showAppToast(context, dioErrorMessage(e).localizedError(l10n));
       } catch (_) {
-        showAppToast(context, 'Không thể tạo bệnh nhân. Vui lòng thử lại.');
+        showAppToast(context, l10n.patientCreateFailed);
       }
     }
 
@@ -104,8 +106,8 @@ class AddPatientScreen extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       AppAppBar(
-                        title: 'Thêm bệnh nhân',
-                        subtitle: 'Tạo hồ sơ bệnh nhân mới',
+                        title: l10n.patientAddTitle,
+                        subtitle: l10n.patientAddSubtitle,
                         onBack: () => context.goBackOr(PatientRoutes.list),
                       ),
                       const SizedBox(height: Spacing.section),
@@ -114,7 +116,7 @@ class AddPatientScreen extends ConsumerWidget {
                         children: [
                           Expanded(
                             child: AppTextField(
-                              label: 'Họ',
+                              label: l10n.patientLastName,
                               initialValue: form.lastName,
                               onChanged: controller.setLastName,
                             ),
@@ -122,7 +124,7 @@ class AddPatientScreen extends ConsumerWidget {
                           const SizedBox(width: Spacing.group),
                           Expanded(
                             child: AppTextField(
-                              label: 'Tên',
+                              label: l10n.patientFirstName,
                               initialValue: form.firstName,
                               onChanged: controller.setFirstName,
                             ),
@@ -131,7 +133,7 @@ class AddPatientScreen extends ConsumerWidget {
                       ),
                       const SizedBox(height: Spacing.group),
                       AppTextField(
-                        label: 'Mã bệnh án',
+                        label: l10n.patientRecordCode,
                         initialValue: form.code,
                         onChanged: controller.setCode,
                       ),
@@ -141,7 +143,7 @@ class AddPatientScreen extends ConsumerWidget {
                         children: [
                           Expanded(
                             child: AppTextField(
-                              label: 'Ngày sinh',
+                              label: l10n.patientDob,
                               initialValue: form.dob,
                               onChanged: controller.setDob,
                               hintText: 'dd/MM/yyyy',
@@ -159,41 +161,41 @@ class AddPatientScreen extends ConsumerWidget {
                       ),
                       const SizedBox(height: Spacing.group),
                       AppTextField(
-                        label: 'Số thẻ BHYT',
+                        label: l10n.patientInsuranceCard,
                         keyboardType: TextInputType.number,
                         initialValue: form.insurance,
                         onChanged: controller.setInsurance,
                       ),
                       const SizedBox(height: Spacing.group),
                       AppTextField(
-                        label: 'Số điện thoại',
+                        label: l10n.patientPhone,
                         keyboardType: TextInputType.phone,
                         initialValue: form.phoneNumber,
                         onChanged: controller.setPhoneNumber,
                       ),
                       const SizedBox(height: Spacing.group),
                       AppUnitField(
-                        label: 'Chiều cao',
+                        label: l10n.patientHeight,
                         unit: 'cm',
                         initialValue: form.heightCm,
                         onChanged: controller.setHeightCm,
                       ),
                       const SizedBox(height: Spacing.group),
                       AppUnitField(
-                        label: 'Cân nặng',
+                        label: l10n.patientWeight,
                         unit: 'kg',
                         initialValue: form.weightKg,
                         onChanged: controller.setWeightKg,
                       ),
                       const SizedBox(height: Spacing.group),
                       AppTextField(
-                        label: 'Địa chỉ',
+                        label: l10n.patientAddress,
                         initialValue: form.address,
                         onChanged: controller.setAddress,
                       ),
                       const SizedBox(height: Spacing.group),
                       AppTextField(
-                        label: 'Tỉnh/Thành phố',
+                        label: l10n.patientProvince,
                         initialValue: form.city,
                         onChanged: controller.setCity,
                       ),
@@ -201,7 +203,9 @@ class AddPatientScreen extends ConsumerWidget {
                       Padding(
                         padding: const EdgeInsets.only(top: Spacing.block),
                         child: AppButton(
-                          label: saving ? 'Đang lưu…' : 'Lưu hồ sơ',
+                          label: saving
+                              ? l10n.patientSaving
+                              : l10n.patientSaveRecord,
                           expand: true,
                           loading: saving,
                           onPressed: saving ? null : () => save(context),
@@ -227,22 +231,23 @@ class _GenderField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        const SectionLabelWidget('Giới tính'),
+        SectionLabelWidget(l10n.patientGender),
         const SizedBox(height: Spacing.inline),
         Row(
           children: [
             GenderOptionWidget(
-              label: Gender.nam.displayName,
+              label: Gender.nam.label(l10n),
               selected: selected == Gender.nam,
               onTap: () => onSelect(Gender.nam),
             ),
             const SizedBox(width: Spacing.inline),
             GenderOptionWidget(
-              label: Gender.nu.displayName,
+              label: Gender.nu.label(l10n),
               selected: selected == Gender.nu,
               onTap: () => onSelect(Gender.nu),
             ),

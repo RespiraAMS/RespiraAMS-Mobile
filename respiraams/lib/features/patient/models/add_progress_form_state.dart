@@ -3,15 +3,9 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'add_progress_form_state.freezed.dart';
 part 'add_progress_form_state.g.dart';
 
-/// Treatment approach options ("Loại điều trị").
-enum TreatmentType {
-  empirical('Kinh nghiệm'),
-  targeted('Điều trị đích');
-
-  const TreatmentType(this.displayName);
-
-  final String displayName;
-}
+/// Treatment approach options ("Loại điều trị"). Display labels are
+/// provided by `l10n_labels.dart`.
+enum TreatmentType { empirical, targeted }
 
 /// Editable state of the "Thêm diễn biến" form.
 @freezed

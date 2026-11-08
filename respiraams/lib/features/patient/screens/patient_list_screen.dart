@@ -7,7 +7,9 @@ import 'package:respiraams/features/lookup/lookup_route.dart';
 import 'package:respiraams/features/settings/settings_menu_button.dart';
 import 'package:respiraams/features/statistics/routes.dart';
 
+import '../../../../core/navigation/app_nav_items.dart';
 import '../../../../design_system/design_system.dart';
+import '../../../../l10n/l10n.dart';
 import '../models/patient_summary.dart';
 import '../providers/patient_list_provider.dart';
 import '../routes.dart';
@@ -34,12 +36,13 @@ class _PatientListScreenState extends ConsumerState<PatientListScreen> {
   }
 
   void _showTabPlaceholder(BuildContext context, String label) {
-    showAppToast(context, 'Tab "$label" sẽ được bổ sung sau.');
+    showAppToast(context, context.l10n.commonTabComingSoon(label));
   }
 
   @override
   Widget build(BuildContext context) {
     final c = context.respiraColors;
+    final l10n = context.l10n;
     final state = ref.watch(patientListControllerProvider);
     final controller = ref.read(patientListControllerProvider.notifier);
     final roster = ref.watch(patientListControllerProvider.select((s) => s.patients));
@@ -52,13 +55,7 @@ class _PatientListScreenState extends ConsumerState<PatientListScreen> {
     final highRiskCount =
         roster.where((p) => p.status == PatientStatus.deceased).length;
 
-    final navItems = const [
-      AppBottomNavItem(icon: LucideIcons.users, label: 'Bệnh nhân'),
-      AppBottomNavItem(icon: LucideIcons.search, label: 'Tra cứu'),
-      AppBottomNavItem(icon: LucideIcons.stethoscope, label: 'Chẩn đoán'),
-      AppBottomNavItem(icon: LucideIcons.calculator, label: 'Máy tính'),
-      AppBottomNavItem(icon: LucideIcons.barChart2, label: 'Thống kê'),
-    ];
+    final navItems = appBottomNavItems(context);
 
     return Scaffold(
       body: SafeArea(
@@ -72,7 +69,10 @@ class _PatientListScreenState extends ConsumerState<PatientListScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              _Header(onAttentionSubtitle: '${roster.length} bệnh nhân đang theo dõi'),
+              _Header(
+                onAttentionSubtitle:
+                    l10n.patientFollowingCount(roster.length),
+              ),
               const SizedBox(height: Spacing.section),
               _SearchField(
                 query: state.query,
@@ -82,7 +82,7 @@ class _PatientListScreenState extends ConsumerState<PatientListScreen> {
               Row(
                 children: [
                   StatusFilterChipWidget(
-                    label: 'Tất cả',
+                    label: l10n.patientFilterAll,
                     count: roster.length,
                     contentColor: c.primary,
                     selected: state.filter == PatientListFilter.all,
@@ -90,7 +90,7 @@ class _PatientListScreenState extends ConsumerState<PatientListScreen> {
                   ),
                   const SizedBox(width: Spacing.inline),
                   StatusFilterChipWidget(
-                    label: 'Cần chú ý',
+                    label: l10n.patientFilterAttention,
                     count: attentionCount,
                     contentColor: c.warning,
                     selected: state.filter == PatientListFilter.attention,
@@ -99,7 +99,7 @@ class _PatientListScreenState extends ConsumerState<PatientListScreen> {
                   ),
                   const SizedBox(width: Spacing.inline),
                   StatusFilterChipWidget(
-                    label: 'Nguy cơ cao',
+                    label: l10n.patientFilterHighRisk,
                     count: highRiskCount,
                     contentColor: c.error,
                     selected: state.filter == PatientListFilter.highRisk,
@@ -113,7 +113,7 @@ class _PatientListScreenState extends ConsumerState<PatientListScreen> {
                 children: [
                   Expanded(
                     child: Text(
-                      '${visible.length} bệnh nhân',
+                      l10n.patientCount(visible.length),
                       style: TypographyTokens.bodyMedium(context)
                           .copyWith(fontWeight: FontWeight.w600),
                     ),
@@ -140,7 +140,7 @@ class _PatientListScreenState extends ConsumerState<PatientListScreen> {
                                 size: ControlSize.iconSm, color: c.primary),
                             const SizedBox(width: Spacing.xxxs),
                             Text(
-                              'Ưu tiên',
+                              l10n.patientPrioritySort,
                               style: TypographyTokens.label(context)
                                   .copyWith(color: c.primary),
                             ),
@@ -156,7 +156,7 @@ class _PatientListScreenState extends ConsumerState<PatientListScreen> {
                 child: loading && visible.isEmpty
                     ? const Center(child: CircularProgressIndicator())
                     : errorMessage != null && visible.isEmpty
-                        ? _ErrorState(message: errorMessage)
+                        ? _ErrorState(message: errorMessage.localizedError(l10n))
                         : RefreshIndicator(
                             onRefresh: controller.refresh,
                             child: visible.isEmpty
@@ -250,7 +250,7 @@ class _Header extends ConsumerWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'Danh sách bệnh nhân',
+                context.l10n.patientListTitle,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: TypographyTokens.h3(context)
@@ -267,7 +267,7 @@ class _Header extends ConsumerWidget {
           icon: LucideIcons.userPlus,
           background: c.primary,
           foreground: c.onPrimary,
-          semanticLabel: 'Thêm bệnh nhân',
+          semanticLabel: context.l10n.patientAddSemantic,
           onTap: () => context.push(PatientRoutes.addPatient),
         ),
       ],
@@ -342,7 +342,7 @@ class _SearchField extends StatelessWidget {
               decoration: InputDecoration(
                 isCollapsed: true,
                 border: InputBorder.none,
-                hintText: 'Tìm theo tên hoặc mã bệnh án',
+                hintText: context.l10n.patientSearchHint,
                 hintStyle: TextStyle(fontSize: 15, color: c.textSecondary),
               ),
             ),
@@ -390,7 +390,7 @@ class _EmptyState extends StatelessWidget {
           Icon(LucideIcons.searchX,
               size: ControlSize.iconBase * 2, color: c.iconMuted),
           const SizedBox(height: Spacing.control),
-          AppText('Không tìm thấy bệnh nhân phù hợp.',
+          AppText(context.l10n.patientEmpty,
               type: AppTextType.caption,
               textAlign: TextAlign.center),
         ],

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../../../../design_system/design_system.dart';
+import '../../../../l10n/l10n.dart';
 import '../../../core/network/api_client.dart';
 import '../providers/risk_factor_provider.dart';
 import '../../suspected_causes/models/pathogen_summary.dart';
@@ -53,6 +54,7 @@ class _RiskFactorListScreenState extends State<RiskFactorListScreen> {
   @override
   Widget build(BuildContext context) {
     final c = context.respiraColors;
+    final l10n = context.l10n;
 
     return Scaffold(
       backgroundColor: c.background,
@@ -62,8 +64,8 @@ class _RiskFactorListScreenState extends State<RiskFactorListScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: Spacing.group, vertical: 8),
               child: AppAppBar(
-                title: 'Yếu tố nguy cơ',
-                subtitle: 'Theo tác nhân gây bệnh',
+                title: l10n.riskFactorTitle,
+                subtitle: l10n.riskFactorSubtitle,
                 onBack: () => Navigator.pop(context),
               ),
             ),
@@ -73,7 +75,7 @@ class _RiskFactorListScreenState extends State<RiskFactorListScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  AppText('Danh sách yếu tố', type: AppTextType.bodyMedium, fontWeight: FontWeight.w700),
+                  AppText(l10n.riskFactorListLabel, type: AppTextType.bodyMedium, fontWeight: FontWeight.w700),
                   Consumer<RiskFactorProvider>(
                     builder: (context, provider, child) {
                       final hasFilter = provider.hasActiveFilters;
@@ -104,7 +106,7 @@ class _RiskFactorListScreenState extends State<RiskFactorListScreen> {
                 builder: (context, provider, child) {
                   if (provider.errorMessage != null && provider.items.isNotEmpty) {
                     WidgetsBinding.instance.addPostFrameCallback((_) {
-                      showAppToast(context, provider.errorMessage!);
+                      showAppToast(context, provider.errorMessage!.localizedError(l10n));
                       provider.clearError();
                     });
                   }
@@ -120,7 +122,7 @@ class _RiskFactorListScreenState extends State<RiskFactorListScreen> {
                         children: [
                           Icon(LucideIcons.folderSearch, size: 48, color: c.textSecondary.withValues(alpha: 0.5)),
                           const SizedBox(height: 16),
-                          AppText('Không tìm thấy kết quả nào.', color: c.textSecondary),
+                          AppText(l10n.commonNoResults, color: c.textSecondary),
                         ],
                       ),
                     );
@@ -139,7 +141,7 @@ class _RiskFactorListScreenState extends State<RiskFactorListScreen> {
                             child: provider.errorMessage != null
                                 ? GestureDetector(
                                     onTap: () => provider.fetchPage(),
-                                    child: AppText('Không thể tải thêm. Nhấn thử lại', type: AppTextType.caption, color: c.error),
+                                    child: AppText(l10n.commonLoadMoreFailed, type: AppTextType.caption, color: c.error),
                                   )
                                 : CircularProgressIndicator(color: c.primary),
                           ),
@@ -229,6 +231,7 @@ class _FilterBottomSheetState extends State<_FilterBottomSheet> {
   @override
   Widget build(BuildContext context) {
     final c = context.respiraColors;
+    final l10n = context.l10n;
     
     return Padding(
       padding: const EdgeInsets.all(Spacing.group),
@@ -240,10 +243,10 @@ class _FilterBottomSheetState extends State<_FilterBottomSheet> {
             child: Container(width: 40, height: 4, decoration: BoxDecoration(color: c.borderSubtle, borderRadius: BorderRadius.circular(2))),
           ),
           const SizedBox(height: Spacing.section),
-          AppText('Bộ lọc dữ liệu', type: AppTextType.h3, fontWeight: FontWeight.bold),
+          AppText(l10n.filterTitle, type: AppTextType.h3, fontWeight: FontWeight.bold),
           const SizedBox(height: Spacing.section),
 
-          AppText('Tác nhân', type: AppTextType.bodyMedium, fontWeight: FontWeight.w600),
+          AppText(l10n.riskFactorPathogenLabel, type: AppTextType.bodyMedium, fontWeight: FontWeight.w600),
           const SizedBox(height: 8),
           FutureBuilder<List<PathogenSummary>>(
             future: _pathogenListFuture,
@@ -252,7 +255,7 @@ class _FilterBottomSheetState extends State<_FilterBottomSheet> {
                 return const Center(child: CircularProgressIndicator());
               }
               if (snapshot.hasError) {
-                return AppText('Không tải được danh sách tác nhân', color: c.error);
+                return AppText(l10n.riskFactorPathogensList, color: c.error);
               }
               
               final pathogens = snapshot.data ?? [];
@@ -267,13 +270,13 @@ class _FilterBottomSheetState extends State<_FilterBottomSheet> {
                   child: DropdownButton<String?>(
                     isExpanded: true,
                     value: _selectedPathogenId,
-                    hint: AppText('Tất cả tác nhân', color: c.textSecondary),
+                    hint: AppText(l10n.riskFactorAllPathogens, color: c.textSecondary),
                     dropdownColor: c.surface,
                     icon: Icon(LucideIcons.chevronDown, color: c.iconDefault),
                     items: [
                       DropdownMenuItem(
                         value: null,
-                        child: AppText('Tất cả tác nhân'),
+                        child: AppText(l10n.riskFactorAllPathogens),
                       ),
                       ...pathogens.map((p) => DropdownMenuItem(
                         value: p.id,
@@ -292,14 +295,14 @@ class _FilterBottomSheetState extends State<_FilterBottomSheet> {
             children: [
               Expanded(
                 child: AppButton(
-                  label: 'Xóa bộ lọc',
+                  label: l10n.filterClear,
                   onPressed: _reset,
                 ),
               ),
               const SizedBox(width: 16),
               Expanded(
                 child: AppButton(
-                  label: 'Áp dụng',
+                  label: l10n.filterApply,
                   onPressed: _apply,
                 ),
               ),

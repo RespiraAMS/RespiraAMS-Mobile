@@ -5,6 +5,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../core/network/api_client.dart';
 import '../../../core/network/api_response.dart';
 import '../../../core/network/pagination_dto.dart';
+import '../models/patient.dart';
 import '../models/patient_dtos.dart';
 import '../models/patient_summary.dart';
 import '../services/patient_service.dart';
@@ -114,7 +115,7 @@ class PatientListController extends _$PatientListController {
           id: dto.id,
           name: dto.fullName,
           code: dto.medicalRecordCode,
-          genderLabel: dto.gender == 'Male' ? 'Nam' : 'Nữ',
+          gender: dto.gender == 'Male' ? Gender.nam : Gender.nu,
           age: dto.age,
           status: status,
         );

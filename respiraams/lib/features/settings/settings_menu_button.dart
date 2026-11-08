@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../design_system/design_system.dart';
+import '../../l10n/l10n.dart';
 import 'settings_sheet.dart';
 
 /// Header hamburger that opens the left-side settings sheet.
@@ -10,7 +11,7 @@ class SettingsMenuButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppMenuButton(
-      semanticLabel: 'Mở cài đặt',
+      semanticLabel: context.l10n.settingsOpen,
       onTap: () => showSettingsDrawer(context),
     );
   }

@@ -8,7 +8,7 @@ part 'forgot_password_form_state.g.dart';
 class ForgotPasswordFormState with _$ForgotPasswordFormState {
   const factory ForgotPasswordFormState({
     @Default('') String email,
-    String? errorMessage,
+    @Default(false) bool emailInvalid,
   }) = _ForgotPasswordFormState;
 
   factory ForgotPasswordFormState.fromJson(Map<String, dynamic> json) =>

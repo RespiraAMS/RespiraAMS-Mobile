@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lucide_icons/lucide_icons.dart';
 
+import '../../../../core/navigation/app_nav_items.dart';
 import '../../../../design_system/design_system.dart';
+import '../../../../l10n/l10n.dart';
 import '../../calculator/routes.dart';
 import '../../patient/routes.dart';
 import '../../settings/settings_menu_button.dart';
@@ -14,17 +15,11 @@ import '../widgets/category_grid_item.dart';
 class MedicalLookupScreen extends StatelessWidget {
   const MedicalLookupScreen({super.key});
 
-  static const _navItems = [
-    AppBottomNavItem(icon: LucideIcons.users, label: 'Bệnh nhân'),
-    AppBottomNavItem(icon: LucideIcons.search, label: 'Tra cứu'),
-    AppBottomNavItem(icon: LucideIcons.stethoscope, label: 'Chẩn đoán'),
-    AppBottomNavItem(icon: LucideIcons.calculator, label: 'Máy tính'),
-    AppBottomNavItem(icon: LucideIcons.barChart2, label: 'Thống kê'),
-  ];
-
   @override
   Widget build(BuildContext context) {
     final c = context.respiraColors;
+    final l10n = context.l10n;
+    final navItems = appBottomNavItems(context);
 
     return Scaffold(
       body: SafeArea(
@@ -48,7 +43,7 @@ class MedicalLookupScreen extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          'Tra cứu',
+                          l10n.lookupTitle,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TypographyTokens.h3(context)
@@ -56,7 +51,7 @@ class MedicalLookupScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 2),
                         AppText(
-                          'Tài liệu y tế dành cho bác sĩ',
+                          l10n.lookupSubtitle,
                           type: AppTextType.caption,
                           maxLines: 1,
                         ),
@@ -67,7 +62,7 @@ class MedicalLookupScreen extends StatelessWidget {
               ),
               const SizedBox(height: Spacing.section),
               Text(
-                'Danh mục',
+                l10n.lookupCategories,
                 style: TypographyTokens.bodyLarge(context).copyWith(
                   fontWeight: FontWeight.w700,
                   color: c.textPrimary,
@@ -99,7 +94,7 @@ class MedicalLookupScreen extends StatelessWidget {
               ),
               const SizedBox(height: Spacing.inline),
               AppBottomNavigation(
-                items: _navItems,
+                items: navItems,
                 activeIndex: 1,
                 onTap: (index) {
                   if (index == 0) {

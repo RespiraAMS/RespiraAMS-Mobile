@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/utils/context_extensions.dart';
 import '../../../../design_system/design_system.dart';
+import '../../../../l10n/l10n.dart';
 import '../models/patient.dart';
 import '../models/patient_dtos.dart';
 import '../providers/active_patient_provider.dart';
@@ -28,6 +29,7 @@ class PatientDetailScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final id = patientId;
+    final l10n = context.l10n;
 
     if (id != null && id.isNotEmpty) {
       ref.listen(patientDetailProvider(id), (_, next) {
@@ -42,15 +44,15 @@ class PatientDetailScreen extends ConsumerWidget {
             loading: () => const _StateScaffold(
               child: CircularProgressIndicator(),
             ),
-            error: (_, _) => const _StateScaffold(
+            error: (_, _) => _StateScaffold(
               child: AppText(
-                'Không thể tải hồ sơ bệnh nhân.',
+                l10n.patientProfileError,
                 type: AppTextType.caption,
               ),
             ),
             data: (dto) => _ProfileView(
               patient: Patient.fromDetail(dto),
-              statusLabel: _statusLabel(dto.treatmentOutcome),
+              statusLabel: _statusLabel(dto.treatmentOutcome, l10n),
               treatments: dto.treatments,
             ),
           );
@@ -58,19 +60,20 @@ class PatientDetailScreen extends ConsumerWidget {
 
     final patient = ref.watch(currentPatientProvider);
     if (patient == null) {
-      return const _StateScaffold(
-        child: AppText('Chưa chọn bệnh nhân.', type: AppTextType.caption),
+      return _StateScaffold(
+        child: AppText(l10n.patientNoSelection, type: AppTextType.caption),
       );
     }
     return _ProfileView(patient: patient);
   }
 }
 
-String _statusLabel(PatientStatusDto outcome) => switch (outcome) {
-      PatientStatusDto.inTreatment => 'Đang điều trị',
-      PatientStatusDto.recovered => 'Hồi phục',
-      PatientStatusDto.death => 'Tử vong',
-      PatientStatusDto.outOfScope => 'Ngoài phạm vi điều trị',
+String _statusLabel(PatientStatusDto outcome, AppLocalizations l10n) =>
+    switch (outcome) {
+      PatientStatusDto.inTreatment => l10n.patientStatusTreating,
+      PatientStatusDto.recovered => l10n.patientStatusRecovered,
+      PatientStatusDto.death => l10n.patientStatusDeceased,
+      PatientStatusDto.outOfScope => l10n.patientStatusOutOfScope,
     };
 
 /// Shared shell for the loading / error / empty states.
@@ -81,6 +84,7 @@ class _StateScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -89,8 +93,8 @@ class _StateScaffold extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               AppAppBar(
-                title: 'Chi tiết bệnh nhân',
-                subtitle: 'Thông tin chỉ đọc và tiến trình điều trị',
+                title: l10n.patientDetailTitle,
+                subtitle: l10n.patientDetailSubtitle,
                 onBack: () => context.goBackOr(PatientRoutes.list),
               ),
               Expanded(child: Center(child: child)),
@@ -115,6 +119,7 @@ class _ProfileView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final avatarGlyph = patient.gender == Gender.nam ? '👨🏻' : '👩🏾';
     final vitals = (patient.heightCm != null && patient.weightKg != null)
         ? '${patient.weightKg!.toStringAsFixed(0)} kg · '
@@ -123,8 +128,8 @@ class _ProfileView extends StatelessWidget {
     final entries = [
       for (var i = 0; i < treatments.length; i++)
         TreatmentTimelineEntry(
-          dateLabel: 'Đợt ${i + 1}',
-          title: 'Điều trị đã lưu',
+          dateLabel: l10n.patientEpisode(i + 1),
+          title: l10n.patientSavedTreatment,
           status: statusLabel ?? '',
         ),
     ];
@@ -142,8 +147,8 @@ class _ProfileView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       AppAppBar(
-                        title: 'Chi tiết bệnh nhân',
-                        subtitle: 'Thông tin chỉ đọc và tiến trình điều trị',
+                        title: l10n.patientDetailTitle,
+                        subtitle: l10n.patientDetailSubtitle,
                         onBack: () =>
                             context.goBackOr(PatientRoutes.list),
                       ),
@@ -151,34 +156,34 @@ class _ProfileView extends StatelessWidget {
                       PatientHeader(
                         name: patient.name,
                         metadata:
-                            '${patient.code} · ${patient.gender.displayName}',
+                            '${patient.code} · ${patient.gender.label(l10n)}',
                         avatarGlyph: avatarGlyph,
                       ),
                       const SizedBox(height: Spacing.section),
-                      const SectionLabelWidget('Thông tin hồ sơ'),
+                      SectionLabelWidget(l10n.patientRecordSection),
                       const SizedBox(height: Spacing.xxs),
                       AppCard.divided(
                         [
                           InfoRowWidget(
-                            label: 'Ngày sinh · Giới tính',
+                            label: l10n.patientDobGender,
                             value:
-                                '${patient.dob} · ${patient.gender.displayName}',
+                                '${patient.dob} · ${patient.gender.label(l10n)}',
                           ),
                           InfoRowWidget(
-                            label: 'BHYT',
+                            label: l10n.patientInsurance,
                             value: patient.insurance,
                           ),
                           InfoRowWidget(
-                            label: 'Địa chỉ',
+                            label: l10n.patientAddress,
                             value: patient.address,
                           ),
                           InfoRowWidget(
-                            label: 'Thể trạng',
+                            label: l10n.patientVitals,
                             value: vitals,
                           ),
                           if (statusLabel != null)
                             InfoRowWidget(
-                              label: 'Trạng thái điều trị',
+                              label: l10n.patientTreatmentStatus,
                               value: statusLabel!,
                             ),
                         ],
@@ -187,13 +192,13 @@ class _ProfileView extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: Spacing.section),
-                      const SectionLabelWidget('Tiến trình điều trị'),
+                      SectionLabelWidget(l10n.patientProgressSection),
                       const SizedBox(height: Spacing.inline),
                       Padding(
                         padding: const EdgeInsets.only(left: Spacing.xxs),
                         child: entries.isEmpty
-                            ? const AppText(
-                                'Chưa có diễn biến điều trị.',
+                            ? AppText(
+                                l10n.patientNoProgress,
                                 type: AppTextType.caption,
                               )
                             : TimelineWidget(entries: entries),
@@ -208,7 +213,7 @@ class _ProfileView extends StatelessWidget {
                           children: [
                             Expanded(
                               child: AppButton(
-                                label: 'Thêm điều trị',
+                                label: l10n.patientAddTreatment,
                                 onPressed: () =>
                                     context.push(PatientRoutes.progress),
                               ),
@@ -216,7 +221,7 @@ class _ProfileView extends StatelessWidget {
                             const SizedBox(width: Spacing.control),
                             Expanded(
                               child: AppButton(
-                                label: 'Cập nhật trạng thái',
+                                label: l10n.patientUpdateStatus,
                                 type: AppButtonType.outline,
                                 onPressed: () =>
                                     context.push(PatientRoutes.progress),

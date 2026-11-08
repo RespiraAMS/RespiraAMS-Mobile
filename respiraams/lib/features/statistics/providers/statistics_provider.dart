@@ -15,9 +15,9 @@ class StatisticsPeriodController extends _$StatisticsPeriodController {
 
 const _thirtyDays = StatisticsView(
   kpis: [
-    KpiStat(label: 'Chẩn đoán', value: 128, deltaPercent: 12),
-    KpiStat(label: 'Đã lưu', value: 116, deltaPercent: 9),
-    KpiStat(label: 'Vi sinh', value: 34, deltaPercent: 5),
+    KpiStat(id: KpiId.diagnoses, value: 128, deltaPercent: 12),
+    KpiStat(id: KpiId.saved, value: 116, deltaPercent: 9),
+    KpiStat(id: KpiId.microbiology, value: 34, deltaPercent: 5),
   ],
   bars: [
     WeeklyBar(label: 'T1', value: 14),
@@ -36,9 +36,9 @@ const _thirtyDays = StatisticsView(
 
 const _thisQuarter = StatisticsView(
   kpis: [
-    KpiStat(label: 'Chẩn đoán', value: 384, deltaPercent: 8),
-    KpiStat(label: 'Đã lưu', value: 351, deltaPercent: 6),
-    KpiStat(label: 'Vi sinh', value: 97, deltaPercent: 4),
+    KpiStat(id: KpiId.diagnoses, value: 384, deltaPercent: 8),
+    KpiStat(id: KpiId.saved, value: 351, deltaPercent: 6),
+    KpiStat(id: KpiId.microbiology, value: 97, deltaPercent: 4),
   ],
   bars: [
     WeeklyBar(label: 'T1', value: 58),
@@ -57,9 +57,9 @@ const _thisQuarter = StatisticsView(
 
 const _thisYear = StatisticsView(
   kpis: [
-    KpiStat(label: 'Chẩn đoán', value: 1523, deltaPercent: 15),
-    KpiStat(label: 'Đã lưu', value: 1387, deltaPercent: 11),
-    KpiStat(label: 'Vi sinh', value: 402, deltaPercent: 7),
+    KpiStat(id: KpiId.diagnoses, value: 1523, deltaPercent: 15),
+    KpiStat(id: KpiId.saved, value: 1387, deltaPercent: 11),
+    KpiStat(id: KpiId.microbiology, value: 402, deltaPercent: 7),
   ],
   bars: [
     WeeklyBar(label: 'T1', value: 212),

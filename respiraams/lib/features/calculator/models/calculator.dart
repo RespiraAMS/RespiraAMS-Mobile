@@ -3,18 +3,18 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'calculator.freezed.dart';
 part 'calculator.g.dart';
 
-/// Clinical calculators offered on the 'Máy tính' tab.
+/// Clinical calculators offered on the 'Máy tính' tab. Descriptions are
+/// provided by `l10n_labels.dart`.
 enum CalculatorId {
-  curb65('CURB-65', 'Đánh giá mức độ nặng viêm phổi'),
-  egfr('eGFR', 'Ước tính chức năng thận'),
-  crcl('CrCl', 'Độ thanh thải creatinin'),
-  bmi('BMI', 'Chỉ số khối cơ thể'),
-  qsofa('qSOFA', 'Đánh giá nhanh nguy cơ nhiễm khuẩn');
+  curb65('CURB-65'),
+  egfr('eGFR'),
+  crcl('CrCl'),
+  bmi('BMI'),
+  qsofa('qSOFA');
 
-  const CalculatorId(this.title, this.description);
+  const CalculatorId(this.title);
 
   final String title;
-  final String description;
 }
 
 /// Raw CURB-65 inputs of the calculator. Empty fields count as unmet

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../design_system/design_system.dart';
+import '../../../../l10n/l10n.dart';
 import '../routes.dart';
 import '../widgets/brand_header_widget.dart';
 
@@ -58,7 +59,7 @@ class _SplashScreenState extends State<SplashScreen> {
                       ),
                       const SizedBox(height: Spacing.inline),
                       AppText(
-                        'Clinical workspace for respiratory care',
+                        context.l10n.splashSubtitle,
                         type: AppTextType.caption,
                         textAlign: TextAlign.center,
                       ),

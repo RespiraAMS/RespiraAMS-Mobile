@@ -27,7 +27,7 @@ final diagnosisFormProvider =
 // ignore: unused_element
 typedef DiagnosisFormRef = FutureProviderRef<List<ClinicalVariableDto>>;
 String _$diagnosisFlowControllerHash() =>
-    r'3b41c2c2272f9f6b00e782bfb228bf6da66572bf';
+    r'eec5d956353a0fcde81330a3323a907344dc4008';
 
 /// Orchestrates the API-backed empirical diagnosis flow.
 ///

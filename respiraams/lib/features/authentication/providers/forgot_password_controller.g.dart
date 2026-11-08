@@ -7,7 +7,7 @@ part of 'forgot_password_controller.dart';
 // **************************************************************************
 
 String _$forgotPasswordControllerHash() =>
-    r'169f799e81dacb668e34a3c8308e3f8bbf97fcce';
+    r'787f9acb68a125b94373e7a4ffdda2a1397ed7ad';
 
 /// Holds the forgot-password form state and inline email validation.
 ///

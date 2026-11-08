@@ -27,7 +27,7 @@ final visiblePatientsProvider =
 // ignore: unused_element
 typedef VisiblePatientsRef = AutoDisposeProviderRef<List<PatientSummary>>;
 String _$patientListControllerHash() =>
-    r'3efb63bbbc54312306036479e2cedb04ef51d921';
+    r'a690740eecab70d9c90e3bb24c98b3f518bb532e';
 
 /// See also [PatientListController].
 @ProviderFor(PatientListController)

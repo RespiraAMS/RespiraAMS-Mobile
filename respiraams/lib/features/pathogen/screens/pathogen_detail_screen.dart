@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../../../../design_system/design_system.dart';
+import '../../../../l10n/l10n.dart';
 import '../models/pathogen.dart';
 
 class PathogenDetailScreen extends StatefulWidget {
@@ -18,6 +19,7 @@ class _PathogenDetailScreenState extends State<PathogenDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final c = context.respiraColors;
+    final l10n = context.l10n;
 
     return Scaffold(
       backgroundColor: c.background,
@@ -28,7 +30,7 @@ class _PathogenDetailScreenState extends State<PathogenDetailScreen> {
               padding: const EdgeInsets.symmetric(horizontal: Spacing.group, vertical: 8),
               child: AppAppBar(
                 title: widget.pathogen.name,
-                subtitle: 'Tác nhân gây bệnh',
+                subtitle: l10n.pathogenTitle,
                 onBack: () => Navigator.pop(context),
               ),
             ),
@@ -58,7 +60,7 @@ class _PathogenDetailScreenState extends State<PathogenDetailScreen> {
                             children: [
                               AppText(widget.pathogen.name, type: AppTextType.h3, fontWeight: FontWeight.w700),
                               const SizedBox(height: 4),
-                              AppText('Tác nhân gây bệnh', type: AppTextType.caption),
+                              AppText(l10n.pathogenTitle, type: AppTextType.caption),
                               if (widget.pathogen.isAtypical) ...[
                                     const SizedBox(width: 12),
                                     Container(
@@ -67,7 +69,7 @@ class _PathogenDetailScreenState extends State<PathogenDetailScreen> {
                                         color: c.warningSoft,
                                         borderRadius: AppRadius.full,
                                       ),
-                                      child: AppText('Không điển hình', type: AppTextType.label, color: c.warning),
+                                      child: AppText(l10n.pathogenAtypical, type: AppTextType.label, color: c.warning),
                                     ),
                                   ]
                             ],
@@ -78,7 +80,7 @@ class _PathogenDetailScreenState extends State<PathogenDetailScreen> {
                   ),
                   const SizedBox(height: Spacing.section),
 
-                  AppText('Mô tả', type: AppTextType.button, fontWeight: FontWeight.w700),
+                  AppText(l10n.pathogenDescription, type: AppTextType.button, fontWeight: FontWeight.w700),
                   const SizedBox(height: Spacing.control),
                   AppText(
                     widget.pathogen.description,
