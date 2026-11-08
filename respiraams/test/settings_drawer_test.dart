@@ -11,6 +11,7 @@ import 'package:respiraams/features/patient/routes.dart';
 import 'package:respiraams/features/settings/providers/app_settings_provider.dart';
 import 'package:respiraams/features/settings/settings_menu_button.dart';
 import 'package:respiraams/features/settings/settings_sheet.dart';
+import 'package:respiraams/l10n/l10n.dart';
 
 import 'helpers/pump_test_app.dart';
 
@@ -71,6 +72,9 @@ void main() {
         overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
         child: MaterialApp(
           theme: lightThemeData,
+          locale: const Locale('vi'),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
           home: const Scaffold(
             body: Row(
               crossAxisAlignment: CrossAxisAlignment.stretch,

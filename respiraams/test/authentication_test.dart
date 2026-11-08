@@ -24,7 +24,7 @@ void main() {
 
     expect(find.text('RespiraAMS'), findsWidgets);
     expect(
-      find.text('Clinical workspace for respiratory care'),
+      find.text('Không gian làm việc lâm sàng cho hô hấp'),
       findsOneWidget,
     );
 
@@ -57,7 +57,7 @@ void main() {
     await _settleNavigation(tester);
 
     // Post-login landing page.
-    expect(find.text('MOBILE CLINICAL WORKSPACE'), findsOneWidget);
+    expect(find.text('KHÔNG GIAN LÀM VIỆC LÂM SÀNG'), findsOneWidget);
     expect(find.text('Bắt đầu'), findsOneWidget);
 
     // Enter the clinical workspace.

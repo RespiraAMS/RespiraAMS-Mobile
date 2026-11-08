@@ -17,11 +17,12 @@ Future<void> pumpTestApp(
   String initialLocation = '/splash',
   Map<String, MockedResponse> overrides = const {},
   List<Override> providerOverrides = const [],
+  Map<String, Object> initialPrefs = const {},
 }) async {
   // Widget tests never hit the network; google_fonts otherwise tries to
   // download Inter at first theme build and throws after the test ends.
   GoogleFonts.config.allowRuntimeFetching = false;
-  SharedPreferences.setMockInitialValues({});
+  SharedPreferences.setMockInitialValues(initialPrefs);
   final prefs = await SharedPreferences.getInstance();
 
   final dio = Dio(BaseOptions(baseUrl: 'http://localhost:5016'))
