@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'core/localization/language_provider.dart';
 import 'core/network/api_client.dart';
 import 'core/router/app_router.dart';
 import 'core/theme/theme_mode_provider.dart';
 import 'design_system/design_system.dart';
 import 'features/settings/providers/app_settings_provider.dart';
+import 'l10n/l10n.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,6 +35,7 @@ class RespiraMobileApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeModeControllerProvider);
     final textScale = ref.watch(appTextScaleControllerProvider);
+    final language = ref.watch(languageControllerProvider);
 
     return MaterialApp.router(
       title: 'RespiraAMS',
@@ -39,6 +43,14 @@ class RespiraMobileApp extends ConsumerWidget {
       theme: lightThemeData,
       darkTheme: darkThemeData,
       themeMode: themeMode,
+      locale: language.locale,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: AppLocalizations.supportedLocales,
       builder: (context, child) {
         // Multiply the OS accessibility scale by the in-app "Cỡ chữ" preset.
         final systemFactor = MediaQuery.textScalerOf(context).scale(16) / 16;
