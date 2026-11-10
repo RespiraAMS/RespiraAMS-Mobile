@@ -7,9 +7,11 @@ part of 'diagnosis_controller.dart';
 // **************************************************************************
 
 String _$diagnosisControllerHash() =>
-    r'330c2b8d3608483afdc65afe65e8c3f01cfd2d69';
+    r'a7e403af4e1a4a3b36937dd425412aa2d3070c68';
 
-/// Holds the dynamic diagnosis-wizard input keyed by clinical-variable id.
+/// Holds the dynamic diagnosis-wizard input keyed by clinical-variable id,
+/// plus the optional contract fields (`specialMedicalHistory`,
+/// `otherInfections`, `microbialSamples`).
 ///
 /// Copied from [DiagnosisController].
 @ProviderFor(DiagnosisController)

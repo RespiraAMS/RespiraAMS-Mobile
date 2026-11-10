@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../core/utils/context_extensions.dart';
 import '../../../../design_system/design_system.dart';
@@ -10,6 +11,7 @@ import '../../patient/providers/current_patient_provider.dart';
 import '../../patient/routes.dart';
 import '../../patient/widgets/section_label_widget.dart';
 import '../models/clinical_dtos.dart';
+import '../models/diagnosis_labels.dart';
 import '../providers/diagnosis_controller.dart';
 import '../providers/diagnosis_flow_provider.dart';
 import '../routes.dart';
@@ -17,7 +19,7 @@ import '../widgets/selection_row_widget.dart';
 
 /// Route `/diagnosis` — dynamic empirical-diagnosis wizard. Its steps and
 /// inputs are derived from the variable catalog returned by
-/// `GET /diagnose/empirical`.
+/// `GET /diagnose`.
 class DiagnosisWizardScreen extends ConsumerStatefulWidget {
   const DiagnosisWizardScreen({super.key});
 
@@ -45,14 +47,14 @@ class _DiagnosisWizardScreenState extends ConsumerState<DiagnosisWizardScreen> {
               onBack: () => context.goBackOr(PatientRoutes.progress),
               onRetry: () => ref.invalidate(diagnosisFormProvider),
             ),
-            data: (variables) {
+            data: (form) {
               if (!_prefilled) {
                 _prefilled = true;
                 WidgetsBinding.instance.addPostFrameCallback(
-                  (_) => _prefill(variables),
+                  (_) => _prefill(form.variables),
                 );
               }
-              final steps = _buildSteps(variables, l10n);
+              final steps = _buildSteps(form, l10n);
               if (steps.isEmpty) {
                 return Center(child: Text(l10n.diagnosisEmptyForm));
               }
@@ -81,6 +83,16 @@ class _DiagnosisWizardScreenState extends ConsumerState<DiagnosisWizardScreen> {
                             _VariableField(variable: variable),
                             const SizedBox(height: Spacing.group),
                           ],
+                          if (step.kind == _StepKind.allergy)
+                            _AllergySection(antibiotics: step.antibiotics),
+                          if (step.kind == _StepKind.specialHistory)
+                            const _SpecialHistorySection(),
+                          if (step.kind == _StepKind.otherInfections)
+                            const _OtherInfectionsSection(),
+                          if (step.kind == _StepKind.microbialSamples)
+                            _MicrobialSamplesSection(
+                              pathogens: step.pathogens,
+                            ),
                         ],
                       ),
                     ),
@@ -108,8 +120,8 @@ class _DiagnosisWizardScreenState extends ConsumerState<DiagnosisWizardScreen> {
                                 ref.watch(diagnosisFlowControllerProvider)
                                     .diagnosing,
                             onPressed: isLast
-                                ? () => _diagnose(context)
-                                : () => setState(() => _step += 1),
+                                ? () => _diagnose(context, step)
+                                : () => _continue(context, step),
                           ),
                         ),
                       ],
@@ -130,6 +142,15 @@ class _DiagnosisWizardScreenState extends ConsumerState<DiagnosisWizardScreen> {
     } else {
       context.goBackOr(PatientRoutes.progress);
     }
+  }
+
+  void _continue(BuildContext context, _Step step) {
+    final error = _validateStep(step, context.l10n);
+    if (error != null) {
+      showAppToast(context, error);
+      return;
+    }
+    setState(() => _step += 1);
   }
 
   void _prefill(List<ClinicalVariableDto> variables) {
@@ -160,7 +181,13 @@ class _DiagnosisWizardScreenState extends ConsumerState<DiagnosisWizardScreen> {
     }
   }
 
-  Future<void> _diagnose(BuildContext context) async {
+  Future<void> _diagnose(BuildContext context, _Step step) async {
+    final error = _validateStep(step, context.l10n);
+    if (error != null) {
+      showAppToast(context, error);
+      return;
+    }
+
     await ref
         .read(diagnosisFlowControllerProvider.notifier)
         .runEmpiricalDiagnosis();
@@ -173,10 +200,45 @@ class _DiagnosisWizardScreenState extends ConsumerState<DiagnosisWizardScreen> {
     }
   }
 
+  String? _validateStep(_Step step, AppLocalizations l10n) {
+    final form = ref.read(diagnosisControllerProvider);
+
+    if (step.kind == _StepKind.allergy) {
+      if (!form.hasAllergySelection) return l10n.diagnosisAllergyRequired;
+      if (form.hasAntibioticAllergy &&
+          form.allergicAntibioticIds.isEmpty) {
+        return l10n.diagnosisAllergyYesRequired;
+      }
+      if (form.needsOtherAllergy && form.otherAllergy.trim().isEmpty) {
+        return l10n.diagnosisAllergyOtherRequired;
+      }
+    }
+
+    if (step.kind == _StepKind.microbialSamples &&
+        form.microbialSamples.any((s) => s.pathogenId.trim().isEmpty)) {
+      return l10n.diagnosisMicrobialPathogenRequired;
+    }
+
+    if (step.kind == _StepKind.variables) {
+      for (final variable in step.variables) {
+        if (!variable.isRequired || variable.valueType == 'Boolean') continue;
+        final raw = form.valueOf(variable.id)?.trim() ?? '';
+        if (raw.isEmpty) return l10n.diagnosisFlowMissing(variable.name);
+        if (variable.valueType == 'Numeric' && double.tryParse(raw) == null) {
+          return l10n.diagnosisInvalidNumber(variable.name);
+        }
+      }
+    }
+
+    return null;
+  }
+
   List<_Step> _buildSteps(
-    List<ClinicalVariableDto> variables,
+    DiagnosisFormDto form,
     AppLocalizations l10n,
   ) {
+    final variables = form.variables;
+
     List<ClinicalVariableDto> where(bool Function(ClinicalVariableDto) test) =>
         variables.where(test).toList();
 
@@ -203,19 +265,49 @@ class _DiagnosisWizardScreenState extends ConsumerState<DiagnosisWizardScreen> {
       );
     }
 
+    final personal = where((v) => v.category == 'PersonalInformation');
+    final medicalHistory = where((v) => v.category == 'MedicalHistory');
+    final otherVariables = where(
+      (v) =>
+          v.category != 'PersonalInformation' &&
+          v.category != 'MedicalHistory' &&
+          v.valueType != 'Numeric',
+    );
+
+    // Safety net: never silently drop a variable the backend expects.
+    final assignedIds = {
+      ...personal.map((v) => v.id),
+      ...medicalHistory.map((v) => v.id),
+      ...clinicalNumeric.map((v) => v.id),
+      ...paraclinicalNumeric.map((v) => v.id),
+      ...otherVariables.map((v) => v.id),
+    };
+    final leftovers =
+        variables.where((v) => !assignedIds.contains(v.id)).toList();
+
     final steps = <_Step>[
-      _Step(
-        l10n.diagnosisPersonalInfo,
-        where((v) => v.category == 'PersonalInformation'),
-      ),
-      _Step(l10n.diagnosisVitalSigns, clinicalNumeric),
-      _Step(l10n.diagnosisLabResults, paraclinicalNumeric),
-      _Step(
-        l10n.diagnosisComorbidities,
-        where((v) => v.valueType != 'Numeric' && v.category != 'PersonalInformation'),
-      ),
+      _Step.variables(l10n.diagnosisPersonalInfo, personal),
+      _Step.variables(l10n.diagnosisVitalSigns, clinicalNumeric),
+      _Step.variables(l10n.diagnosisLabResults, paraclinicalNumeric),
+      _Step.variables(l10n.diagnosisMedicalHistory, medicalHistory),
+      _Step.variables(l10n.diagnosisComorbidities, [
+        ...otherVariables,
+        ...leftovers,
+      ]),
+      _Step.specialHistory(l10n.diagnosisSpecialHistory),
+      _Step.otherInfections(l10n.diagnosisOtherInfections),
+      if (form.pathogens.isNotEmpty)
+        _Step.microbialSamples(
+          l10n.diagnosisMicrobialSamples,
+          form.pathogens,
+        ),
+      _Step.allergy(l10n.diagnosisAllergy, form.antibiotics),
     ];
-    return steps.where((s) => s.variables.isNotEmpty).toList();
+    return steps
+        .where(
+          (s) => s.kind != _StepKind.variables || s.variables.isNotEmpty,
+        )
+        .toList();
   }
 }
 
@@ -225,11 +317,498 @@ class PatientProgressRoute {
   static const value = '/patient/progress';
 }
 
+enum _StepKind {
+  variables,
+  allergy,
+  specialHistory,
+  otherInfections,
+  microbialSamples,
+}
+
 class _Step {
-  const _Step(this.title, this.variables);
+  const _Step.variables(this.title, this.variables)
+      : kind = _StepKind.variables,
+        antibiotics = const [],
+        pathogens = const [];
+
+  const _Step.allergy(this.title, this.antibiotics)
+      : kind = _StepKind.allergy,
+        variables = const [],
+        pathogens = const [];
+
+  const _Step.specialHistory(this.title)
+      : kind = _StepKind.specialHistory,
+        variables = const [],
+        antibiotics = const [],
+        pathogens = const [];
+
+  const _Step.otherInfections(this.title)
+      : kind = _StepKind.otherInfections,
+        variables = const [],
+        antibiotics = const [],
+        pathogens = const [];
+
+  const _Step.microbialSamples(this.title, this.pathogens)
+      : kind = _StepKind.microbialSamples,
+        variables = const [],
+        antibiotics = const [];
 
   final String title;
+  final _StepKind kind;
   final List<ClinicalVariableDto> variables;
+  final List<AntibioticFormDto> antibiotics;
+  final List<NamedRefDto> pathogens;
+}
+
+/// Allergy step: `AllergyType` selector plus the antibiotic multi-select /
+/// free-text fallback, matching `POST /diagnose`'s `AllergyQuery`.
+class _AllergySection extends ConsumerWidget {
+  const _AllergySection({required this.antibiotics});
+
+  final List<AntibioticFormDto> antibiotics;
+
+  static const _types = [
+    'No',
+    'Yes',
+    'NonRegisteredAntibiotic',
+    'Unknown',
+  ];
+
+  String _typeLabel(String type, AppLocalizations l10n) => switch (type) {
+        'No' => l10n.diagnosisAllergyNo,
+        'Yes' => l10n.diagnosisAllergyYes,
+        'NonRegisteredAntibiotic' => l10n.diagnosisAllergyNonRegistered,
+        _ => l10n.diagnosisAllergyUnknown,
+      };
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.l10n;
+    final form = ref.watch(diagnosisControllerProvider);
+    final controller = ref.read(diagnosisControllerProvider.notifier);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SectionLabelWidget(l10n.diagnosisAllergyType),
+        const SizedBox(height: Spacing.inline),
+        Wrap(
+          spacing: Spacing.inline,
+          runSpacing: Spacing.inline,
+          children: [
+            for (final type in _types)
+              _ChoiceChip(
+                label: _typeLabel(type, l10n),
+                selected: form.allergyType == type,
+                onTap: () => controller.setAllergyType(type),
+              ),
+          ],
+        ),
+        if (form.hasAntibioticAllergy) ...[
+          const SizedBox(height: Spacing.section),
+          SectionLabelWidget(l10n.diagnosisAllergySelect),
+          const SizedBox(height: Spacing.inline),
+          if (antibiotics.isEmpty)
+            Text(
+              l10n.diagnosisNoData,
+              style: TypographyTokens.caption(context),
+            )
+          else
+            for (final antibiotic in antibiotics)
+              Padding(
+                padding: const EdgeInsets.only(bottom: Spacing.inline),
+                child: SelectionRowWidget(
+                  title: antibiotic.name,
+                  selected:
+                      form.allergicAntibioticIds.contains(antibiotic.id),
+                  onTap: () => controller.toggleAllergy(antibiotic.id),
+                ),
+              ),
+        ],
+        if (form.needsOtherAllergy) ...[
+          const SizedBox(height: Spacing.section),
+          AppTextField(
+            label: l10n.diagnosisAllergyOther,
+            initialValue: form.otherAllergy,
+            onChanged: controller.setOtherAllergy,
+          ),
+        ],
+      ],
+    );
+  }
+}
+
+class _SpecialHistorySection extends ConsumerStatefulWidget {
+  const _SpecialHistorySection();
+
+  @override
+  ConsumerState<_SpecialHistorySection> createState() =>
+      _SpecialHistorySectionState();
+}
+
+class _SpecialHistorySectionState
+    extends ConsumerState<_SpecialHistorySection> {
+  final _controller = TextEditingController();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final form = ref.watch(diagnosisControllerProvider);
+    final controller = ref.read(diagnosisControllerProvider.notifier);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        AppTextField(
+          label: l10n.diagnosisSpecialHistory,
+          controller: _controller,
+          hintText: l10n.diagnosisSpecialHistoryHint,
+        ),
+        const SizedBox(height: Spacing.control),
+        AppButton(
+          label: l10n.diagnosisAdd,
+          type: AppButtonType.outline,
+          size: AppButtonSize.medium,
+          onPressed: () {
+            controller.addSpecialHistory(_controller.text);
+            _controller.clear();
+          },
+        ),
+        if (form.specialMedicalHistory.isNotEmpty) ...[
+          const SizedBox(height: Spacing.section),
+          AppCard.divided([
+            for (var i = 0; i < form.specialMedicalHistory.length; i++)
+              _RemovableRow(
+                title: form.specialMedicalHistory[i],
+                onRemove: () => controller.removeSpecialHistory(i),
+              ),
+          ]),
+        ],
+      ],
+    );
+  }
+}
+
+class _RemovableRow extends StatelessWidget {
+  const _RemovableRow({required this.title, required this.onRemove});
+
+  final String title;
+  final VoidCallback onRemove;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.respiraColors;
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: Spacing.control,
+        vertical: Spacing.inline,
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              title,
+              style: TypographyTokens.body(context),
+            ),
+          ),
+          IconButton(
+            onPressed: onRemove,
+            icon: Icon(LucideIcons.x, size: ControlSize.iconMd),
+            color: c.textSecondary,
+            tooltip: context.l10n.diagnosisRemove,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _OtherInfectionsSection extends ConsumerWidget {
+  const _OtherInfectionsSection();
+
+  Future<void> _openPicker(BuildContext context) {
+    return showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: context.respiraColors.surface,
+      builder: (_) => const _InfectionPickerSheet(),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.l10n;
+    final form = ref.watch(diagnosisControllerProvider);
+    final controller = ref.read(diagnosisControllerProvider.notifier);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        if (form.otherInfections.isEmpty)
+          AppText(l10n.diagnosisNoData, type: AppTextType.caption)
+        else
+          Wrap(
+            spacing: Spacing.inline,
+            runSpacing: Spacing.inline,
+            children: [
+              for (final type in form.otherInfections)
+                _ChoiceChip(
+                  label: infectionTypeLabel(type, l10n),
+                  selected: true,
+                  onTap: () => controller.toggleOtherInfection(type),
+                ),
+            ],
+          ),
+        const SizedBox(height: Spacing.group),
+        AppButton(
+          label: l10n.diagnosisOtherInfectionsSelect,
+          type: AppButtonType.outline,
+          size: AppButtonSize.medium,
+          onPressed: () => _openPicker(context),
+        ),
+      ],
+    );
+  }
+}
+
+class _InfectionPickerSheet extends ConsumerWidget {
+  const _InfectionPickerSheet();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.l10n;
+    final form = ref.watch(diagnosisControllerProvider);
+    final controller = ref.read(diagnosisControllerProvider.notifier);
+
+    return SafeArea(
+      child: SizedBox(
+        height: MediaQuery.sizeOf(context).height * 0.82,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(Spacing.group),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      l10n.diagnosisOtherInfectionsSelect,
+                      style: TypographyTokens.h2(context),
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    icon: const Icon(LucideIcons.x),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: ListView.separated(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: Spacing.group,
+                  vertical: Spacing.inline,
+                ),
+                itemCount: infectionTypes.length,
+                separatorBuilder: (_, _) =>
+                    const SizedBox(height: Spacing.inline),
+                itemBuilder: (context, index) {
+                  final type = infectionTypes[index];
+                  return SelectionRowWidget(
+                    title: infectionTypeLabel(type, l10n),
+                    selected: form.otherInfections.contains(type),
+                    onTap: () => controller.toggleOtherInfection(type),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _MicrobialSamplesSection extends ConsumerWidget {
+  const _MicrobialSamplesSection({required this.pathogens});
+
+  final List<NamedRefDto> pathogens;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.l10n;
+    final form = ref.watch(diagnosisControllerProvider);
+    final controller = ref.read(diagnosisControllerProvider.notifier);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        if (form.microbialSamples.isEmpty)
+          AppText(l10n.diagnosisNoData, type: AppTextType.caption),
+        for (var i = 0; i < form.microbialSamples.length; i++) ...[
+          _MicrobialSampleCard(
+            index: i,
+            sample: form.microbialSamples[i],
+            pathogens: pathogens,
+          ),
+          const SizedBox(height: Spacing.group),
+        ],
+        AppButton(
+          label: l10n.diagnosisMicrobialAdd,
+          type: AppButtonType.outline,
+          size: AppButtonSize.medium,
+          onPressed: controller.addMicrobialSample,
+        ),
+      ],
+    );
+  }
+}
+
+class _MicrobialSampleCard extends ConsumerWidget {
+  const _MicrobialSampleCard({
+    required this.index,
+    required this.sample,
+    required this.pathogens,
+  });
+
+  final int index;
+  final MicrobialSampleInputDto sample;
+  final List<NamedRefDto> pathogens;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.l10n;
+    final controller = ref.read(diagnosisControllerProvider.notifier);
+
+    return AppCard(
+      padding: const EdgeInsets.all(Spacing.control),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  '${l10n.diagnosisMicrobialSamples} ${index + 1}',
+                  style: TypographyTokens.label(context),
+                ),
+              ),
+              IconButton(
+                onPressed: () => controller.removeMicrobialSample(index),
+                icon: const Icon(LucideIcons.x),
+                tooltip: l10n.diagnosisRemove,
+              ),
+            ],
+          ),
+          const SizedBox(height: Spacing.inline),
+          _DropdownField<String>(
+            label: l10n.diagnosisMicrobialSampleType,
+            value: sample.sampleType,
+            items: [
+              for (final type in microbialSampleTypes)
+                (type, microbialSampleTypeLabel(type, l10n)),
+            ],
+            onChanged: (value) {
+              if (value != null) {
+                controller.updateMicrobialSample(index, sampleType: value);
+              }
+            },
+          ),
+          const SizedBox(height: Spacing.control),
+          _DropdownField<String>(
+            label: l10n.diagnosisMicrobialMicCategory,
+            value: sample.micCategory,
+            items: [
+              for (final category in micCategories)
+                (category, micCategoryLabel(category, l10n)),
+            ],
+            onChanged: (value) {
+              if (value != null) {
+                controller.updateMicrobialSample(index, micCategory: value);
+              }
+            },
+          ),
+          const SizedBox(height: Spacing.control),
+          _DropdownField<String>(
+            label: l10n.diagnosisMicrobialPathogen,
+            value: sample.pathogenId,
+            items: [
+              ('', l10n.diagnosisMicrobialPathogenHint),
+              for (final pathogen in pathogens) (pathogen.id, pathogen.name),
+            ],
+            onChanged: (value) {
+              if (value != null) {
+                controller.updateMicrobialSample(index, pathogenId: value);
+              }
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _DropdownField<T> extends StatelessWidget {
+  const _DropdownField({
+    required this.label,
+    required this.value,
+    required this.items,
+    required this.onChanged,
+  });
+
+  final String label;
+  final T value;
+  final List<(T, String)> items;
+  final ValueChanged<T?> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.respiraColors;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: TypographyTokens.label(context),
+        ),
+        const SizedBox(height: Spacing.inline),
+        Container(
+          height: ControlSize.inputDefault,
+          padding: const EdgeInsets.symmetric(horizontal: Spacing.control),
+          decoration: BoxDecoration(
+            color: c.surface,
+            borderRadius: AppRadius.md,
+            border: Border.all(color: c.borderSubtle),
+          ),
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton<T>(
+              value: value,
+              isExpanded: true,
+              icon: Icon(LucideIcons.chevronDown, color: c.iconDefault),
+              items: [
+                for (final (itemValue, itemLabel) in items)
+                  DropdownMenuItem<T>(
+                    value: itemValue,
+                    child: Text(
+                      itemLabel,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+              ],
+              onChanged: onChanged,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 }
 
 class _VariableField extends ConsumerWidget {

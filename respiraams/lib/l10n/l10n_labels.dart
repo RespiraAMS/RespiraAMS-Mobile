@@ -66,6 +66,7 @@ extension DiagnosisTabL10n on DiagnosisTab {
         DiagnosisTab.result => l10n.diagnosisTabResult,
         DiagnosisTab.suspected => l10n.diagnosisTabSuspected,
         DiagnosisTab.evidences => l10n.diagnosisTabEvidences,
+        DiagnosisTab.protocols => l10n.diagnosisTabProtocols,
       };
 }
 
@@ -99,6 +100,7 @@ extension ValueTypeL10n on ValueType {
 extension VariableCategoryL10n on VariableCategory {
   String label(AppLocalizations l10n) => switch (this) {
         VariableCategory.personalInformation => l10n.variableCategoryPersonal,
+        VariableCategory.medicalHistory => l10n.variableCategoryMedicalHistory,
         VariableCategory.paraclinical => l10n.variableCategoryParaclinical,
         VariableCategory.clinical => l10n.variableCategoryClinical,
         VariableCategory.unknown => l10n.variableCategoryOther,
@@ -108,6 +110,7 @@ extension VariableCategoryL10n on VariableCategory {
   String shortLabel(AppLocalizations l10n) => switch (this) {
         VariableCategory.personalInformation =>
           l10n.variableCategoryPersonalShort,
+        VariableCategory.medicalHistory => l10n.variableCategoryMedicalHistory,
         VariableCategory.paraclinical => l10n.variableCategoryParaclinical,
         VariableCategory.clinical => l10n.variableCategoryClinical,
         VariableCategory.unknown => l10n.variableCategoryOther,
@@ -205,6 +208,32 @@ extension LocalizedApiErrorX on String {
       return l10n.diagnosisFlowMissing(
         substring(LocalApiError.missingRequiredPrefix.length),
       );
+    }
+    if (startsWith(LocalApiError.invalidNumberPrefix)) {
+      return l10n.diagnosisInvalidNumber(
+        substring(LocalApiError.invalidNumberPrefix.length),
+      );
+    }
+    if (this == LocalApiError.allergyRequired) {
+      return l10n.diagnosisAllergyRequired;
+    }
+    if (this == LocalApiError.allergyYesRequired) {
+      return l10n.diagnosisAllergyYesRequired;
+    }
+    if (this == LocalApiError.allergyOtherRequired) {
+      return l10n.diagnosisAllergyOtherRequired;
+    }
+    if (this == LocalApiError.microbialPathogenRequired) {
+      return l10n.diagnosisMicrobialPathogenRequired;
+    }
+    if (this == LocalApiError.noResultToSave) {
+      return l10n.diagnosisConfirmMissingResult;
+    }
+    if (this == LocalApiError.noProtocolToSave) {
+      return l10n.diagnosisNoProtocolToSave;
+    }
+    if (this == LocalApiError.selectMedicineRequired) {
+      return l10n.diagnosisSelectMedicineRequired;
     }
     return this;
   }

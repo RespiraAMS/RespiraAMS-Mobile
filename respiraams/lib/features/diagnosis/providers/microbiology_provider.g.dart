@@ -7,7 +7,7 @@ part of 'microbiology_provider.dart';
 // **************************************************************************
 
 String _$microbiologyResultHash() =>
-    r'3fede4096e6933d4ba5d1829de9350fbf2cb9e33';
+    r'e4dd5987014f73c3a40b81b49f30f2a870e5f158';
 
 /// Demo microbiology findings — swap for a repository call once the
 /// networking layer (dio + retrofit) exists.
