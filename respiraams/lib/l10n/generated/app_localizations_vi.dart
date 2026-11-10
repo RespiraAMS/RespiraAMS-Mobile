@@ -27,6 +27,12 @@ class AppLocalizationsVi extends AppLocalizations {
   String get commonNoData => 'Không có dữ liệu';
 
   @override
+  String get commonYes => 'Có';
+
+  @override
+  String get commonNo => 'Không';
+
+  @override
   String get commonDescription => 'Mô tả';
 
   @override
@@ -527,6 +533,24 @@ class AppLocalizationsVi extends AppLocalizations {
   String get patientSavedTreatment => 'Điều trị đã lưu';
 
   @override
+  String get treatmentPlanInProgress => 'Đang thực hiện';
+
+  @override
+  String get treatmentPlanClosed => 'Đã kết thúc';
+
+  @override
+  String get adherenceAdhere => 'Tuân thủ phác đồ';
+
+  @override
+  String get adherenceNotAdhere => 'Không tuân thủ';
+
+  @override
+  String get adherenceNotAdhereValid => 'Không tuân thủ (chấp nhận)';
+
+  @override
+  String get adherenceNotAdhereInvalid => 'Không tuân thủ (không hợp lệ)';
+
+  @override
   String get patientAddTitle => 'Thêm bệnh nhân';
 
   @override
@@ -690,6 +714,31 @@ class AppLocalizationsVi extends AppLocalizations {
   String get diagnosisComorbidities => 'Bệnh nền & nguy cơ';
 
   @override
+  String get diagnosisAllergy => 'Dị ứng';
+
+  @override
+  String get diagnosisAllergyType => 'Tình trạng dị ứng kháng sinh';
+
+  @override
+  String get diagnosisAllergyNo => 'Không dị ứng';
+
+  @override
+  String get diagnosisAllergyYes => 'Có dị ứng kháng sinh';
+
+  @override
+  String get diagnosisAllergyNonRegistered =>
+      'Dị ứng kháng sinh ngoài danh mục';
+
+  @override
+  String get diagnosisAllergyUnknown => 'Không rõ / dị ứng khác';
+
+  @override
+  String get diagnosisAllergySelect => 'Chọn kháng sinh dị ứng';
+
+  @override
+  String get diagnosisAllergyOther => 'Mô tả dị ứng khác';
+
+  @override
   String get diagnosisEmptyForm => 'Không có dữ liệu biểu mẫu.';
 
   @override
@@ -829,6 +878,306 @@ class AppLocalizationsVi extends AppLocalizations {
   String diagnosisFlowMissing(String fields) {
     return 'Thiếu thông tin bắt buộc: $fields.';
   }
+
+  @override
+  String get diagnosisMedicalHistory => 'Tiền sử bệnh';
+
+  @override
+  String get diagnosisSpecialHistory => 'Bệnh sử đặc biệt';
+
+  @override
+  String get diagnosisSpecialHistoryHint =>
+      'Nhập bệnh sử mà hệ thống chưa bao phủ';
+
+  @override
+  String get diagnosisAdd => 'Thêm';
+
+  @override
+  String get diagnosisRemove => 'Xóa';
+
+  @override
+  String get diagnosisOtherInfections => 'Nhiễm trùng khác';
+
+  @override
+  String get diagnosisOtherInfectionsSelect => 'Chọn nhiễm trùng kèm theo';
+
+  @override
+  String get diagnosisMicrobialSamples => 'Mẫu xét nghiệm vi sinh';
+
+  @override
+  String get diagnosisMicrobialAdd => 'Thêm mẫu';
+
+  @override
+  String get diagnosisMicrobialSampleType => 'Loại mẫu';
+
+  @override
+  String get diagnosisMicrobialMicCategory => 'Mức MIC';
+
+  @override
+  String get diagnosisMicrobialPathogen => 'Tác nhân';
+
+  @override
+  String get diagnosisMicrobialPathogenHint => 'Chọn tác nhân';
+
+  @override
+  String get diagnosisMicrobialPathogenRequired =>
+      'Vui lòng chọn tác nhân cho tất cả mẫu vi sinh.';
+
+  @override
+  String get diagnosisAllergyRequired =>
+      'Vui lòng chọn tình trạng dị ứng kháng sinh.';
+
+  @override
+  String get diagnosisAllergyYesRequired =>
+      'Vui lòng chọn ít nhất một kháng sinh dị ứng.';
+
+  @override
+  String get diagnosisAllergyOtherRequired => 'Vui lòng mô tả dị ứng khác.';
+
+  @override
+  String diagnosisInvalidNumber(String name) {
+    return 'Giá trị \"$name\" phải là số.';
+  }
+
+  @override
+  String get diagnosisEgfr => 'eGFR';
+
+  @override
+  String get diagnosisOtherInfectionsTitle => 'Nhiễm trùng khác';
+
+  @override
+  String get diagnosisAllergyTitle => 'Dị ứng kháng sinh';
+
+  @override
+  String get diagnosisAllergyNoValue => 'Không có';
+
+  @override
+  String get diagnosisSectionMetrics => 'Chi tiết điểm';
+
+  @override
+  String diagnosisMetricsMajorMinor(int major, int minor) {
+    return 'Chính $major · Phụ $minor';
+  }
+
+  @override
+  String get diagnosisTabProtocols => 'Phác đồ';
+
+  @override
+  String get diagnosisSectionProtocols => 'Phác đồ điều trị';
+
+  @override
+  String get diagnosisProtocolMedicines => 'Tổ hợp thuốc';
+
+  @override
+  String get diagnosisProtocolPathogens => 'Tác nhân';
+
+  @override
+  String get diagnosisProtocolCriteria => 'Tiêu chí';
+
+  @override
+  String get diagnosisProtocolNoData => 'Không có phác đồ phù hợp.';
+
+  @override
+  String get diagnosisProtocolSelect => 'Chọn tổ hợp thuốc';
+
+  @override
+  String get diagnosisProtocolNoMedicine => 'Không có tổ hợp thuốc.';
+
+  @override
+  String get diagnosisConfirmTreatment => 'Xác nhận điều trị';
+
+  @override
+  String get diagnosisReason => 'Lý do chọn thuốc';
+
+  @override
+  String get diagnosisReasonHint => 'Bắt buộc nếu chọn thuốc ngoài phác đồ';
+
+  @override
+  String get diagnosisWarnCombinationTitle => 'Cảnh báo phối hợp kháng sinh';
+
+  @override
+  String get diagnosisWarnCombinationDesc =>
+      'Tổ hợp thuốc đã chọn cần được kiểm tra trước khi chỉ định.';
+
+  @override
+  String get diagnosisConfirmSuccess => 'Đã lưu kết quả điều trị.';
+
+  @override
+  String get diagnosisConfirmFailed => 'Không thể lưu kết quả điều trị.';
+
+  @override
+  String get diagnosisConfirmMissingResult =>
+      'Không có kết quả chẩn đoán để lưu.';
+
+  @override
+  String get diagnosisSelectMedicineRequired => 'Vui lòng chọn tổ hợp thuốc.';
+
+  @override
+  String get diagnosisNoProtocolToSave => 'Không có phác đồ phù hợp để lưu.';
+
+  @override
+  String diagnosisEvidenceFormula(String formula) {
+    return 'Công thức: $formula';
+  }
+
+  @override
+  String diagnosisEvidenceValue(String value) {
+    return 'Giá trị: $value';
+  }
+
+  @override
+  String diagnosisEvidenceRelated(String variables) {
+    return 'Biến liên quan: $variables';
+  }
+
+  @override
+  String diagnosisEvidenceMissing(String variables) {
+    return 'Thiếu: $variables';
+  }
+
+  @override
+  String get diagnosisMicrobialResultTitle => 'Kết quả vi sinh';
+
+  @override
+  String get diagnosisMicrobialAntibiotics => 'Kháng sinh nhạy cảm';
+
+  @override
+  String get diagnosisDiagnosisId => 'Mã chẩn đoán';
+
+  @override
+  String get infectionSkinSoftTissue => 'Nhiễm khuẩn da / mô mềm';
+
+  @override
+  String get infectionSepticArthritis => 'Viêm khớp nhiễm khuẩn';
+
+  @override
+  String get infectionOsteomyelitis => 'Viêm tủy xương nhiễm khuẩn';
+
+  @override
+  String get infectionBacterialMyositis => 'Viêm cơ / áp xe cơ nhiễm khuẩn';
+
+  @override
+  String get infectionInfectedGoutyTophus => 'Nhiễm khuẩn hạt tophi';
+
+  @override
+  String get infectionPyelonephritis => 'Viêm / áp xe thận - bể thận';
+
+  @override
+  String get infectionAcuteCystitis => 'Viêm bàng quang cấp';
+
+  @override
+  String get infectionAcuteNonGonococcalUrethritis =>
+      'Viêm niệu đạo cấp không do lậu';
+
+  @override
+  String get infectionBacterialVaginourethritis =>
+      'Viêm âm đạo - niệu đạo do vi khuẩn';
+
+  @override
+  String get infectionBacterialEndometritis => 'Viêm tử cung do vi khuẩn';
+
+  @override
+  String get infectionPurulentMeningitis => 'Viêm màng não mủ';
+
+  @override
+  String get infectionBacterialEncephalitis => 'Viêm não do vi khuẩn';
+
+  @override
+  String get infectionPleuralEmpyema => 'Tràn mủ màng phổi';
+
+  @override
+  String get infectionMediastinalAbscess => 'Áp xe trung thất';
+
+  @override
+  String get infectionInfectiveEndocarditis => 'Viêm nội tâm mạc nhiễm khuẩn';
+
+  @override
+  String get infectionBacterialMyocarditis => 'Viêm cơ tim do vi khuẩn';
+
+  @override
+  String get infectionBacterialPericarditis =>
+      'Viêm màng ngoài tim do vi khuẩn';
+
+  @override
+  String get infectionPulmonaryTuberculosis => 'Lao phổi';
+
+  @override
+  String get infectionExtrapulmonaryTuberculosis => 'Lao ngoài phổi';
+
+  @override
+  String get infectionBiliaryTract => 'Nhiễm trùng đường mật';
+
+  @override
+  String get infectionBacterialLiverAbscess => 'Áp xe gan do vi khuẩn';
+
+  @override
+  String get infectionInfectedAcutePancreatitis => 'Viêm tụy cấp nhiễm khuẩn';
+
+  @override
+  String get infectionBacterialPeritonitis => 'Viêm phúc mạc nhiễm khuẩn';
+
+  @override
+  String get infectionBacterialDiarrhea => 'Tiêu chảy do vi khuẩn';
+
+  @override
+  String get infectionHelicobacterPylori => 'Nhiễm Helicobacter pylori';
+
+  @override
+  String get infectionSepsis => 'Nhiễm trùng huyết';
+
+  @override
+  String get infectionOrbitalCellulitis => 'Viêm tổ chức hốc mắt';
+
+  @override
+  String get infectionConjunctivitis => 'Viêm kết mạc mắt';
+
+  @override
+  String get infectionKeratitis => 'Viêm giác mạc mắt';
+
+  @override
+  String get infectionDacryocystitis => 'Viêm túi lệ mắt';
+
+  @override
+  String get infectionMaxillofacialAbscess => 'Áp xe vùng hàm - mặt';
+
+  @override
+  String get infectionOther => 'Khác';
+
+  @override
+  String get sampleSputum => 'Đờm';
+
+  @override
+  String get sampleBronchoalveolarLavageFluid => 'Dịch rửa phế quản / phế nang';
+
+  @override
+  String get samplePleuralFluid => 'Dịch màng phổi';
+
+  @override
+  String get sampleUrine => 'Nước tiểu';
+
+  @override
+  String get sampleBlood => 'Máu';
+
+  @override
+  String get sampleAbdominalFluid => 'Dịch ổ bụng';
+
+  @override
+  String get sampleCerebrospinalFluid => 'Dịch não tủy';
+
+  @override
+  String get sampleWoundExudate => 'Dịch tiết vết thương';
+
+  @override
+  String get sampleOther => 'Khác';
+
+  @override
+  String get micSusceptible => 'Nhạy cảm';
+
+  @override
+  String get micIntermediate => 'Trung gian';
+
+  @override
+  String get micResistant => 'Kháng thuốc';
 
   @override
   String get routeIntravenous => 'Tiêm tĩnh mạch';
@@ -1246,6 +1595,9 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get variableCategoryPersonalShort => 'Cá nhân';
+
+  @override
+  String get variableCategoryMedicalHistory => 'Tiền sử bệnh';
 
   @override
   String get variableCategoryParaclinical => 'Cận lâm sàng';

@@ -14,6 +14,14 @@ abstract final class LocalApiError {
   static const formLoadFailed = 'local:formLoadFailed';
   static const badRequestPrefix = 'local:badRequest:';
   static const missingRequiredPrefix = 'local:missingRequired:';
+  static const invalidNumberPrefix = 'local:invalidNumber:';
+  static const allergyRequired = 'local:allergyRequired';
+  static const allergyYesRequired = 'local:allergyYesRequired';
+  static const allergyOtherRequired = 'local:allergyOtherRequired';
+  static const microbialPathogenRequired = 'local:microbialPathogenRequired';
+  static const noResultToSave = 'local:noResultToSave';
+  static const noProtocolToSave = 'local:noProtocolToSave';
+  static const selectMedicineRequired = 'local:selectMedicineRequired';
 }
 
 /// Domain-specific failure surfaced from failed `Result` envelopes;
@@ -29,8 +37,7 @@ class ApiException implements Exception {
 }
 
 /// True for statuses where a token refresh + retry can recover the call.
-bool isAuthRetryable(int statusCode) =>
-    statusCode == 401 || statusCode == 403;
+bool isAuthRetryable(int statusCode) => statusCode == 401 || statusCode == 403;
 
 /// The backend answers with `Result` / `Result<T>`
 /// (`Respira.ServiceDefaults.Contracts.Results`), serialized as:
@@ -49,9 +56,7 @@ bool _isFailure(Map<String, dynamic> json) {
 
 Never _throwFailure(Map<String, dynamic> json, Response<dynamic> res) {
   final error = json['error'];
-  final description = error is Map
-      ? error['description'] as String?
-      : null;
+  final description = error is Map ? error['description'] as String? : null;
   throw ApiException(
     res.statusCode ?? 500,
     description ?? (json['message'] as String?) ?? 'Request failed',
@@ -79,6 +84,25 @@ Map<String, dynamic> unwrapEnvelope(Response<dynamic> res) {
   final json = res.data as Map<String, dynamic>;
   if (_isFailure(json)) _throwFailure(json, res);
   return json['data'] as Map<String, dynamic>? ?? {};
+}
+
+/// Validates a non-generic `Result` envelope (`204`-style commands that
+/// carry no payload) and throws [ApiException] on failure.
+void unwrapResult(Response<dynamic> res) {
+  final json = res.data as Map<String, dynamic>?;
+  if (json != null && _isFailure(json)) _throwFailure(json, res);
+}
+
+/// Extracts the envelope's `data` scalar (for `Result<Guid>`, `Result<bool>`
+/// and similar payloads that are not objects).
+T unwrapScalar<T>(Response<dynamic> res, T Function(Object? data) convert) {
+  final json = res.data as Map<String, dynamic>;
+  if (_isFailure(json)) _throwFailure(json, res);
+  final data = json['data'];
+  if (data == null) {
+    throw ApiException(res.statusCode ?? 500, 'Empty response data');
+  }
+  return convert(data);
 }
 
 /// Best-effort human message for a failed Dio call. Dio throws on non-2xx
@@ -114,11 +138,12 @@ String dioErrorMessage(DioException error) {
       String? generic;
       for (final entry in errors.entries) {
         final value = entry.value;
-        final message = value is List && value.isNotEmpty && value.first is String
+        final message =
+            value is List && value.isNotEmpty && value.first is String
             ? value.first as String
             : value is String
-                ? value
-                : null;
+            ? value
+            : null;
         if (message == null || message.isEmpty) continue;
         if (entry.key == 'req') {
           generic ??= message;

@@ -17,17 +17,17 @@ class AntibioticGroupRepository {
 
   Future<PaginatedGroupResponse> fetchGroups({int page = 1, int pageSize = 10, String? name}) async {
     try {
+      final search = name?.trim() ?? '';
       final queryParams = <String, dynamic>{
         'page': page,
-        'pageSize': pageSize,
+        'size': pageSize,
+        if (search.isNotEmpty) 'searchTerm': search,
       };
 
-      if (name != null && name.trim().isNotEmpty) {
-        queryParams['name'] = name.trim();
-      }
-
+      // Free-text search lives on `/antibiotic-groups/search`; the paged
+      // endpoint only supports the `parentId` filter.
       final response = await apiClient.dio.get(
-        '/antibiotic-groups',
+        search.isEmpty ? '/antibiotic-groups' : '/antibiotic-groups/search',
         queryParameters: queryParams,
       );
 
@@ -57,7 +57,8 @@ class AntibioticGroupRepository {
       final response = await apiClient.dio.get(
         '/antibiotics',
         queryParameters: {
-          'AntibioticGroupId': groupId,
+          'antibioticGroupId': groupId,
+          'size': 100,
         },
       );
 

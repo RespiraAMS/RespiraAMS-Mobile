@@ -9,7 +9,13 @@ class CriterionProvider extends ChangeNotifier {
   CriterionProvider(this._repository);
 
   final List<Criterion> _items = [];
-  List<Criterion> get items => _items;
+  List<Criterion> get items {
+    final query = _searchQuery.trim().toLowerCase();
+    if (query.isEmpty) return _items;
+    return _items
+        .where((item) => item.name.toLowerCase().contains(query))
+        .toList();
+  }
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
@@ -33,7 +39,6 @@ class CriterionProvider extends ChangeNotifier {
     try {
       final response = await _repository.fetchCriteria(
         page: _currentPage,
-        name: _searchQuery,
       );
       
       _items.addAll(response.items);
@@ -50,14 +55,9 @@ class CriterionProvider extends ChangeNotifier {
 
   void search(String query) {
     if (_searchQuery == query) return;
-    
+    // `/criteria` has no server-side search; filter the loaded pages locally.
     _searchQuery = query;
-    _currentPage = 1;
-    _items.clear();
-    _hasMore = true;
-    _isLoading = false; 
-    
-    fetchPage();
+    notifyListeners();
   }
 
   void clearError() {

@@ -23,10 +23,10 @@ class RiskFactorRepository {
     try {
       final queryParams = <String, dynamic>{
         'page': page,
-        'pageSize': pageSize,
+        'size': pageSize,
       };
 
-      if (pathogenId != null) queryParams['PathogenId'] = pathogenId;
+      if (pathogenId != null) queryParams['pathogenId'] = pathogenId;
 
       final response = await apiClient.dio.get(
         '/risk-factors',

@@ -53,7 +53,7 @@ class PatientDetailScreen extends ConsumerWidget {
             data: (dto) => _ProfileView(
               patient: Patient.fromDetail(dto),
               statusLabel: _statusLabel(dto.treatmentOutcome, l10n),
-              treatments: dto.treatments,
+              treatments: dto.treatmentPlans,
             ),
           );
     }
@@ -75,6 +75,24 @@ String _statusLabel(PatientStatusDto outcome, AppLocalizations l10n) =>
       PatientStatusDto.death => l10n.patientStatusDeceased,
       PatientStatusDto.outOfScope => l10n.patientStatusOutOfScope,
     };
+
+String _adherenceLabel(String state, AppLocalizations l10n) => switch (state) {
+      'Adhere' => l10n.adherenceAdhere,
+      'NotAdhere' => l10n.adherenceNotAdhere,
+      'NotAdhereValid' => l10n.adherenceNotAdhereValid,
+      'NotAdhereInvalid' => l10n.adherenceNotAdhereInvalid,
+      _ => state,
+    };
+
+String _dateLabel(String value) {
+  if (value.isEmpty) return '';
+  final parsed = DateTime.tryParse(value);
+  if (parsed == null) return value.length >= 10 ? value.substring(0, 10) : value;
+  final local = parsed.toLocal();
+  final dd = local.day.toString().padLeft(2, '0');
+  final mm = local.month.toString().padLeft(2, '0');
+  return '$dd/$mm/${local.year}';
+}
 
 /// Shared shell for the loading / error / empty states.
 class _StateScaffold extends StatelessWidget {
@@ -115,7 +133,7 @@ class _ProfileView extends StatelessWidget {
 
   final Patient patient;
   final String? statusLabel;
-  final List<TreatmentItemDto> treatments;
+  final List<TreatmentPlanItemDto> treatments;
 
   @override
   Widget build(BuildContext context) {
@@ -126,11 +144,13 @@ class _ProfileView extends StatelessWidget {
             '${patient.heightCm!.toStringAsFixed(0)} cm'
         : '—';
     final entries = [
-      for (var i = 0; i < treatments.length; i++)
+      for (final plan in treatments)
         TreatmentTimelineEntry(
-          dateLabel: l10n.patientEpisode(i + 1),
-          title: l10n.patientSavedTreatment,
-          status: statusLabel ?? '',
+          dateLabel: _dateLabel(plan.updatedAt),
+          title: plan.treatmentPlanStatus == 1
+              ? l10n.treatmentPlanClosed
+              : l10n.treatmentPlanInProgress,
+          status: _adherenceLabel(plan.adherenceState, l10n),
         ),
     ];
 

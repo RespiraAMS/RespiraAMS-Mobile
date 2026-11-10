@@ -21,16 +21,16 @@ class ClinicalMetricRepository {
     String? code,
   }) async {
     try {
+      final search = (name ?? code ?? '').trim();
       final queryParams = <String, dynamic>{
         'page': page,
-        'pageSize': pageSize,
+        'size': pageSize,
+        if (search.isNotEmpty) 'searchTerm': search,
       };
 
-      if (name != null && name.trim().isNotEmpty) queryParams['name'] = name.trim();
-      if (code != null && code.trim().isNotEmpty) queryParams['code'] = code.trim();
-
+      // Free-text search lives on `/clinical-metrics/search`.
       final response = await apiClient.dio.get(
-        '/clinical-metrics',
+        search.isEmpty ? '/clinical-metrics' : '/clinical-metrics/search',
         queryParameters: queryParams,
       );
 

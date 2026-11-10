@@ -705,54 +705,88 @@ abstract class _NextOfKinItemDto implements NextOfKinItemDto {
       throw _privateConstructorUsedError;
 }
 
-TreatmentItemDto _$TreatmentItemDtoFromJson(Map<String, dynamic> json) {
-  return _TreatmentItemDto.fromJson(json);
+TreatmentPlanItemDto _$TreatmentPlanItemDtoFromJson(Map<String, dynamic> json) {
+  return _TreatmentPlanItemDto.fromJson(json);
 }
 
 /// @nodoc
-mixin _$TreatmentItemDto {
+mixin _$TreatmentPlanItemDto {
   String get id => throw _privateConstructorUsedError;
 
-  /// Serializes this TreatmentItemDto to a JSON map.
+  /// `Adhere` | `NotAdhere` | `NotAdhereValid` | `NotAdhereInvalid`.
+  String get adherenceState => throw _privateConstructorUsedError;
+
+  /// `TreatmentPlanStatus` has no string enum converter on the backend,
+  /// so it arrives as a number: `0` = InProgress, `1` = Closed.
+  @JsonKey(fromJson: _treatmentPlanStatusFromJson)
+  int get treatmentPlanStatus => throw _privateConstructorUsedError;
+  String get updatedAt => throw _privateConstructorUsedError;
+
+  /// Serializes this TreatmentPlanItemDto to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
-  /// Create a copy of TreatmentItemDto
+  /// Create a copy of TreatmentPlanItemDto
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $TreatmentItemDtoCopyWith<TreatmentItemDto> get copyWith =>
+  $TreatmentPlanItemDtoCopyWith<TreatmentPlanItemDto> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $TreatmentItemDtoCopyWith<$Res> {
-  factory $TreatmentItemDtoCopyWith(
-    TreatmentItemDto value,
-    $Res Function(TreatmentItemDto) then,
-  ) = _$TreatmentItemDtoCopyWithImpl<$Res, TreatmentItemDto>;
+abstract class $TreatmentPlanItemDtoCopyWith<$Res> {
+  factory $TreatmentPlanItemDtoCopyWith(
+    TreatmentPlanItemDto value,
+    $Res Function(TreatmentPlanItemDto) then,
+  ) = _$TreatmentPlanItemDtoCopyWithImpl<$Res, TreatmentPlanItemDto>;
   @useResult
-  $Res call({String id});
+  $Res call({
+    String id,
+    String adherenceState,
+    @JsonKey(fromJson: _treatmentPlanStatusFromJson) int treatmentPlanStatus,
+    String updatedAt,
+  });
 }
 
 /// @nodoc
-class _$TreatmentItemDtoCopyWithImpl<$Res, $Val extends TreatmentItemDto>
-    implements $TreatmentItemDtoCopyWith<$Res> {
-  _$TreatmentItemDtoCopyWithImpl(this._value, this._then);
+class _$TreatmentPlanItemDtoCopyWithImpl<
+  $Res,
+  $Val extends TreatmentPlanItemDto
+>
+    implements $TreatmentPlanItemDtoCopyWith<$Res> {
+  _$TreatmentPlanItemDtoCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of TreatmentItemDto
+  /// Create a copy of TreatmentPlanItemDto
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? id = null}) {
+  $Res call({
+    Object? id = null,
+    Object? adherenceState = null,
+    Object? treatmentPlanStatus = null,
+    Object? updatedAt = null,
+  }) {
     return _then(
       _value.copyWith(
             id: null == id
                 ? _value.id
                 : id // ignore: cast_nullable_to_non_nullable
+                      as String,
+            adherenceState: null == adherenceState
+                ? _value.adherenceState
+                : adherenceState // ignore: cast_nullable_to_non_nullable
+                      as String,
+            treatmentPlanStatus: null == treatmentPlanStatus
+                ? _value.treatmentPlanStatus
+                : treatmentPlanStatus // ignore: cast_nullable_to_non_nullable
+                      as int,
+            updatedAt: null == updatedAt
+                ? _value.updatedAt
+                : updatedAt // ignore: cast_nullable_to_non_nullable
                       as String,
           )
           as $Val,
@@ -761,36 +795,58 @@ class _$TreatmentItemDtoCopyWithImpl<$Res, $Val extends TreatmentItemDto>
 }
 
 /// @nodoc
-abstract class _$$TreatmentItemDtoImplCopyWith<$Res>
-    implements $TreatmentItemDtoCopyWith<$Res> {
-  factory _$$TreatmentItemDtoImplCopyWith(
-    _$TreatmentItemDtoImpl value,
-    $Res Function(_$TreatmentItemDtoImpl) then,
-  ) = __$$TreatmentItemDtoImplCopyWithImpl<$Res>;
+abstract class _$$TreatmentPlanItemDtoImplCopyWith<$Res>
+    implements $TreatmentPlanItemDtoCopyWith<$Res> {
+  factory _$$TreatmentPlanItemDtoImplCopyWith(
+    _$TreatmentPlanItemDtoImpl value,
+    $Res Function(_$TreatmentPlanItemDtoImpl) then,
+  ) = __$$TreatmentPlanItemDtoImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String id});
+  $Res call({
+    String id,
+    String adherenceState,
+    @JsonKey(fromJson: _treatmentPlanStatusFromJson) int treatmentPlanStatus,
+    String updatedAt,
+  });
 }
 
 /// @nodoc
-class __$$TreatmentItemDtoImplCopyWithImpl<$Res>
-    extends _$TreatmentItemDtoCopyWithImpl<$Res, _$TreatmentItemDtoImpl>
-    implements _$$TreatmentItemDtoImplCopyWith<$Res> {
-  __$$TreatmentItemDtoImplCopyWithImpl(
-    _$TreatmentItemDtoImpl _value,
-    $Res Function(_$TreatmentItemDtoImpl) _then,
+class __$$TreatmentPlanItemDtoImplCopyWithImpl<$Res>
+    extends _$TreatmentPlanItemDtoCopyWithImpl<$Res, _$TreatmentPlanItemDtoImpl>
+    implements _$$TreatmentPlanItemDtoImplCopyWith<$Res> {
+  __$$TreatmentPlanItemDtoImplCopyWithImpl(
+    _$TreatmentPlanItemDtoImpl _value,
+    $Res Function(_$TreatmentPlanItemDtoImpl) _then,
   ) : super(_value, _then);
 
-  /// Create a copy of TreatmentItemDto
+  /// Create a copy of TreatmentPlanItemDto
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? id = null}) {
+  $Res call({
+    Object? id = null,
+    Object? adherenceState = null,
+    Object? treatmentPlanStatus = null,
+    Object? updatedAt = null,
+  }) {
     return _then(
-      _$TreatmentItemDtoImpl(
+      _$TreatmentPlanItemDtoImpl(
         id: null == id
             ? _value.id
             : id // ignore: cast_nullable_to_non_nullable
+                  as String,
+        adherenceState: null == adherenceState
+            ? _value.adherenceState
+            : adherenceState // ignore: cast_nullable_to_non_nullable
+                  as String,
+        treatmentPlanStatus: null == treatmentPlanStatus
+            ? _value.treatmentPlanStatus
+            : treatmentPlanStatus // ignore: cast_nullable_to_non_nullable
+                  as int,
+        updatedAt: null == updatedAt
+            ? _value.updatedAt
+            : updatedAt // ignore: cast_nullable_to_non_nullable
                   as String,
       ),
     );
@@ -799,65 +855,115 @@ class __$$TreatmentItemDtoImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$TreatmentItemDtoImpl implements _TreatmentItemDto {
-  const _$TreatmentItemDtoImpl({required this.id});
+class _$TreatmentPlanItemDtoImpl implements _TreatmentPlanItemDto {
+  const _$TreatmentPlanItemDtoImpl({
+    required this.id,
+    this.adherenceState = 'Adhere',
+    @JsonKey(fromJson: _treatmentPlanStatusFromJson)
+    this.treatmentPlanStatus = 0,
+    this.updatedAt = '',
+  });
 
-  factory _$TreatmentItemDtoImpl.fromJson(Map<String, dynamic> json) =>
-      _$$TreatmentItemDtoImplFromJson(json);
+  factory _$TreatmentPlanItemDtoImpl.fromJson(Map<String, dynamic> json) =>
+      _$$TreatmentPlanItemDtoImplFromJson(json);
 
   @override
   final String id;
 
+  /// `Adhere` | `NotAdhere` | `NotAdhereValid` | `NotAdhereInvalid`.
+  @override
+  @JsonKey()
+  final String adherenceState;
+
+  /// `TreatmentPlanStatus` has no string enum converter on the backend,
+  /// so it arrives as a number: `0` = InProgress, `1` = Closed.
+  @override
+  @JsonKey(fromJson: _treatmentPlanStatusFromJson)
+  final int treatmentPlanStatus;
+  @override
+  @JsonKey()
+  final String updatedAt;
+
   @override
   String toString() {
-    return 'TreatmentItemDto(id: $id)';
+    return 'TreatmentPlanItemDto(id: $id, adherenceState: $adherenceState, treatmentPlanStatus: $treatmentPlanStatus, updatedAt: $updatedAt)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$TreatmentItemDtoImpl &&
-            (identical(other.id, id) || other.id == id));
+            other is _$TreatmentPlanItemDtoImpl &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.adherenceState, adherenceState) ||
+                other.adherenceState == adherenceState) &&
+            (identical(other.treatmentPlanStatus, treatmentPlanStatus) ||
+                other.treatmentPlanStatus == treatmentPlanStatus) &&
+            (identical(other.updatedAt, updatedAt) ||
+                other.updatedAt == updatedAt));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id);
+  int get hashCode => Object.hash(
+    runtimeType,
+    id,
+    adherenceState,
+    treatmentPlanStatus,
+    updatedAt,
+  );
 
-  /// Create a copy of TreatmentItemDto
+  /// Create a copy of TreatmentPlanItemDto
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$TreatmentItemDtoImplCopyWith<_$TreatmentItemDtoImpl> get copyWith =>
-      __$$TreatmentItemDtoImplCopyWithImpl<_$TreatmentItemDtoImpl>(
+  _$$TreatmentPlanItemDtoImplCopyWith<_$TreatmentPlanItemDtoImpl>
+  get copyWith =>
+      __$$TreatmentPlanItemDtoImplCopyWithImpl<_$TreatmentPlanItemDtoImpl>(
         this,
         _$identity,
       );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$TreatmentItemDtoImplToJson(this);
+    return _$$TreatmentPlanItemDtoImplToJson(this);
   }
 }
 
-abstract class _TreatmentItemDto implements TreatmentItemDto {
-  const factory _TreatmentItemDto({required final String id}) =
-      _$TreatmentItemDtoImpl;
+abstract class _TreatmentPlanItemDto implements TreatmentPlanItemDto {
+  const factory _TreatmentPlanItemDto({
+    required final String id,
+    final String adherenceState,
+    @JsonKey(fromJson: _treatmentPlanStatusFromJson)
+    final int treatmentPlanStatus,
+    final String updatedAt,
+  }) = _$TreatmentPlanItemDtoImpl;
 
-  factory _TreatmentItemDto.fromJson(Map<String, dynamic> json) =
-      _$TreatmentItemDtoImpl.fromJson;
+  factory _TreatmentPlanItemDto.fromJson(Map<String, dynamic> json) =
+      _$TreatmentPlanItemDtoImpl.fromJson;
 
   @override
   String get id;
 
-  /// Create a copy of TreatmentItemDto
+  /// `Adhere` | `NotAdhere` | `NotAdhereValid` | `NotAdhereInvalid`.
+  @override
+  String get adherenceState;
+
+  /// `TreatmentPlanStatus` has no string enum converter on the backend,
+  /// so it arrives as a number: `0` = InProgress, `1` = Closed.
+  @override
+  @JsonKey(fromJson: _treatmentPlanStatusFromJson)
+  int get treatmentPlanStatus;
+  @override
+  String get updatedAt;
+
+  /// Create a copy of TreatmentPlanItemDto
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$TreatmentItemDtoImplCopyWith<_$TreatmentItemDtoImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$TreatmentPlanItemDtoImplCopyWith<_$TreatmentPlanItemDtoImpl>
+  get copyWith => throw _privateConstructorUsedError;
 }
 
 PatientDetailDto _$PatientDetailDtoFromJson(Map<String, dynamic> json) {
@@ -881,7 +987,8 @@ mixin _$PatientDetailDto {
   String? get discharge => throw _privateConstructorUsedError;
   PatientStatusDto get treatmentOutcome => throw _privateConstructorUsedError;
   List<NextOfKinItemDto> get nextOfKins => throw _privateConstructorUsedError;
-  List<TreatmentItemDto> get treatments => throw _privateConstructorUsedError;
+  List<TreatmentPlanItemDto> get treatmentPlans =>
+      throw _privateConstructorUsedError;
 
   /// Serializes this PatientDetailDto to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -916,7 +1023,7 @@ abstract class $PatientDetailDtoCopyWith<$Res> {
     String? discharge,
     PatientStatusDto treatmentOutcome,
     List<NextOfKinItemDto> nextOfKins,
-    List<TreatmentItemDto> treatments,
+    List<TreatmentPlanItemDto> treatmentPlans,
   });
 }
 
@@ -950,7 +1057,7 @@ class _$PatientDetailDtoCopyWithImpl<$Res, $Val extends PatientDetailDto>
     Object? discharge = freezed,
     Object? treatmentOutcome = null,
     Object? nextOfKins = null,
-    Object? treatments = null,
+    Object? treatmentPlans = null,
   }) {
     return _then(
       _value.copyWith(
@@ -1014,10 +1121,10 @@ class _$PatientDetailDtoCopyWithImpl<$Res, $Val extends PatientDetailDto>
                 ? _value.nextOfKins
                 : nextOfKins // ignore: cast_nullable_to_non_nullable
                       as List<NextOfKinItemDto>,
-            treatments: null == treatments
-                ? _value.treatments
-                : treatments // ignore: cast_nullable_to_non_nullable
-                      as List<TreatmentItemDto>,
+            treatmentPlans: null == treatmentPlans
+                ? _value.treatmentPlans
+                : treatmentPlans // ignore: cast_nullable_to_non_nullable
+                      as List<TreatmentPlanItemDto>,
           )
           as $Val,
     );
@@ -1049,7 +1156,7 @@ abstract class _$$PatientDetailDtoImplCopyWith<$Res>
     String? discharge,
     PatientStatusDto treatmentOutcome,
     List<NextOfKinItemDto> nextOfKins,
-    List<TreatmentItemDto> treatments,
+    List<TreatmentPlanItemDto> treatmentPlans,
   });
 }
 
@@ -1082,7 +1189,7 @@ class __$$PatientDetailDtoImplCopyWithImpl<$Res>
     Object? discharge = freezed,
     Object? treatmentOutcome = null,
     Object? nextOfKins = null,
-    Object? treatments = null,
+    Object? treatmentPlans = null,
   }) {
     return _then(
       _$PatientDetailDtoImpl(
@@ -1146,10 +1253,10 @@ class __$$PatientDetailDtoImplCopyWithImpl<$Res>
             ? _value._nextOfKins
             : nextOfKins // ignore: cast_nullable_to_non_nullable
                   as List<NextOfKinItemDto>,
-        treatments: null == treatments
-            ? _value._treatments
-            : treatments // ignore: cast_nullable_to_non_nullable
-                  as List<TreatmentItemDto>,
+        treatmentPlans: null == treatmentPlans
+            ? _value._treatmentPlans
+            : treatmentPlans // ignore: cast_nullable_to_non_nullable
+                  as List<TreatmentPlanItemDto>,
       ),
     );
   }
@@ -1174,9 +1281,9 @@ class _$PatientDetailDtoImpl implements _PatientDetailDto {
     this.discharge,
     required this.treatmentOutcome,
     final List<NextOfKinItemDto> nextOfKins = const [],
-    final List<TreatmentItemDto> treatments = const [],
+    final List<TreatmentPlanItemDto> treatmentPlans = const [],
   }) : _nextOfKins = nextOfKins,
-       _treatments = treatments;
+       _treatmentPlans = treatmentPlans;
 
   factory _$PatientDetailDtoImpl.fromJson(Map<String, dynamic> json) =>
       _$$PatientDetailDtoImplFromJson(json);
@@ -1221,18 +1328,18 @@ class _$PatientDetailDtoImpl implements _PatientDetailDto {
     return EqualUnmodifiableListView(_nextOfKins);
   }
 
-  final List<TreatmentItemDto> _treatments;
+  final List<TreatmentPlanItemDto> _treatmentPlans;
   @override
   @JsonKey()
-  List<TreatmentItemDto> get treatments {
-    if (_treatments is EqualUnmodifiableListView) return _treatments;
+  List<TreatmentPlanItemDto> get treatmentPlans {
+    if (_treatmentPlans is EqualUnmodifiableListView) return _treatmentPlans;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_treatments);
+    return EqualUnmodifiableListView(_treatmentPlans);
   }
 
   @override
   String toString() {
-    return 'PatientDetailDto(id: $id, fullName: $fullName, phoneNumber: $phoneNumber, dateOfBirth: $dateOfBirth, gender: $gender, height: $height, weight: $weight, medicalRecordCode: $medicalRecordCode, healthInsuranceCard: $healthInsuranceCard, address: $address, city: $city, admission: $admission, discharge: $discharge, treatmentOutcome: $treatmentOutcome, nextOfKins: $nextOfKins, treatments: $treatments)';
+    return 'PatientDetailDto(id: $id, fullName: $fullName, phoneNumber: $phoneNumber, dateOfBirth: $dateOfBirth, gender: $gender, height: $height, weight: $weight, medicalRecordCode: $medicalRecordCode, healthInsuranceCard: $healthInsuranceCard, address: $address, city: $city, admission: $admission, discharge: $discharge, treatmentOutcome: $treatmentOutcome, nextOfKins: $nextOfKins, treatmentPlans: $treatmentPlans)';
   }
 
   @override
@@ -1267,8 +1374,8 @@ class _$PatientDetailDtoImpl implements _PatientDetailDto {
               _nextOfKins,
             ) &&
             const DeepCollectionEquality().equals(
-              other._treatments,
-              _treatments,
+              other._treatmentPlans,
+              _treatmentPlans,
             ));
   }
 
@@ -1291,7 +1398,7 @@ class _$PatientDetailDtoImpl implements _PatientDetailDto {
     discharge,
     treatmentOutcome,
     const DeepCollectionEquality().hash(_nextOfKins),
-    const DeepCollectionEquality().hash(_treatments),
+    const DeepCollectionEquality().hash(_treatmentPlans),
   );
 
   /// Create a copy of PatientDetailDto
@@ -1328,7 +1435,7 @@ abstract class _PatientDetailDto implements PatientDetailDto {
     final String? discharge,
     required final PatientStatusDto treatmentOutcome,
     final List<NextOfKinItemDto> nextOfKins,
-    final List<TreatmentItemDto> treatments,
+    final List<TreatmentPlanItemDto> treatmentPlans,
   }) = _$PatientDetailDtoImpl;
 
   factory _PatientDetailDto.fromJson(Map<String, dynamic> json) =
@@ -1365,7 +1472,7 @@ abstract class _PatientDetailDto implements PatientDetailDto {
   @override
   List<NextOfKinItemDto> get nextOfKins;
   @override
-  List<TreatmentItemDto> get treatments;
+  List<TreatmentPlanItemDto> get treatmentPlans;
 
   /// Create a copy of PatientDetailDto
   /// with the given fields replaced by the non-null parameter values.
@@ -1373,4 +1480,787 @@ abstract class _PatientDetailDto implements PatientDetailDto {
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$PatientDetailDtoImplCopyWith<_$PatientDetailDtoImpl> get copyWith =>
       throw _privateConstructorUsedError;
+}
+
+TreatmentPlanPatientDto _$TreatmentPlanPatientDtoFromJson(
+  Map<String, dynamic> json,
+) {
+  return _TreatmentPlanPatientDto.fromJson(json);
+}
+
+/// @nodoc
+mixin _$TreatmentPlanPatientDto {
+  String get id => throw _privateConstructorUsedError;
+  String get name => throw _privateConstructorUsedError;
+
+  /// Serializes this TreatmentPlanPatientDto to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of TreatmentPlanPatientDto
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $TreatmentPlanPatientDtoCopyWith<TreatmentPlanPatientDto> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $TreatmentPlanPatientDtoCopyWith<$Res> {
+  factory $TreatmentPlanPatientDtoCopyWith(
+    TreatmentPlanPatientDto value,
+    $Res Function(TreatmentPlanPatientDto) then,
+  ) = _$TreatmentPlanPatientDtoCopyWithImpl<$Res, TreatmentPlanPatientDto>;
+  @useResult
+  $Res call({String id, String name});
+}
+
+/// @nodoc
+class _$TreatmentPlanPatientDtoCopyWithImpl<
+  $Res,
+  $Val extends TreatmentPlanPatientDto
+>
+    implements $TreatmentPlanPatientDtoCopyWith<$Res> {
+  _$TreatmentPlanPatientDtoCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of TreatmentPlanPatientDto
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({Object? id = null, Object? name = null}) {
+    return _then(
+      _value.copyWith(
+            id: null == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as String,
+            name: null == name
+                ? _value.name
+                : name // ignore: cast_nullable_to_non_nullable
+                      as String,
+          )
+          as $Val,
+    );
+  }
+}
+
+/// @nodoc
+abstract class _$$TreatmentPlanPatientDtoImplCopyWith<$Res>
+    implements $TreatmentPlanPatientDtoCopyWith<$Res> {
+  factory _$$TreatmentPlanPatientDtoImplCopyWith(
+    _$TreatmentPlanPatientDtoImpl value,
+    $Res Function(_$TreatmentPlanPatientDtoImpl) then,
+  ) = __$$TreatmentPlanPatientDtoImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({String id, String name});
+}
+
+/// @nodoc
+class __$$TreatmentPlanPatientDtoImplCopyWithImpl<$Res>
+    extends
+        _$TreatmentPlanPatientDtoCopyWithImpl<
+          $Res,
+          _$TreatmentPlanPatientDtoImpl
+        >
+    implements _$$TreatmentPlanPatientDtoImplCopyWith<$Res> {
+  __$$TreatmentPlanPatientDtoImplCopyWithImpl(
+    _$TreatmentPlanPatientDtoImpl _value,
+    $Res Function(_$TreatmentPlanPatientDtoImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of TreatmentPlanPatientDto
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({Object? id = null, Object? name = null}) {
+    return _then(
+      _$TreatmentPlanPatientDtoImpl(
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as String,
+        name: null == name
+            ? _value.name
+            : name // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$TreatmentPlanPatientDtoImpl implements _TreatmentPlanPatientDto {
+  const _$TreatmentPlanPatientDtoImpl({required this.id, required this.name});
+
+  factory _$TreatmentPlanPatientDtoImpl.fromJson(Map<String, dynamic> json) =>
+      _$$TreatmentPlanPatientDtoImplFromJson(json);
+
+  @override
+  final String id;
+  @override
+  final String name;
+
+  @override
+  String toString() {
+    return 'TreatmentPlanPatientDto(id: $id, name: $name)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$TreatmentPlanPatientDtoImpl &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.name, name) || other.name == name));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, id, name);
+
+  /// Create a copy of TreatmentPlanPatientDto
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$TreatmentPlanPatientDtoImplCopyWith<_$TreatmentPlanPatientDtoImpl>
+  get copyWith =>
+      __$$TreatmentPlanPatientDtoImplCopyWithImpl<
+        _$TreatmentPlanPatientDtoImpl
+      >(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$TreatmentPlanPatientDtoImplToJson(this);
+  }
+}
+
+abstract class _TreatmentPlanPatientDto implements TreatmentPlanPatientDto {
+  const factory _TreatmentPlanPatientDto({
+    required final String id,
+    required final String name,
+  }) = _$TreatmentPlanPatientDtoImpl;
+
+  factory _TreatmentPlanPatientDto.fromJson(Map<String, dynamic> json) =
+      _$TreatmentPlanPatientDtoImpl.fromJson;
+
+  @override
+  String get id;
+  @override
+  String get name;
+
+  /// Create a copy of TreatmentPlanPatientDto
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$TreatmentPlanPatientDtoImplCopyWith<_$TreatmentPlanPatientDtoImpl>
+  get copyWith => throw _privateConstructorUsedError;
+}
+
+TreatmentMedicineDto _$TreatmentMedicineDtoFromJson(Map<String, dynamic> json) {
+  return _TreatmentMedicineDto.fromJson(json);
+}
+
+/// @nodoc
+mixin _$TreatmentMedicineDto {
+  String get id => throw _privateConstructorUsedError;
+  String get name => throw _privateConstructorUsedError;
+  String get classification => throw _privateConstructorUsedError;
+
+  /// Serializes this TreatmentMedicineDto to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of TreatmentMedicineDto
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $TreatmentMedicineDtoCopyWith<TreatmentMedicineDto> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $TreatmentMedicineDtoCopyWith<$Res> {
+  factory $TreatmentMedicineDtoCopyWith(
+    TreatmentMedicineDto value,
+    $Res Function(TreatmentMedicineDto) then,
+  ) = _$TreatmentMedicineDtoCopyWithImpl<$Res, TreatmentMedicineDto>;
+  @useResult
+  $Res call({String id, String name, String classification});
+}
+
+/// @nodoc
+class _$TreatmentMedicineDtoCopyWithImpl<
+  $Res,
+  $Val extends TreatmentMedicineDto
+>
+    implements $TreatmentMedicineDtoCopyWith<$Res> {
+  _$TreatmentMedicineDtoCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of TreatmentMedicineDto
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? name = null,
+    Object? classification = null,
+  }) {
+    return _then(
+      _value.copyWith(
+            id: null == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as String,
+            name: null == name
+                ? _value.name
+                : name // ignore: cast_nullable_to_non_nullable
+                      as String,
+            classification: null == classification
+                ? _value.classification
+                : classification // ignore: cast_nullable_to_non_nullable
+                      as String,
+          )
+          as $Val,
+    );
+  }
+}
+
+/// @nodoc
+abstract class _$$TreatmentMedicineDtoImplCopyWith<$Res>
+    implements $TreatmentMedicineDtoCopyWith<$Res> {
+  factory _$$TreatmentMedicineDtoImplCopyWith(
+    _$TreatmentMedicineDtoImpl value,
+    $Res Function(_$TreatmentMedicineDtoImpl) then,
+  ) = __$$TreatmentMedicineDtoImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({String id, String name, String classification});
+}
+
+/// @nodoc
+class __$$TreatmentMedicineDtoImplCopyWithImpl<$Res>
+    extends _$TreatmentMedicineDtoCopyWithImpl<$Res, _$TreatmentMedicineDtoImpl>
+    implements _$$TreatmentMedicineDtoImplCopyWith<$Res> {
+  __$$TreatmentMedicineDtoImplCopyWithImpl(
+    _$TreatmentMedicineDtoImpl _value,
+    $Res Function(_$TreatmentMedicineDtoImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of TreatmentMedicineDto
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? name = null,
+    Object? classification = null,
+  }) {
+    return _then(
+      _$TreatmentMedicineDtoImpl(
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as String,
+        name: null == name
+            ? _value.name
+            : name // ignore: cast_nullable_to_non_nullable
+                  as String,
+        classification: null == classification
+            ? _value.classification
+            : classification // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$TreatmentMedicineDtoImpl implements _TreatmentMedicineDto {
+  const _$TreatmentMedicineDtoImpl({
+    required this.id,
+    required this.name,
+    this.classification = '',
+  });
+
+  factory _$TreatmentMedicineDtoImpl.fromJson(Map<String, dynamic> json) =>
+      _$$TreatmentMedicineDtoImplFromJson(json);
+
+  @override
+  final String id;
+  @override
+  final String name;
+  @override
+  @JsonKey()
+  final String classification;
+
+  @override
+  String toString() {
+    return 'TreatmentMedicineDto(id: $id, name: $name, classification: $classification)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$TreatmentMedicineDtoImpl &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.name, name) || other.name == name) &&
+            (identical(other.classification, classification) ||
+                other.classification == classification));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, id, name, classification);
+
+  /// Create a copy of TreatmentMedicineDto
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$TreatmentMedicineDtoImplCopyWith<_$TreatmentMedicineDtoImpl>
+  get copyWith =>
+      __$$TreatmentMedicineDtoImplCopyWithImpl<_$TreatmentMedicineDtoImpl>(
+        this,
+        _$identity,
+      );
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$TreatmentMedicineDtoImplToJson(this);
+  }
+}
+
+abstract class _TreatmentMedicineDto implements TreatmentMedicineDto {
+  const factory _TreatmentMedicineDto({
+    required final String id,
+    required final String name,
+    final String classification,
+  }) = _$TreatmentMedicineDtoImpl;
+
+  factory _TreatmentMedicineDto.fromJson(Map<String, dynamic> json) =
+      _$TreatmentMedicineDtoImpl.fromJson;
+
+  @override
+  String get id;
+  @override
+  String get name;
+  @override
+  String get classification;
+
+  /// Create a copy of TreatmentMedicineDto
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$TreatmentMedicineDtoImplCopyWith<_$TreatmentMedicineDtoImpl>
+  get copyWith => throw _privateConstructorUsedError;
+}
+
+TreatmentPlanDetailDto _$TreatmentPlanDetailDtoFromJson(
+  Map<String, dynamic> json,
+) {
+  return _TreatmentPlanDetailDto.fromJson(json);
+}
+
+/// @nodoc
+mixin _$TreatmentPlanDetailDto {
+  String get id => throw _privateConstructorUsedError;
+  TreatmentPlanPatientDto get patient => throw _privateConstructorUsedError;
+  String get doctorId => throw _privateConstructorUsedError;
+  String get diagnosis => throw _privateConstructorUsedError;
+  List<TreatmentMedicineDto> get medicines =>
+      throw _privateConstructorUsedError;
+  String? get reasonForMedicineChoice => throw _privateConstructorUsedError;
+
+  /// `Adhere` | `NotAdhere` | `NotAdhereValid` | `NotAdhereInvalid`.
+  String get adherenceState => throw _privateConstructorUsedError;
+
+  /// `TreatmentPlanStatus` is numeric on the wire (`0` = InProgress,
+  /// `1` = Closed).
+  @JsonKey(fromJson: _treatmentPlanStatusFromJson)
+  int get status => throw _privateConstructorUsedError;
+  String? get closeReason => throw _privateConstructorUsedError;
+
+  /// Serializes this TreatmentPlanDetailDto to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of TreatmentPlanDetailDto
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $TreatmentPlanDetailDtoCopyWith<TreatmentPlanDetailDto> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $TreatmentPlanDetailDtoCopyWith<$Res> {
+  factory $TreatmentPlanDetailDtoCopyWith(
+    TreatmentPlanDetailDto value,
+    $Res Function(TreatmentPlanDetailDto) then,
+  ) = _$TreatmentPlanDetailDtoCopyWithImpl<$Res, TreatmentPlanDetailDto>;
+  @useResult
+  $Res call({
+    String id,
+    TreatmentPlanPatientDto patient,
+    String doctorId,
+    String diagnosis,
+    List<TreatmentMedicineDto> medicines,
+    String? reasonForMedicineChoice,
+    String adherenceState,
+    @JsonKey(fromJson: _treatmentPlanStatusFromJson) int status,
+    String? closeReason,
+  });
+
+  $TreatmentPlanPatientDtoCopyWith<$Res> get patient;
+}
+
+/// @nodoc
+class _$TreatmentPlanDetailDtoCopyWithImpl<
+  $Res,
+  $Val extends TreatmentPlanDetailDto
+>
+    implements $TreatmentPlanDetailDtoCopyWith<$Res> {
+  _$TreatmentPlanDetailDtoCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of TreatmentPlanDetailDto
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? patient = null,
+    Object? doctorId = null,
+    Object? diagnosis = null,
+    Object? medicines = null,
+    Object? reasonForMedicineChoice = freezed,
+    Object? adherenceState = null,
+    Object? status = null,
+    Object? closeReason = freezed,
+  }) {
+    return _then(
+      _value.copyWith(
+            id: null == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as String,
+            patient: null == patient
+                ? _value.patient
+                : patient // ignore: cast_nullable_to_non_nullable
+                      as TreatmentPlanPatientDto,
+            doctorId: null == doctorId
+                ? _value.doctorId
+                : doctorId // ignore: cast_nullable_to_non_nullable
+                      as String,
+            diagnosis: null == diagnosis
+                ? _value.diagnosis
+                : diagnosis // ignore: cast_nullable_to_non_nullable
+                      as String,
+            medicines: null == medicines
+                ? _value.medicines
+                : medicines // ignore: cast_nullable_to_non_nullable
+                      as List<TreatmentMedicineDto>,
+            reasonForMedicineChoice: freezed == reasonForMedicineChoice
+                ? _value.reasonForMedicineChoice
+                : reasonForMedicineChoice // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            adherenceState: null == adherenceState
+                ? _value.adherenceState
+                : adherenceState // ignore: cast_nullable_to_non_nullable
+                      as String,
+            status: null == status
+                ? _value.status
+                : status // ignore: cast_nullable_to_non_nullable
+                      as int,
+            closeReason: freezed == closeReason
+                ? _value.closeReason
+                : closeReason // ignore: cast_nullable_to_non_nullable
+                      as String?,
+          )
+          as $Val,
+    );
+  }
+
+  /// Create a copy of TreatmentPlanDetailDto
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $TreatmentPlanPatientDtoCopyWith<$Res> get patient {
+    return $TreatmentPlanPatientDtoCopyWith<$Res>(_value.patient, (value) {
+      return _then(_value.copyWith(patient: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$TreatmentPlanDetailDtoImplCopyWith<$Res>
+    implements $TreatmentPlanDetailDtoCopyWith<$Res> {
+  factory _$$TreatmentPlanDetailDtoImplCopyWith(
+    _$TreatmentPlanDetailDtoImpl value,
+    $Res Function(_$TreatmentPlanDetailDtoImpl) then,
+  ) = __$$TreatmentPlanDetailDtoImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({
+    String id,
+    TreatmentPlanPatientDto patient,
+    String doctorId,
+    String diagnosis,
+    List<TreatmentMedicineDto> medicines,
+    String? reasonForMedicineChoice,
+    String adherenceState,
+    @JsonKey(fromJson: _treatmentPlanStatusFromJson) int status,
+    String? closeReason,
+  });
+
+  @override
+  $TreatmentPlanPatientDtoCopyWith<$Res> get patient;
+}
+
+/// @nodoc
+class __$$TreatmentPlanDetailDtoImplCopyWithImpl<$Res>
+    extends
+        _$TreatmentPlanDetailDtoCopyWithImpl<$Res, _$TreatmentPlanDetailDtoImpl>
+    implements _$$TreatmentPlanDetailDtoImplCopyWith<$Res> {
+  __$$TreatmentPlanDetailDtoImplCopyWithImpl(
+    _$TreatmentPlanDetailDtoImpl _value,
+    $Res Function(_$TreatmentPlanDetailDtoImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of TreatmentPlanDetailDto
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? patient = null,
+    Object? doctorId = null,
+    Object? diagnosis = null,
+    Object? medicines = null,
+    Object? reasonForMedicineChoice = freezed,
+    Object? adherenceState = null,
+    Object? status = null,
+    Object? closeReason = freezed,
+  }) {
+    return _then(
+      _$TreatmentPlanDetailDtoImpl(
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as String,
+        patient: null == patient
+            ? _value.patient
+            : patient // ignore: cast_nullable_to_non_nullable
+                  as TreatmentPlanPatientDto,
+        doctorId: null == doctorId
+            ? _value.doctorId
+            : doctorId // ignore: cast_nullable_to_non_nullable
+                  as String,
+        diagnosis: null == diagnosis
+            ? _value.diagnosis
+            : diagnosis // ignore: cast_nullable_to_non_nullable
+                  as String,
+        medicines: null == medicines
+            ? _value._medicines
+            : medicines // ignore: cast_nullable_to_non_nullable
+                  as List<TreatmentMedicineDto>,
+        reasonForMedicineChoice: freezed == reasonForMedicineChoice
+            ? _value.reasonForMedicineChoice
+            : reasonForMedicineChoice // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        adherenceState: null == adherenceState
+            ? _value.adherenceState
+            : adherenceState // ignore: cast_nullable_to_non_nullable
+                  as String,
+        status: null == status
+            ? _value.status
+            : status // ignore: cast_nullable_to_non_nullable
+                  as int,
+        closeReason: freezed == closeReason
+            ? _value.closeReason
+            : closeReason // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$TreatmentPlanDetailDtoImpl implements _TreatmentPlanDetailDto {
+  const _$TreatmentPlanDetailDtoImpl({
+    required this.id,
+    required this.patient,
+    this.doctorId = '',
+    this.diagnosis = '',
+    final List<TreatmentMedicineDto> medicines = const [],
+    this.reasonForMedicineChoice,
+    this.adherenceState = 'Adhere',
+    @JsonKey(fromJson: _treatmentPlanStatusFromJson) this.status = 0,
+    this.closeReason,
+  }) : _medicines = medicines;
+
+  factory _$TreatmentPlanDetailDtoImpl.fromJson(Map<String, dynamic> json) =>
+      _$$TreatmentPlanDetailDtoImplFromJson(json);
+
+  @override
+  final String id;
+  @override
+  final TreatmentPlanPatientDto patient;
+  @override
+  @JsonKey()
+  final String doctorId;
+  @override
+  @JsonKey()
+  final String diagnosis;
+  final List<TreatmentMedicineDto> _medicines;
+  @override
+  @JsonKey()
+  List<TreatmentMedicineDto> get medicines {
+    if (_medicines is EqualUnmodifiableListView) return _medicines;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_medicines);
+  }
+
+  @override
+  final String? reasonForMedicineChoice;
+
+  /// `Adhere` | `NotAdhere` | `NotAdhereValid` | `NotAdhereInvalid`.
+  @override
+  @JsonKey()
+  final String adherenceState;
+
+  /// `TreatmentPlanStatus` is numeric on the wire (`0` = InProgress,
+  /// `1` = Closed).
+  @override
+  @JsonKey(fromJson: _treatmentPlanStatusFromJson)
+  final int status;
+  @override
+  final String? closeReason;
+
+  @override
+  String toString() {
+    return 'TreatmentPlanDetailDto(id: $id, patient: $patient, doctorId: $doctorId, diagnosis: $diagnosis, medicines: $medicines, reasonForMedicineChoice: $reasonForMedicineChoice, adherenceState: $adherenceState, status: $status, closeReason: $closeReason)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$TreatmentPlanDetailDtoImpl &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.patient, patient) || other.patient == patient) &&
+            (identical(other.doctorId, doctorId) ||
+                other.doctorId == doctorId) &&
+            (identical(other.diagnosis, diagnosis) ||
+                other.diagnosis == diagnosis) &&
+            const DeepCollectionEquality().equals(
+              other._medicines,
+              _medicines,
+            ) &&
+            (identical(
+                  other.reasonForMedicineChoice,
+                  reasonForMedicineChoice,
+                ) ||
+                other.reasonForMedicineChoice == reasonForMedicineChoice) &&
+            (identical(other.adherenceState, adherenceState) ||
+                other.adherenceState == adherenceState) &&
+            (identical(other.status, status) || other.status == status) &&
+            (identical(other.closeReason, closeReason) ||
+                other.closeReason == closeReason));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(
+    runtimeType,
+    id,
+    patient,
+    doctorId,
+    diagnosis,
+    const DeepCollectionEquality().hash(_medicines),
+    reasonForMedicineChoice,
+    adherenceState,
+    status,
+    closeReason,
+  );
+
+  /// Create a copy of TreatmentPlanDetailDto
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$TreatmentPlanDetailDtoImplCopyWith<_$TreatmentPlanDetailDtoImpl>
+  get copyWith =>
+      __$$TreatmentPlanDetailDtoImplCopyWithImpl<_$TreatmentPlanDetailDtoImpl>(
+        this,
+        _$identity,
+      );
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$TreatmentPlanDetailDtoImplToJson(this);
+  }
+}
+
+abstract class _TreatmentPlanDetailDto implements TreatmentPlanDetailDto {
+  const factory _TreatmentPlanDetailDto({
+    required final String id,
+    required final TreatmentPlanPatientDto patient,
+    final String doctorId,
+    final String diagnosis,
+    final List<TreatmentMedicineDto> medicines,
+    final String? reasonForMedicineChoice,
+    final String adherenceState,
+    @JsonKey(fromJson: _treatmentPlanStatusFromJson) final int status,
+    final String? closeReason,
+  }) = _$TreatmentPlanDetailDtoImpl;
+
+  factory _TreatmentPlanDetailDto.fromJson(Map<String, dynamic> json) =
+      _$TreatmentPlanDetailDtoImpl.fromJson;
+
+  @override
+  String get id;
+  @override
+  TreatmentPlanPatientDto get patient;
+  @override
+  String get doctorId;
+  @override
+  String get diagnosis;
+  @override
+  List<TreatmentMedicineDto> get medicines;
+  @override
+  String? get reasonForMedicineChoice;
+
+  /// `Adhere` | `NotAdhere` | `NotAdhereValid` | `NotAdhereInvalid`.
+  @override
+  String get adherenceState;
+
+  /// `TreatmentPlanStatus` is numeric on the wire (`0` = InProgress,
+  /// `1` = Closed).
+  @override
+  @JsonKey(fromJson: _treatmentPlanStatusFromJson)
+  int get status;
+  @override
+  String? get closeReason;
+
+  /// Create a copy of TreatmentPlanDetailDto
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$TreatmentPlanDetailDtoImplCopyWith<_$TreatmentPlanDetailDtoImpl>
+  get copyWith => throw _privateConstructorUsedError;
 }

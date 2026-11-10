@@ -16,15 +16,16 @@ class PathogenRepository {
 
   Future<PaginatedPathogenResponse> fetchPathogens({int page = 1, int pageSize = 10, String? name}) async {
     try {
+      final search = name?.trim() ?? '';
       final queryParams = <String, dynamic>{
         'page': page,
-        'pageSize': pageSize,
+        'size': pageSize,
+        if (search.isNotEmpty) 'searchTerm': search,
       };
-      if (name != null && name.trim().isNotEmpty) {
-        queryParams['name'] = name.trim();
-      }
+      // Free-text search lives on `/pathogens/search`; the paged endpoint
+      // only supports the `isAtypical` filter.
       final response = await apiClient.dio.get(
-        '/pathogens',
+        search.isEmpty ? '/pathogens' : '/pathogens/search',
         queryParameters: queryParams,
       );
 

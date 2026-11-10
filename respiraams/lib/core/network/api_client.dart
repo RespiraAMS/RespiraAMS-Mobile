@@ -37,7 +37,21 @@ String get kApiBaseUrl {
   return _kDefaultBaseUrl;
 }
 
-const String kApiVersion = '1';
+/// API version segment of the gateway routes (`/api/v{version}`).
+///
+/// The backend versioning middleware (`UrlSegmentApiVersionReader`) reads
+/// this segment, so it must stay in sync with `[ApiVersion("1.0")]` on the
+/// controllers — i.e. `v1`.
+const String kApiVersion = 'v1';
+
+/// Versioned API prefix, e.g. `/api/v1`.
+///
+/// Every HTTP client in the app is built from [kApiBaseUrl] + this prefix,
+/// so bumping [kApiVersion] updates all services at once.
+const String kApiBasePath = '/api/$kApiVersion';
+
+/// Absolute root of the versioned API, e.g. `https://localhost:7283/api/v1`.
+String get kApiRootUrl => '$kApiBaseUrl$kApiBasePath';
 
 /// Base options shared by every Dio instance in the app.
 BaseOptions gatewayBaseOptions({String? baseUrl}) => BaseOptions(
@@ -61,9 +75,12 @@ void attachDebugTrust(Dio dio) {
 /// Raw Dio instance shared by every service. Handles:
 /// 1. Bearer header injection from [TokenStorage]
 /// 2. Single-flight 401/403 recovery: POST /auth/refresh then retry once
+///
+/// Its base URL already includes [kApiBasePath], so feature services use
+/// paths relative to `/api/v1` (e.g. `/patients`, `/diagnose`).
 final Provider<Dio> apiClientProvider = Provider<Dio>((ref) {
   final storage = TokenStorage(ref.watch(sharedPreferencesProvider));
-  final dio = Dio(gatewayBaseOptions());
+  final dio = Dio(gatewayBaseOptions(baseUrl: kApiRootUrl));
   attachDebugTrust(dio);
 
   dio.interceptors.add(
@@ -157,11 +174,10 @@ Dio unauthenticatedDio() {
 /// Compatibility client for lookup-feature repositories
 /// (`AntibioticRepository`, `PathogenRepository`, …).
 ///
-/// Builds a [Dio] with the `/api/1` base appended so their relative paths
-/// (`/antibiotics`, `/pathogens`, …) resolve against the gateway. The
-/// default instance is fully auth-aware — bearer injection, single-flight
-/// 401/403 refresh recovery and debug TLS trust — because the lookup
-/// screens construct it outside any Riverpod scope.
+/// Builds a [Dio] whose base URL is [kApiRootUrl] so their relative paths
+/// (`/antibiotics`, `/pathogens`, …) resolve against the versioned gateway
+/// API. Prefer [apiClientServiceProvider] over constructing this directly,
+/// so every repository shares one authenticated client.
 class ApiClient {
   final Dio dio;
 
@@ -169,8 +185,7 @@ class ApiClient {
 
   static Dio _buildDio(Dio? dioOverride) {
     if (dioOverride != null) return dioOverride;
-    final dio =
-        Dio(gatewayBaseOptions(baseUrl: '$kApiBaseUrl/api/$kApiVersion'));
+    final dio = Dio(gatewayBaseOptions(baseUrl: kApiRootUrl));
     attachDebugTrust(dio);
     dio.interceptors.add(_authInterceptor(dio));
     return dio;
@@ -212,3 +227,12 @@ class ApiClient {
     );
   }
 }
+
+/// Shared [ApiClient] for lookup-feature repositories.
+///
+/// It reuses [apiClientProvider]'s Dio (base URL `…/api/v1`, bearer
+/// injection, refresh recovery), so the API version lives in exactly one
+/// place and tests can override a single provider.
+final Provider<ApiClient> apiClientServiceProvider = Provider<ApiClient>(
+  (ref) => ApiClient(dioOverride: ref.watch(apiClientProvider)),
+);

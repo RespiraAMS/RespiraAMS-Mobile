@@ -27,6 +27,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonNoData => 'No data';
 
   @override
+  String get commonYes => 'Yes';
+
+  @override
+  String get commonNo => 'No';
+
+  @override
   String get commonDescription => 'Description';
 
   @override
@@ -539,6 +545,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get patientSavedTreatment => 'Saved treatment';
 
   @override
+  String get treatmentPlanInProgress => 'In progress';
+
+  @override
+  String get treatmentPlanClosed => 'Closed';
+
+  @override
+  String get adherenceAdhere => 'Adheres to protocol';
+
+  @override
+  String get adherenceNotAdhere => 'Not adhered';
+
+  @override
+  String get adherenceNotAdhereValid => 'Not adhered (acceptable)';
+
+  @override
+  String get adherenceNotAdhereInvalid => 'Not adhered (invalid)';
+
+  @override
   String get patientAddTitle => 'Add patient';
 
   @override
@@ -705,6 +729,31 @@ class AppLocalizationsEn extends AppLocalizations {
   String get diagnosisComorbidities => 'Comorbidities & risk';
 
   @override
+  String get diagnosisAllergy => 'Allergy';
+
+  @override
+  String get diagnosisAllergyType => 'Antibiotic allergy status';
+
+  @override
+  String get diagnosisAllergyNo => 'No allergy';
+
+  @override
+  String get diagnosisAllergyYes => 'Antibiotic allergy';
+
+  @override
+  String get diagnosisAllergyNonRegistered =>
+      'Allergy to an unlisted antibiotic';
+
+  @override
+  String get diagnosisAllergyUnknown => 'Unknown / other allergy';
+
+  @override
+  String get diagnosisAllergySelect => 'Select the allergenic antibiotics';
+
+  @override
+  String get diagnosisAllergyOther => 'Describe the other allergy';
+
+  @override
   String get diagnosisEmptyForm => 'No form data.';
 
   @override
@@ -846,6 +895,309 @@ class AppLocalizationsEn extends AppLocalizations {
   String diagnosisFlowMissing(String fields) {
     return 'Missing required information: $fields.';
   }
+
+  @override
+  String get diagnosisMedicalHistory => 'Medical history';
+
+  @override
+  String get diagnosisSpecialHistory => 'Special medical history';
+
+  @override
+  String get diagnosisSpecialHistoryHint =>
+      'Enter history not covered by the system';
+
+  @override
+  String get diagnosisAdd => 'Add';
+
+  @override
+  String get diagnosisRemove => 'Remove';
+
+  @override
+  String get diagnosisOtherInfections => 'Other infections';
+
+  @override
+  String get diagnosisOtherInfectionsSelect => 'Select concurrent infections';
+
+  @override
+  String get diagnosisMicrobialSamples => 'Microbiology samples';
+
+  @override
+  String get diagnosisMicrobialAdd => 'Add sample';
+
+  @override
+  String get diagnosisMicrobialSampleType => 'Sample type';
+
+  @override
+  String get diagnosisMicrobialMicCategory => 'MIC category';
+
+  @override
+  String get diagnosisMicrobialPathogen => 'Pathogen';
+
+  @override
+  String get diagnosisMicrobialPathogenHint => 'Select pathogen';
+
+  @override
+  String get diagnosisMicrobialPathogenRequired =>
+      'Please select a pathogen for every microbiology sample.';
+
+  @override
+  String get diagnosisAllergyRequired =>
+      'Please select the antibiotic allergy status.';
+
+  @override
+  String get diagnosisAllergyYesRequired =>
+      'Please select at least one allergenic antibiotic.';
+
+  @override
+  String get diagnosisAllergyOtherRequired =>
+      'Please describe the other allergy.';
+
+  @override
+  String diagnosisInvalidNumber(String name) {
+    return '\"$name\" must be a number.';
+  }
+
+  @override
+  String get diagnosisEgfr => 'eGFR';
+
+  @override
+  String get diagnosisOtherInfectionsTitle => 'Other infections';
+
+  @override
+  String get diagnosisAllergyTitle => 'Antibiotic allergy';
+
+  @override
+  String get diagnosisAllergyNoValue => 'None';
+
+  @override
+  String get diagnosisSectionMetrics => 'Score details';
+
+  @override
+  String diagnosisMetricsMajorMinor(int major, int minor) {
+    return 'Major $major · Minor $minor';
+  }
+
+  @override
+  String get diagnosisTabProtocols => 'Protocols';
+
+  @override
+  String get diagnosisSectionProtocols => 'Treatment protocols';
+
+  @override
+  String get diagnosisProtocolMedicines => 'Medicine combinations';
+
+  @override
+  String get diagnosisProtocolPathogens => 'Pathogens';
+
+  @override
+  String get diagnosisProtocolCriteria => 'Criteria';
+
+  @override
+  String get diagnosisProtocolNoData => 'No matching protocol.';
+
+  @override
+  String get diagnosisProtocolSelect => 'Select a medicine combination';
+
+  @override
+  String get diagnosisProtocolNoMedicine => 'No medicine combination.';
+
+  @override
+  String get diagnosisConfirmTreatment => 'Confirm treatment';
+
+  @override
+  String get diagnosisReason => 'Reason for medicine choice';
+
+  @override
+  String get diagnosisReasonHint =>
+      'Required when choosing medicines outside the protocol';
+
+  @override
+  String get diagnosisWarnCombinationTitle => 'Antibiotic combination warning';
+
+  @override
+  String get diagnosisWarnCombinationDesc =>
+      'The selected combination should be reviewed before prescribing.';
+
+  @override
+  String get diagnosisConfirmSuccess => 'Treatment result saved.';
+
+  @override
+  String get diagnosisConfirmFailed => 'Unable to save the treatment result.';
+
+  @override
+  String get diagnosisConfirmMissingResult => 'No diagnosis result to save.';
+
+  @override
+  String get diagnosisSelectMedicineRequired =>
+      'Please select a medicine combination.';
+
+  @override
+  String get diagnosisNoProtocolToSave => 'No matching protocol to save.';
+
+  @override
+  String diagnosisEvidenceFormula(String formula) {
+    return 'Formula: $formula';
+  }
+
+  @override
+  String diagnosisEvidenceValue(String value) {
+    return 'Value: $value';
+  }
+
+  @override
+  String diagnosisEvidenceRelated(String variables) {
+    return 'Related variables: $variables';
+  }
+
+  @override
+  String diagnosisEvidenceMissing(String variables) {
+    return 'Missing: $variables';
+  }
+
+  @override
+  String get diagnosisMicrobialResultTitle => 'Microbiology result';
+
+  @override
+  String get diagnosisMicrobialAntibiotics => 'Susceptible antibiotics';
+
+  @override
+  String get diagnosisDiagnosisId => 'Diagnosis ID';
+
+  @override
+  String get infectionSkinSoftTissue => 'Skin and soft tissue infection';
+
+  @override
+  String get infectionSepticArthritis => 'Septic arthritis';
+
+  @override
+  String get infectionOsteomyelitis => 'Osteomyelitis';
+
+  @override
+  String get infectionBacterialMyositis =>
+      'Bacterial myositis / muscle abscess';
+
+  @override
+  String get infectionInfectedGoutyTophus => 'Infected gouty tophus';
+
+  @override
+  String get infectionPyelonephritis => 'Pyelonephritis / renal abscess';
+
+  @override
+  String get infectionAcuteCystitis => 'Acute cystitis';
+
+  @override
+  String get infectionAcuteNonGonococcalUrethritis =>
+      'Acute non-gonococcal urethritis';
+
+  @override
+  String get infectionBacterialVaginourethritis => 'Bacterial vaginourethritis';
+
+  @override
+  String get infectionBacterialEndometritis => 'Bacterial endometritis';
+
+  @override
+  String get infectionPurulentMeningitis => 'Purulent meningitis';
+
+  @override
+  String get infectionBacterialEncephalitis => 'Bacterial encephalitis';
+
+  @override
+  String get infectionPleuralEmpyema => 'Pleural empyema';
+
+  @override
+  String get infectionMediastinalAbscess => 'Mediastinal abscess';
+
+  @override
+  String get infectionInfectiveEndocarditis => 'Infective endocarditis';
+
+  @override
+  String get infectionBacterialMyocarditis => 'Bacterial myocarditis';
+
+  @override
+  String get infectionBacterialPericarditis => 'Bacterial pericarditis';
+
+  @override
+  String get infectionPulmonaryTuberculosis => 'Pulmonary tuberculosis';
+
+  @override
+  String get infectionExtrapulmonaryTuberculosis =>
+      'Extrapulmonary tuberculosis';
+
+  @override
+  String get infectionBiliaryTract => 'Biliary tract infection';
+
+  @override
+  String get infectionBacterialLiverAbscess => 'Bacterial liver abscess';
+
+  @override
+  String get infectionInfectedAcutePancreatitis =>
+      'Infected acute pancreatitis';
+
+  @override
+  String get infectionBacterialPeritonitis => 'Bacterial peritonitis';
+
+  @override
+  String get infectionBacterialDiarrhea => 'Bacterial diarrhea';
+
+  @override
+  String get infectionHelicobacterPylori => 'Helicobacter pylori infection';
+
+  @override
+  String get infectionSepsis => 'Sepsis';
+
+  @override
+  String get infectionOrbitalCellulitis => 'Orbital cellulitis';
+
+  @override
+  String get infectionConjunctivitis => 'Conjunctivitis';
+
+  @override
+  String get infectionKeratitis => 'Keratitis';
+
+  @override
+  String get infectionDacryocystitis => 'Dacryocystitis';
+
+  @override
+  String get infectionMaxillofacialAbscess => 'Maxillofacial abscess';
+
+  @override
+  String get infectionOther => 'Other';
+
+  @override
+  String get sampleSputum => 'Sputum';
+
+  @override
+  String get sampleBronchoalveolarLavageFluid => 'Bronchoalveolar lavage fluid';
+
+  @override
+  String get samplePleuralFluid => 'Pleural fluid';
+
+  @override
+  String get sampleUrine => 'Urine';
+
+  @override
+  String get sampleBlood => 'Blood';
+
+  @override
+  String get sampleAbdominalFluid => 'Abdominal fluid';
+
+  @override
+  String get sampleCerebrospinalFluid => 'Cerebrospinal fluid';
+
+  @override
+  String get sampleWoundExudate => 'Wound exudate';
+
+  @override
+  String get sampleOther => 'Other';
+
+  @override
+  String get micSusceptible => 'Susceptible';
+
+  @override
+  String get micIntermediate => 'Intermediate';
+
+  @override
+  String get micResistant => 'Resistant';
 
   @override
   String get routeIntravenous => 'Intravenous';
@@ -1263,6 +1615,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get variableCategoryPersonalShort => 'Personal';
+
+  @override
+  String get variableCategoryMedicalHistory => 'Medical history';
 
   @override
   String get variableCategoryParaclinical => 'Paraclinical';

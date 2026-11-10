@@ -25,12 +25,12 @@ class SuspectedCauseRepository {
     try {
       final queryParams = <String, dynamic>{
         'page': page,
-        'pageSize': pageSize,
+        'size': pageSize,
       };
 
-      if (pathogenId != null) queryParams['PathogenId'] = pathogenId;
-      if (severity != null) queryParams['Severity'] = severity;
-      if (treatmentSite != null) queryParams['TreatmentSite'] = treatmentSite;
+      if (pathogenId != null) queryParams['pathogenId'] = pathogenId;
+      if (severity != null) queryParams['severity'] = severity;
+      if (treatmentSite != null) queryParams['treatmentSite'] = treatmentSite;
 
       final response = await apiClient.dio.get(
         '/suspected-causes',

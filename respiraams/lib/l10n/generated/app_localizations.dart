@@ -134,6 +134,18 @@ abstract class AppLocalizations {
   /// **'Không có dữ liệu'**
   String get commonNoData;
 
+  /// No description provided for @commonYes.
+  ///
+  /// In vi, this message translates to:
+  /// **'Có'**
+  String get commonYes;
+
+  /// No description provided for @commonNo.
+  ///
+  /// In vi, this message translates to:
+  /// **'Không'**
+  String get commonNo;
+
   /// No description provided for @commonDescription.
   ///
   /// In vi, this message translates to:
@@ -1040,6 +1052,42 @@ abstract class AppLocalizations {
   /// **'Điều trị đã lưu'**
   String get patientSavedTreatment;
 
+  /// No description provided for @treatmentPlanInProgress.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đang thực hiện'**
+  String get treatmentPlanInProgress;
+
+  /// No description provided for @treatmentPlanClosed.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đã kết thúc'**
+  String get treatmentPlanClosed;
+
+  /// No description provided for @adherenceAdhere.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tuân thủ phác đồ'**
+  String get adherenceAdhere;
+
+  /// No description provided for @adherenceNotAdhere.
+  ///
+  /// In vi, this message translates to:
+  /// **'Không tuân thủ'**
+  String get adherenceNotAdhere;
+
+  /// No description provided for @adherenceNotAdhereValid.
+  ///
+  /// In vi, this message translates to:
+  /// **'Không tuân thủ (chấp nhận)'**
+  String get adherenceNotAdhereValid;
+
+  /// No description provided for @adherenceNotAdhereInvalid.
+  ///
+  /// In vi, this message translates to:
+  /// **'Không tuân thủ (không hợp lệ)'**
+  String get adherenceNotAdhereInvalid;
+
   /// No description provided for @patientAddTitle.
   ///
   /// In vi, this message translates to:
@@ -1352,6 +1400,54 @@ abstract class AppLocalizations {
   /// **'Bệnh nền & nguy cơ'**
   String get diagnosisComorbidities;
 
+  /// No description provided for @diagnosisAllergy.
+  ///
+  /// In vi, this message translates to:
+  /// **'Dị ứng'**
+  String get diagnosisAllergy;
+
+  /// No description provided for @diagnosisAllergyType.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tình trạng dị ứng kháng sinh'**
+  String get diagnosisAllergyType;
+
+  /// No description provided for @diagnosisAllergyNo.
+  ///
+  /// In vi, this message translates to:
+  /// **'Không dị ứng'**
+  String get diagnosisAllergyNo;
+
+  /// No description provided for @diagnosisAllergyYes.
+  ///
+  /// In vi, this message translates to:
+  /// **'Có dị ứng kháng sinh'**
+  String get diagnosisAllergyYes;
+
+  /// No description provided for @diagnosisAllergyNonRegistered.
+  ///
+  /// In vi, this message translates to:
+  /// **'Dị ứng kháng sinh ngoài danh mục'**
+  String get diagnosisAllergyNonRegistered;
+
+  /// No description provided for @diagnosisAllergyUnknown.
+  ///
+  /// In vi, this message translates to:
+  /// **'Không rõ / dị ứng khác'**
+  String get diagnosisAllergyUnknown;
+
+  /// No description provided for @diagnosisAllergySelect.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chọn kháng sinh dị ứng'**
+  String get diagnosisAllergySelect;
+
+  /// No description provided for @diagnosisAllergyOther.
+  ///
+  /// In vi, this message translates to:
+  /// **'Mô tả dị ứng khác'**
+  String get diagnosisAllergyOther;
+
   /// No description provided for @diagnosisEmptyForm.
   ///
   /// In vi, this message translates to:
@@ -1621,6 +1717,564 @@ abstract class AppLocalizations {
   /// In vi, this message translates to:
   /// **'Thiếu thông tin bắt buộc: {fields}.'**
   String diagnosisFlowMissing(String fields);
+
+  /// No description provided for @diagnosisMedicalHistory.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tiền sử bệnh'**
+  String get diagnosisMedicalHistory;
+
+  /// No description provided for @diagnosisSpecialHistory.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bệnh sử đặc biệt'**
+  String get diagnosisSpecialHistory;
+
+  /// No description provided for @diagnosisSpecialHistoryHint.
+  ///
+  /// In vi, this message translates to:
+  /// **'Nhập bệnh sử mà hệ thống chưa bao phủ'**
+  String get diagnosisSpecialHistoryHint;
+
+  /// No description provided for @diagnosisAdd.
+  ///
+  /// In vi, this message translates to:
+  /// **'Thêm'**
+  String get diagnosisAdd;
+
+  /// No description provided for @diagnosisRemove.
+  ///
+  /// In vi, this message translates to:
+  /// **'Xóa'**
+  String get diagnosisRemove;
+
+  /// No description provided for @diagnosisOtherInfections.
+  ///
+  /// In vi, this message translates to:
+  /// **'Nhiễm trùng khác'**
+  String get diagnosisOtherInfections;
+
+  /// No description provided for @diagnosisOtherInfectionsSelect.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chọn nhiễm trùng kèm theo'**
+  String get diagnosisOtherInfectionsSelect;
+
+  /// No description provided for @diagnosisMicrobialSamples.
+  ///
+  /// In vi, this message translates to:
+  /// **'Mẫu xét nghiệm vi sinh'**
+  String get diagnosisMicrobialSamples;
+
+  /// No description provided for @diagnosisMicrobialAdd.
+  ///
+  /// In vi, this message translates to:
+  /// **'Thêm mẫu'**
+  String get diagnosisMicrobialAdd;
+
+  /// No description provided for @diagnosisMicrobialSampleType.
+  ///
+  /// In vi, this message translates to:
+  /// **'Loại mẫu'**
+  String get diagnosisMicrobialSampleType;
+
+  /// No description provided for @diagnosisMicrobialMicCategory.
+  ///
+  /// In vi, this message translates to:
+  /// **'Mức MIC'**
+  String get diagnosisMicrobialMicCategory;
+
+  /// No description provided for @diagnosisMicrobialPathogen.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tác nhân'**
+  String get diagnosisMicrobialPathogen;
+
+  /// No description provided for @diagnosisMicrobialPathogenHint.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chọn tác nhân'**
+  String get diagnosisMicrobialPathogenHint;
+
+  /// No description provided for @diagnosisMicrobialPathogenRequired.
+  ///
+  /// In vi, this message translates to:
+  /// **'Vui lòng chọn tác nhân cho tất cả mẫu vi sinh.'**
+  String get diagnosisMicrobialPathogenRequired;
+
+  /// No description provided for @diagnosisAllergyRequired.
+  ///
+  /// In vi, this message translates to:
+  /// **'Vui lòng chọn tình trạng dị ứng kháng sinh.'**
+  String get diagnosisAllergyRequired;
+
+  /// No description provided for @diagnosisAllergyYesRequired.
+  ///
+  /// In vi, this message translates to:
+  /// **'Vui lòng chọn ít nhất một kháng sinh dị ứng.'**
+  String get diagnosisAllergyYesRequired;
+
+  /// No description provided for @diagnosisAllergyOtherRequired.
+  ///
+  /// In vi, this message translates to:
+  /// **'Vui lòng mô tả dị ứng khác.'**
+  String get diagnosisAllergyOtherRequired;
+
+  /// No description provided for @diagnosisInvalidNumber.
+  ///
+  /// In vi, this message translates to:
+  /// **'Giá trị \"{name}\" phải là số.'**
+  String diagnosisInvalidNumber(String name);
+
+  /// No description provided for @diagnosisEgfr.
+  ///
+  /// In vi, this message translates to:
+  /// **'eGFR'**
+  String get diagnosisEgfr;
+
+  /// No description provided for @diagnosisOtherInfectionsTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Nhiễm trùng khác'**
+  String get diagnosisOtherInfectionsTitle;
+
+  /// No description provided for @diagnosisAllergyTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Dị ứng kháng sinh'**
+  String get diagnosisAllergyTitle;
+
+  /// No description provided for @diagnosisAllergyNoValue.
+  ///
+  /// In vi, this message translates to:
+  /// **'Không có'**
+  String get diagnosisAllergyNoValue;
+
+  /// No description provided for @diagnosisSectionMetrics.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chi tiết điểm'**
+  String get diagnosisSectionMetrics;
+
+  /// No description provided for @diagnosisMetricsMajorMinor.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chính {major} · Phụ {minor}'**
+  String diagnosisMetricsMajorMinor(int major, int minor);
+
+  /// No description provided for @diagnosisTabProtocols.
+  ///
+  /// In vi, this message translates to:
+  /// **'Phác đồ'**
+  String get diagnosisTabProtocols;
+
+  /// No description provided for @diagnosisSectionProtocols.
+  ///
+  /// In vi, this message translates to:
+  /// **'Phác đồ điều trị'**
+  String get diagnosisSectionProtocols;
+
+  /// No description provided for @diagnosisProtocolMedicines.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tổ hợp thuốc'**
+  String get diagnosisProtocolMedicines;
+
+  /// No description provided for @diagnosisProtocolPathogens.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tác nhân'**
+  String get diagnosisProtocolPathogens;
+
+  /// No description provided for @diagnosisProtocolCriteria.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tiêu chí'**
+  String get diagnosisProtocolCriteria;
+
+  /// No description provided for @diagnosisProtocolNoData.
+  ///
+  /// In vi, this message translates to:
+  /// **'Không có phác đồ phù hợp.'**
+  String get diagnosisProtocolNoData;
+
+  /// No description provided for @diagnosisProtocolSelect.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chọn tổ hợp thuốc'**
+  String get diagnosisProtocolSelect;
+
+  /// No description provided for @diagnosisProtocolNoMedicine.
+  ///
+  /// In vi, this message translates to:
+  /// **'Không có tổ hợp thuốc.'**
+  String get diagnosisProtocolNoMedicine;
+
+  /// No description provided for @diagnosisConfirmTreatment.
+  ///
+  /// In vi, this message translates to:
+  /// **'Xác nhận điều trị'**
+  String get diagnosisConfirmTreatment;
+
+  /// No description provided for @diagnosisReason.
+  ///
+  /// In vi, this message translates to:
+  /// **'Lý do chọn thuốc'**
+  String get diagnosisReason;
+
+  /// No description provided for @diagnosisReasonHint.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bắt buộc nếu chọn thuốc ngoài phác đồ'**
+  String get diagnosisReasonHint;
+
+  /// No description provided for @diagnosisWarnCombinationTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Cảnh báo phối hợp kháng sinh'**
+  String get diagnosisWarnCombinationTitle;
+
+  /// No description provided for @diagnosisWarnCombinationDesc.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tổ hợp thuốc đã chọn cần được kiểm tra trước khi chỉ định.'**
+  String get diagnosisWarnCombinationDesc;
+
+  /// No description provided for @diagnosisConfirmSuccess.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đã lưu kết quả điều trị.'**
+  String get diagnosisConfirmSuccess;
+
+  /// No description provided for @diagnosisConfirmFailed.
+  ///
+  /// In vi, this message translates to:
+  /// **'Không thể lưu kết quả điều trị.'**
+  String get diagnosisConfirmFailed;
+
+  /// No description provided for @diagnosisConfirmMissingResult.
+  ///
+  /// In vi, this message translates to:
+  /// **'Không có kết quả chẩn đoán để lưu.'**
+  String get diagnosisConfirmMissingResult;
+
+  /// No description provided for @diagnosisSelectMedicineRequired.
+  ///
+  /// In vi, this message translates to:
+  /// **'Vui lòng chọn tổ hợp thuốc.'**
+  String get diagnosisSelectMedicineRequired;
+
+  /// No description provided for @diagnosisNoProtocolToSave.
+  ///
+  /// In vi, this message translates to:
+  /// **'Không có phác đồ phù hợp để lưu.'**
+  String get diagnosisNoProtocolToSave;
+
+  /// No description provided for @diagnosisEvidenceFormula.
+  ///
+  /// In vi, this message translates to:
+  /// **'Công thức: {formula}'**
+  String diagnosisEvidenceFormula(String formula);
+
+  /// No description provided for @diagnosisEvidenceValue.
+  ///
+  /// In vi, this message translates to:
+  /// **'Giá trị: {value}'**
+  String diagnosisEvidenceValue(String value);
+
+  /// No description provided for @diagnosisEvidenceRelated.
+  ///
+  /// In vi, this message translates to:
+  /// **'Biến liên quan: {variables}'**
+  String diagnosisEvidenceRelated(String variables);
+
+  /// No description provided for @diagnosisEvidenceMissing.
+  ///
+  /// In vi, this message translates to:
+  /// **'Thiếu: {variables}'**
+  String diagnosisEvidenceMissing(String variables);
+
+  /// No description provided for @diagnosisMicrobialResultTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Kết quả vi sinh'**
+  String get diagnosisMicrobialResultTitle;
+
+  /// No description provided for @diagnosisMicrobialAntibiotics.
+  ///
+  /// In vi, this message translates to:
+  /// **'Kháng sinh nhạy cảm'**
+  String get diagnosisMicrobialAntibiotics;
+
+  /// No description provided for @diagnosisDiagnosisId.
+  ///
+  /// In vi, this message translates to:
+  /// **'Mã chẩn đoán'**
+  String get diagnosisDiagnosisId;
+
+  /// No description provided for @infectionSkinSoftTissue.
+  ///
+  /// In vi, this message translates to:
+  /// **'Nhiễm khuẩn da / mô mềm'**
+  String get infectionSkinSoftTissue;
+
+  /// No description provided for @infectionSepticArthritis.
+  ///
+  /// In vi, this message translates to:
+  /// **'Viêm khớp nhiễm khuẩn'**
+  String get infectionSepticArthritis;
+
+  /// No description provided for @infectionOsteomyelitis.
+  ///
+  /// In vi, this message translates to:
+  /// **'Viêm tủy xương nhiễm khuẩn'**
+  String get infectionOsteomyelitis;
+
+  /// No description provided for @infectionBacterialMyositis.
+  ///
+  /// In vi, this message translates to:
+  /// **'Viêm cơ / áp xe cơ nhiễm khuẩn'**
+  String get infectionBacterialMyositis;
+
+  /// No description provided for @infectionInfectedGoutyTophus.
+  ///
+  /// In vi, this message translates to:
+  /// **'Nhiễm khuẩn hạt tophi'**
+  String get infectionInfectedGoutyTophus;
+
+  /// No description provided for @infectionPyelonephritis.
+  ///
+  /// In vi, this message translates to:
+  /// **'Viêm / áp xe thận - bể thận'**
+  String get infectionPyelonephritis;
+
+  /// No description provided for @infectionAcuteCystitis.
+  ///
+  /// In vi, this message translates to:
+  /// **'Viêm bàng quang cấp'**
+  String get infectionAcuteCystitis;
+
+  /// No description provided for @infectionAcuteNonGonococcalUrethritis.
+  ///
+  /// In vi, this message translates to:
+  /// **'Viêm niệu đạo cấp không do lậu'**
+  String get infectionAcuteNonGonococcalUrethritis;
+
+  /// No description provided for @infectionBacterialVaginourethritis.
+  ///
+  /// In vi, this message translates to:
+  /// **'Viêm âm đạo - niệu đạo do vi khuẩn'**
+  String get infectionBacterialVaginourethritis;
+
+  /// No description provided for @infectionBacterialEndometritis.
+  ///
+  /// In vi, this message translates to:
+  /// **'Viêm tử cung do vi khuẩn'**
+  String get infectionBacterialEndometritis;
+
+  /// No description provided for @infectionPurulentMeningitis.
+  ///
+  /// In vi, this message translates to:
+  /// **'Viêm màng não mủ'**
+  String get infectionPurulentMeningitis;
+
+  /// No description provided for @infectionBacterialEncephalitis.
+  ///
+  /// In vi, this message translates to:
+  /// **'Viêm não do vi khuẩn'**
+  String get infectionBacterialEncephalitis;
+
+  /// No description provided for @infectionPleuralEmpyema.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tràn mủ màng phổi'**
+  String get infectionPleuralEmpyema;
+
+  /// No description provided for @infectionMediastinalAbscess.
+  ///
+  /// In vi, this message translates to:
+  /// **'Áp xe trung thất'**
+  String get infectionMediastinalAbscess;
+
+  /// No description provided for @infectionInfectiveEndocarditis.
+  ///
+  /// In vi, this message translates to:
+  /// **'Viêm nội tâm mạc nhiễm khuẩn'**
+  String get infectionInfectiveEndocarditis;
+
+  /// No description provided for @infectionBacterialMyocarditis.
+  ///
+  /// In vi, this message translates to:
+  /// **'Viêm cơ tim do vi khuẩn'**
+  String get infectionBacterialMyocarditis;
+
+  /// No description provided for @infectionBacterialPericarditis.
+  ///
+  /// In vi, this message translates to:
+  /// **'Viêm màng ngoài tim do vi khuẩn'**
+  String get infectionBacterialPericarditis;
+
+  /// No description provided for @infectionPulmonaryTuberculosis.
+  ///
+  /// In vi, this message translates to:
+  /// **'Lao phổi'**
+  String get infectionPulmonaryTuberculosis;
+
+  /// No description provided for @infectionExtrapulmonaryTuberculosis.
+  ///
+  /// In vi, this message translates to:
+  /// **'Lao ngoài phổi'**
+  String get infectionExtrapulmonaryTuberculosis;
+
+  /// No description provided for @infectionBiliaryTract.
+  ///
+  /// In vi, this message translates to:
+  /// **'Nhiễm trùng đường mật'**
+  String get infectionBiliaryTract;
+
+  /// No description provided for @infectionBacterialLiverAbscess.
+  ///
+  /// In vi, this message translates to:
+  /// **'Áp xe gan do vi khuẩn'**
+  String get infectionBacterialLiverAbscess;
+
+  /// No description provided for @infectionInfectedAcutePancreatitis.
+  ///
+  /// In vi, this message translates to:
+  /// **'Viêm tụy cấp nhiễm khuẩn'**
+  String get infectionInfectedAcutePancreatitis;
+
+  /// No description provided for @infectionBacterialPeritonitis.
+  ///
+  /// In vi, this message translates to:
+  /// **'Viêm phúc mạc nhiễm khuẩn'**
+  String get infectionBacterialPeritonitis;
+
+  /// No description provided for @infectionBacterialDiarrhea.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tiêu chảy do vi khuẩn'**
+  String get infectionBacterialDiarrhea;
+
+  /// No description provided for @infectionHelicobacterPylori.
+  ///
+  /// In vi, this message translates to:
+  /// **'Nhiễm Helicobacter pylori'**
+  String get infectionHelicobacterPylori;
+
+  /// No description provided for @infectionSepsis.
+  ///
+  /// In vi, this message translates to:
+  /// **'Nhiễm trùng huyết'**
+  String get infectionSepsis;
+
+  /// No description provided for @infectionOrbitalCellulitis.
+  ///
+  /// In vi, this message translates to:
+  /// **'Viêm tổ chức hốc mắt'**
+  String get infectionOrbitalCellulitis;
+
+  /// No description provided for @infectionConjunctivitis.
+  ///
+  /// In vi, this message translates to:
+  /// **'Viêm kết mạc mắt'**
+  String get infectionConjunctivitis;
+
+  /// No description provided for @infectionKeratitis.
+  ///
+  /// In vi, this message translates to:
+  /// **'Viêm giác mạc mắt'**
+  String get infectionKeratitis;
+
+  /// No description provided for @infectionDacryocystitis.
+  ///
+  /// In vi, this message translates to:
+  /// **'Viêm túi lệ mắt'**
+  String get infectionDacryocystitis;
+
+  /// No description provided for @infectionMaxillofacialAbscess.
+  ///
+  /// In vi, this message translates to:
+  /// **'Áp xe vùng hàm - mặt'**
+  String get infectionMaxillofacialAbscess;
+
+  /// No description provided for @infectionOther.
+  ///
+  /// In vi, this message translates to:
+  /// **'Khác'**
+  String get infectionOther;
+
+  /// No description provided for @sampleSputum.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đờm'**
+  String get sampleSputum;
+
+  /// No description provided for @sampleBronchoalveolarLavageFluid.
+  ///
+  /// In vi, this message translates to:
+  /// **'Dịch rửa phế quản / phế nang'**
+  String get sampleBronchoalveolarLavageFluid;
+
+  /// No description provided for @samplePleuralFluid.
+  ///
+  /// In vi, this message translates to:
+  /// **'Dịch màng phổi'**
+  String get samplePleuralFluid;
+
+  /// No description provided for @sampleUrine.
+  ///
+  /// In vi, this message translates to:
+  /// **'Nước tiểu'**
+  String get sampleUrine;
+
+  /// No description provided for @sampleBlood.
+  ///
+  /// In vi, this message translates to:
+  /// **'Máu'**
+  String get sampleBlood;
+
+  /// No description provided for @sampleAbdominalFluid.
+  ///
+  /// In vi, this message translates to:
+  /// **'Dịch ổ bụng'**
+  String get sampleAbdominalFluid;
+
+  /// No description provided for @sampleCerebrospinalFluid.
+  ///
+  /// In vi, this message translates to:
+  /// **'Dịch não tủy'**
+  String get sampleCerebrospinalFluid;
+
+  /// No description provided for @sampleWoundExudate.
+  ///
+  /// In vi, this message translates to:
+  /// **'Dịch tiết vết thương'**
+  String get sampleWoundExudate;
+
+  /// No description provided for @sampleOther.
+  ///
+  /// In vi, this message translates to:
+  /// **'Khác'**
+  String get sampleOther;
+
+  /// No description provided for @micSusceptible.
+  ///
+  /// In vi, this message translates to:
+  /// **'Nhạy cảm'**
+  String get micSusceptible;
+
+  /// No description provided for @micIntermediate.
+  ///
+  /// In vi, this message translates to:
+  /// **'Trung gian'**
+  String get micIntermediate;
+
+  /// No description provided for @micResistant.
+  ///
+  /// In vi, this message translates to:
+  /// **'Kháng thuốc'**
+  String get micResistant;
 
   /// No description provided for @routeIntravenous.
   ///
@@ -2413,6 +3067,12 @@ abstract class AppLocalizations {
   /// In vi, this message translates to:
   /// **'Cá nhân'**
   String get variableCategoryPersonalShort;
+
+  /// No description provided for @variableCategoryMedicalHistory.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tiền sử bệnh'**
+  String get variableCategoryMedicalHistory;
 
   /// No description provided for @variableCategoryParaclinical.
   ///

@@ -16,17 +16,17 @@ class AntibioticRepository {
 
   Future<PaginatedAntibioticResponse> fetchAntibiotics({int page = 1, int pageSize = 10, String? name,}) async {
     try {
+      final search = name?.trim() ?? '';
       final queryParams = <String, dynamic>{
         'page': page,
-        'pageSize': pageSize,
+        'size': pageSize,
+        if (search.isNotEmpty) 'searchTerm': search,
       };
 
-      if (name != null && name.trim().isNotEmpty) {
-        queryParams['name'] = name.trim();
-      }
-
+      // Free-text search lives on `/antibiotics/search`; the paged endpoint
+      // only supports `antibioticGroupId` / `classification` filters.
       final response = await apiClient.dio.get(
-        '/antibiotics',
+        search.isEmpty ? '/antibiotics' : '/antibiotics/search',
         queryParameters: queryParams,
       );
 

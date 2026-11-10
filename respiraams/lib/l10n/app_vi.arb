@@ -7,6 +7,8 @@
   "commonLoadDataError": "Không thể tải dữ liệu",
   "commonLoadInfoError": "Không tải được thông tin",
   "commonNoData": "Không có dữ liệu",
+  "commonYes": "Có",
+  "commonNo": "Không",
   "commonDescription": "Mô tả",
   "commonCode": "Mã",
   "commonApply": "Áp dụng",
@@ -262,6 +264,12 @@
     }
   },
   "patientSavedTreatment": "Điều trị đã lưu",
+  "treatmentPlanInProgress": "Đang thực hiện",
+  "treatmentPlanClosed": "Đã kết thúc",
+  "adherenceAdhere": "Tuân thủ phác đồ",
+  "adherenceNotAdhere": "Không tuân thủ",
+  "adherenceNotAdhereValid": "Không tuân thủ (chấp nhận)",
+  "adherenceNotAdhereInvalid": "Không tuân thủ (không hợp lệ)",
 
   "patientAddTitle": "Thêm bệnh nhân",
   "patientAddSubtitle": "Tạo hồ sơ bệnh nhân mới",
@@ -324,6 +332,14 @@
   "diagnosisVitalSigns": "Chỉ số sinh tồn",
   "diagnosisLabResults": "Kết quả xét nghiệm",
   "diagnosisComorbidities": "Bệnh nền & nguy cơ",
+  "diagnosisAllergy": "Dị ứng",
+  "diagnosisAllergyType": "Tình trạng dị ứng kháng sinh",
+  "diagnosisAllergyNo": "Không dị ứng",
+  "diagnosisAllergyYes": "Có dị ứng kháng sinh",
+  "diagnosisAllergyNonRegistered": "Dị ứng kháng sinh ngoài danh mục",
+  "diagnosisAllergyUnknown": "Không rõ / dị ứng khác",
+  "diagnosisAllergySelect": "Chọn kháng sinh dị ứng",
+  "diagnosisAllergyOther": "Mô tả dị ứng khác",
   "diagnosisEmptyForm": "Không có dữ liệu biểu mẫu.",
   "diagnosisFormLoadFailed": "Không thể tải biểu mẫu chẩn đoán.",
   "diagnosisResultTitle": "Kết quả chẩn đoán",
@@ -379,6 +395,134 @@
       "fields": { "type": "String" }
     }
   },
+  "diagnosisMedicalHistory": "Tiền sử bệnh",
+  "diagnosisSpecialHistory": "Bệnh sử đặc biệt",
+  "diagnosisSpecialHistoryHint": "Nhập bệnh sử mà hệ thống chưa bao phủ",
+  "diagnosisAdd": "Thêm",
+  "diagnosisRemove": "Xóa",
+  "diagnosisOtherInfections": "Nhiễm trùng khác",
+  "diagnosisOtherInfectionsSelect": "Chọn nhiễm trùng kèm theo",
+  "diagnosisMicrobialSamples": "Mẫu xét nghiệm vi sinh",
+  "diagnosisMicrobialAdd": "Thêm mẫu",
+  "diagnosisMicrobialSampleType": "Loại mẫu",
+  "diagnosisMicrobialMicCategory": "Mức MIC",
+  "diagnosisMicrobialPathogen": "Tác nhân",
+  "diagnosisMicrobialPathogenHint": "Chọn tác nhân",
+  "diagnosisMicrobialPathogenRequired": "Vui lòng chọn tác nhân cho tất cả mẫu vi sinh.",
+  "diagnosisAllergyRequired": "Vui lòng chọn tình trạng dị ứng kháng sinh.",
+  "diagnosisAllergyYesRequired": "Vui lòng chọn ít nhất một kháng sinh dị ứng.",
+  "diagnosisAllergyOtherRequired": "Vui lòng mô tả dị ứng khác.",
+  "diagnosisInvalidNumber": "Giá trị \"{name}\" phải là số.",
+  "@diagnosisInvalidNumber": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "diagnosisEgfr": "eGFR",
+  "diagnosisOtherInfectionsTitle": "Nhiễm trùng khác",
+  "diagnosisAllergyTitle": "Dị ứng kháng sinh",
+  "diagnosisAllergyNoValue": "Không có",
+  "diagnosisSectionMetrics": "Chi tiết điểm",
+  "diagnosisMetricsMajorMinor": "Chính {major} · Phụ {minor}",
+  "@diagnosisMetricsMajorMinor": {
+    "placeholders": {
+      "major": { "type": "int" },
+      "minor": { "type": "int" }
+    }
+  },
+  "diagnosisTabProtocols": "Phác đồ",
+  "diagnosisSectionProtocols": "Phác đồ điều trị",
+  "diagnosisProtocolMedicines": "Tổ hợp thuốc",
+  "diagnosisProtocolPathogens": "Tác nhân",
+  "diagnosisProtocolCriteria": "Tiêu chí",
+  "diagnosisProtocolNoData": "Không có phác đồ phù hợp.",
+  "diagnosisProtocolSelect": "Chọn tổ hợp thuốc",
+  "diagnosisProtocolNoMedicine": "Không có tổ hợp thuốc.",
+  "diagnosisConfirmTreatment": "Xác nhận điều trị",
+  "diagnosisReason": "Lý do chọn thuốc",
+  "diagnosisReasonHint": "Bắt buộc nếu chọn thuốc ngoài phác đồ",
+  "diagnosisWarnCombinationTitle": "Cảnh báo phối hợp kháng sinh",
+  "diagnosisWarnCombinationDesc": "Tổ hợp thuốc đã chọn cần được kiểm tra trước khi chỉ định.",
+  "diagnosisConfirmSuccess": "Đã lưu kết quả điều trị.",
+  "diagnosisConfirmFailed": "Không thể lưu kết quả điều trị.",
+  "diagnosisConfirmMissingResult": "Không có kết quả chẩn đoán để lưu.",
+  "diagnosisSelectMedicineRequired": "Vui lòng chọn tổ hợp thuốc.",
+  "diagnosisNoProtocolToSave": "Không có phác đồ phù hợp để lưu.",
+  "diagnosisEvidenceFormula": "Công thức: {formula}",
+  "@diagnosisEvidenceFormula": {
+    "placeholders": {
+      "formula": { "type": "String" }
+    }
+  },
+  "diagnosisEvidenceValue": "Giá trị: {value}",
+  "@diagnosisEvidenceValue": {
+    "placeholders": {
+      "value": { "type": "String" }
+    }
+  },
+  "diagnosisEvidenceRelated": "Biến liên quan: {variables}",
+  "@diagnosisEvidenceRelated": {
+    "placeholders": {
+      "variables": { "type": "String" }
+    }
+  },
+  "diagnosisEvidenceMissing": "Thiếu: {variables}",
+  "@diagnosisEvidenceMissing": {
+    "placeholders": {
+      "variables": { "type": "String" }
+    }
+  },
+  "diagnosisMicrobialResultTitle": "Kết quả vi sinh",
+  "diagnosisMicrobialAntibiotics": "Kháng sinh nhạy cảm",
+  "diagnosisDiagnosisId": "Mã chẩn đoán",
+
+  "infectionSkinSoftTissue": "Nhiễm khuẩn da / mô mềm",
+  "infectionSepticArthritis": "Viêm khớp nhiễm khuẩn",
+  "infectionOsteomyelitis": "Viêm tủy xương nhiễm khuẩn",
+  "infectionBacterialMyositis": "Viêm cơ / áp xe cơ nhiễm khuẩn",
+  "infectionInfectedGoutyTophus": "Nhiễm khuẩn hạt tophi",
+  "infectionPyelonephritis": "Viêm / áp xe thận - bể thận",
+  "infectionAcuteCystitis": "Viêm bàng quang cấp",
+  "infectionAcuteNonGonococcalUrethritis": "Viêm niệu đạo cấp không do lậu",
+  "infectionBacterialVaginourethritis": "Viêm âm đạo - niệu đạo do vi khuẩn",
+  "infectionBacterialEndometritis": "Viêm tử cung do vi khuẩn",
+  "infectionPurulentMeningitis": "Viêm màng não mủ",
+  "infectionBacterialEncephalitis": "Viêm não do vi khuẩn",
+  "infectionPleuralEmpyema": "Tràn mủ màng phổi",
+  "infectionMediastinalAbscess": "Áp xe trung thất",
+  "infectionInfectiveEndocarditis": "Viêm nội tâm mạc nhiễm khuẩn",
+  "infectionBacterialMyocarditis": "Viêm cơ tim do vi khuẩn",
+  "infectionBacterialPericarditis": "Viêm màng ngoài tim do vi khuẩn",
+  "infectionPulmonaryTuberculosis": "Lao phổi",
+  "infectionExtrapulmonaryTuberculosis": "Lao ngoài phổi",
+  "infectionBiliaryTract": "Nhiễm trùng đường mật",
+  "infectionBacterialLiverAbscess": "Áp xe gan do vi khuẩn",
+  "infectionInfectedAcutePancreatitis": "Viêm tụy cấp nhiễm khuẩn",
+  "infectionBacterialPeritonitis": "Viêm phúc mạc nhiễm khuẩn",
+  "infectionBacterialDiarrhea": "Tiêu chảy do vi khuẩn",
+  "infectionHelicobacterPylori": "Nhiễm Helicobacter pylori",
+  "infectionSepsis": "Nhiễm trùng huyết",
+  "infectionOrbitalCellulitis": "Viêm tổ chức hốc mắt",
+  "infectionConjunctivitis": "Viêm kết mạc mắt",
+  "infectionKeratitis": "Viêm giác mạc mắt",
+  "infectionDacryocystitis": "Viêm túi lệ mắt",
+  "infectionMaxillofacialAbscess": "Áp xe vùng hàm - mặt",
+  "infectionOther": "Khác",
+
+  "sampleSputum": "Đờm",
+  "sampleBronchoalveolarLavageFluid": "Dịch rửa phế quản / phế nang",
+  "samplePleuralFluid": "Dịch màng phổi",
+  "sampleUrine": "Nước tiểu",
+  "sampleBlood": "Máu",
+  "sampleAbdominalFluid": "Dịch ổ bụng",
+  "sampleCerebrospinalFluid": "Dịch não tủy",
+  "sampleWoundExudate": "Dịch tiết vết thương",
+  "sampleOther": "Khác",
+
+  "micSusceptible": "Nhạy cảm",
+  "micIntermediate": "Trung gian",
+  "micResistant": "Kháng thuốc",
+
   "routeIntravenous": "Tiêm tĩnh mạch",
   "routeOral": "Uống",
   "routeIntramuscular": "Tiêm bắp",
@@ -558,6 +702,7 @@
   "valueTypeOther": "Khác",
   "variableCategoryPersonal": "Thông tin cá nhân",
   "variableCategoryPersonalShort": "Cá nhân",
+  "variableCategoryMedicalHistory": "Tiền sử bệnh",
   "variableCategoryParaclinical": "Cận lâm sàng",
   "variableCategoryClinical": "Lâm sàng",
   "variableCategoryOther": "Khác",
