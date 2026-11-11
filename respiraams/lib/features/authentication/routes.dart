@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 
+import 'screens/doctor_profile_screen.dart';
 import 'screens/forgot_password_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/new_password_screen.dart';
@@ -16,6 +17,9 @@ class AuthenticationRoutes {
   static const otpVerification = '/otp-verification';
   static const newPassword = '/new-password';
   static const passwordResetSuccess = '/password-reset-success';
+
+  /// Read-only profile of the signed-in doctor, opened from Settings.
+  static const doctorProfile = '/doctor/profile';
 }
 
 final List<RouteBase> authenticationRoutes = [
@@ -46,5 +50,9 @@ final List<RouteBase> authenticationRoutes = [
   GoRoute(
     path: AuthenticationRoutes.passwordResetSuccess,
     builder: (c, s) => const PasswordResetSuccessScreen(),
+  ),
+  GoRoute(
+    path: AuthenticationRoutes.doctorProfile,
+    builder: (c, s) => const DoctorProfileScreen(),
   ),
 ];

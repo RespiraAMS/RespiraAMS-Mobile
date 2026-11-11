@@ -7,6 +7,7 @@ import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../core/localization/language_provider.dart';
 import '../../core/theme/theme_mode_provider.dart';
+import '../../core/utils/name_initials.dart';
 import '../../design_system/design_system.dart';
 import '../../l10n/l10n.dart';
 import '../authentication/providers/session_provider.dart';
@@ -115,7 +116,10 @@ class SettingsSheet extends ConsumerWidget {
                 children: [
                   const _SheetHeader(),
                   const SizedBox(height: Spacing.section),
-                  _ProfileCard(name: name),
+                  _ProfileCard(
+                    name: name,
+                    onTap: () => _openDoctorProfile(context),
+                  ),
                   const SizedBox(height: Spacing.section),
                   _SectionTitle(l10n.settingsAppearance),
                   const SizedBox(height: Spacing.inline),
@@ -332,42 +336,71 @@ class _CloseButton extends StatelessWidget {
   }
 }
 
+/// Closes the sheet, then opens the signed-in doctor's profile.
+///
+/// The router is captured first: popping the sheet deactivates its context,
+/// so a later `context.push` would fail.
+void _openDoctorProfile(BuildContext context) {
+  final router = GoRouter.of(context);
+  Navigator.of(context, rootNavigator: true).pop();
+  router.push(AuthenticationRoutes.doctorProfile);
+}
+
 class _ProfileCard extends StatelessWidget {
-  const _ProfileCard({required this.name});
+  const _ProfileCard({required this.name, this.onTap});
 
   final String name;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return AppSurface(
-      padding: const EdgeInsets.all(Spacing.group),
-      child: Row(
-        children: [
-          AvatarGlyphWidget(glyph: _initialsFor(name), size: 50),
-          const SizedBox(width: Spacing.control),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
+    final c = context.respiraColors;
+    return Semantics(
+      button: onTap != null,
+      label: context.l10n.doctorProfileOpen,
+      child: Material(
+        color: c.surface,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppRadius.lgValue),
+          side: BorderSide(color: c.borderSubtle),
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.all(Spacing.group),
+            child: Row(
               children: [
-                AppText(
-                  name,
-                  type: AppTextType.bodyLarge,
-                  fontWeight: FontWeight.w700,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                AvatarGlyphWidget(glyph: initialsFor(name), size: 50),
+                const SizedBox(width: Spacing.control),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      AppText(
+                        name,
+                        type: AppTextType.bodyLarge,
+                        fontWeight: FontWeight.w700,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 3),
+                      AppText(
+                        context.l10n.settingsProfileSpecialty,
+                        type: AppTextType.caption,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
                 ),
-                const SizedBox(height: 3),
-                AppText(
-                  context.l10n.settingsProfileSpecialty,
-                  type: AppTextType.caption,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
+                const SizedBox(width: Spacing.inline),
+                const _Chevron(),
               ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }
@@ -714,31 +747,3 @@ class _OptionRow<T> extends StatelessWidget {
   }
 }
 
-/// Builds an avatar glyph from the session name.
-///
-/// The local auth flow stores the email as the doctor name, so e-mails are
-/// reduced to their local part (e.g. `bs.minh@respira.vn` → `BM`).
-String _initialsFor(String name) {
-  var value = name.trim();
-  if (value.isEmpty) return 'BS';
-  if (value.contains('@')) {
-    value = value.split('@').first.replaceAll(RegExp(r'[._-]+'), ' ');
-  }
-
-  final parts = value
-      .split(RegExp(r'\s+'))
-      .where((part) => part.isNotEmpty)
-      .toList();
-  if (parts.isEmpty) return 'BS';
-
-  String firstChar(String part) =>
-      String.fromCharCode(part.runes.first).toUpperCase();
-
-  if (parts.length == 1) {
-    final part = parts.first;
-    return part.runes.length >= 2
-        ? String.fromCharCodes(part.runes.take(2)).toUpperCase()
-        : firstChar(part);
-  }
-  return '${firstChar(parts.last)}${firstChar(parts.first)}';
-}

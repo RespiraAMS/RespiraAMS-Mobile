@@ -338,6 +338,132 @@ abstract class AppLocalizations {
   /// **'Bác sĩ'**
   String get settingsDoctorFallback;
 
+  /// No description provided for @doctorProfileTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Hồ sơ bác sĩ'**
+  String get doctorProfileTitle;
+
+  /// No description provided for @doctorProfileSubtitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Thông tin tài khoản'**
+  String get doctorProfileSubtitle;
+
+  /// No description provided for @doctorProfileOpen.
+  ///
+  /// In vi, this message translates to:
+  /// **'Mở hồ sơ bác sĩ'**
+  String get doctorProfileOpen;
+
+  /// No description provided for @doctorProfileSectionProfessional.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chuyên môn'**
+  String get doctorProfileSectionProfessional;
+
+  /// No description provided for @doctorProfileSectionContact.
+  ///
+  /// In vi, this message translates to:
+  /// **'Liên hệ'**
+  String get doctorProfileSectionContact;
+
+  /// No description provided for @doctorProfileSectionPersonal.
+  ///
+  /// In vi, this message translates to:
+  /// **'Cá nhân'**
+  String get doctorProfileSectionPersonal;
+
+  /// No description provided for @doctorProfileAcademicTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Học hàm / học vị'**
+  String get doctorProfileAcademicTitle;
+
+  /// No description provided for @doctorProfileDegrees.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bằng cấp'**
+  String get doctorProfileDegrees;
+
+  /// No description provided for @doctorProfilePosition.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chức vụ'**
+  String get doctorProfilePosition;
+
+  /// No description provided for @doctorProfileRole.
+  ///
+  /// In vi, this message translates to:
+  /// **'Vai trò'**
+  String get doctorProfileRole;
+
+  /// No description provided for @doctorProfileEmail.
+  ///
+  /// In vi, this message translates to:
+  /// **'Email'**
+  String get doctorProfileEmail;
+
+  /// No description provided for @doctorProfilePhone.
+  ///
+  /// In vi, this message translates to:
+  /// **'Điện thoại'**
+  String get doctorProfilePhone;
+
+  /// No description provided for @doctorProfileAddress.
+  ///
+  /// In vi, this message translates to:
+  /// **'Địa chỉ'**
+  String get doctorProfileAddress;
+
+  /// No description provided for @doctorProfileGender.
+  ///
+  /// In vi, this message translates to:
+  /// **'Giới tính'**
+  String get doctorProfileGender;
+
+  /// No description provided for @doctorProfileCitizenId.
+  ///
+  /// In vi, this message translates to:
+  /// **'CCCD'**
+  String get doctorProfileCitizenId;
+
+  /// No description provided for @doctorProfileRoleDoctor.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bác sĩ'**
+  String get doctorProfileRoleDoctor;
+
+  /// No description provided for @doctorProfileRoleAdmin.
+  ///
+  /// In vi, this message translates to:
+  /// **'Quản trị viên'**
+  String get doctorProfileRoleAdmin;
+
+  /// No description provided for @doctorProfileGenderOther.
+  ///
+  /// In vi, this message translates to:
+  /// **'Khác'**
+  String get doctorProfileGenderOther;
+
+  /// No description provided for @doctorProfileError.
+  ///
+  /// In vi, this message translates to:
+  /// **'Không tải được hồ sơ bác sĩ.'**
+  String get doctorProfileError;
+
+  /// No description provided for @doctorProfileEmpty.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chưa có thông tin hồ sơ.'**
+  String get doctorProfileEmpty;
+
+  /// No description provided for @doctorProfileRetry.
+  ///
+  /// In vi, this message translates to:
+  /// **'Thử lại'**
+  String get doctorProfileRetry;
+
   /// No description provided for @settingsAppearance.
   ///
   /// In vi, this message translates to:

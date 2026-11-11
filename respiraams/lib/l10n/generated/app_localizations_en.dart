@@ -139,6 +139,69 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsDoctorFallback => 'Doctor';
 
   @override
+  String get doctorProfileTitle => 'Doctor profile';
+
+  @override
+  String get doctorProfileSubtitle => 'Account details';
+
+  @override
+  String get doctorProfileOpen => 'Open doctor profile';
+
+  @override
+  String get doctorProfileSectionProfessional => 'Professional';
+
+  @override
+  String get doctorProfileSectionContact => 'Contact';
+
+  @override
+  String get doctorProfileSectionPersonal => 'Personal';
+
+  @override
+  String get doctorProfileAcademicTitle => 'Academic title';
+
+  @override
+  String get doctorProfileDegrees => 'Degrees';
+
+  @override
+  String get doctorProfilePosition => 'Position';
+
+  @override
+  String get doctorProfileRole => 'Role';
+
+  @override
+  String get doctorProfileEmail => 'Email';
+
+  @override
+  String get doctorProfilePhone => 'Phone';
+
+  @override
+  String get doctorProfileAddress => 'Address';
+
+  @override
+  String get doctorProfileGender => 'Gender';
+
+  @override
+  String get doctorProfileCitizenId => 'Citizen ID';
+
+  @override
+  String get doctorProfileRoleDoctor => 'Doctor';
+
+  @override
+  String get doctorProfileRoleAdmin => 'Administrator';
+
+  @override
+  String get doctorProfileGenderOther => 'Other';
+
+  @override
+  String get doctorProfileError => 'Couldn\'t load the doctor profile.';
+
+  @override
+  String get doctorProfileEmpty => 'No profile details available.';
+
+  @override
+  String get doctorProfileRetry => 'Try again';
+
+  @override
   String get settingsAppearance => 'Appearance';
 
   @override

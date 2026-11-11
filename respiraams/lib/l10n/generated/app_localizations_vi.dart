@@ -139,6 +139,69 @@ class AppLocalizationsVi extends AppLocalizations {
   String get settingsDoctorFallback => 'Bác sĩ';
 
   @override
+  String get doctorProfileTitle => 'Hồ sơ bác sĩ';
+
+  @override
+  String get doctorProfileSubtitle => 'Thông tin tài khoản';
+
+  @override
+  String get doctorProfileOpen => 'Mở hồ sơ bác sĩ';
+
+  @override
+  String get doctorProfileSectionProfessional => 'Chuyên môn';
+
+  @override
+  String get doctorProfileSectionContact => 'Liên hệ';
+
+  @override
+  String get doctorProfileSectionPersonal => 'Cá nhân';
+
+  @override
+  String get doctorProfileAcademicTitle => 'Học hàm / học vị';
+
+  @override
+  String get doctorProfileDegrees => 'Bằng cấp';
+
+  @override
+  String get doctorProfilePosition => 'Chức vụ';
+
+  @override
+  String get doctorProfileRole => 'Vai trò';
+
+  @override
+  String get doctorProfileEmail => 'Email';
+
+  @override
+  String get doctorProfilePhone => 'Điện thoại';
+
+  @override
+  String get doctorProfileAddress => 'Địa chỉ';
+
+  @override
+  String get doctorProfileGender => 'Giới tính';
+
+  @override
+  String get doctorProfileCitizenId => 'CCCD';
+
+  @override
+  String get doctorProfileRoleDoctor => 'Bác sĩ';
+
+  @override
+  String get doctorProfileRoleAdmin => 'Quản trị viên';
+
+  @override
+  String get doctorProfileGenderOther => 'Khác';
+
+  @override
+  String get doctorProfileError => 'Không tải được hồ sơ bác sĩ.';
+
+  @override
+  String get doctorProfileEmpty => 'Chưa có thông tin hồ sơ.';
+
+  @override
+  String get doctorProfileRetry => 'Thử lại';
+
+  @override
   String get settingsAppearance => 'Giao diện';
 
   @override
