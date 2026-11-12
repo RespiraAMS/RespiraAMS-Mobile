@@ -1,5 +1,6 @@
 import '../core/network/api_response.dart';
 import '../features/calculator/models/calculator.dart';
+import '../features/antibiogram/models/antibiogram.dart';
 import '../features/clinical_variables/models/clinical_variable.dart';
 import '../features/diagnosis/models/diagnosis_result.dart';
 import '../features/patient/models/add_progress_form_state.dart';
@@ -7,6 +8,7 @@ import '../features/patient/models/patient.dart';
 import '../features/patient/models/patient_summary.dart';
 import '../features/statistics/models/statistics_view.dart';
 import '../features/suspected_causes/models/suspected_cause.dart';
+import '../features/treatment_protocol/models/treatment_protocol.dart';
 import 'generated/app_localizations.dart';
 
 /// Localized display labels for enums and value objects that live outside
@@ -85,6 +87,33 @@ extension TreatmentSiteL10n on TreatmentSite {
         TreatmentSite.inpatient => l10n.siteInpatient,
         TreatmentSite.intensiveCareUnit => l10n.siteIcu,
         TreatmentSite.unknown => l10n.commonOther,
+      };
+}
+
+extension MicCategoryL10n on MicCategory {
+  String label(AppLocalizations l10n) => switch (this) {
+        MicCategory.susceptible => l10n.micSusceptible,
+        MicCategory.intermediate => l10n.micIntermediate,
+        MicCategory.resistant => l10n.micResistant,
+        MicCategory.unknown => l10n.commonOther,
+      };
+}
+
+extension ProtocolSeverityL10n on ProtocolSeverity {
+  String label(AppLocalizations l10n) => switch (this) {
+        ProtocolSeverity.mild => l10n.severityMild,
+        ProtocolSeverity.moderate => l10n.severityModerate,
+        ProtocolSeverity.severe => l10n.severitySevere,
+        ProtocolSeverity.unknown => l10n.commonOther,
+      };
+}
+
+extension ProtocolTreatmentSiteL10n on ProtocolTreatmentSite {
+  String label(AppLocalizations l10n) => switch (this) {
+        ProtocolTreatmentSite.outpatient => l10n.siteOutpatient,
+        ProtocolTreatmentSite.inpatient => l10n.siteInpatient,
+        ProtocolTreatmentSite.intensiveCareUnit => l10n.siteIcu,
+        ProtocolTreatmentSite.unknown => l10n.commonOther,
       };
 }
 

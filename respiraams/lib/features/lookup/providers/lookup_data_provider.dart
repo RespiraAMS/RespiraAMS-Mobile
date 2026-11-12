@@ -7,7 +7,9 @@ class LookupDataProvider {
   static const List<LookupCategory> categories = [
     LookupCategory(id: LookupCategoryId.antibioticGroups, icon: LucideIcons.layers),
     LookupCategory(id: LookupCategoryId.antibiotics, icon: LucideIcons.pill),
+    LookupCategory(id: LookupCategoryId.antibiograms, icon: LucideIcons.activity),
     LookupCategory(id: LookupCategoryId.pathogens, icon: LucideIcons.bug),
+    LookupCategory(id: LookupCategoryId.treatmentProtocols, icon: LucideIcons.clipboardCheck),
     LookupCategory(id: LookupCategoryId.clinicalVariables, icon: LucideIcons.clipboardList),
     LookupCategory(id: LookupCategoryId.suspectedCauses, icon: LucideIcons.alertCircle),
     LookupCategory(id: LookupCategoryId.criteria, icon: LucideIcons.checkSquare),

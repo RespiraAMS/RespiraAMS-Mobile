@@ -9,6 +9,9 @@ import '../../antibiotic/screens/antibiotic_list_screen.dart';
 import '../../antibioticGroup/providers/antibiotic_group_provider.dart';
 import '../../antibioticGroup/providers/antibiotic_group_service.dart';
 import '../../antibioticGroup/screens/antibiotic_group_list_screen.dart';
+import '../../antibiogram/providers/antibiogram_provider.dart';
+import '../../antibiogram/providers/antibiogram_service.dart';
+import '../../antibiogram/screens/antibiogram_list_screen.dart';
 import '../../clinical_metrics/providers/clinical_metric_provider.dart';
 import '../../clinical_metrics/providers/clinical_metric_service.dart';
 import '../../clinical_metrics/screens/clinical_metric_list_screen.dart';
@@ -27,6 +30,9 @@ import '../../risk_factors/screens/risk_factor_list_screen.dart';
 import '../../suspected_causes/providers/suspected_cause_provider.dart';
 import '../../suspected_causes/providers/suspected_cause_service.dart';
 import '../../suspected_causes/screens/suspected_cause_list_screen.dart';
+import '../../treatment_protocol/providers/treatment_protocol_provider.dart';
+import '../../treatment_protocol/providers/treatment_protocol_service.dart';
+import '../../treatment_protocol/screens/treatment_protocol_list_screen.dart';
 import '../models/lookup_category.dart';
 
 class CategoryGridItem extends StatelessWidget {
@@ -75,6 +81,36 @@ class CategoryGridItem extends StatelessWidget {
                 return PathogenProvider(repository);
               },
               child: const PathogenListScreen(),
+            ),
+          ),
+        );
+      case LookupCategoryId.antibiograms:
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => ChangeNotifierProvider(
+              create: (_) {
+                final apiClient = ApiClient();
+                final repository = AntibiogramRepository(apiClient: apiClient);
+                return AntibiogramProvider(repository);
+              },
+              child: const AntibiogramListScreen(),
+            ),
+          ),
+        );
+      case LookupCategoryId.treatmentProtocols:
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => ChangeNotifierProvider(
+              create: (_) {
+                final apiClient = ApiClient();
+                final repository = TreatmentProtocolRepository(
+                  apiClient: apiClient,
+                );
+                return TreatmentProtocolProvider(repository);
+              },
+              child: const TreatmentProtocolListScreen(),
             ),
           ),
         );

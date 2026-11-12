@@ -8,9 +8,15 @@ import '../antibiotic/screens/antibiotic_list_screen.dart';
 import '../antibioticGroup/providers/antibiotic_group_provider.dart';
 import '../antibioticGroup/providers/antibiotic_group_service.dart';
 import '../antibioticGroup/screens/antibiotic_group_list_screen.dart';
+import '../antibiogram/providers/antibiogram_provider.dart';
+import '../antibiogram/providers/antibiogram_service.dart';
+import '../antibiogram/screens/antibiogram_list_screen.dart';
 import '../pathogen/providers/pathogen_provider.dart';
 import '../pathogen/providers/pathogen_service.dart';
 import '../pathogen/screens/pathogen_list_screen.dart';
+import '../treatment_protocol/providers/treatment_protocol_provider.dart';
+import '../treatment_protocol/providers/treatment_protocol_service.dart';
+import '../treatment_protocol/screens/treatment_protocol_list_screen.dart';
 import 'screens/medical_lookup_screen.dart';
 
 class LookupRoutes {
@@ -19,6 +25,7 @@ class LookupRoutes {
   static const antibiotics = '/lookup/antibiotics';
   static const antibioticGroups = '/lookup/antibiotic-groups';
   static const antibiograms = '/lookup/antibiograms';
+  static const treatmentProtocols = '/lookup/treatment-protocols';
   static const diseases = '/lookup/diseases';
 }
 
@@ -52,6 +59,24 @@ final List<RouteBase> lookupRoutes = [
         AntibioticGroupRepository(apiClient: ApiClient()),
       ),
       child: const AntibioticGroupListScreen(),
+    ),
+  ),
+  GoRoute(
+    path: LookupRoutes.antibiograms,
+    builder: (context, state) => ChangeNotifierProvider(
+      create: (_) => AntibiogramProvider(
+        AntibiogramRepository(apiClient: ApiClient()),
+      ),
+      child: const AntibiogramListScreen(),
+    ),
+  ),
+  GoRoute(
+    path: LookupRoutes.treatmentProtocols,
+    builder: (context, state) => ChangeNotifierProvider(
+      create: (_) => TreatmentProtocolProvider(
+        TreatmentProtocolRepository(apiClient: ApiClient()),
+      ),
+      child: const TreatmentProtocolListScreen(),
     ),
   ),
 ];
