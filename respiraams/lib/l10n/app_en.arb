@@ -228,6 +228,54 @@
   "patientErrAddress": "Please enter the address.",
   "patientErrCity": "Please enter the province/city.",
   "patientCreateFailed": "Unable to create the patient. Please try again.",
+  "patientMenuSemantic": "Patient options",
+  "patientMenuEdit": "Edit",
+  "patientMenuDelete": "Delete",
+  "patientEditTitle": "Edit patient",
+  "patientEditSubtitle": "Update demographic & clinical information",
+  "patientEditCancel": "Cancel",
+  "patientEditSave": "Save changes",
+  "patientEditSuccess": "Patient updated.",
+  "patientEditFailed": "Unable to update the patient.",
+  "patientEditLoadFailed": "Unable to load the patient profile.",
+  "patientEditClinicalLocked": "Date of birth, gender, weight and height cannot be changed once the patient has a treatment.",
+  "patientFullName": "Full name",
+  "patientSectionAdmin": "Administrative information",
+  "patientSectionVitals": "Vitals",
+  "patientRequiredHint": "Required (*)",
+  "patientDeleteTitle": "Delete patient",
+  "patientDeleteDescription": "The patient record will be permanently deleted. This action cannot be undone.",
+  "patientDeleteConfirm": "Delete",
+  "patientDeleteSuccess": "Patient deleted.",
+  "patientDeleteFailed": "Unable to delete the patient.",
+  "patientDischarge": "Discharge",
+  "patientDischargeTitle": "Discharge patient",
+  "patientDischargeAdmission": "Admission date",
+  "patientDischargeOutcomeLabel": "TREATMENT OUTCOME *",
+  "patientDischargeRecovered": "Recovered",
+  "patientDischargeRecoveredDesc": "Symptoms improved, eligible for discharge",
+  "patientDischargeDeath": "Death",
+  "patientDischargeDeathDesc": "Death recorded during inpatient treatment",
+  "patientDischargeOutOfScope": "Out of scope",
+  "patientDischargeOutOfScopeDesc": "Transferred to a higher-level facility or taken home by family",
+  "patientDischargeSelected": "Selected outcome: {outcome}. Ready to save to the medical record.",
+  "@patientDischargeSelected": {
+    "placeholders": {
+      "outcome": { "type": "String" }
+    }
+  },
+  "patientDischargeConfirm": "Confirm discharge",
+  "patientDischargeCancel": "Cancel",
+  "patientDischargeSuccess": "Patient discharged.",
+  "patientDischargeFailed": "Unable to discharge. Please try again.",
+  "patientDischargedBanner": "Patient has been discharged",
+  "patientDischargedAt": "{date} · {outcome}",
+  "@patientDischargedAt": {
+    "placeholders": {
+      "date": { "type": "String" },
+      "outcome": { "type": "String" }
+    }
+  },
 
   "progressTitle": "Add progress",
   "progressSubtitleTargeted": "Based on the existing microbiology result",
@@ -503,6 +551,10 @@
   "categoryRiskFactorsSub": "Risk by pathogen",
   "categoryClinicalScores": "Clinical scores",
   "categoryClinicalScoresSub": "Criteria sets & assessment",
+  "categoryAntibiograms": "Antibiograms",
+  "categoryAntibiogramsSub": "MIC and antibiotics",
+  "categoryTreatmentProtocols": "Treatment protocols",
+  "categoryTreatmentProtocolsSub": "By severity & treatment site",
   "recentItemDrugTitle": "Ceftriaxone",
   "recentItemDrugSubtitle": "Third-generation cephalosporin",
   "recentItemDrugTag": "Drug",
@@ -554,6 +606,159 @@
   "pathogenSearchHint": "Search pathogens...",
   "pathogenAtypical": "Atypical",
   "pathogenDescription": "Description",
+
+  "antibiogramTitle": "Antibiograms",
+  "antibiogramSubtitle": "Pathogen · MIC · antibiotics",
+  "antibiogramSearchHint": "Search pathogen or antibiotic...",
+  "antibiogramEmpty": "No antibiogram data yet.",
+  "antibiogramAntibiotics": "Antibiotics ({count})",
+  "@antibiogramAntibiotics": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "micSusceptible": "Susceptible",
+  "micIntermediate": "Intermediate",
+  "micResistant": "Resistant",
+
+  "treatmentProtocolTitle": "Treatment protocols",
+  "treatmentProtocolSubtitle": "Severity · site · antibiotics",
+  "treatmentProtocolSearchHint": "Search pathogen, criteria, antibiotic...",
+  "treatmentProtocolEmpty": "No treatment protocol yet.",
+  "treatmentProtocolApplied": "Applied",
+  "treatmentProtocolNotApplied": "Not applied",
+  "treatmentProtocolCriteria": "Criteria",
+  "treatmentProtocolPathogens": "Pathogens",
+  "treatmentProtocolCombinations": "Antibiotic combinations",
+  "treatmentProtocolPublisher": "Publisher",
+
+  "analysisTitle": "Analysis reports",
+  "analysisSubtitle": "Adherence & treatment outcomes",
+  "analysisEntryTitle": "Treatment analysis reports",
+  "analysisEntrySubtitle": "Adherence & outcomes by doctor",
+  "analysisEmpty": "No analysis report yet.",
+  "analysisLoadFailed": "Unable to load the analysis report.",
+  "analysisDetailTitle": "Report detail",
+  "analysisDetailSubtitle": "Adherence and outcome metrics",
+  "analysisPeriod": "Analysis period",
+  "analysisCreatedAt": "Created {date}",
+  "@analysisCreatedAt": {
+    "placeholders": {
+      "date": { "type": "String" }
+    }
+  },
+  "analysisAllDoctors": "All doctors",
+  "analysisDoctorFallback": "Doctor #{id}",
+  "@analysisDoctorFallback": {
+    "placeholders": {
+      "id": { "type": "String" }
+    }
+  },
+  "analysisTotalPatients": "Total patients",
+  "analysisTotalPlans": "Total plans",
+  "analysisAdherenceRate": "Adherence rate",
+  "analysisPendingRate": "Pending review rate",
+  "analysisAdherent": "Adherent",
+  "analysisNonAdherent": "Non-adherent",
+  "analysisPendingReview": "Pending review",
+  "analysisOutcomes": "Treatment outcomes",
+  "analysisRecovered": "Recovered",
+  "analysisDeceased": "Deceased",
+  "analysisOtherOutcome": "Other",
+  "analysisByDoctor": "By doctor",
+  "analysisByMedicine": "By medicine",
+  "analysisMedicine": "Medicine",
+  "analysisClassification": "Classification",
+  "analysisPatientsCount": "{count} patients",
+  "@analysisPatientsCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "analysisPlansCount": "{count} plans",
+  "@analysisPlansCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "analysisNoDoctors": "This report has no doctor data.",
+  "analysisNoMedicines": "This report has no medicine data.",
+  "analysisNoData": "No data yet.",
+
+  "nextOfKinSection": "Emergency contacts",
+  "nextOfKinEmpty": "No emergency contact yet",
+  "nextOfKinEmptyDesc": "Add a relative to keep their contact details on file.",
+  "nextOfKinAdd": "Add relative",
+  "nextOfKinAddTitle": "Add relative",
+  "nextOfKinEditTitle": "Edit relative",
+  "nextOfKinSubtitle": "Patient contact information",
+  "nextOfKinInfoSection": "Relative information",
+  "nextOfKinFullName": "Full name",
+  "nextOfKinFullNameHint": "Enter full name",
+  "nextOfKinRelationship": "Relationship",
+  "nextOfKinRelationshipHint": "Select relationship",
+  "nextOfKinPhone": "Phone number",
+  "nextOfKinPhoneHint": "0912 345 678",
+  "nextOfKinSave": "Save relative",
+  "nextOfKinUpdate": "Save changes",
+  "nextOfKinMenuSemantic": "Relative options",
+  "nextOfKinMenuEdit": "Edit",
+  "nextOfKinMenuDelete": "Delete",
+  "nextOfKinDeleteTitle": "Delete relative?",
+  "nextOfKinDeleteDesc": "Are you sure you want to remove this relative from the patient record? This action cannot be undone.",
+  "nextOfKinDeleteConfirm": "Delete relative",
+  "nextOfKinDeleteSuccess": "Relative deleted.",
+  "nextOfKinDeleteFailed": "Unable to delete the relative.",
+  "nextOfKinCreateSuccess": "Relative added.",
+  "nextOfKinCreateFailed": "Unable to add the relative.",
+  "nextOfKinUpdateSuccess": "Relative updated.",
+  "nextOfKinUpdateFailed": "Unable to update the relative.",
+  "nextOfKinErrName": "Please enter the relative's full name.",
+  "nextOfKinErrPhone": "Invalid phone number.",
+  "nextOfKinErrRelationship": "Please select a relationship.",
+  "nextOfKinRelationshipOther": "Other",
+  "nextOfKinRelationshipOtherHint": "Enter relationship",
+  "relationshipSpouse": "Spouse",
+  "relationshipParent": "Parent",
+  "relationshipChild": "Child",
+  "relationshipSibling": "Sibling",
+  "relationshipGrandparent": "Grandparent",
+
+  "treatmentPlanDetailTitle": "Treatment plan",
+  "treatmentPlanDetailSubtitle": "Saved treatment information",
+  "treatmentPlanLoadFailed": "Unable to load the treatment plan.",
+  "treatmentPlanStatusInProgress": "In treatment",
+  "treatmentPlanStatusClosed": "Closed",
+  "treatmentPlanSeverity": "Severity",
+  "treatmentPlanSite": "Treatment site",
+  "treatmentPlanAdherenceLabel": "Adherence",
+  "treatmentPlanSuspected": "Suspected etiology",
+  "treatmentPlanMedicines": "Antibiotics",
+  "treatmentPlanNoMedicines": "No antibiotic recorded.",
+  "treatmentPlanReasonForChoice": "Reason for medicine choice",
+  "treatmentPlanClose": "Close plan",
+  "treatmentPlanCloseTitle": "Close treatment plan",
+  "treatmentPlanCloseDescriptionPrefix": "{name}'s treatment plan will be stopped. Once closed, the plan moves to the archive and ",
+  "@treatmentPlanCloseDescriptionPrefix": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "treatmentPlanCloseWarning": "cannot be edited",
+  "treatmentPlanCloseDescriptionSuffix": " any further.",
+  "treatmentPlanCloseReasonLabel": "Reason for closing",
+  "treatmentPlanCloseReasonHint": "Enter the reason for closing (recovered, transferred, protocol changed)...",
+  "treatmentPlanCloseReasonCounter": "{count}/500 characters",
+  "@treatmentPlanCloseReasonCounter": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "treatmentPlanCloseConfirm": "Close plan",
+  "treatmentPlanCloseSuccess": "Treatment plan closed.",
+  "treatmentPlanCloseFailed": "Unable to close the plan. Please try again.",
+  "treatmentPlanErrReasonRequired": "Please enter the reason for closing.",
+  "treatmentPlanViewSemantic": "View treatment plan details",
 
   "clinicalVariableTitle": "Clinical variables",
   "clinicalVariableSubtitle": "Parameter management",

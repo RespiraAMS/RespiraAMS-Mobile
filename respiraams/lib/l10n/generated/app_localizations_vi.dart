@@ -691,6 +691,126 @@ class AppLocalizationsVi extends AppLocalizations {
       'Không thể tạo bệnh nhân. Vui lòng thử lại.';
 
   @override
+  String get patientMenuSemantic => 'Tùy chọn bệnh nhân';
+
+  @override
+  String get patientMenuEdit => 'Edit';
+
+  @override
+  String get patientMenuDelete => 'Delete';
+
+  @override
+  String get patientEditTitle => 'Chỉnh sửa bệnh nhân';
+
+  @override
+  String get patientEditSubtitle => 'Cập nhật thông tin hành chính & lâm sàng';
+
+  @override
+  String get patientEditCancel => 'Hủy bỏ';
+
+  @override
+  String get patientEditSave => 'Lưu cập nhật';
+
+  @override
+  String get patientEditSuccess => 'Đã cập nhật bệnh nhân.';
+
+  @override
+  String get patientEditFailed => 'Không thể cập nhật bệnh nhân.';
+
+  @override
+  String get patientEditLoadFailed => 'Không thể tải hồ sơ bệnh nhân.';
+
+  @override
+  String get patientEditClinicalLocked =>
+      'Không thể sửa ngày sinh, giới tính, cân nặng và chiều cao sau khi bệnh nhân đã có điều trị.';
+
+  @override
+  String get patientFullName => 'Họ và tên bệnh nhân';
+
+  @override
+  String get patientSectionAdmin => 'Thông tin hành chính';
+
+  @override
+  String get patientSectionVitals => 'Thể trạng';
+
+  @override
+  String get patientRequiredHint => 'Bắt buộc (*)';
+
+  @override
+  String get patientDeleteTitle => 'Xóa bệnh nhân';
+
+  @override
+  String get patientDeleteDescription =>
+      'Hồ sơ bệnh nhân sẽ bị xóa vĩnh viễn. Thao tác này không thể hoàn tác.';
+
+  @override
+  String get patientDeleteConfirm => 'Xóa';
+
+  @override
+  String get patientDeleteSuccess => 'Đã xóa bệnh nhân.';
+
+  @override
+  String get patientDeleteFailed => 'Không thể xóa bệnh nhân.';
+
+  @override
+  String get patientDischarge => 'Xuất viện';
+
+  @override
+  String get patientDischargeTitle => 'Xuất viện bệnh nhân';
+
+  @override
+  String get patientDischargeAdmission => 'Ngày nhập viện';
+
+  @override
+  String get patientDischargeOutcomeLabel => 'KẾT QUẢ ĐIỀU TRỊ *';
+
+  @override
+  String get patientDischargeRecovered => 'Hồi phục';
+
+  @override
+  String get patientDischargeRecoveredDesc =>
+      'Bệnh nhân thuyên giảm triệu chứng, đủ điều kiện ra viện';
+
+  @override
+  String get patientDischargeDeath => 'Tử vong';
+
+  @override
+  String get patientDischargeDeathDesc =>
+      'Ghi nhận tử vong trong quá trình điều trị nội trú';
+
+  @override
+  String get patientDischargeOutOfScope => 'Ngoài phạm vi điều trị';
+
+  @override
+  String get patientDischargeOutOfScopeDesc =>
+      'Chuyển viện tuyến trên hoặc gia đình xin về';
+
+  @override
+  String patientDischargeSelected(String outcome) {
+    return 'Đã chọn kết quả: $outcome. Sẵn sàng lưu vào hệ thống bệnh án.';
+  }
+
+  @override
+  String get patientDischargeConfirm => 'Xác nhận xuất viện';
+
+  @override
+  String get patientDischargeCancel => 'Hủy bỏ';
+
+  @override
+  String get patientDischargeSuccess => 'Đã xuất viện bệnh nhân.';
+
+  @override
+  String get patientDischargeFailed => 'Không thể xuất viện. Vui lòng thử lại.';
+
+  @override
+  String get patientDischargedBanner => 'Bệnh nhân đã xuất viện';
+
+  @override
+  String patientDischargedAt(String date, String outcome) {
+    return '$date · $outcome';
+  }
+
+  @override
   String get progressTitle => 'Thêm diễn biến';
 
   @override
@@ -1240,7 +1360,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get micIntermediate => 'Trung gian';
 
   @override
-  String get micResistant => 'Kháng thuốc';
+  String get micResistant => 'Kháng';
 
   @override
   String get routeIntravenous => 'Tiêm tĩnh mạch';
@@ -1447,6 +1567,18 @@ class AppLocalizationsVi extends AppLocalizations {
   String get categoryClinicalScoresSub => 'Các bộ tiêu chí & đánh giá';
 
   @override
+  String get categoryAntibiograms => 'Kháng sinh đồ';
+
+  @override
+  String get categoryAntibiogramsSub => 'MIC và kháng sinh';
+
+  @override
+  String get categoryTreatmentProtocols => 'Phác đồ điều trị';
+
+  @override
+  String get categoryTreatmentProtocolsSub => 'Theo mức độ & vị trí';
+
+  @override
   String get recentItemDrugTitle => 'Ceftriaxone';
 
   @override
@@ -1592,6 +1724,356 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get pathogenDescription => 'Mô tả';
+
+  @override
+  String get antibiogramTitle => 'Kháng sinh đồ';
+
+  @override
+  String get antibiogramSubtitle => 'Tác nhân · MIC · kháng sinh';
+
+  @override
+  String get antibiogramSearchHint => 'Tìm tác nhân hoặc kháng sinh...';
+
+  @override
+  String get antibiogramEmpty => 'Chưa có dữ liệu kháng sinh đồ.';
+
+  @override
+  String antibiogramAntibiotics(int count) {
+    return 'Kháng sinh ($count)';
+  }
+
+  @override
+  String get treatmentProtocolTitle => 'Phác đồ điều trị';
+
+  @override
+  String get treatmentProtocolSubtitle => 'Mức độ · vị trí · kháng sinh';
+
+  @override
+  String get treatmentProtocolSearchHint =>
+      'Tìm tác nhân, tiêu chí, kháng sinh...';
+
+  @override
+  String get treatmentProtocolEmpty => 'Chưa có phác đồ điều trị.';
+
+  @override
+  String get treatmentProtocolApplied => 'Đang áp dụng';
+
+  @override
+  String get treatmentProtocolNotApplied => 'Ngừng áp dụng';
+
+  @override
+  String get treatmentProtocolCriteria => 'Tiêu chí';
+
+  @override
+  String get treatmentProtocolPathogens => 'Tác nhân';
+
+  @override
+  String get treatmentProtocolCombinations => 'Tổ hợp kháng sinh';
+
+  @override
+  String get treatmentProtocolPublisher => 'Nhà phát hành';
+
+  @override
+  String get analysisTitle => 'Báo cáo phân tích';
+
+  @override
+  String get analysisSubtitle => 'Tuân thủ & kết cục điều trị';
+
+  @override
+  String get analysisEntryTitle => 'Báo cáo phân tích điều trị';
+
+  @override
+  String get analysisEntrySubtitle => 'Tuân thủ & kết cục theo bác sĩ';
+
+  @override
+  String get analysisEmpty => 'Chưa có báo cáo phân tích.';
+
+  @override
+  String get analysisLoadFailed => 'Không thể tải báo cáo phân tích.';
+
+  @override
+  String get analysisDetailTitle => 'Chi tiết báo cáo';
+
+  @override
+  String get analysisDetailSubtitle => 'Chỉ số tuân thủ & kết cục';
+
+  @override
+  String get analysisPeriod => 'Kỳ phân tích';
+
+  @override
+  String analysisCreatedAt(String date) {
+    return 'Tạo lúc $date';
+  }
+
+  @override
+  String get analysisAllDoctors => 'Tất cả bác sĩ';
+
+  @override
+  String analysisDoctorFallback(String id) {
+    return 'Bác sĩ #$id';
+  }
+
+  @override
+  String get analysisTotalPatients => 'Tổng bệnh nhân';
+
+  @override
+  String get analysisTotalPlans => 'Tổng phác đồ';
+
+  @override
+  String get analysisAdherenceRate => 'Tỷ lệ tuân thủ';
+
+  @override
+  String get analysisPendingRate => 'Tỷ lệ chờ đánh giá';
+
+  @override
+  String get analysisAdherent => 'Tuân thủ';
+
+  @override
+  String get analysisNonAdherent => 'Không tuân thủ';
+
+  @override
+  String get analysisPendingReview => 'Chờ đánh giá';
+
+  @override
+  String get analysisOutcomes => 'Kết cục điều trị';
+
+  @override
+  String get analysisRecovered => 'Hồi phục';
+
+  @override
+  String get analysisDeceased => 'Tử vong';
+
+  @override
+  String get analysisOtherOutcome => 'Khác';
+
+  @override
+  String get analysisByDoctor => 'Theo bác sĩ';
+
+  @override
+  String get analysisByMedicine => 'Theo thuốc';
+
+  @override
+  String get analysisMedicine => 'Thuốc';
+
+  @override
+  String get analysisClassification => 'Phân loại';
+
+  @override
+  String analysisPatientsCount(int count) {
+    return '$count bệnh nhân';
+  }
+
+  @override
+  String analysisPlansCount(int count) {
+    return '$count phác đồ';
+  }
+
+  @override
+  String get analysisNoDoctors => 'Báo cáo không có dữ liệu bác sĩ.';
+
+  @override
+  String get analysisNoMedicines => 'Báo cáo không có dữ liệu thuốc.';
+
+  @override
+  String get analysisNoData => 'Chưa có dữ liệu.';
+
+  @override
+  String get nextOfKinSection => 'Người thân liên hệ';
+
+  @override
+  String get nextOfKinEmpty => 'Chưa có thông tin người thân';
+
+  @override
+  String get nextOfKinEmptyDesc =>
+      'Thêm người thân để lưu thông tin liên hệ khi cần thiết.';
+
+  @override
+  String get nextOfKinAdd => 'Thêm người thân';
+
+  @override
+  String get nextOfKinAddTitle => 'Thêm người thân';
+
+  @override
+  String get nextOfKinEditTitle => 'Chỉnh sửa người thân';
+
+  @override
+  String get nextOfKinSubtitle => 'Thông tin liên hệ của bệnh nhân';
+
+  @override
+  String get nextOfKinInfoSection => 'Thông tin người thân';
+
+  @override
+  String get nextOfKinFullName => 'Họ và tên';
+
+  @override
+  String get nextOfKinFullNameHint => 'Nhập họ và tên';
+
+  @override
+  String get nextOfKinRelationship => 'Mối quan hệ';
+
+  @override
+  String get nextOfKinRelationshipHint => 'Chọn mối quan hệ';
+
+  @override
+  String get nextOfKinPhone => 'Số điện thoại';
+
+  @override
+  String get nextOfKinPhoneHint => '0912 345 678';
+
+  @override
+  String get nextOfKinSave => 'Lưu người thân';
+
+  @override
+  String get nextOfKinUpdate => 'Lưu thay đổi';
+
+  @override
+  String get nextOfKinMenuSemantic => 'Tùy chọn người thân';
+
+  @override
+  String get nextOfKinMenuEdit => 'Sửa';
+
+  @override
+  String get nextOfKinMenuDelete => 'Xóa';
+
+  @override
+  String get nextOfKinDeleteTitle => 'Xóa người thân?';
+
+  @override
+  String get nextOfKinDeleteDesc =>
+      'Bạn có chắc chắn muốn xóa thông tin người thân khỏi hồ sơ bệnh nhân không? Hành động này không thể hoàn tác.';
+
+  @override
+  String get nextOfKinDeleteConfirm => 'Xóa người thân';
+
+  @override
+  String get nextOfKinDeleteSuccess => 'Đã xóa người thân.';
+
+  @override
+  String get nextOfKinDeleteFailed => 'Không thể xóa người thân.';
+
+  @override
+  String get nextOfKinCreateSuccess => 'Đã thêm người thân.';
+
+  @override
+  String get nextOfKinCreateFailed => 'Không thể thêm người thân.';
+
+  @override
+  String get nextOfKinUpdateSuccess => 'Đã cập nhật người thân.';
+
+  @override
+  String get nextOfKinUpdateFailed => 'Không thể cập nhật người thân.';
+
+  @override
+  String get nextOfKinErrName => 'Vui lòng nhập họ và tên người thân.';
+
+  @override
+  String get nextOfKinErrPhone => 'Số điện thoại không hợp lệ.';
+
+  @override
+  String get nextOfKinErrRelationship => 'Vui lòng chọn mối quan hệ.';
+
+  @override
+  String get nextOfKinRelationshipOther => 'Khác';
+
+  @override
+  String get nextOfKinRelationshipOtherHint => 'Nhập mối quan hệ';
+
+  @override
+  String get relationshipSpouse => 'Vợ/Chồng';
+
+  @override
+  String get relationshipParent => 'Cha/Mẹ';
+
+  @override
+  String get relationshipChild => 'Con';
+
+  @override
+  String get relationshipSibling => 'Anh/Chị/Em';
+
+  @override
+  String get relationshipGrandparent => 'Ông/Bà';
+
+  @override
+  String get treatmentPlanDetailTitle => 'Chi tiết phác đồ';
+
+  @override
+  String get treatmentPlanDetailSubtitle => 'Thông tin điều trị đã lưu';
+
+  @override
+  String get treatmentPlanLoadFailed => 'Không thể tải phác đồ điều trị.';
+
+  @override
+  String get treatmentPlanStatusInProgress => 'Đang điều trị';
+
+  @override
+  String get treatmentPlanStatusClosed => 'Đã đóng';
+
+  @override
+  String get treatmentPlanSeverity => 'Mức độ';
+
+  @override
+  String get treatmentPlanSite => 'Vị trí điều trị';
+
+  @override
+  String get treatmentPlanAdherenceLabel => 'Tuân thủ phác đồ';
+
+  @override
+  String get treatmentPlanSuspected => 'Căn nguyên nghi ngờ';
+
+  @override
+  String get treatmentPlanMedicines => 'Kháng sinh';
+
+  @override
+  String get treatmentPlanNoMedicines => 'Chưa có kháng sinh.';
+
+  @override
+  String get treatmentPlanReasonForChoice => 'Lý do chọn thuốc';
+
+  @override
+  String get treatmentPlanClose => 'Dừng phác đồ';
+
+  @override
+  String get treatmentPlanCloseTitle => 'Dừng phác đồ điều trị';
+
+  @override
+  String treatmentPlanCloseDescriptionPrefix(String name) {
+    return 'Phác đồ của bệnh nhân $name sẽ được dừng lại. Sau khi hoàn tất, phác đồ chuyển sang lưu trữ và ';
+  }
+
+  @override
+  String get treatmentPlanCloseWarning => 'không thể chỉnh sửa';
+
+  @override
+  String get treatmentPlanCloseDescriptionSuffix => ' thêm nội dung.';
+
+  @override
+  String get treatmentPlanCloseReasonLabel => 'Lý do dừng phác đồ';
+
+  @override
+  String get treatmentPlanCloseReasonHint =>
+      'Nhập lý do dừng phác đồ (bệnh nhân hồi phục, chuyển viện, thay đổi phác đồ)...';
+
+  @override
+  String treatmentPlanCloseReasonCounter(int count) {
+    return '$count/500 ký tự';
+  }
+
+  @override
+  String get treatmentPlanCloseConfirm => 'Dừng phác đồ';
+
+  @override
+  String get treatmentPlanCloseSuccess => 'Đã dừng phác đồ điều trị.';
+
+  @override
+  String get treatmentPlanCloseFailed =>
+      'Không thể dừng phác đồ. Vui lòng thử lại.';
+
+  @override
+  String get treatmentPlanErrReasonRequired =>
+      'Vui lòng nhập lý do dừng phác đồ.';
+
+  @override
+  String get treatmentPlanViewSemantic => 'Xem chi tiết phác đồ';
 
   @override
   String get clinicalVariableTitle => 'Biến số lâm sàng';

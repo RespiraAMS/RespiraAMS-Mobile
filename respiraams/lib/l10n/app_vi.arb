@@ -319,6 +319,54 @@
   "patientErrAddress": "Vui lòng nhập địa chỉ.",
   "patientErrCity": "Vui lòng nhập tỉnh/thành phố.",
   "patientCreateFailed": "Không thể tạo bệnh nhân. Vui lòng thử lại.",
+  "patientMenuSemantic": "Tùy chọn bệnh nhân",
+  "patientMenuEdit": "Edit",
+  "patientMenuDelete": "Delete",
+  "patientEditTitle": "Chỉnh sửa bệnh nhân",
+  "patientEditSubtitle": "Cập nhật thông tin hành chính & lâm sàng",
+  "patientEditCancel": "Hủy bỏ",
+  "patientEditSave": "Lưu cập nhật",
+  "patientEditSuccess": "Đã cập nhật bệnh nhân.",
+  "patientEditFailed": "Không thể cập nhật bệnh nhân.",
+  "patientEditLoadFailed": "Không thể tải hồ sơ bệnh nhân.",
+  "patientEditClinicalLocked": "Không thể sửa ngày sinh, giới tính, cân nặng và chiều cao sau khi bệnh nhân đã có điều trị.",
+  "patientFullName": "Họ và tên bệnh nhân",
+  "patientSectionAdmin": "Thông tin hành chính",
+  "patientSectionVitals": "Thể trạng",
+  "patientRequiredHint": "Bắt buộc (*)",
+  "patientDeleteTitle": "Xóa bệnh nhân",
+  "patientDeleteDescription": "Hồ sơ bệnh nhân sẽ bị xóa vĩnh viễn. Thao tác này không thể hoàn tác.",
+  "patientDeleteConfirm": "Xóa",
+  "patientDeleteSuccess": "Đã xóa bệnh nhân.",
+  "patientDeleteFailed": "Không thể xóa bệnh nhân.",
+  "patientDischarge": "Xuất viện",
+  "patientDischargeTitle": "Xuất viện bệnh nhân",
+  "patientDischargeAdmission": "Ngày nhập viện",
+  "patientDischargeOutcomeLabel": "KẾT QUẢ ĐIỀU TRỊ *",
+  "patientDischargeRecovered": "Hồi phục",
+  "patientDischargeRecoveredDesc": "Bệnh nhân thuyên giảm triệu chứng, đủ điều kiện ra viện",
+  "patientDischargeDeath": "Tử vong",
+  "patientDischargeDeathDesc": "Ghi nhận tử vong trong quá trình điều trị nội trú",
+  "patientDischargeOutOfScope": "Ngoài phạm vi điều trị",
+  "patientDischargeOutOfScopeDesc": "Chuyển viện tuyến trên hoặc gia đình xin về",
+  "patientDischargeSelected": "Đã chọn kết quả: {outcome}. Sẵn sàng lưu vào hệ thống bệnh án.",
+  "@patientDischargeSelected": {
+    "placeholders": {
+      "outcome": { "type": "String" }
+    }
+  },
+  "patientDischargeConfirm": "Xác nhận xuất viện",
+  "patientDischargeCancel": "Hủy bỏ",
+  "patientDischargeSuccess": "Đã xuất viện bệnh nhân.",
+  "patientDischargeFailed": "Không thể xuất viện. Vui lòng thử lại.",
+  "patientDischargedBanner": "Bệnh nhân đã xuất viện",
+  "patientDischargedAt": "{date} · {outcome}",
+  "@patientDischargedAt": {
+    "placeholders": {
+      "date": { "type": "String" },
+      "outcome": { "type": "String" }
+    }
+  },
 
   "progressTitle": "Thêm diễn biến",
   "progressSubtitleTargeted": "Dựa trên kết quả vi sinh đã có",
@@ -636,6 +684,10 @@
   "categoryRiskFactorsSub": "Nguy cơ theo tác nhân",
   "categoryClinicalScores": "Thang điểm lâm sàng",
   "categoryClinicalScoresSub": "Các bộ tiêu chí & đánh giá",
+  "categoryAntibiograms": "Kháng sinh đồ",
+  "categoryAntibiogramsSub": "MIC và kháng sinh",
+  "categoryTreatmentProtocols": "Phác đồ điều trị",
+  "categoryTreatmentProtocolsSub": "Theo mức độ & vị trí",
   "recentItemDrugTitle": "Ceftriaxone",
   "recentItemDrugSubtitle": "Cephalosporin thế hệ 3",
   "recentItemDrugTag": "Thuốc",
@@ -702,6 +754,159 @@
   "pathogenSearchHint": "Tìm kiếm tác nhân...",
   "pathogenAtypical": "Không điển hình",
   "pathogenDescription": "Mô tả",
+
+  "antibiogramTitle": "Kháng sinh đồ",
+  "antibiogramSubtitle": "Tác nhân · MIC · kháng sinh",
+  "antibiogramSearchHint": "Tìm tác nhân hoặc kháng sinh...",
+  "antibiogramEmpty": "Chưa có dữ liệu kháng sinh đồ.",
+  "antibiogramAntibiotics": "Kháng sinh ({count})",
+  "@antibiogramAntibiotics": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "micSusceptible": "Nhạy cảm",
+  "micIntermediate": "Trung gian",
+  "micResistant": "Kháng",
+
+  "treatmentProtocolTitle": "Phác đồ điều trị",
+  "treatmentProtocolSubtitle": "Mức độ · vị trí · kháng sinh",
+  "treatmentProtocolSearchHint": "Tìm tác nhân, tiêu chí, kháng sinh...",
+  "treatmentProtocolEmpty": "Chưa có phác đồ điều trị.",
+  "treatmentProtocolApplied": "Đang áp dụng",
+  "treatmentProtocolNotApplied": "Ngừng áp dụng",
+  "treatmentProtocolCriteria": "Tiêu chí",
+  "treatmentProtocolPathogens": "Tác nhân",
+  "treatmentProtocolCombinations": "Tổ hợp kháng sinh",
+  "treatmentProtocolPublisher": "Nhà phát hành",
+
+  "analysisTitle": "Báo cáo phân tích",
+  "analysisSubtitle": "Tuân thủ & kết cục điều trị",
+  "analysisEntryTitle": "Báo cáo phân tích điều trị",
+  "analysisEntrySubtitle": "Tuân thủ & kết cục theo bác sĩ",
+  "analysisEmpty": "Chưa có báo cáo phân tích.",
+  "analysisLoadFailed": "Không thể tải báo cáo phân tích.",
+  "analysisDetailTitle": "Chi tiết báo cáo",
+  "analysisDetailSubtitle": "Chỉ số tuân thủ & kết cục",
+  "analysisPeriod": "Kỳ phân tích",
+  "analysisCreatedAt": "Tạo lúc {date}",
+  "@analysisCreatedAt": {
+    "placeholders": {
+      "date": { "type": "String" }
+    }
+  },
+  "analysisAllDoctors": "Tất cả bác sĩ",
+  "analysisDoctorFallback": "Bác sĩ #{id}",
+  "@analysisDoctorFallback": {
+    "placeholders": {
+      "id": { "type": "String" }
+    }
+  },
+  "analysisTotalPatients": "Tổng bệnh nhân",
+  "analysisTotalPlans": "Tổng phác đồ",
+  "analysisAdherenceRate": "Tỷ lệ tuân thủ",
+  "analysisPendingRate": "Tỷ lệ chờ đánh giá",
+  "analysisAdherent": "Tuân thủ",
+  "analysisNonAdherent": "Không tuân thủ",
+  "analysisPendingReview": "Chờ đánh giá",
+  "analysisOutcomes": "Kết cục điều trị",
+  "analysisRecovered": "Hồi phục",
+  "analysisDeceased": "Tử vong",
+  "analysisOtherOutcome": "Khác",
+  "analysisByDoctor": "Theo bác sĩ",
+  "analysisByMedicine": "Theo thuốc",
+  "analysisMedicine": "Thuốc",
+  "analysisClassification": "Phân loại",
+  "analysisPatientsCount": "{count} bệnh nhân",
+  "@analysisPatientsCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "analysisPlansCount": "{count} phác đồ",
+  "@analysisPlansCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "analysisNoDoctors": "Báo cáo không có dữ liệu bác sĩ.",
+  "analysisNoMedicines": "Báo cáo không có dữ liệu thuốc.",
+  "analysisNoData": "Chưa có dữ liệu.",
+
+  "nextOfKinSection": "Người thân liên hệ",
+  "nextOfKinEmpty": "Chưa có thông tin người thân",
+  "nextOfKinEmptyDesc": "Thêm người thân để lưu thông tin liên hệ khi cần thiết.",
+  "nextOfKinAdd": "Thêm người thân",
+  "nextOfKinAddTitle": "Thêm người thân",
+  "nextOfKinEditTitle": "Chỉnh sửa người thân",
+  "nextOfKinSubtitle": "Thông tin liên hệ của bệnh nhân",
+  "nextOfKinInfoSection": "Thông tin người thân",
+  "nextOfKinFullName": "Họ và tên",
+  "nextOfKinFullNameHint": "Nhập họ và tên",
+  "nextOfKinRelationship": "Mối quan hệ",
+  "nextOfKinRelationshipHint": "Chọn mối quan hệ",
+  "nextOfKinPhone": "Số điện thoại",
+  "nextOfKinPhoneHint": "0912 345 678",
+  "nextOfKinSave": "Lưu người thân",
+  "nextOfKinUpdate": "Lưu thay đổi",
+  "nextOfKinMenuSemantic": "Tùy chọn người thân",
+  "nextOfKinMenuEdit": "Sửa",
+  "nextOfKinMenuDelete": "Xóa",
+  "nextOfKinDeleteTitle": "Xóa người thân?",
+  "nextOfKinDeleteDesc": "Bạn có chắc chắn muốn xóa thông tin người thân khỏi hồ sơ bệnh nhân không? Hành động này không thể hoàn tác.",
+  "nextOfKinDeleteConfirm": "Xóa người thân",
+  "nextOfKinDeleteSuccess": "Đã xóa người thân.",
+  "nextOfKinDeleteFailed": "Không thể xóa người thân.",
+  "nextOfKinCreateSuccess": "Đã thêm người thân.",
+  "nextOfKinCreateFailed": "Không thể thêm người thân.",
+  "nextOfKinUpdateSuccess": "Đã cập nhật người thân.",
+  "nextOfKinUpdateFailed": "Không thể cập nhật người thân.",
+  "nextOfKinErrName": "Vui lòng nhập họ và tên người thân.",
+  "nextOfKinErrPhone": "Số điện thoại không hợp lệ.",
+  "nextOfKinErrRelationship": "Vui lòng chọn mối quan hệ.",
+  "nextOfKinRelationshipOther": "Khác",
+  "nextOfKinRelationshipOtherHint": "Nhập mối quan hệ",
+  "relationshipSpouse": "Vợ/Chồng",
+  "relationshipParent": "Cha/Mẹ",
+  "relationshipChild": "Con",
+  "relationshipSibling": "Anh/Chị/Em",
+  "relationshipGrandparent": "Ông/Bà",
+
+  "treatmentPlanDetailTitle": "Chi tiết phác đồ",
+  "treatmentPlanDetailSubtitle": "Thông tin điều trị đã lưu",
+  "treatmentPlanLoadFailed": "Không thể tải phác đồ điều trị.",
+  "treatmentPlanStatusInProgress": "Đang điều trị",
+  "treatmentPlanStatusClosed": "Đã đóng",
+  "treatmentPlanSeverity": "Mức độ",
+  "treatmentPlanSite": "Vị trí điều trị",
+  "treatmentPlanAdherenceLabel": "Tuân thủ phác đồ",
+  "treatmentPlanSuspected": "Căn nguyên nghi ngờ",
+  "treatmentPlanMedicines": "Kháng sinh",
+  "treatmentPlanNoMedicines": "Chưa có kháng sinh.",
+  "treatmentPlanReasonForChoice": "Lý do chọn thuốc",
+  "treatmentPlanClose": "Dừng phác đồ",
+  "treatmentPlanCloseTitle": "Dừng phác đồ điều trị",
+  "treatmentPlanCloseDescriptionPrefix": "Phác đồ của bệnh nhân {name} sẽ được dừng lại. Sau khi hoàn tất, phác đồ chuyển sang lưu trữ và ",
+  "@treatmentPlanCloseDescriptionPrefix": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "treatmentPlanCloseWarning": "không thể chỉnh sửa",
+  "treatmentPlanCloseDescriptionSuffix": " thêm nội dung.",
+  "treatmentPlanCloseReasonLabel": "Lý do dừng phác đồ",
+  "treatmentPlanCloseReasonHint": "Nhập lý do dừng phác đồ (bệnh nhân hồi phục, chuyển viện, thay đổi phác đồ)...",
+  "treatmentPlanCloseReasonCounter": "{count}/500 ký tự",
+  "@treatmentPlanCloseReasonCounter": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "treatmentPlanCloseConfirm": "Dừng phác đồ",
+  "treatmentPlanCloseSuccess": "Đã dừng phác đồ điều trị.",
+  "treatmentPlanCloseFailed": "Không thể dừng phác đồ. Vui lòng thử lại.",
+  "treatmentPlanErrReasonRequired": "Vui lòng nhập lý do dừng phác đồ.",
+  "treatmentPlanViewSemantic": "Xem chi tiết phác đồ",
 
   "clinicalVariableTitle": "Biến số lâm sàng",
   "clinicalVariableSubtitle": "Quản lý tham số",

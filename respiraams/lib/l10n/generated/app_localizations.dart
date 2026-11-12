@@ -1364,6 +1364,228 @@ abstract class AppLocalizations {
   /// **'Không thể tạo bệnh nhân. Vui lòng thử lại.'**
   String get patientCreateFailed;
 
+  /// No description provided for @patientMenuSemantic.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tùy chọn bệnh nhân'**
+  String get patientMenuSemantic;
+
+  /// No description provided for @patientMenuEdit.
+  ///
+  /// In vi, this message translates to:
+  /// **'Edit'**
+  String get patientMenuEdit;
+
+  /// No description provided for @patientMenuDelete.
+  ///
+  /// In vi, this message translates to:
+  /// **'Delete'**
+  String get patientMenuDelete;
+
+  /// No description provided for @patientEditTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chỉnh sửa bệnh nhân'**
+  String get patientEditTitle;
+
+  /// No description provided for @patientEditSubtitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Cập nhật thông tin hành chính & lâm sàng'**
+  String get patientEditSubtitle;
+
+  /// No description provided for @patientEditCancel.
+  ///
+  /// In vi, this message translates to:
+  /// **'Hủy bỏ'**
+  String get patientEditCancel;
+
+  /// No description provided for @patientEditSave.
+  ///
+  /// In vi, this message translates to:
+  /// **'Lưu cập nhật'**
+  String get patientEditSave;
+
+  /// No description provided for @patientEditSuccess.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đã cập nhật bệnh nhân.'**
+  String get patientEditSuccess;
+
+  /// No description provided for @patientEditFailed.
+  ///
+  /// In vi, this message translates to:
+  /// **'Không thể cập nhật bệnh nhân.'**
+  String get patientEditFailed;
+
+  /// No description provided for @patientEditLoadFailed.
+  ///
+  /// In vi, this message translates to:
+  /// **'Không thể tải hồ sơ bệnh nhân.'**
+  String get patientEditLoadFailed;
+
+  /// No description provided for @patientEditClinicalLocked.
+  ///
+  /// In vi, this message translates to:
+  /// **'Không thể sửa ngày sinh, giới tính, cân nặng và chiều cao sau khi bệnh nhân đã có điều trị.'**
+  String get patientEditClinicalLocked;
+
+  /// No description provided for @patientFullName.
+  ///
+  /// In vi, this message translates to:
+  /// **'Họ và tên bệnh nhân'**
+  String get patientFullName;
+
+  /// No description provided for @patientSectionAdmin.
+  ///
+  /// In vi, this message translates to:
+  /// **'Thông tin hành chính'**
+  String get patientSectionAdmin;
+
+  /// No description provided for @patientSectionVitals.
+  ///
+  /// In vi, this message translates to:
+  /// **'Thể trạng'**
+  String get patientSectionVitals;
+
+  /// No description provided for @patientRequiredHint.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bắt buộc (*)'**
+  String get patientRequiredHint;
+
+  /// No description provided for @patientDeleteTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Xóa bệnh nhân'**
+  String get patientDeleteTitle;
+
+  /// No description provided for @patientDeleteDescription.
+  ///
+  /// In vi, this message translates to:
+  /// **'Hồ sơ bệnh nhân sẽ bị xóa vĩnh viễn. Thao tác này không thể hoàn tác.'**
+  String get patientDeleteDescription;
+
+  /// No description provided for @patientDeleteConfirm.
+  ///
+  /// In vi, this message translates to:
+  /// **'Xóa'**
+  String get patientDeleteConfirm;
+
+  /// No description provided for @patientDeleteSuccess.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đã xóa bệnh nhân.'**
+  String get patientDeleteSuccess;
+
+  /// No description provided for @patientDeleteFailed.
+  ///
+  /// In vi, this message translates to:
+  /// **'Không thể xóa bệnh nhân.'**
+  String get patientDeleteFailed;
+
+  /// No description provided for @patientDischarge.
+  ///
+  /// In vi, this message translates to:
+  /// **'Xuất viện'**
+  String get patientDischarge;
+
+  /// No description provided for @patientDischargeTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Xuất viện bệnh nhân'**
+  String get patientDischargeTitle;
+
+  /// No description provided for @patientDischargeAdmission.
+  ///
+  /// In vi, this message translates to:
+  /// **'Ngày nhập viện'**
+  String get patientDischargeAdmission;
+
+  /// No description provided for @patientDischargeOutcomeLabel.
+  ///
+  /// In vi, this message translates to:
+  /// **'KẾT QUẢ ĐIỀU TRỊ *'**
+  String get patientDischargeOutcomeLabel;
+
+  /// No description provided for @patientDischargeRecovered.
+  ///
+  /// In vi, this message translates to:
+  /// **'Hồi phục'**
+  String get patientDischargeRecovered;
+
+  /// No description provided for @patientDischargeRecoveredDesc.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bệnh nhân thuyên giảm triệu chứng, đủ điều kiện ra viện'**
+  String get patientDischargeRecoveredDesc;
+
+  /// No description provided for @patientDischargeDeath.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tử vong'**
+  String get patientDischargeDeath;
+
+  /// No description provided for @patientDischargeDeathDesc.
+  ///
+  /// In vi, this message translates to:
+  /// **'Ghi nhận tử vong trong quá trình điều trị nội trú'**
+  String get patientDischargeDeathDesc;
+
+  /// No description provided for @patientDischargeOutOfScope.
+  ///
+  /// In vi, this message translates to:
+  /// **'Ngoài phạm vi điều trị'**
+  String get patientDischargeOutOfScope;
+
+  /// No description provided for @patientDischargeOutOfScopeDesc.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chuyển viện tuyến trên hoặc gia đình xin về'**
+  String get patientDischargeOutOfScopeDesc;
+
+  /// No description provided for @patientDischargeSelected.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đã chọn kết quả: {outcome}. Sẵn sàng lưu vào hệ thống bệnh án.'**
+  String patientDischargeSelected(String outcome);
+
+  /// No description provided for @patientDischargeConfirm.
+  ///
+  /// In vi, this message translates to:
+  /// **'Xác nhận xuất viện'**
+  String get patientDischargeConfirm;
+
+  /// No description provided for @patientDischargeCancel.
+  ///
+  /// In vi, this message translates to:
+  /// **'Hủy bỏ'**
+  String get patientDischargeCancel;
+
+  /// No description provided for @patientDischargeSuccess.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đã xuất viện bệnh nhân.'**
+  String get patientDischargeSuccess;
+
+  /// No description provided for @patientDischargeFailed.
+  ///
+  /// In vi, this message translates to:
+  /// **'Không thể xuất viện. Vui lòng thử lại.'**
+  String get patientDischargeFailed;
+
+  /// No description provided for @patientDischargedBanner.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bệnh nhân đã xuất viện'**
+  String get patientDischargedBanner;
+
+  /// No description provided for @patientDischargedAt.
+  ///
+  /// In vi, this message translates to:
+  /// **'{date} · {outcome}'**
+  String patientDischargedAt(String date, String outcome);
+
   /// No description provided for @progressTitle.
   ///
   /// In vi, this message translates to:
@@ -2399,7 +2621,7 @@ abstract class AppLocalizations {
   /// No description provided for @micResistant.
   ///
   /// In vi, this message translates to:
-  /// **'Kháng thuốc'**
+  /// **'Kháng'**
   String get micResistant;
 
   /// No description provided for @routeIntravenous.
@@ -2780,6 +3002,30 @@ abstract class AppLocalizations {
   /// **'Các bộ tiêu chí & đánh giá'**
   String get categoryClinicalScoresSub;
 
+  /// No description provided for @categoryAntibiograms.
+  ///
+  /// In vi, this message translates to:
+  /// **'Kháng sinh đồ'**
+  String get categoryAntibiograms;
+
+  /// No description provided for @categoryAntibiogramsSub.
+  ///
+  /// In vi, this message translates to:
+  /// **'MIC và kháng sinh'**
+  String get categoryAntibiogramsSub;
+
+  /// No description provided for @categoryTreatmentProtocols.
+  ///
+  /// In vi, this message translates to:
+  /// **'Phác đồ điều trị'**
+  String get categoryTreatmentProtocols;
+
+  /// No description provided for @categoryTreatmentProtocolsSub.
+  ///
+  /// In vi, this message translates to:
+  /// **'Theo mức độ & vị trí'**
+  String get categoryTreatmentProtocolsSub;
+
   /// No description provided for @recentItemDrugTitle.
   ///
   /// In vi, this message translates to:
@@ -3061,6 +3307,666 @@ abstract class AppLocalizations {
   /// In vi, this message translates to:
   /// **'Mô tả'**
   String get pathogenDescription;
+
+  /// No description provided for @antibiogramTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Kháng sinh đồ'**
+  String get antibiogramTitle;
+
+  /// No description provided for @antibiogramSubtitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tác nhân · MIC · kháng sinh'**
+  String get antibiogramSubtitle;
+
+  /// No description provided for @antibiogramSearchHint.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tìm tác nhân hoặc kháng sinh...'**
+  String get antibiogramSearchHint;
+
+  /// No description provided for @antibiogramEmpty.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chưa có dữ liệu kháng sinh đồ.'**
+  String get antibiogramEmpty;
+
+  /// No description provided for @antibiogramAntibiotics.
+  ///
+  /// In vi, this message translates to:
+  /// **'Kháng sinh ({count})'**
+  String antibiogramAntibiotics(int count);
+
+  /// No description provided for @treatmentProtocolTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Phác đồ điều trị'**
+  String get treatmentProtocolTitle;
+
+  /// No description provided for @treatmentProtocolSubtitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Mức độ · vị trí · kháng sinh'**
+  String get treatmentProtocolSubtitle;
+
+  /// No description provided for @treatmentProtocolSearchHint.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tìm tác nhân, tiêu chí, kháng sinh...'**
+  String get treatmentProtocolSearchHint;
+
+  /// No description provided for @treatmentProtocolEmpty.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chưa có phác đồ điều trị.'**
+  String get treatmentProtocolEmpty;
+
+  /// No description provided for @treatmentProtocolApplied.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đang áp dụng'**
+  String get treatmentProtocolApplied;
+
+  /// No description provided for @treatmentProtocolNotApplied.
+  ///
+  /// In vi, this message translates to:
+  /// **'Ngừng áp dụng'**
+  String get treatmentProtocolNotApplied;
+
+  /// No description provided for @treatmentProtocolCriteria.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tiêu chí'**
+  String get treatmentProtocolCriteria;
+
+  /// No description provided for @treatmentProtocolPathogens.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tác nhân'**
+  String get treatmentProtocolPathogens;
+
+  /// No description provided for @treatmentProtocolCombinations.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tổ hợp kháng sinh'**
+  String get treatmentProtocolCombinations;
+
+  /// No description provided for @treatmentProtocolPublisher.
+  ///
+  /// In vi, this message translates to:
+  /// **'Nhà phát hành'**
+  String get treatmentProtocolPublisher;
+
+  /// No description provided for @analysisTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Báo cáo phân tích'**
+  String get analysisTitle;
+
+  /// No description provided for @analysisSubtitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tuân thủ & kết cục điều trị'**
+  String get analysisSubtitle;
+
+  /// No description provided for @analysisEntryTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Báo cáo phân tích điều trị'**
+  String get analysisEntryTitle;
+
+  /// No description provided for @analysisEntrySubtitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tuân thủ & kết cục theo bác sĩ'**
+  String get analysisEntrySubtitle;
+
+  /// No description provided for @analysisEmpty.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chưa có báo cáo phân tích.'**
+  String get analysisEmpty;
+
+  /// No description provided for @analysisLoadFailed.
+  ///
+  /// In vi, this message translates to:
+  /// **'Không thể tải báo cáo phân tích.'**
+  String get analysisLoadFailed;
+
+  /// No description provided for @analysisDetailTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chi tiết báo cáo'**
+  String get analysisDetailTitle;
+
+  /// No description provided for @analysisDetailSubtitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chỉ số tuân thủ & kết cục'**
+  String get analysisDetailSubtitle;
+
+  /// No description provided for @analysisPeriod.
+  ///
+  /// In vi, this message translates to:
+  /// **'Kỳ phân tích'**
+  String get analysisPeriod;
+
+  /// No description provided for @analysisCreatedAt.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tạo lúc {date}'**
+  String analysisCreatedAt(String date);
+
+  /// No description provided for @analysisAllDoctors.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tất cả bác sĩ'**
+  String get analysisAllDoctors;
+
+  /// No description provided for @analysisDoctorFallback.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bác sĩ #{id}'**
+  String analysisDoctorFallback(String id);
+
+  /// No description provided for @analysisTotalPatients.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tổng bệnh nhân'**
+  String get analysisTotalPatients;
+
+  /// No description provided for @analysisTotalPlans.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tổng phác đồ'**
+  String get analysisTotalPlans;
+
+  /// No description provided for @analysisAdherenceRate.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tỷ lệ tuân thủ'**
+  String get analysisAdherenceRate;
+
+  /// No description provided for @analysisPendingRate.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tỷ lệ chờ đánh giá'**
+  String get analysisPendingRate;
+
+  /// No description provided for @analysisAdherent.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tuân thủ'**
+  String get analysisAdherent;
+
+  /// No description provided for @analysisNonAdherent.
+  ///
+  /// In vi, this message translates to:
+  /// **'Không tuân thủ'**
+  String get analysisNonAdherent;
+
+  /// No description provided for @analysisPendingReview.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chờ đánh giá'**
+  String get analysisPendingReview;
+
+  /// No description provided for @analysisOutcomes.
+  ///
+  /// In vi, this message translates to:
+  /// **'Kết cục điều trị'**
+  String get analysisOutcomes;
+
+  /// No description provided for @analysisRecovered.
+  ///
+  /// In vi, this message translates to:
+  /// **'Hồi phục'**
+  String get analysisRecovered;
+
+  /// No description provided for @analysisDeceased.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tử vong'**
+  String get analysisDeceased;
+
+  /// No description provided for @analysisOtherOutcome.
+  ///
+  /// In vi, this message translates to:
+  /// **'Khác'**
+  String get analysisOtherOutcome;
+
+  /// No description provided for @analysisByDoctor.
+  ///
+  /// In vi, this message translates to:
+  /// **'Theo bác sĩ'**
+  String get analysisByDoctor;
+
+  /// No description provided for @analysisByMedicine.
+  ///
+  /// In vi, this message translates to:
+  /// **'Theo thuốc'**
+  String get analysisByMedicine;
+
+  /// No description provided for @analysisMedicine.
+  ///
+  /// In vi, this message translates to:
+  /// **'Thuốc'**
+  String get analysisMedicine;
+
+  /// No description provided for @analysisClassification.
+  ///
+  /// In vi, this message translates to:
+  /// **'Phân loại'**
+  String get analysisClassification;
+
+  /// No description provided for @analysisPatientsCount.
+  ///
+  /// In vi, this message translates to:
+  /// **'{count} bệnh nhân'**
+  String analysisPatientsCount(int count);
+
+  /// No description provided for @analysisPlansCount.
+  ///
+  /// In vi, this message translates to:
+  /// **'{count} phác đồ'**
+  String analysisPlansCount(int count);
+
+  /// No description provided for @analysisNoDoctors.
+  ///
+  /// In vi, this message translates to:
+  /// **'Báo cáo không có dữ liệu bác sĩ.'**
+  String get analysisNoDoctors;
+
+  /// No description provided for @analysisNoMedicines.
+  ///
+  /// In vi, this message translates to:
+  /// **'Báo cáo không có dữ liệu thuốc.'**
+  String get analysisNoMedicines;
+
+  /// No description provided for @analysisNoData.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chưa có dữ liệu.'**
+  String get analysisNoData;
+
+  /// No description provided for @nextOfKinSection.
+  ///
+  /// In vi, this message translates to:
+  /// **'Người thân liên hệ'**
+  String get nextOfKinSection;
+
+  /// No description provided for @nextOfKinEmpty.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chưa có thông tin người thân'**
+  String get nextOfKinEmpty;
+
+  /// No description provided for @nextOfKinEmptyDesc.
+  ///
+  /// In vi, this message translates to:
+  /// **'Thêm người thân để lưu thông tin liên hệ khi cần thiết.'**
+  String get nextOfKinEmptyDesc;
+
+  /// No description provided for @nextOfKinAdd.
+  ///
+  /// In vi, this message translates to:
+  /// **'Thêm người thân'**
+  String get nextOfKinAdd;
+
+  /// No description provided for @nextOfKinAddTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Thêm người thân'**
+  String get nextOfKinAddTitle;
+
+  /// No description provided for @nextOfKinEditTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chỉnh sửa người thân'**
+  String get nextOfKinEditTitle;
+
+  /// No description provided for @nextOfKinSubtitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Thông tin liên hệ của bệnh nhân'**
+  String get nextOfKinSubtitle;
+
+  /// No description provided for @nextOfKinInfoSection.
+  ///
+  /// In vi, this message translates to:
+  /// **'Thông tin người thân'**
+  String get nextOfKinInfoSection;
+
+  /// No description provided for @nextOfKinFullName.
+  ///
+  /// In vi, this message translates to:
+  /// **'Họ và tên'**
+  String get nextOfKinFullName;
+
+  /// No description provided for @nextOfKinFullNameHint.
+  ///
+  /// In vi, this message translates to:
+  /// **'Nhập họ và tên'**
+  String get nextOfKinFullNameHint;
+
+  /// No description provided for @nextOfKinRelationship.
+  ///
+  /// In vi, this message translates to:
+  /// **'Mối quan hệ'**
+  String get nextOfKinRelationship;
+
+  /// No description provided for @nextOfKinRelationshipHint.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chọn mối quan hệ'**
+  String get nextOfKinRelationshipHint;
+
+  /// No description provided for @nextOfKinPhone.
+  ///
+  /// In vi, this message translates to:
+  /// **'Số điện thoại'**
+  String get nextOfKinPhone;
+
+  /// No description provided for @nextOfKinPhoneHint.
+  ///
+  /// In vi, this message translates to:
+  /// **'0912 345 678'**
+  String get nextOfKinPhoneHint;
+
+  /// No description provided for @nextOfKinSave.
+  ///
+  /// In vi, this message translates to:
+  /// **'Lưu người thân'**
+  String get nextOfKinSave;
+
+  /// No description provided for @nextOfKinUpdate.
+  ///
+  /// In vi, this message translates to:
+  /// **'Lưu thay đổi'**
+  String get nextOfKinUpdate;
+
+  /// No description provided for @nextOfKinMenuSemantic.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tùy chọn người thân'**
+  String get nextOfKinMenuSemantic;
+
+  /// No description provided for @nextOfKinMenuEdit.
+  ///
+  /// In vi, this message translates to:
+  /// **'Sửa'**
+  String get nextOfKinMenuEdit;
+
+  /// No description provided for @nextOfKinMenuDelete.
+  ///
+  /// In vi, this message translates to:
+  /// **'Xóa'**
+  String get nextOfKinMenuDelete;
+
+  /// No description provided for @nextOfKinDeleteTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Xóa người thân?'**
+  String get nextOfKinDeleteTitle;
+
+  /// No description provided for @nextOfKinDeleteDesc.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bạn có chắc chắn muốn xóa thông tin người thân khỏi hồ sơ bệnh nhân không? Hành động này không thể hoàn tác.'**
+  String get nextOfKinDeleteDesc;
+
+  /// No description provided for @nextOfKinDeleteConfirm.
+  ///
+  /// In vi, this message translates to:
+  /// **'Xóa người thân'**
+  String get nextOfKinDeleteConfirm;
+
+  /// No description provided for @nextOfKinDeleteSuccess.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đã xóa người thân.'**
+  String get nextOfKinDeleteSuccess;
+
+  /// No description provided for @nextOfKinDeleteFailed.
+  ///
+  /// In vi, this message translates to:
+  /// **'Không thể xóa người thân.'**
+  String get nextOfKinDeleteFailed;
+
+  /// No description provided for @nextOfKinCreateSuccess.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đã thêm người thân.'**
+  String get nextOfKinCreateSuccess;
+
+  /// No description provided for @nextOfKinCreateFailed.
+  ///
+  /// In vi, this message translates to:
+  /// **'Không thể thêm người thân.'**
+  String get nextOfKinCreateFailed;
+
+  /// No description provided for @nextOfKinUpdateSuccess.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đã cập nhật người thân.'**
+  String get nextOfKinUpdateSuccess;
+
+  /// No description provided for @nextOfKinUpdateFailed.
+  ///
+  /// In vi, this message translates to:
+  /// **'Không thể cập nhật người thân.'**
+  String get nextOfKinUpdateFailed;
+
+  /// No description provided for @nextOfKinErrName.
+  ///
+  /// In vi, this message translates to:
+  /// **'Vui lòng nhập họ và tên người thân.'**
+  String get nextOfKinErrName;
+
+  /// No description provided for @nextOfKinErrPhone.
+  ///
+  /// In vi, this message translates to:
+  /// **'Số điện thoại không hợp lệ.'**
+  String get nextOfKinErrPhone;
+
+  /// No description provided for @nextOfKinErrRelationship.
+  ///
+  /// In vi, this message translates to:
+  /// **'Vui lòng chọn mối quan hệ.'**
+  String get nextOfKinErrRelationship;
+
+  /// No description provided for @nextOfKinRelationshipOther.
+  ///
+  /// In vi, this message translates to:
+  /// **'Khác'**
+  String get nextOfKinRelationshipOther;
+
+  /// No description provided for @nextOfKinRelationshipOtherHint.
+  ///
+  /// In vi, this message translates to:
+  /// **'Nhập mối quan hệ'**
+  String get nextOfKinRelationshipOtherHint;
+
+  /// No description provided for @relationshipSpouse.
+  ///
+  /// In vi, this message translates to:
+  /// **'Vợ/Chồng'**
+  String get relationshipSpouse;
+
+  /// No description provided for @relationshipParent.
+  ///
+  /// In vi, this message translates to:
+  /// **'Cha/Mẹ'**
+  String get relationshipParent;
+
+  /// No description provided for @relationshipChild.
+  ///
+  /// In vi, this message translates to:
+  /// **'Con'**
+  String get relationshipChild;
+
+  /// No description provided for @relationshipSibling.
+  ///
+  /// In vi, this message translates to:
+  /// **'Anh/Chị/Em'**
+  String get relationshipSibling;
+
+  /// No description provided for @relationshipGrandparent.
+  ///
+  /// In vi, this message translates to:
+  /// **'Ông/Bà'**
+  String get relationshipGrandparent;
+
+  /// No description provided for @treatmentPlanDetailTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chi tiết phác đồ'**
+  String get treatmentPlanDetailTitle;
+
+  /// No description provided for @treatmentPlanDetailSubtitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Thông tin điều trị đã lưu'**
+  String get treatmentPlanDetailSubtitle;
+
+  /// No description provided for @treatmentPlanLoadFailed.
+  ///
+  /// In vi, this message translates to:
+  /// **'Không thể tải phác đồ điều trị.'**
+  String get treatmentPlanLoadFailed;
+
+  /// No description provided for @treatmentPlanStatusInProgress.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đang điều trị'**
+  String get treatmentPlanStatusInProgress;
+
+  /// No description provided for @treatmentPlanStatusClosed.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đã đóng'**
+  String get treatmentPlanStatusClosed;
+
+  /// No description provided for @treatmentPlanSeverity.
+  ///
+  /// In vi, this message translates to:
+  /// **'Mức độ'**
+  String get treatmentPlanSeverity;
+
+  /// No description provided for @treatmentPlanSite.
+  ///
+  /// In vi, this message translates to:
+  /// **'Vị trí điều trị'**
+  String get treatmentPlanSite;
+
+  /// No description provided for @treatmentPlanAdherenceLabel.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tuân thủ phác đồ'**
+  String get treatmentPlanAdherenceLabel;
+
+  /// No description provided for @treatmentPlanSuspected.
+  ///
+  /// In vi, this message translates to:
+  /// **'Căn nguyên nghi ngờ'**
+  String get treatmentPlanSuspected;
+
+  /// No description provided for @treatmentPlanMedicines.
+  ///
+  /// In vi, this message translates to:
+  /// **'Kháng sinh'**
+  String get treatmentPlanMedicines;
+
+  /// No description provided for @treatmentPlanNoMedicines.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chưa có kháng sinh.'**
+  String get treatmentPlanNoMedicines;
+
+  /// No description provided for @treatmentPlanReasonForChoice.
+  ///
+  /// In vi, this message translates to:
+  /// **'Lý do chọn thuốc'**
+  String get treatmentPlanReasonForChoice;
+
+  /// No description provided for @treatmentPlanClose.
+  ///
+  /// In vi, this message translates to:
+  /// **'Dừng phác đồ'**
+  String get treatmentPlanClose;
+
+  /// No description provided for @treatmentPlanCloseTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Dừng phác đồ điều trị'**
+  String get treatmentPlanCloseTitle;
+
+  /// No description provided for @treatmentPlanCloseDescriptionPrefix.
+  ///
+  /// In vi, this message translates to:
+  /// **'Phác đồ của bệnh nhân {name} sẽ được dừng lại. Sau khi hoàn tất, phác đồ chuyển sang lưu trữ và '**
+  String treatmentPlanCloseDescriptionPrefix(String name);
+
+  /// No description provided for @treatmentPlanCloseWarning.
+  ///
+  /// In vi, this message translates to:
+  /// **'không thể chỉnh sửa'**
+  String get treatmentPlanCloseWarning;
+
+  /// No description provided for @treatmentPlanCloseDescriptionSuffix.
+  ///
+  /// In vi, this message translates to:
+  /// **' thêm nội dung.'**
+  String get treatmentPlanCloseDescriptionSuffix;
+
+  /// No description provided for @treatmentPlanCloseReasonLabel.
+  ///
+  /// In vi, this message translates to:
+  /// **'Lý do dừng phác đồ'**
+  String get treatmentPlanCloseReasonLabel;
+
+  /// No description provided for @treatmentPlanCloseReasonHint.
+  ///
+  /// In vi, this message translates to:
+  /// **'Nhập lý do dừng phác đồ (bệnh nhân hồi phục, chuyển viện, thay đổi phác đồ)...'**
+  String get treatmentPlanCloseReasonHint;
+
+  /// No description provided for @treatmentPlanCloseReasonCounter.
+  ///
+  /// In vi, this message translates to:
+  /// **'{count}/500 ký tự'**
+  String treatmentPlanCloseReasonCounter(int count);
+
+  /// No description provided for @treatmentPlanCloseConfirm.
+  ///
+  /// In vi, this message translates to:
+  /// **'Dừng phác đồ'**
+  String get treatmentPlanCloseConfirm;
+
+  /// No description provided for @treatmentPlanCloseSuccess.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đã dừng phác đồ điều trị.'**
+  String get treatmentPlanCloseSuccess;
+
+  /// No description provided for @treatmentPlanCloseFailed.
+  ///
+  /// In vi, this message translates to:
+  /// **'Không thể dừng phác đồ. Vui lòng thử lại.'**
+  String get treatmentPlanCloseFailed;
+
+  /// No description provided for @treatmentPlanErrReasonRequired.
+  ///
+  /// In vi, this message translates to:
+  /// **'Vui lòng nhập lý do dừng phác đồ.'**
+  String get treatmentPlanErrReasonRequired;
+
+  /// No description provided for @treatmentPlanViewSemantic.
+  ///
+  /// In vi, this message translates to:
+  /// **'Xem chi tiết phác đồ'**
+  String get treatmentPlanViewSemantic;
 
   /// No description provided for @clinicalVariableTitle.
   ///

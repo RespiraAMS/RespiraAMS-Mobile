@@ -703,6 +703,126 @@ class AppLocalizationsEn extends AppLocalizations {
       'Unable to create the patient. Please try again.';
 
   @override
+  String get patientMenuSemantic => 'Patient options';
+
+  @override
+  String get patientMenuEdit => 'Edit';
+
+  @override
+  String get patientMenuDelete => 'Delete';
+
+  @override
+  String get patientEditTitle => 'Edit patient';
+
+  @override
+  String get patientEditSubtitle => 'Update demographic & clinical information';
+
+  @override
+  String get patientEditCancel => 'Cancel';
+
+  @override
+  String get patientEditSave => 'Save changes';
+
+  @override
+  String get patientEditSuccess => 'Patient updated.';
+
+  @override
+  String get patientEditFailed => 'Unable to update the patient.';
+
+  @override
+  String get patientEditLoadFailed => 'Unable to load the patient profile.';
+
+  @override
+  String get patientEditClinicalLocked =>
+      'Date of birth, gender, weight and height cannot be changed once the patient has a treatment.';
+
+  @override
+  String get patientFullName => 'Full name';
+
+  @override
+  String get patientSectionAdmin => 'Administrative information';
+
+  @override
+  String get patientSectionVitals => 'Vitals';
+
+  @override
+  String get patientRequiredHint => 'Required (*)';
+
+  @override
+  String get patientDeleteTitle => 'Delete patient';
+
+  @override
+  String get patientDeleteDescription =>
+      'The patient record will be permanently deleted. This action cannot be undone.';
+
+  @override
+  String get patientDeleteConfirm => 'Delete';
+
+  @override
+  String get patientDeleteSuccess => 'Patient deleted.';
+
+  @override
+  String get patientDeleteFailed => 'Unable to delete the patient.';
+
+  @override
+  String get patientDischarge => 'Discharge';
+
+  @override
+  String get patientDischargeTitle => 'Discharge patient';
+
+  @override
+  String get patientDischargeAdmission => 'Admission date';
+
+  @override
+  String get patientDischargeOutcomeLabel => 'TREATMENT OUTCOME *';
+
+  @override
+  String get patientDischargeRecovered => 'Recovered';
+
+  @override
+  String get patientDischargeRecoveredDesc =>
+      'Symptoms improved, eligible for discharge';
+
+  @override
+  String get patientDischargeDeath => 'Death';
+
+  @override
+  String get patientDischargeDeathDesc =>
+      'Death recorded during inpatient treatment';
+
+  @override
+  String get patientDischargeOutOfScope => 'Out of scope';
+
+  @override
+  String get patientDischargeOutOfScopeDesc =>
+      'Transferred to a higher-level facility or taken home by family';
+
+  @override
+  String patientDischargeSelected(String outcome) {
+    return 'Selected outcome: $outcome. Ready to save to the medical record.';
+  }
+
+  @override
+  String get patientDischargeConfirm => 'Confirm discharge';
+
+  @override
+  String get patientDischargeCancel => 'Cancel';
+
+  @override
+  String get patientDischargeSuccess => 'Patient discharged.';
+
+  @override
+  String get patientDischargeFailed => 'Unable to discharge. Please try again.';
+
+  @override
+  String get patientDischargedBanner => 'Patient has been discharged';
+
+  @override
+  String patientDischargedAt(String date, String outcome) {
+    return '$date · $outcome';
+  }
+
+  @override
   String get progressTitle => 'Add progress';
 
   @override
@@ -1467,6 +1587,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get categoryClinicalScoresSub => 'Criteria sets & assessment';
 
   @override
+  String get categoryAntibiograms => 'Antibiograms';
+
+  @override
+  String get categoryAntibiogramsSub => 'MIC and antibiotics';
+
+  @override
+  String get categoryTreatmentProtocols => 'Treatment protocols';
+
+  @override
+  String get categoryTreatmentProtocolsSub => 'By severity & treatment site';
+
+  @override
   String get recentItemDrugTitle => 'Ceftriaxone';
 
   @override
@@ -1612,6 +1744,356 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pathogenDescription => 'Description';
+
+  @override
+  String get antibiogramTitle => 'Antibiograms';
+
+  @override
+  String get antibiogramSubtitle => 'Pathogen · MIC · antibiotics';
+
+  @override
+  String get antibiogramSearchHint => 'Search pathogen or antibiotic...';
+
+  @override
+  String get antibiogramEmpty => 'No antibiogram data yet.';
+
+  @override
+  String antibiogramAntibiotics(int count) {
+    return 'Antibiotics ($count)';
+  }
+
+  @override
+  String get treatmentProtocolTitle => 'Treatment protocols';
+
+  @override
+  String get treatmentProtocolSubtitle => 'Severity · site · antibiotics';
+
+  @override
+  String get treatmentProtocolSearchHint =>
+      'Search pathogen, criteria, antibiotic...';
+
+  @override
+  String get treatmentProtocolEmpty => 'No treatment protocol yet.';
+
+  @override
+  String get treatmentProtocolApplied => 'Applied';
+
+  @override
+  String get treatmentProtocolNotApplied => 'Not applied';
+
+  @override
+  String get treatmentProtocolCriteria => 'Criteria';
+
+  @override
+  String get treatmentProtocolPathogens => 'Pathogens';
+
+  @override
+  String get treatmentProtocolCombinations => 'Antibiotic combinations';
+
+  @override
+  String get treatmentProtocolPublisher => 'Publisher';
+
+  @override
+  String get analysisTitle => 'Analysis reports';
+
+  @override
+  String get analysisSubtitle => 'Adherence & treatment outcomes';
+
+  @override
+  String get analysisEntryTitle => 'Treatment analysis reports';
+
+  @override
+  String get analysisEntrySubtitle => 'Adherence & outcomes by doctor';
+
+  @override
+  String get analysisEmpty => 'No analysis report yet.';
+
+  @override
+  String get analysisLoadFailed => 'Unable to load the analysis report.';
+
+  @override
+  String get analysisDetailTitle => 'Report detail';
+
+  @override
+  String get analysisDetailSubtitle => 'Adherence and outcome metrics';
+
+  @override
+  String get analysisPeriod => 'Analysis period';
+
+  @override
+  String analysisCreatedAt(String date) {
+    return 'Created $date';
+  }
+
+  @override
+  String get analysisAllDoctors => 'All doctors';
+
+  @override
+  String analysisDoctorFallback(String id) {
+    return 'Doctor #$id';
+  }
+
+  @override
+  String get analysisTotalPatients => 'Total patients';
+
+  @override
+  String get analysisTotalPlans => 'Total plans';
+
+  @override
+  String get analysisAdherenceRate => 'Adherence rate';
+
+  @override
+  String get analysisPendingRate => 'Pending review rate';
+
+  @override
+  String get analysisAdherent => 'Adherent';
+
+  @override
+  String get analysisNonAdherent => 'Non-adherent';
+
+  @override
+  String get analysisPendingReview => 'Pending review';
+
+  @override
+  String get analysisOutcomes => 'Treatment outcomes';
+
+  @override
+  String get analysisRecovered => 'Recovered';
+
+  @override
+  String get analysisDeceased => 'Deceased';
+
+  @override
+  String get analysisOtherOutcome => 'Other';
+
+  @override
+  String get analysisByDoctor => 'By doctor';
+
+  @override
+  String get analysisByMedicine => 'By medicine';
+
+  @override
+  String get analysisMedicine => 'Medicine';
+
+  @override
+  String get analysisClassification => 'Classification';
+
+  @override
+  String analysisPatientsCount(int count) {
+    return '$count patients';
+  }
+
+  @override
+  String analysisPlansCount(int count) {
+    return '$count plans';
+  }
+
+  @override
+  String get analysisNoDoctors => 'This report has no doctor data.';
+
+  @override
+  String get analysisNoMedicines => 'This report has no medicine data.';
+
+  @override
+  String get analysisNoData => 'No data yet.';
+
+  @override
+  String get nextOfKinSection => 'Emergency contacts';
+
+  @override
+  String get nextOfKinEmpty => 'No emergency contact yet';
+
+  @override
+  String get nextOfKinEmptyDesc =>
+      'Add a relative to keep their contact details on file.';
+
+  @override
+  String get nextOfKinAdd => 'Add relative';
+
+  @override
+  String get nextOfKinAddTitle => 'Add relative';
+
+  @override
+  String get nextOfKinEditTitle => 'Edit relative';
+
+  @override
+  String get nextOfKinSubtitle => 'Patient contact information';
+
+  @override
+  String get nextOfKinInfoSection => 'Relative information';
+
+  @override
+  String get nextOfKinFullName => 'Full name';
+
+  @override
+  String get nextOfKinFullNameHint => 'Enter full name';
+
+  @override
+  String get nextOfKinRelationship => 'Relationship';
+
+  @override
+  String get nextOfKinRelationshipHint => 'Select relationship';
+
+  @override
+  String get nextOfKinPhone => 'Phone number';
+
+  @override
+  String get nextOfKinPhoneHint => '0912 345 678';
+
+  @override
+  String get nextOfKinSave => 'Save relative';
+
+  @override
+  String get nextOfKinUpdate => 'Save changes';
+
+  @override
+  String get nextOfKinMenuSemantic => 'Relative options';
+
+  @override
+  String get nextOfKinMenuEdit => 'Edit';
+
+  @override
+  String get nextOfKinMenuDelete => 'Delete';
+
+  @override
+  String get nextOfKinDeleteTitle => 'Delete relative?';
+
+  @override
+  String get nextOfKinDeleteDesc =>
+      'Are you sure you want to remove this relative from the patient record? This action cannot be undone.';
+
+  @override
+  String get nextOfKinDeleteConfirm => 'Delete relative';
+
+  @override
+  String get nextOfKinDeleteSuccess => 'Relative deleted.';
+
+  @override
+  String get nextOfKinDeleteFailed => 'Unable to delete the relative.';
+
+  @override
+  String get nextOfKinCreateSuccess => 'Relative added.';
+
+  @override
+  String get nextOfKinCreateFailed => 'Unable to add the relative.';
+
+  @override
+  String get nextOfKinUpdateSuccess => 'Relative updated.';
+
+  @override
+  String get nextOfKinUpdateFailed => 'Unable to update the relative.';
+
+  @override
+  String get nextOfKinErrName => 'Please enter the relative\'s full name.';
+
+  @override
+  String get nextOfKinErrPhone => 'Invalid phone number.';
+
+  @override
+  String get nextOfKinErrRelationship => 'Please select a relationship.';
+
+  @override
+  String get nextOfKinRelationshipOther => 'Other';
+
+  @override
+  String get nextOfKinRelationshipOtherHint => 'Enter relationship';
+
+  @override
+  String get relationshipSpouse => 'Spouse';
+
+  @override
+  String get relationshipParent => 'Parent';
+
+  @override
+  String get relationshipChild => 'Child';
+
+  @override
+  String get relationshipSibling => 'Sibling';
+
+  @override
+  String get relationshipGrandparent => 'Grandparent';
+
+  @override
+  String get treatmentPlanDetailTitle => 'Treatment plan';
+
+  @override
+  String get treatmentPlanDetailSubtitle => 'Saved treatment information';
+
+  @override
+  String get treatmentPlanLoadFailed => 'Unable to load the treatment plan.';
+
+  @override
+  String get treatmentPlanStatusInProgress => 'In treatment';
+
+  @override
+  String get treatmentPlanStatusClosed => 'Closed';
+
+  @override
+  String get treatmentPlanSeverity => 'Severity';
+
+  @override
+  String get treatmentPlanSite => 'Treatment site';
+
+  @override
+  String get treatmentPlanAdherenceLabel => 'Adherence';
+
+  @override
+  String get treatmentPlanSuspected => 'Suspected etiology';
+
+  @override
+  String get treatmentPlanMedicines => 'Antibiotics';
+
+  @override
+  String get treatmentPlanNoMedicines => 'No antibiotic recorded.';
+
+  @override
+  String get treatmentPlanReasonForChoice => 'Reason for medicine choice';
+
+  @override
+  String get treatmentPlanClose => 'Close plan';
+
+  @override
+  String get treatmentPlanCloseTitle => 'Close treatment plan';
+
+  @override
+  String treatmentPlanCloseDescriptionPrefix(String name) {
+    return '$name\'s treatment plan will be stopped. Once closed, the plan moves to the archive and ';
+  }
+
+  @override
+  String get treatmentPlanCloseWarning => 'cannot be edited';
+
+  @override
+  String get treatmentPlanCloseDescriptionSuffix => ' any further.';
+
+  @override
+  String get treatmentPlanCloseReasonLabel => 'Reason for closing';
+
+  @override
+  String get treatmentPlanCloseReasonHint =>
+      'Enter the reason for closing (recovered, transferred, protocol changed)...';
+
+  @override
+  String treatmentPlanCloseReasonCounter(int count) {
+    return '$count/500 characters';
+  }
+
+  @override
+  String get treatmentPlanCloseConfirm => 'Close plan';
+
+  @override
+  String get treatmentPlanCloseSuccess => 'Treatment plan closed.';
+
+  @override
+  String get treatmentPlanCloseFailed =>
+      'Unable to close the plan. Please try again.';
+
+  @override
+  String get treatmentPlanErrReasonRequired =>
+      'Please enter the reason for closing.';
+
+  @override
+  String get treatmentPlanViewSemantic => 'View treatment plan details';
 
   @override
   String get clinicalVariableTitle => 'Clinical variables';
