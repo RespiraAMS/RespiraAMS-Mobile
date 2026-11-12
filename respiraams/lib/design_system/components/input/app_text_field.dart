@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../theme/theme_extensions.dart';
 import '../../tokens/sizes.dart';
@@ -8,6 +9,9 @@ import '../../tokens/spacing.dart';
 
 /// Labeled input (§09.2): 52px field, radius 16, clear focus indicator,
 /// slots: label · input · helper/error text.
+///
+/// Set [maxLines] above 1 for multi-line inputs (e.g. a reason/notes field):
+/// the field then grows with its content instead of staying 52px tall.
 class AppTextField extends StatelessWidget {
   const AppTextField({
     super.key,
@@ -23,6 +27,10 @@ class AppTextField extends StatelessWidget {
     this.obscureText = false,
     this.enabled = true,
     this.semanticLabel,
+    this.maxLines = 1,
+    this.minLines,
+    this.maxLength,
+    this.inputFormatters,
   });
 
   final String label;
@@ -45,6 +53,16 @@ class AppTextField extends StatelessWidget {
   /// Accessibility label for the input itself.
   final String? semanticLabel;
 
+  /// 1 = single-line (fixed 52px); above 1 = multi-line, auto-growing.
+  final int maxLines;
+  final int? minLines;
+
+  /// Hard character limit; the counter is hidden (callers render their own).
+  final int? maxLength;
+  final List<TextInputFormatter>? inputFormatters;
+
+  bool get _isMultiline => maxLines > 1;
+
   @override
   Widget build(BuildContext context) {
     final c = context.respiraColors;
@@ -60,7 +78,7 @@ class AppTextField extends StatelessWidget {
         ),
         const SizedBox(height: Spacing.inline),
         SizedBox(
-          height: ControlSize.inputDefault,
+          height: _isMultiline ? null : ControlSize.inputDefault,
           child: TextFormField(
             controller: controller,
             initialValue: controller == null ? initialValue : null,
@@ -69,7 +87,13 @@ class AppTextField extends StatelessWidget {
             obscureText: obscureText,
             keyboardType: keyboardType,
             textInputAction: textInputAction,
-            textAlignVertical: TextAlignVertical.center,
+            maxLines: maxLines,
+            minLines: minLines,
+            maxLength: maxLength,
+            inputFormatters: inputFormatters,
+            textAlignVertical: _isMultiline
+                ? TextAlignVertical.top
+                : TextAlignVertical.center,
             style: TextStyle(
               fontSize: 15,
               height: 22 / 15,
@@ -81,6 +105,7 @@ class AppTextField extends StatelessWidget {
               fillColor: c.surface,
               hintText: hintText,
               hintStyle: TextStyle(fontSize: 15, color: c.textTertiary),
+              counterText: '',
               // Component-internal geometry (§17 allows raw values in
               // component implementations): 22px text line + 2×14 vertical
               // padding + 2px border == ControlSize.inputDefault, so the

@@ -10,6 +10,12 @@ import '../../../core/network/api_response.dart';
 ///
 /// The backend accepts one image per request (max 5 MB) and derives the file
 /// name and content type from the stream itself.
+///
+/// **Not used by any screen on purpose.** Doctor avatars are created/replaced
+/// through the profile saga (`POST /profile/update`, multipart `request` +
+/// `avatar`), which uploads the image *and* links `MediaId` to the profile.
+/// Calling `POST /media-assets` directly would leave an orphaned asset with
+/// nothing pointing at it.
 class MediaService {
   MediaService(this._dio);
 

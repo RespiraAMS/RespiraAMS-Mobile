@@ -147,6 +147,7 @@ class _ProfileView extends StatelessWidget {
                       ? headline
                       : l10n.settingsProfileSpecialty,
                   avatarGlyph: initialsFor(name),
+                  avatarImageUrl: doctor.avatarUrl,
                 ),
                 if (professional.isEmpty && contact.isEmpty && personal.isEmpty)
                   Padding(

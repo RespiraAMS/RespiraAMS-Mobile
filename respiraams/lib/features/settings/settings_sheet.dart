@@ -118,6 +118,7 @@ class SettingsSheet extends ConsumerWidget {
                   const SizedBox(height: Spacing.section),
                   _ProfileCard(
                     name: name,
+                    avatarUrl: session?.avatarUrl,
                     onTap: () => _openDoctorProfile(context),
                   ),
                   const SizedBox(height: Spacing.section),
@@ -347,9 +348,10 @@ void _openDoctorProfile(BuildContext context) {
 }
 
 class _ProfileCard extends StatelessWidget {
-  const _ProfileCard({required this.name, this.onTap});
+  const _ProfileCard({required this.name, this.avatarUrl, this.onTap});
 
   final String name;
+  final String? avatarUrl;
   final VoidCallback? onTap;
 
   @override
@@ -371,7 +373,11 @@ class _ProfileCard extends StatelessWidget {
             padding: const EdgeInsets.all(Spacing.group),
             child: Row(
               children: [
-                AvatarGlyphWidget(glyph: initialsFor(name), size: 50),
+                AvatarGlyphWidget(
+                  glyph: initialsFor(name),
+                  size: 50,
+                  imageUrl: avatarUrl,
+                ),
                 const SizedBox(width: Spacing.control),
                 Expanded(
                   child: Column(
