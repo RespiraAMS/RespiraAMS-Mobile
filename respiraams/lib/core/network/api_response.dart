@@ -22,15 +22,27 @@ abstract final class LocalApiError {
   static const noResultToSave = 'local:noResultToSave';
   static const noProtocolToSave = 'local:noProtocolToSave';
   static const selectMedicineRequired = 'local:selectMedicineRequired';
+
+  /// Prefix of the "which fields failed BE validation" message; the rest of
+  /// the token is the comma-separated field names.
+  static const invalidObservationsPrefix = 'local:invalidObservations:';
 }
 
 /// Domain-specific failure surfaced from failed `Result` envelopes;
 /// controllers map it into error states (guidelines Rule 3/5).
 class ApiException implements Exception {
-  const ApiException(this.statusCode, this.message);
+  const ApiException(
+    this.statusCode,
+    this.message, {
+    this.details,
+  });
 
   final int statusCode;
   final String message;
+
+  /// Per-field validation details (`error.detail`), e.g. the id of the
+  /// clinical variable that failed validation and why.
+  final Map<String, String>? details;
 
   @override
   String toString() => 'ApiException($statusCode): $message';
@@ -60,8 +72,33 @@ Never _throwFailure(Map<String, dynamic> json, Response<dynamic> res) {
   throw ApiException(
     res.statusCode ?? 500,
     description ?? (json['message'] as String?) ?? 'Request failed',
+    details: apiErrorDetails(json),
   );
 }
+
+/// Per-field validation details of a failed `Result` envelope
+/// (`error.detail`): a map of entity id → reason (e.g. clinical variable id →
+/// "Tuổi should be ≥ 16"). Returns `null` when the envelope has none.
+Map<String, String>? apiErrorDetails(Object? data) {
+  if (data is! Map) return null;
+  final error = data['error'];
+  if (error is! Map) return null;
+  final detail = error['detail'];
+  if (detail is! Map) return null;
+
+  final details = <String, String>{};
+  for (final entry in detail.entries) {
+    final value = entry.value;
+    if (value == null) continue;
+    details[entry.key.toString()] = value.toString();
+  }
+  return details.isEmpty ? null : details;
+}
+
+/// [apiErrorDetails] of a failed HTTP call (Dio throws before the envelope is
+/// unwrapped, so the body has to be inspected here).
+Map<String, String>? dioErrorDetails(DioException error) =>
+    apiErrorDetails(error.response?.data);
 
 /// Extracts the envelope's `data` as a typed value, throwing [ApiException]
 /// on failure envelopes.
@@ -88,9 +125,15 @@ Map<String, dynamic> unwrapEnvelope(Response<dynamic> res) {
 
 /// Validates a non-generic `Result` envelope (`204`-style commands that
 /// carry no payload) and throws [ApiException] on failure.
+///
+/// `ApplicationStatus.Updated` is returned as **204 No Content**, so Dio
+/// surfaces `''`/`null` here instead of a map — only a map can be a failure
+/// envelope.
 void unwrapResult(Response<dynamic> res) {
-  final json = res.data as Map<String, dynamic>?;
-  if (json != null && _isFailure(json)) _throwFailure(json, res);
+  final data = res.data;
+  if (data is Map<String, dynamic> && _isFailure(data)) {
+    _throwFailure(data, res);
+  }
 }
 
 /// Extracts the envelope's `data` scalar (for `Result<Guid>`, `Result<bool>`
