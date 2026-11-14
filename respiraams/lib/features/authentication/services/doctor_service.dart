@@ -82,6 +82,7 @@ class DoctorProfileDto {
     this.gender,
     this.citizenIdentificationNumber,
     this.address,
+    this.dateOfBirth,
     this.mediaId,
     this.email,
     this.phone,
@@ -108,6 +109,7 @@ class DoctorProfileDto {
       citizenIdentificationNumber:
           json['citizenIdentificationNumber'] as String?,
       address: json['address'] as String?,
+      dateOfBirth: json['dateOfBirth'] as String?,
       mediaId: json['mediaId'] as String?,
       email: json['email'] as String?,
       phone: json['phone'] as String?,
@@ -128,6 +130,9 @@ class DoctorProfileDto {
   final String? gender;
   final String? citizenIdentificationNumber;
   final String? address;
+
+  /// ISO-8601 date-time (`yyyy-MM-ddTHH:mm:ss…`) or `null`.
+  final String? dateOfBirth;
   final String? mediaId;
   final String? email;
   final String? phone;

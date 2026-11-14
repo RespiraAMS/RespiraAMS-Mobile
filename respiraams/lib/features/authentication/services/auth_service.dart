@@ -59,6 +59,32 @@ class AuthService {
     );
   }
 
+  /// `POST /auth/refresh` — rotates the token pair and updates the stored
+  /// session.
+  ///
+  /// Used after a password change: the authentication service drops its
+  /// cached account entry when refreshing, so the new password works
+  /// immediately instead of after the cache TTL.
+  Future<bool> refreshSession() async {
+    final refresh = _storage.refreshToken;
+    if (refresh == null || refresh.isEmpty) return false;
+
+    try {
+      final res = await _dio.post(
+        '/auth/refresh',
+        data: {'refreshToken': refresh},
+      );
+      final tokens = unwrapData(res, _TokenPair.fromJson);
+      await _storage.save(
+        accessToken: tokens.accessToken,
+        refreshToken: tokens.refreshToken,
+      );
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
   /// `POST /auth/logout` — revokes the refresh token server-side, then
   /// clears the local session (best-effort: a network failure must never
   /// keep the user signed in locally).

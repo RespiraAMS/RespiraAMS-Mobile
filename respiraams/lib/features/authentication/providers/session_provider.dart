@@ -68,6 +68,25 @@ class SessionController extends _$SessionController {
     return profile;
   }
 
+  /// Refreshes the cached identity after the doctor edits their profile, so
+  /// the settings header picks up the new name/avatar without re-login.
+  Future<void> updateIdentity({String? displayName, String? avatarUrl}) async {
+    final current = state;
+    if (current == null) return;
+
+    final name = displayName?.trim();
+    final storage = TokenStorage(ref.read(sharedPreferencesProvider));
+    if (name != null && name.isNotEmpty) {
+      await storage.saveIdentity(displayName: name);
+    }
+
+    state = DoctorProfile(
+      id: current.id,
+      name: name != null && name.isNotEmpty ? name : current.name,
+      avatarUrl: avatarUrl ?? current.avatarUrl,
+    );
+  }
+
   /// Revokes the server session (best-effort) and clears local tokens.
   Future<void> logout() async {
     await ref.read(authServiceProvider).logout();

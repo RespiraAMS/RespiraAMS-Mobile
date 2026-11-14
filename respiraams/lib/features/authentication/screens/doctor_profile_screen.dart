@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../core/utils/context_extensions.dart';
 import '../../../core/utils/name_initials.dart';
 import '../../../design_system/design_system.dart';
 import '../../../l10n/l10n.dart';
+import '../../patient/models/patient.dart';
 import '../../patient/routes.dart';
+import '../models/doctor_profile_options.dart';
 import '../providers/current_doctor_provider.dart';
+import '../routes.dart';
 import '../services/doctor_service.dart';
 
 /// Route `/doctor/profile` — read-only profile of the signed-in doctor.
@@ -79,31 +84,34 @@ class _ProfileView extends StatelessWidget {
     final name = doctor.fullName.trim().isNotEmpty
         ? doctor.fullName.trim()
         : l10n.settingsDoctorFallback;
-    final headline = [doctor.academicTitle, doctor.position]
+    final academicTitle = _academicTitleLabel(doctor.academicTitle, l10n);
+    final position = _positionLabel(doctor.position, l10n);
+    final headline = [academicTitle, position]
         .whereType<String>()
         .map((part) => part.trim())
         .where((part) => part.isNotEmpty)
         .join(' · ');
     final degrees = doctor.degrees
-        .map((part) => part.trim())
-        .where((part) => part.isNotEmpty)
+        .map((part) => _degreeLabel(part, l10n))
+        .whereType<String>()
         .join(', ');
     final gender = _genderLabel(doctor.gender, l10n);
     final role = _roleLabel(doctor.role, l10n);
     final citizenId = _maskCitizenId(doctor.citizenIdentificationNumber);
+    final dateOfBirth = _dateOfBirthLabel(doctor.dateOfBirth);
 
     final professional = <Widget>[
-      if (doctor.academicTitle?.trim().isNotEmpty ?? false)
+      if (academicTitle != null)
         _InfoRow(
           label: l10n.doctorProfileAcademicTitle,
-          value: doctor.academicTitle!.trim(),
+          value: academicTitle,
         ),
       if (degrees.isNotEmpty)
         _InfoRow(label: l10n.doctorProfileDegrees, value: degrees),
-      if (doctor.position?.trim().isNotEmpty ?? false)
+      if (position != null)
         _InfoRow(
           label: l10n.doctorProfilePosition,
-          value: doctor.position!.trim(),
+          value: position,
         ),
       if (role != null) _InfoRow(label: l10n.doctorProfileRole, value: role),
     ];
@@ -121,6 +129,8 @@ class _ProfileView extends StatelessWidget {
     ];
 
     final personal = <Widget>[
+      if (dateOfBirth != null)
+        _InfoRow(label: l10n.doctorProfileDob, value: dateOfBirth),
       if (gender != null)
         _InfoRow(label: l10n.doctorProfileGender, value: gender),
       if (citizenId != null)
@@ -135,10 +145,18 @@ class _ProfileView extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                AppAppBar(
-                  title: l10n.doctorProfileTitle,
-                  subtitle: l10n.doctorProfileSubtitle,
-                  onBack: () => context.goBackOr(PatientRoutes.list),
+                Row(
+                  children: [
+                    Expanded(
+                      child: AppAppBar(
+                        title: l10n.doctorProfileTitle,
+                        subtitle: l10n.doctorProfileSubtitle,
+                        onBack: () => context.goBackOr(PatientRoutes.list),
+                      ),
+                    ),
+                    const SizedBox(width: Spacing.inline),
+                    _EditButton(doctor: doctor),
+                  ],
                 ),
                 const SizedBox(height: Spacing.block),
                 PatientHeader(
@@ -148,6 +166,18 @@ class _ProfileView extends StatelessWidget {
                       : l10n.settingsProfileSpecialty,
                   avatarGlyph: initialsFor(name),
                   avatarImageUrl: doctor.avatarUrl,
+                ),
+                const SizedBox(height: Spacing.control),
+                AppButton(
+                  label: l10n.doctorProfileEdit,
+                  type: AppButtonType.outline,
+                  size: AppButtonSize.medium,
+                  leadingIcon: LucideIcons.pencil,
+                  expand: true,
+                  onPressed: () => context.push(
+                    AuthenticationRoutes.doctorProfileEdit,
+                    extra: doctor,
+                  ),
                 ),
                 if (professional.isEmpty && contact.isEmpty && personal.isEmpty)
                   Padding(
@@ -194,6 +224,43 @@ class _ProfileView extends StatelessWidget {
                 ],
                 const SizedBox(height: Spacing.screen),
               ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Opens the editable profile, passing the loaded [doctor] so the form does
+/// not have to resolve the profile again.
+class _EditButton extends StatelessWidget {
+  const _EditButton({required this.doctor});
+
+  final DoctorProfileDto doctor;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.respiraColors;
+    final l10n = context.l10n;
+
+    return Semantics(
+      button: true,
+      label: l10n.doctorProfileEdit,
+      child: Material(
+        color: c.primarySoft,
+        shape: const CircleBorder(),
+        clipBehavior: Clip.antiAlias,
+        child: SizedBox(
+          width: 44,
+          height: 44,
+          child: InkWell(
+            onTap: () => context.push(
+              AuthenticationRoutes.doctorProfileEdit,
+              extra: doctor,
+            ),
+            child: Center(
+              child: Icon(LucideIcons.pencil, size: 20, color: c.primary),
             ),
           ),
         ),
@@ -292,12 +359,39 @@ class _SectionLabel extends StatelessWidget {
 String? _genderLabel(String? gender, AppLocalizations l10n) {
   final value = gender?.trim();
   if (value == null || value.isEmpty) return null;
+  final parsed = DoctorGender.fromWire(value);
+  if (parsed != null) return parsed.label(l10n);
   return switch (value.toLowerCase()) {
-    'male' => l10n.genderMale,
-    'female' => l10n.genderFemale,
     'other' => l10n.doctorProfileGenderOther,
     _ => value,
   };
+}
+
+/// Enum labels are localized; unknown values from older payloads fall back to
+/// the raw string so nothing disappears from the screen.
+String? _degreeLabel(String? degree, AppLocalizations l10n) {
+  final value = degree?.trim();
+  if (value == null || value.isEmpty) return null;
+  return DoctorDegree.fromWire(value)?.label(l10n) ?? value;
+}
+
+String? _academicTitleLabel(String? title, AppLocalizations l10n) {
+  final value = title?.trim();
+  if (value == null || value.isEmpty) return null;
+  return DoctorAcademicTitle.fromWire(value)?.label(l10n) ?? value;
+}
+
+String? _positionLabel(String? position, AppLocalizations l10n) {
+  final value = position?.trim();
+  if (value == null || value.isEmpty) return null;
+  return DoctorPosition.fromWire(value)?.label(l10n) ?? value;
+}
+
+/// `yyyy-MM-ddTHH:mm:ss…` → `dd/MM/yyyy`.
+String? _dateOfBirthLabel(String? dateOfBirth) {
+  final value = dateOfBirth?.trim();
+  if (value == null || value.isEmpty) return null;
+  return isoDateToDdMmYyyy(value);
 }
 
 String? _roleLabel(String? role, AppLocalizations l10n) {

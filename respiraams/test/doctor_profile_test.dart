@@ -72,6 +72,35 @@ void main() {
     expect(find.text('CCCD'), findsOneWidget);
     expect(find.text('•••• 6789'), findsOneWidget);
     expect(find.text('079123456789'), findsNothing);
+
+    // Date of birth row (ISO → dd/MM/yyyy) and the edit action.
+    expect(find.text('Ngày sinh'), findsOneWidget);
+    expect(find.text('12/04/1971'), findsOneWidget);
+    expect(find.text('Cập nhật thông tin'), findsOneWidget);
+    expect(find.byIcon(LucideIcons.pencil), findsWidgets);
+  });
+
+  testWidgets('localizes the doctor enums', (tester) async {
+    await _openProfile(
+      tester,
+      overrides: {
+        'GET /doctors': MockedResponse(
+          200,
+          FakeApiAdapter.doctorsEnvelope(
+            FakeApiAdapter.doctorProfile(
+              degrees: const ['Master', 'Doctor'],
+              academicTitle: 'AssociateProfessor',
+              position: 'HeadOfDepartment',
+            ),
+          ),
+        ),
+      },
+    );
+
+    expect(find.text('Phó giáo sư · Trưởng khoa'), findsOneWidget);
+    expect(find.text('Thạc sĩ, Bác sĩ'), findsOneWidget);
+    // Unknown/legacy values still fall back to the raw string.
+    expect(find.text('ThS, BS'), findsNothing);
   });
 
   testWidgets('back returns to the workspace', (tester) async {
