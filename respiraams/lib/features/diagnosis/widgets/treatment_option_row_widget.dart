@@ -71,8 +71,6 @@ class TreatmentOptionRowWidget extends StatelessWidget {
                   children: [
                     Text(
                       option.drug,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
                       style: TypographyTokens.caption(context)
                           .copyWith(color: c.textPrimary),
                     ),
@@ -80,8 +78,6 @@ class TreatmentOptionRowWidget extends StatelessWidget {
                     AppText(
                       '${routeLabel(option.route, context.l10n)} · ${option.dosage}',
                       type: AppTextType.caption,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
                     ),
                   ],
                 ),

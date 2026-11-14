@@ -44,8 +44,7 @@ class StatTileWidget extends StatelessWidget {
         children: [
           Text(
             label,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
+            maxLines: 2,
             style: TypographyTokens.caption(context)
                 .copyWith(color: c.textSecondary),
           ),
