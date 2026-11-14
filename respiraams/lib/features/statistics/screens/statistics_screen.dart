@@ -7,6 +7,7 @@ import '../../../../core/navigation/app_nav_items.dart';
 import '../../../../design_system/design_system.dart';
 import '../../../../l10n/l10n.dart';
 import '../../../../features/calculator/routes.dart';
+import '../../../../features/analysis/analysis_routes.dart';
 import '../../../../features/lookup/lookup_route.dart';
 import '../../../../features/patient/routes.dart';
 import '../../settings/settings_menu_button.dart';
@@ -111,6 +112,8 @@ class StatisticsScreen extends ConsumerWidget {
                         ),
                       ),
                       const SizedBox(height: Spacing.section),
+                      _AnalysisReportEntry(),
+                      const SizedBox(height: Spacing.section),
                       _SyncBanner(),
                     ],
                   ),
@@ -176,6 +179,81 @@ class _Header extends ConsumerWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _AnalysisReportEntry extends StatelessWidget {
+  const _AnalysisReportEntry();
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.respiraColors;
+    final l10n = context.l10n;
+
+    return Material(
+      color: c.surface,
+      borderRadius: AppRadius.lg,
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: () => context.push(AnalysisRoutes.list),
+        child: Container(
+          padding: const EdgeInsets.all(Spacing.group),
+          decoration: BoxDecoration(
+            borderRadius: AppRadius.lg,
+            border: Border.all(color: c.borderSubtle),
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: ControlSize.touchTargetMin,
+                height: ControlSize.touchTargetMin,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: c.primarySoft,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  LucideIcons.clipboardList,
+                  size: ControlSize.iconLg,
+                  color: c.primary,
+                ),
+              ),
+              const SizedBox(width: Spacing.control),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      l10n.analysisEntryTitle,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TypographyTokens.bodyMedium(context).copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: c.textPrimary,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    AppText(
+                      l10n.analysisEntrySubtitle,
+                      type: AppTextType.caption,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: Spacing.inline),
+              Icon(
+                LucideIcons.chevronRight,
+                size: ControlSize.iconLg,
+                color: c.iconMuted,
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
