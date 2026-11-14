@@ -75,28 +75,51 @@ void main() {
     expect(find.text('Tiến trình điều trị'), findsOneWidget);
   });
 
-  testWidgets('detail actions navigate to add progress screen',
-      (tester) async {
+  testWidgets('detail actions share a single row', (tester) async {
+    await pumpTestApp(
+      tester,
+      initialLocation: '${PatientRoutes.detail}?id=patient-BA-2026-0001',
+    );
+    await settleApi(tester);
+    await tester.pumpAndSettle();
+
+    // "Thêm điều trị" (left) and "Xuất viện" (right) sit on the same row.
+    final addRect = tester.getRect(find.text('Thêm điều trị'));
+    final dischargeRect = tester.getRect(find.text('Xuất viện'));
+    expect(addRect.center.dy, closeTo(dischargeRect.center.dy, 1));
+    expect(addRect.center.dx, lessThan(dischargeRect.center.dx));
+  });
+
+  testWidgets('detail action opens the diagnosis wizard directly', (
+    tester,
+  ) async {
     await _pumpAt(tester, PatientRoutes.addPatient);
 
     await _fillAddPatientForm(tester);
     await _tapSave(tester);
 
     // Bottom-pinned actions may be below the fold on the test surface.
-    await tester.ensureVisible(find.text('Cập nhật trạng thái'));
+    await tester.ensureVisible(find.text('Thêm điều trị'));
     await tester.pump(const Duration(milliseconds: 200));
 
-    await tester.tap(find.text('Cập nhật trạng thái'));
+    await tester.tap(find.text('Thêm điều trị'));
     await _settleNavigation(tester);
+    await settleApi(tester);
+    await settleApi(tester);
 
-    expect(find.text('Thêm diễn biến'), findsOneWidget);
-    expect(find.text('Loại điều trị'), findsOneWidget);
-    expect(find.text('Không thể chỉnh sửa sau khi lưu'), findsOneWidget);
+    // "Thêm điều trị" goes straight to the wizard (no "Thêm diễn biến").
+    expect(find.text('Chẩn đoán kinh nghiệm'), findsOneWidget);
+    expect(
+      find.text('Bước 1/5 · Đánh giá mức độ & nhiễm khuẩn'),
+      findsOneWidget,
+    );
+    expect(find.text('Thêm diễn biến'), findsNothing);
   });
 
   testWidgets(
-      'Chẩn đoán nav tab: create patient then start empirical treatment '
-      'for them', (tester) async {
+      'Chẩn đoán nav tab: create patient then go straight to the wizard', (
+    tester,
+  ) async {
     await _pumpAt(tester, PatientRoutes.list);
 
     // 'Chẩn đoán' appears only as the nav label on the list screen.
@@ -108,21 +131,16 @@ void main() {
     // Fill in a distinguishable patient and save.
     await _fillAddPatientForm(tester, firstName: 'Mới');
     await _tapSave(tester);
-
-    // Straight into the empirical progress flow — the header shows the
-    // patient that was just created (active-patient propagation).
-    expect(find.text('Thêm diễn biến'), findsOneWidget);
-    expect(find.text('Ghi nhận thay đổi điều trị mới nhất'), findsOneWidget);
-    expect(find.text('Nguyễn Minh Mới'), findsWidgets);
-
-    // And the wizard continues for that patient.
-    await tester.ensureVisible(find.text('Lưu diễn biến'));
-    await tester.pump(const Duration(milliseconds: 200));
-    await tester.tap(find.text('Lưu diễn biến'));
-    await _settleNavigation(tester);
     await settleApi(tester);
     await settleApi(tester);
 
+    // Straight into the diagnosis wizard for the just-created patient
+    // (active-patient propagation), skipping the old progress page.
     expect(find.text('Chẩn đoán kinh nghiệm'), findsOneWidget);
+    expect(
+      find.text('Bước 1/5 · Đánh giá mức độ & nhiễm khuẩn'),
+      findsOneWidget,
+    );
+    expect(find.text('Thêm diễn biến'), findsNothing);
   });
 }

@@ -1,15 +1,16 @@
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:respiraams/features/diagnosis/routes.dart';
 import 'package:respiraams/features/patient/models/patient.dart';
 import 'package:respiraams/features/patient/providers/active_patient_provider.dart';
 
 import 'helpers/pump_test_app.dart';
 
-/// Targeted-treatment flow tests: switching the treatment-type tab, the
-/// targeted variant, the Chẩn đoán vi sinh screen and its selection chips.
+/// Targeted-treatment tests: the Chẩn đoán vi sinh screen and its selection
+/// chips. The screen is opened directly (its former entry point, the
+/// "Thêm diễn biến" page, was removed from the flow).
 
-/// Seeds the active patient the progress/diagnosis flow works on (the demo
-/// `samplePatient` seed was removed in favour of real API data).
+/// Seeds the active patient the targeted screen works on.
 class _SeededActivePatient extends ActivePatientController {
   _SeededActivePatient(this._patient);
 
@@ -29,59 +30,20 @@ final _seedPatient = Patient(
   address: 'Cần Thơ',
 );
 
-Future<void> _pumpProgress(WidgetTester tester) => pumpTestApp(
-      tester,
-      initialLocation: '/patient/progress',
-      providerOverrides: [
-        activePatientControllerProvider
-            .overrideWith(() => _SeededActivePatient(_seedPatient)),
-      ],
-    );
-
-Future<void> _settleNavigation(WidgetTester tester) async {
-  await tester.pump(const Duration(milliseconds: 400));
-  await tester.pump(const Duration(milliseconds: 400));
-}
-
 Future<void> _openTargetedDiagnosis(WidgetTester tester) async {
-  await _pumpProgress(tester);
-
-  await tester.tap(find.text('Điều trị đích'));
-  await tester.pump(const Duration(milliseconds: 200));
-
-  await tester.ensureVisible(find.text('Tiếp tục điều trị đích'));
-  await tester.pump(const Duration(milliseconds: 200));
-  await tester.tap(find.text('Tiếp tục điều trị đích'));
-  await _settleNavigation(tester);
-  for (var i = 0; i < 12; i++) {
-    await settleApi(tester);
-    await tester.pump(const Duration(milliseconds: 100));
-  }
+  await pumpTestApp(
+    tester,
+    initialLocation: DiagnosisRoutes.targetedTreatment,
+    providerOverrides: [
+      activePatientControllerProvider
+          .overrideWith(() => _SeededActivePatient(_seedPatient)),
+    ],
+  );
+  await settleApi(tester);
+  await settleApi(tester);
 }
 
 void main() {
-  testWidgets(
-      'selecting Điều trị đích swaps the form to the targeted variant',
-      (tester) async {
-    await _pumpProgress(tester);
-
-    // Empirical variant by default.
-    expect(find.text('Lý do thay đổi'), findsOneWidget);
-    expect(find.text('Lưu diễn biến'), findsOneWidget);
-
-    await tester.tap(find.text('Điều trị đích'));
-    await tester.pump(const Duration(milliseconds: 200));
-
-    // Targeted variant.
-    expect(find.text('Dựa trên kết quả vi sinh đã có'), findsOneWidget);
-    expect(find.text('Loại điều trị tiếp theo'), findsOneWidget);
-    expect(find.text('Klebsiella pneumoniae'), findsOneWidget);
-    expect(find.text('Kháng sinh đồ gần nhất'), findsOneWidget);
-    expect(find.text('Điều trị đích dựa trên kết quả vi sinh'), findsOneWidget);
-    expect(find.text('Tiếp tục điều trị đích'), findsOneWidget);
-    expect(find.text('Lưu diễn biến'), findsNothing);
-  });
-
   testWidgets('targeted CTA opens Chẩn đoán vi sinh with derived chips',
       (tester) async {
     await _openTargetedDiagnosis(tester);

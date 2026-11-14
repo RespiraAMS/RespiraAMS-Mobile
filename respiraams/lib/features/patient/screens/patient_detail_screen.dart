@@ -1,21 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../core/utils/context_extensions.dart';
 import '../../../../design_system/design_system.dart';
 import '../../../../l10n/l10n.dart';
+import '../../diagnosis/routes.dart';
 import '../models/patient.dart';
 import '../models/patient_dtos.dart';
+import '../models/patient_labels.dart';
 import '../providers/active_patient_provider.dart';
 import '../providers/current_patient_provider.dart';
 import '../providers/patient_detail_provider.dart';
+import '../providers/patient_list_provider.dart';
+import '../widgets/discharge_patient_sheet.dart';
 import '../widgets/info_row_widget.dart';
+import '../widgets/next_of_kin_section.dart';
+import '../widgets/patient_actions_menu.dart';
 import '../widgets/section_label_widget.dart';
 import '../widgets/timeline_widget.dart';
 import '../routes.dart';
 
-/// Route `/patient/detail` — read-only profile and treatment timeline.
+/// Route `/patient/detail` — profile, treatment timeline and record actions.
 ///
 /// Loads the record from `GET /patients/{id}` (passed as query parameter)
 /// and mirrors it into the active patient so progress/diagnosis screens
@@ -51,9 +58,13 @@ class PatientDetailScreen extends ConsumerWidget {
               ),
             ),
             data: (dto) => _ProfileView(
+              patientId: id,
               patient: Patient.fromDetail(dto),
-              statusLabel: _statusLabel(dto.treatmentOutcome, l10n),
+              outcome: dto.treatmentOutcome,
+              discharge: dto.discharge,
+              admission: dto.admission,
               treatments: dto.treatmentPlans,
+              nextOfKins: dto.nextOfKins,
             ),
           );
     }
@@ -64,7 +75,10 @@ class PatientDetailScreen extends ConsumerWidget {
         child: AppText(l10n.patientNoSelection, type: AppTextType.caption),
       );
     }
-    return _ProfileView(patient: patient);
+    return _ProfileView(
+      patientId: patient.id.isEmpty ? null : patient.id,
+      patient: patient,
+    );
   }
 }
 
@@ -74,14 +88,6 @@ String _statusLabel(PatientStatusDto outcome, AppLocalizations l10n) =>
       PatientStatusDto.recovered => l10n.patientStatusRecovered,
       PatientStatusDto.death => l10n.patientStatusDeceased,
       PatientStatusDto.outOfScope => l10n.patientStatusOutOfScope,
-    };
-
-String _adherenceLabel(String state, AppLocalizations l10n) => switch (state) {
-      'Adhere' => l10n.adherenceAdhere,
-      'NotAdhere' => l10n.adherenceNotAdhere,
-      'NotAdhereValid' => l10n.adherenceNotAdhereValid,
-      'NotAdhereInvalid' => l10n.adherenceNotAdhereInvalid,
-      _ => state,
     };
 
 String _dateLabel(String value) {
@@ -124,35 +130,105 @@ class _StateScaffold extends StatelessWidget {
   }
 }
 
-class _ProfileView extends StatelessWidget {
+class _ProfileView extends ConsumerStatefulWidget {
   const _ProfileView({
     required this.patient,
-    this.statusLabel,
+    this.patientId,
+    this.outcome,
+    this.discharge,
+    this.admission,
     this.treatments = const [],
+    this.nextOfKins = const [],
   });
 
   final Patient patient;
-  final String? statusLabel;
+
+  /// Present when the record came from `GET /patients/{id}`; enables the
+  /// overflow menu and the discharge action.
+  final String? patientId;
+  final PatientStatusDto? outcome;
+  final String? discharge;
+  final String? admission;
   final List<TreatmentPlanItemDto> treatments;
+  final List<NextOfKinItemDto> nextOfKins;
+
+  @override
+  ConsumerState<_ProfileView> createState() => _ProfileViewState();
+}
+
+class _ProfileViewState extends ConsumerState<_ProfileView> {
+  /// Local override so the banner/outcome/button update immediately after
+  /// a successful discharge, without waiting for the refetch.
+  PatientStatusDto? _outcomeOverride;
+  String? _dischargedAt;
+
+  bool get _isDischarged =>
+      widget.discharge != null || _dischargedAt != null;
+
+  PatientStatusDto? get _effectiveOutcome =>
+      _outcomeOverride ?? widget.outcome;
+
+  Future<void> _onDischarge() async {
+    final id = widget.patientId;
+    if (id == null || id.isEmpty) return;
+
+    final l10n = context.l10n;
+    final outcome = await showDischargePatientSheet(
+      context,
+      patientId: id,
+      patientName: widget.patient.name,
+      patientCode: widget.patient.code,
+      admission: widget.admission ?? '',
+    );
+    if (outcome == null || !mounted) return;
+
+    setState(() {
+      _outcomeOverride = switch (outcome) {
+        DischargeOutcome.recovered => PatientStatusDto.recovered,
+        DischargeOutcome.death => PatientStatusDto.death,
+        DischargeOutcome.outOfScope => PatientStatusDto.outOfScope,
+      };
+      _dischargedAt = _todayLabel();
+    });
+
+    showAppToast(context, l10n.patientDischargeSuccess);
+    ref.invalidate(patientDetailProvider(id));
+    ref.read(patientListControllerProvider.notifier).refresh();
+  }
+
+  static String _todayLabel() {
+    final now = DateTime.now();
+    final dd = now.day.toString().padLeft(2, '0');
+    final mm = now.month.toString().padLeft(2, '0');
+    return '$dd/$mm/${now.year}';
+  }
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final patient = widget.patient;
     final avatarGlyph = patient.gender == Gender.nam ? '👨🏻' : '👩🏾';
     final vitals = (patient.heightCm != null && patient.weightKg != null)
         ? '${patient.weightKg!.toStringAsFixed(0)} kg · '
             '${patient.heightCm!.toStringAsFixed(0)} cm'
         : '—';
     final entries = [
-      for (final plan in treatments)
+      for (final plan in widget.treatments)
         TreatmentTimelineEntry(
           dateLabel: _dateLabel(plan.updatedAt),
           title: plan.treatmentPlanStatus == 1
               ? l10n.treatmentPlanClosed
               : l10n.treatmentPlanInProgress,
-          status: _adherenceLabel(plan.adherenceState, l10n),
+          status: adherenceStateLabel(plan.adherenceState, l10n),
+          onTap: () =>
+              context.push('${PatientRoutes.treatmentPlan}?id=${plan.id}'),
         ),
     ];
+    final outcome = _effectiveOutcome;
+    final statusLabel = outcome == null ? null : _statusLabel(outcome, l10n);
+    final discharged = _isDischarged;
+    final canDischarge = !discharged && outcome == PatientStatusDto.inTreatment;
+    final patientId = widget.patientId;
 
     return Scaffold(
       body: SafeArea(
@@ -169,15 +245,33 @@ class _ProfileView extends StatelessWidget {
                       AppAppBar(
                         title: l10n.patientDetailTitle,
                         subtitle: l10n.patientDetailSubtitle,
-                        onBack: () =>
-                            context.goBackOr(PatientRoutes.list),
+                        onBack: () => context.goBackOr(PatientRoutes.list),
                       ),
+                      if (discharged) ...[
+                        const SizedBox(height: Spacing.control),
+                        ClinicalAlert(
+                          severity: ClinicalSeverity.stable,
+                          title: l10n.patientDischargedBanner,
+                          description: l10n.patientDischargedAt(
+                            _dischargedAt ??
+                                _dateLabel(widget.discharge ?? ''),
+                            statusLabel ?? '',
+                          ),
+                        ),
+                      ],
                       const SizedBox(height: Spacing.block),
                       PatientHeader(
                         name: patient.name,
                         metadata:
                             '${patient.code} · ${patient.gender.label(l10n)}',
                         avatarGlyph: avatarGlyph,
+                        trailing: (patientId == null || patientId.isEmpty)
+                            ? null
+                            : PatientActionsMenu(
+                                patientId: patientId,
+                                patientName: patient.name,
+                                patientCode: patient.code,
+                              ),
                       ),
                       const SizedBox(height: Spacing.section),
                       SectionLabelWidget(l10n.patientRecordSection),
@@ -204,7 +298,7 @@ class _ProfileView extends StatelessWidget {
                           if (statusLabel != null)
                             InfoRowWidget(
                               label: l10n.patientTreatmentStatus,
-                              value: statusLabel!,
+                              value: statusLabel,
                             ),
                         ],
                         padding: const EdgeInsets.symmetric(
@@ -212,6 +306,13 @@ class _ProfileView extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: Spacing.section),
+                      if (patientId != null && patientId.isNotEmpty) ...[
+                        NextOfKinSection(
+                          patientId: patientId,
+                          nextOfKins: widget.nextOfKins,
+                        ),
+                        const SizedBox(height: Spacing.section),
+                      ],
                       SectionLabelWidget(l10n.patientProgressSection),
                       const SizedBox(height: Spacing.inline),
                       Padding(
@@ -231,22 +332,28 @@ class _ProfileView extends StatelessWidget {
                         ),
                         child: Row(
                           children: [
+                            // Straight into the empirical-diagnosis wizard;
+                            // the intermediate "Thêm diễn biến" page is gone.
                             Expanded(
                               child: AppButton(
                                 label: l10n.patientAddTreatment,
+                                size: AppButtonSize.medium,
                                 onPressed: () =>
-                                    context.push(PatientRoutes.progress),
+                                    context.push(DiagnosisRoutes.wizard),
                               ),
                             ),
-                            const SizedBox(width: Spacing.control),
-                            Expanded(
-                              child: AppButton(
-                                label: l10n.patientUpdateStatus,
-                                type: AppButtonType.outline,
-                                onPressed: () =>
-                                    context.push(PatientRoutes.progress),
+                            if (canDischarge) ...[
+                              const SizedBox(width: Spacing.control),
+                              Expanded(
+                                child: AppButton(
+                                  label: l10n.patientDischarge,
+                                  type: AppButtonType.destructive,
+                                  size: AppButtonSize.medium,
+                                  leadingIcon: LucideIcons.logOut,
+                                  onPressed: _onDischarge,
+                                ),
                               ),
-                            ),
+                            ],
                           ],
                         ),
                       ),

@@ -7,6 +7,7 @@ import '../../../../core/utils/context_extensions.dart';
 import '../../../../design_system/design_system.dart';
 import '../../../../core/network/api_response.dart';
 import '../../../../l10n/l10n.dart';
+import '../../diagnosis/routes.dart';
 import '../models/add_patient_form_state.dart';
 import '../models/patient.dart';
 import '../providers/add_patient_controller.dart';
@@ -18,8 +19,8 @@ import '../routes.dart';
 /// Route `/patient/add` — "Thêm bệnh nhân" form.
 ///
 /// When reached with [diagnosisEntry] (query `?flow=diagnosis` from the
-/// bottom-nav 'Chẩn đoán' tab), saving continues straight into the
-/// empirical-treatment progress flow for the just-created patient.
+/// bottom-nav 'Chẩn đoán' tab), saving continues straight into the empirical
+/// diagnosis wizard for the just-created patient.
 class AddPatientScreen extends ConsumerWidget {
   const AddPatientScreen({super.key, this.diagnosisEntry = false});
 
@@ -82,7 +83,7 @@ class AddPatientScreen extends ConsumerWidget {
         // Replace the form so back from the next screen returns to the
         // roster instead of the just-submitted form.
         context.pushReplacement(
-          diagnosisEntry ? PatientRoutes.progress : PatientRoutes.detail,
+          diagnosisEntry ? DiagnosisRoutes.wizard : PatientRoutes.detail,
         );
       } on ApiException catch (e) {
         showAppToast(context, e.message);
@@ -135,6 +136,7 @@ class AddPatientScreen extends ConsumerWidget {
                       AppTextField(
                         label: l10n.patientRecordCode,
                         initialValue: form.code,
+                        hintText: l10n.patientRecordCodeHint,
                         onChanged: controller.setCode,
                       ),
                       const SizedBox(height: Spacing.group),
@@ -178,6 +180,7 @@ class AddPatientScreen extends ConsumerWidget {
                         label: l10n.patientHeight,
                         unit: 'cm',
                         initialValue: form.heightCm,
+                        expanded: true,
                         onChanged: controller.setHeightCm,
                       ),
                       const SizedBox(height: Spacing.group),
@@ -185,6 +188,7 @@ class AddPatientScreen extends ConsumerWidget {
                         label: l10n.patientWeight,
                         unit: 'kg',
                         initialValue: form.weightKg,
+                        expanded: true,
                         onChanged: controller.setWeightKg,
                       ),
                       const SizedBox(height: Spacing.group),

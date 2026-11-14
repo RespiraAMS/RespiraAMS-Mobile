@@ -168,10 +168,10 @@ class PatientService {
     );
   }
 
-  /// `PUT /next-of-kin/{nextOfKinId}`.
+  /// `PUT /patients/next-of-kin/{nextOfKinId}`.
   ///
-  /// Note the absolute route: the backend declares it with a leading `/`,
-  /// so it is not nested under `/patients`.
+  /// The backend declares the action route relative to the controller, so
+  /// the kin id lives under `/patients` (the route carries no patient id).
   Future<void> updateNextOfKin({
     required String nextOfKinId,
     required String fullName,
@@ -179,7 +179,7 @@ class PatientService {
     required String relationship,
   }) async {
     final res = await _dio.put(
-      '/next-of-kin/$nextOfKinId',
+      '/patients/next-of-kin/$nextOfKinId',
       data: {
         'fullName': fullName,
         'phoneNumber': phoneNumber,
@@ -189,9 +189,9 @@ class PatientService {
     unwrapResult(res);
   }
 
-  /// `DELETE /next-of-kin/{nextOfKinId}` (absolute route).
+  /// `DELETE /patients/next-of-kin/{nextOfKinId}`.
   Future<void> deleteNextOfKin(String nextOfKinId) async {
-    final res = await _dio.delete('/next-of-kin/$nextOfKinId');
+    final res = await _dio.delete('/patients/next-of-kin/$nextOfKinId');
     unwrapResult(res);
   }
 

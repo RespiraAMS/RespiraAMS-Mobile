@@ -77,3 +77,15 @@ String? ddMmYyyyToIsoDate(String input) {
   final mm = month.toString().padLeft(2, '0');
   return '$year-$mm-$dd';
 }
+
+/// `yyyy-MM-dd…` (API `DateOnly`) → `dd/MM/yyyy` (prototype format).
+///
+/// Returns the input unchanged when it is not a parseable date, so callers
+/// never lose data on unexpected payloads.
+String isoDateToDdMmYyyy(String input) {
+  final parsed = DateTime.tryParse(input.trim());
+  if (parsed == null) return input;
+  final dd = parsed.day.toString().padLeft(2, '0');
+  final mm = parsed.month.toString().padLeft(2, '0');
+  return '$dd/$mm/${parsed.year}';
+}

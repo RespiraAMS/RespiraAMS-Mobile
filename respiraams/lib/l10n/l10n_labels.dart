@@ -3,7 +3,6 @@ import '../features/calculator/models/calculator.dart';
 import '../features/antibiogram/models/antibiogram.dart';
 import '../features/clinical_variables/models/clinical_variable.dart';
 import '../features/diagnosis/models/diagnosis_result.dart';
-import '../features/patient/models/add_progress_form_state.dart';
 import '../features/patient/models/patient.dart';
 import '../features/patient/models/patient_summary.dart';
 import '../features/statistics/models/statistics_view.dart';
@@ -27,13 +26,6 @@ extension GenderL10n on Gender {
   String label(AppLocalizations l10n) => switch (this) {
         Gender.nam => l10n.genderMale,
         Gender.nu => l10n.genderFemale,
-      };
-}
-
-extension TreatmentTypeL10n on TreatmentType {
-  String label(AppLocalizations l10n) => switch (this) {
-        TreatmentType.empirical => l10n.treatmentEmpirical,
-        TreatmentType.targeted => l10n.treatmentTargeted,
       };
 }
 
@@ -241,6 +233,11 @@ extension LocalizedApiErrorX on String {
     if (startsWith(LocalApiError.invalidNumberPrefix)) {
       return l10n.diagnosisInvalidNumber(
         substring(LocalApiError.invalidNumberPrefix.length),
+      );
+    }
+    if (startsWith(LocalApiError.invalidObservationsPrefix)) {
+      return l10n.diagnosisInvalidFields(
+        substring(LocalApiError.invalidObservationsPrefix.length),
       );
     }
     if (this == LocalApiError.allergyRequired) {

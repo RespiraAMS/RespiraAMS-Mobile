@@ -6,6 +6,7 @@ import '../../../../design_system/design_system.dart';
 import '../../../../l10n/l10n.dart';
 import '../../../../features/patient/models/patient.dart';
 import '../../../../features/patient/providers/current_patient_provider.dart';
+import '../../../../features/patient/routes.dart';
 import '../models/clinical_dtos.dart';
 import '../models/microbiology_result.dart';
 import '../providers/microbiology_provider.dart';
@@ -57,7 +58,7 @@ class TargetedTreatmentScreen extends ConsumerWidget {
               AppAppBar(
                 title: l10n.targetedTitle,
                 subtitle: l10n.targetedSubtitle,
-                onBack: () => context.goBackOr('/patient/progress'),
+                onBack: () => context.goBackOr(PatientRoutes.list),
               ),
               const SizedBox(height: Spacing.section),
               Expanded(
