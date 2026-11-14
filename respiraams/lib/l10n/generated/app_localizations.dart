@@ -464,6 +464,252 @@ abstract class AppLocalizations {
   /// **'Thử lại'**
   String get doctorProfileRetry;
 
+  /// No description provided for @doctorProfileEdit.
+  ///
+  /// In vi, this message translates to:
+  /// **'Cập nhật thông tin'**
+  String get doctorProfileEdit;
+
+  /// No description provided for @doctorProfileEditTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Cập nhật hồ sơ'**
+  String get doctorProfileEditTitle;
+
+  /// No description provided for @doctorProfileEditSubtitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chỉnh sửa thông tin bác sĩ'**
+  String get doctorProfileEditSubtitle;
+
+  /// No description provided for @doctorProfileAvatarChange.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đổi ảnh đại diện'**
+  String get doctorProfileAvatarChange;
+
+  /// No description provided for @doctorProfileAvatarHint.
+  ///
+  /// In vi, this message translates to:
+  /// **'JPG, PNG hoặc WEBP · tối đa 5 MB'**
+  String get doctorProfileAvatarHint;
+
+  /// No description provided for @doctorProfileAvatarTooLarge.
+  ///
+  /// In vi, this message translates to:
+  /// **'Ảnh đại diện phải nhỏ hơn 5 MB.'**
+  String get doctorProfileAvatarTooLarge;
+
+  /// No description provided for @doctorProfileAvatarInvalid.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chỉ hỗ trợ ảnh JPG, PNG hoặc WEBP.'**
+  String get doctorProfileAvatarInvalid;
+
+  /// No description provided for @doctorProfileSectionSecurity.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bảo mật'**
+  String get doctorProfileSectionSecurity;
+
+  /// No description provided for @doctorProfileDob.
+  ///
+  /// In vi, this message translates to:
+  /// **'Ngày sinh'**
+  String get doctorProfileDob;
+
+  /// No description provided for @doctorProfileEmailHint.
+  ///
+  /// In vi, this message translates to:
+  /// **'Email dùng để đăng nhập.'**
+  String get doctorProfileEmailHint;
+
+  /// No description provided for @doctorProfileNewPassword.
+  ///
+  /// In vi, this message translates to:
+  /// **'Mật khẩu mới'**
+  String get doctorProfileNewPassword;
+
+  /// No description provided for @doctorProfileConfirmPassword.
+  ///
+  /// In vi, this message translates to:
+  /// **'Xác nhận mật khẩu'**
+  String get doctorProfileConfirmPassword;
+
+  /// No description provided for @doctorProfilePasswordHint.
+  ///
+  /// In vi, this message translates to:
+  /// **'Để trống nếu không đổi mật khẩu.'**
+  String get doctorProfilePasswordHint;
+
+  /// No description provided for @doctorProfilePasswordMismatch.
+  ///
+  /// In vi, this message translates to:
+  /// **'Mật khẩu xác nhận không khớp.'**
+  String get doctorProfilePasswordMismatch;
+
+  /// No description provided for @doctorProfilePasswordWeak.
+  ///
+  /// In vi, this message translates to:
+  /// **'Mật khẩu cần ít nhất 8 ký tự, gồm chữ hoa và số/ký tự đặc biệt.'**
+  String get doctorProfilePasswordWeak;
+
+  /// No description provided for @doctorProfileErrEmail.
+  ///
+  /// In vi, this message translates to:
+  /// **'Email không hợp lệ.'**
+  String get doctorProfileErrEmail;
+
+  /// No description provided for @doctorProfileErrRequired.
+  ///
+  /// In vi, this message translates to:
+  /// **'Vui lòng nhập đầy đủ thông tin bắt buộc.'**
+  String get doctorProfileErrRequired;
+
+  /// No description provided for @doctorProfileSave.
+  ///
+  /// In vi, this message translates to:
+  /// **'Lưu thay đổi'**
+  String get doctorProfileSave;
+
+  /// No description provided for @doctorProfileSaving.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đang lưu…'**
+  String get doctorProfileSaving;
+
+  /// No description provided for @doctorProfileSaveSuccess.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đã cập nhật hồ sơ bác sĩ.'**
+  String get doctorProfileSaveSuccess;
+
+  /// No description provided for @doctorProfileSaveFailed.
+  ///
+  /// In vi, this message translates to:
+  /// **'Không thể cập nhật hồ sơ bác sĩ.'**
+  String get doctorProfileSaveFailed;
+
+  /// No description provided for @doctorProfileSaveForbidden.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bạn không có quyền cập nhật hồ sơ này.'**
+  String get doctorProfileSaveForbidden;
+
+  /// No description provided for @doctorProfileSaveTimeout.
+  ///
+  /// In vi, this message translates to:
+  /// **'Hết thời gian chờ cập nhật hồ sơ.'**
+  String get doctorProfileSaveTimeout;
+
+  /// No description provided for @doctorDegreeProfessor.
+  ///
+  /// In vi, this message translates to:
+  /// **'Giáo sư'**
+  String get doctorDegreeProfessor;
+
+  /// No description provided for @doctorDegreeDoctor.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bác sĩ'**
+  String get doctorDegreeDoctor;
+
+  /// No description provided for @doctorDegreeMaster.
+  ///
+  /// In vi, this message translates to:
+  /// **'Thạc sĩ'**
+  String get doctorDegreeMaster;
+
+  /// No description provided for @doctorDegreeBachelor.
+  ///
+  /// In vi, this message translates to:
+  /// **'Cử nhân'**
+  String get doctorDegreeBachelor;
+
+  /// No description provided for @doctorDegreeAssociate.
+  ///
+  /// In vi, this message translates to:
+  /// **'Cao đẳng'**
+  String get doctorDegreeAssociate;
+
+  /// No description provided for @doctorDegreeUndergraduate.
+  ///
+  /// In vi, this message translates to:
+  /// **'Sinh viên'**
+  String get doctorDegreeUndergraduate;
+
+  /// No description provided for @doctorDegreeGraduate.
+  ///
+  /// In vi, this message translates to:
+  /// **'Sau đại học'**
+  String get doctorDegreeGraduate;
+
+  /// No description provided for @doctorDegreePhd.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tiến sĩ'**
+  String get doctorDegreePhd;
+
+  /// No description provided for @doctorDegreePostDoc.
+  ///
+  /// In vi, this message translates to:
+  /// **'Sau tiến sĩ'**
+  String get doctorDegreePostDoc;
+
+  /// No description provided for @doctorTitleNone.
+  ///
+  /// In vi, this message translates to:
+  /// **'Không'**
+  String get doctorTitleNone;
+
+  /// No description provided for @doctorTitleAssociateProfessor.
+  ///
+  /// In vi, this message translates to:
+  /// **'Phó giáo sư'**
+  String get doctorTitleAssociateProfessor;
+
+  /// No description provided for @doctorTitleProfessor.
+  ///
+  /// In vi, this message translates to:
+  /// **'Giáo sư'**
+  String get doctorTitleProfessor;
+
+  /// No description provided for @doctorPositionStaff.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bác sĩ'**
+  String get doctorPositionStaff;
+
+  /// No description provided for @doctorPositionSenior.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bác sĩ chính'**
+  String get doctorPositionSenior;
+
+  /// No description provided for @doctorPositionDeputyHead.
+  ///
+  /// In vi, this message translates to:
+  /// **'Phó trưởng khoa'**
+  String get doctorPositionDeputyHead;
+
+  /// No description provided for @doctorPositionHead.
+  ///
+  /// In vi, this message translates to:
+  /// **'Trưởng khoa'**
+  String get doctorPositionHead;
+
+  /// No description provided for @doctorPositionDeputyDirector.
+  ///
+  /// In vi, this message translates to:
+  /// **'Phó giám đốc'**
+  String get doctorPositionDeputyDirector;
+
+  /// No description provided for @doctorPositionDirector.
+  ///
+  /// In vi, this message translates to:
+  /// **'Giám đốc'**
+  String get doctorPositionDirector;
+
   /// No description provided for @settingsAppearance.
   ///
   /// In vi, this message translates to:
@@ -587,7 +833,7 @@ abstract class AppLocalizations {
   /// No description provided for @authEmailLabel.
   ///
   /// In vi, this message translates to:
-  /// **'Email hoặc mã nhân viên'**
+  /// **'Email'**
   String get authEmailLabel;
 
   /// No description provided for @authPasswordLabel.
@@ -607,24 +853,6 @@ abstract class AppLocalizations {
   /// In vi, this message translates to:
   /// **'Đăng nhập'**
   String get authLoginButton;
-
-  /// No description provided for @authOr.
-  ///
-  /// In vi, this message translates to:
-  /// **'hoặc'**
-  String get authOr;
-
-  /// No description provided for @authUseStaffCode.
-  ///
-  /// In vi, this message translates to:
-  /// **'Dùng mã nhân viên'**
-  String get authUseStaffCode;
-
-  /// No description provided for @authStaffCodeComingSoon.
-  ///
-  /// In vi, this message translates to:
-  /// **'Đăng nhập bằng mã nhân viên sẽ được bổ sung sau.'**
-  String get authStaffCodeComingSoon;
 
   /// No description provided for @authSecureSessionTitle.
   ///
@@ -647,7 +875,7 @@ abstract class AppLocalizations {
   /// No description provided for @authMissingCredentials.
   ///
   /// In vi, this message translates to:
-  /// **'Vui lòng nhập email/mã nhân viên và mật khẩu.'**
+  /// **'Vui lòng nhập email và mật khẩu.'**
   String get authMissingCredentials;
 
   /// No description provided for @authEmailInvalid.
@@ -899,20 +1127,20 @@ abstract class AppLocalizations {
   /// No description provided for @authWelcomeBulletPatients.
   ///
   /// In vi, this message translates to:
-  /// **'12 bệnh nhân đang theo dõi'**
-  String get authWelcomeBulletPatients;
+  /// **'{count} bệnh nhân đang theo dõi'**
+  String authWelcomeBulletPatients(String count);
 
   /// No description provided for @authWelcomeBulletAttention.
   ///
   /// In vi, this message translates to:
-  /// **'3 ca cần chú ý trong ngày'**
-  String get authWelcomeBulletAttention;
+  /// **'{count} ca đang điều trị trong ngày'**
+  String authWelcomeBulletAttention(String count);
 
   /// No description provided for @authWelcomeBulletSynced.
   ///
   /// In vi, this message translates to:
-  /// **'Dữ liệu đồng bộ lúc 19:28'**
-  String get authWelcomeBulletSynced;
+  /// **'Dữ liệu đồng bộ lúc {time}'**
+  String authWelcomeBulletSynced(String time);
 
   /// No description provided for @authStart.
   ///
@@ -1243,6 +1471,12 @@ abstract class AppLocalizations {
   /// In vi, this message translates to:
   /// **'Mã bệnh án'**
   String get patientRecordCode;
+
+  /// No description provided for @patientRecordCodeHint.
+  ///
+  /// In vi, this message translates to:
+  /// **'VD: BA-2026-0001'**
+  String get patientRecordCodeHint;
 
   /// No description provided for @patientDob.
   ///
@@ -1796,6 +2030,12 @@ abstract class AppLocalizations {
   /// **'Mô tả dị ứng khác'**
   String get diagnosisAllergyOther;
 
+  /// No description provided for @diagnosisAllergyOtherHint.
+  ///
+  /// In vi, this message translates to:
+  /// **'VD: dị ứng amoxicillin, phản ứng beta-lactam không rõ'**
+  String get diagnosisAllergyOtherHint;
+
   /// No description provided for @diagnosisEmptyForm.
   ///
   /// In vi, this message translates to:
@@ -2072,6 +2312,66 @@ abstract class AppLocalizations {
   /// **'Tiền sử bệnh'**
   String get diagnosisMedicalHistory;
 
+  /// No description provided for @diagnosisAssessment.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đánh giá mức độ & nhiễm khuẩn'**
+  String get diagnosisAssessment;
+
+  /// No description provided for @diagnosisClinical.
+  ///
+  /// In vi, this message translates to:
+  /// **'Lâm sàng'**
+  String get diagnosisClinical;
+
+  /// No description provided for @diagnosisParaclinical.
+  ///
+  /// In vi, this message translates to:
+  /// **'Cận lâm sàng'**
+  String get diagnosisParaclinical;
+
+  /// No description provided for @diagnosisVariableSearch.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tìm biến số'**
+  String get diagnosisVariableSearch;
+
+  /// No description provided for @diagnosisVariableSearchHint.
+  ///
+  /// In vi, this message translates to:
+  /// **'Lọc theo tên, mã hoặc mô tả…'**
+  String get diagnosisVariableSearchHint;
+
+  /// No description provided for @diagnosisAntibioticSearch.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tìm kháng sinh'**
+  String get diagnosisAntibioticSearch;
+
+  /// No description provided for @diagnosisAntibioticSearchHint.
+  ///
+  /// In vi, this message translates to:
+  /// **'Nhập để lọc theo tên hoặc nhóm…'**
+  String get diagnosisAntibioticSearchHint;
+
+  /// No description provided for @diagnosisNormalRangeBoth.
+  ///
+  /// In vi, this message translates to:
+  /// **'BT: {min}–{max}'**
+  String diagnosisNormalRangeBoth(String min, String max);
+
+  /// No description provided for @diagnosisNormalRangeMin.
+  ///
+  /// In vi, this message translates to:
+  /// **'BT: ≥ {min}'**
+  String diagnosisNormalRangeMin(String min);
+
+  /// No description provided for @diagnosisNormalRangeMax.
+  ///
+  /// In vi, this message translates to:
+  /// **'BT: ≤ {max}'**
+  String diagnosisNormalRangeMax(String max);
+
   /// No description provided for @diagnosisSpecialHistory.
   ///
   /// In vi, this message translates to:
@@ -2081,7 +2381,7 @@ abstract class AppLocalizations {
   /// No description provided for @diagnosisSpecialHistoryHint.
   ///
   /// In vi, this message translates to:
-  /// **'Nhập bệnh sử mà hệ thống chưa bao phủ'**
+  /// **'VD: lao phổi trước đây, hóa trị gần đây'**
   String get diagnosisSpecialHistoryHint;
 
   /// No description provided for @diagnosisAdd.
@@ -2174,6 +2474,18 @@ abstract class AppLocalizations {
   /// **'Giá trị \"{name}\" phải là số.'**
   String diagnosisInvalidNumber(String name);
 
+  /// No description provided for @diagnosisInvalidFields.
+  ///
+  /// In vi, this message translates to:
+  /// **'Dữ liệu không hợp lệ ở: {fields}. Vui lòng kiểm tra lại giá trị.'**
+  String diagnosisInvalidFields(String fields);
+
+  /// No description provided for @diagnosisRangeWarning.
+  ///
+  /// In vi, this message translates to:
+  /// **'Ngoài khoảng cho phép {range}. Vẫn có thể tiếp tục.'**
+  String diagnosisRangeWarning(String range);
+
   /// No description provided for @diagnosisEgfr.
   ///
   /// In vi, this message translates to:
@@ -2257,6 +2569,48 @@ abstract class AppLocalizations {
   /// In vi, this message translates to:
   /// **'Không có tổ hợp thuốc.'**
   String get diagnosisProtocolNoMedicine;
+
+  /// No description provided for @diagnosisSelectDrugs.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chọn kháng sinh'**
+  String get diagnosisSelectDrugs;
+
+  /// No description provided for @diagnosisDrugSearch.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tìm thuốc'**
+  String get diagnosisDrugSearch;
+
+  /// No description provided for @diagnosisDrugSearchHint.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tìm theo tên hoặc nhóm kháng sinh…'**
+  String get diagnosisDrugSearchHint;
+
+  /// No description provided for @diagnosisSelectedDrugs.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đã chọn {count} kháng sinh'**
+  String diagnosisSelectedDrugs(int count);
+
+  /// No description provided for @diagnosisProtocolAdherent.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tuân thủ'**
+  String get diagnosisProtocolAdherent;
+
+  /// No description provided for @diagnosisReasonRequired.
+  ///
+  /// In vi, this message translates to:
+  /// **'Vui lòng nhập lý do chọn thuốc.'**
+  String get diagnosisReasonRequired;
+
+  /// No description provided for @diagnosisNonAdherentReason.
+  ///
+  /// In vi, this message translates to:
+  /// **'Thuốc đã chọn không khớp phác đồ nào — vui lòng nhập lý do.'**
+  String get diagnosisNonAdherentReason;
 
   /// No description provided for @diagnosisConfirmTreatment.
   ///
@@ -3397,6 +3751,54 @@ abstract class AppLocalizations {
   /// In vi, this message translates to:
   /// **'Nhà phát hành'**
   String get treatmentProtocolPublisher;
+
+  /// No description provided for @treatmentProtocolFilterSeverity.
+  ///
+  /// In vi, this message translates to:
+  /// **'Mức độ'**
+  String get treatmentProtocolFilterSeverity;
+
+  /// No description provided for @treatmentProtocolFilterSite.
+  ///
+  /// In vi, this message translates to:
+  /// **'Vị trí điều trị'**
+  String get treatmentProtocolFilterSite;
+
+  /// No description provided for @treatmentProtocolFilterPathogen.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tác nhân gây bệnh'**
+  String get treatmentProtocolFilterPathogen;
+
+  /// No description provided for @treatmentProtocolFilterCriteria.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tiêu chí'**
+  String get treatmentProtocolFilterCriteria;
+
+  /// No description provided for @treatmentProtocolFilterSearchPathogen.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tìm tác nhân...'**
+  String get treatmentProtocolFilterSearchPathogen;
+
+  /// No description provided for @treatmentProtocolFilterSearchCriteria.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tìm tiêu chí...'**
+  String get treatmentProtocolFilterSearchCriteria;
+
+  /// No description provided for @treatmentProtocolFilterSelectedCount.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đã chọn {count}'**
+  String treatmentProtocolFilterSelectedCount(int count);
+
+  /// No description provided for @treatmentProtocolFilterLoadFailed.
+  ///
+  /// In vi, this message translates to:
+  /// **'Không tải được danh sách bộ lọc.'**
+  String get treatmentProtocolFilterLoadFailed;
 
   /// No description provided for @analysisTitle.
   ///

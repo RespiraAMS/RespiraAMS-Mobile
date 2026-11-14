@@ -65,6 +65,47 @@
   "doctorProfileError": "Couldn't load the doctor profile.",
   "doctorProfileEmpty": "No profile details available.",
   "doctorProfileRetry": "Try again",
+  "doctorProfileEdit": "Edit profile",
+  "doctorProfileEditTitle": "Edit profile",
+  "doctorProfileEditSubtitle": "Update your doctor information",
+  "doctorProfileAvatarChange": "Change photo",
+  "doctorProfileAvatarHint": "JPG, PNG or WEBP · up to 5 MB",
+  "doctorProfileAvatarTooLarge": "The photo must be smaller than 5 MB.",
+  "doctorProfileAvatarInvalid": "Only JPG, PNG or WEBP images are supported.",
+  "doctorProfileSectionSecurity": "Security",
+  "doctorProfileDob": "Date of birth",
+  "doctorProfileEmailHint": "This email is used to sign in.",
+  "doctorProfileNewPassword": "New password",
+  "doctorProfileConfirmPassword": "Confirm password",
+  "doctorProfilePasswordHint": "Leave blank to keep the current password.",
+  "doctorProfilePasswordMismatch": "The passwords do not match.",
+  "doctorProfilePasswordWeak": "Use at least 8 characters with an uppercase letter and a number or symbol.",
+  "doctorProfileErrEmail": "Invalid email address.",
+  "doctorProfileErrRequired": "Please fill in all required fields.",
+  "doctorProfileSave": "Save changes",
+  "doctorProfileSaving": "Saving…",
+  "doctorProfileSaveSuccess": "Doctor profile updated.",
+  "doctorProfileSaveFailed": "Unable to update the doctor profile.",
+  "doctorProfileSaveForbidden": "You are not allowed to update this profile.",
+  "doctorProfileSaveTimeout": "The profile update timed out.",
+  "doctorDegreeProfessor": "Professor",
+  "doctorDegreeDoctor": "Doctor",
+  "doctorDegreeMaster": "Master",
+  "doctorDegreeBachelor": "Bachelor",
+  "doctorDegreeAssociate": "Associate",
+  "doctorDegreeUndergraduate": "Undergraduate",
+  "doctorDegreeGraduate": "Graduate",
+  "doctorDegreePhd": "PhD",
+  "doctorDegreePostDoc": "Post-doctorate",
+  "doctorTitleNone": "None",
+  "doctorTitleAssociateProfessor": "Associate professor",
+  "doctorTitleProfessor": "Professor",
+  "doctorPositionStaff": "Staff doctor",
+  "doctorPositionSenior": "Senior doctor",
+  "doctorPositionDeputyHead": "Department deputy head",
+  "doctorPositionHead": "Head of department",
+  "doctorPositionDeputyDirector": "Deputy director",
+  "doctorPositionDirector": "Director",
 
   "settingsAppearance": "Appearance",
   "settingsTheme": "Theme",
@@ -87,17 +128,14 @@
   "splashSubtitle": "Clinical workspace for respiratory care",
   "authLoginTitle": "Sign in",
   "authLoginSubtitle": "Continue to your RespiraAMS workspace.",
-  "authEmailLabel": "Email or staff code",
+  "authEmailLabel": "Email",
   "authPasswordLabel": "Password",
   "authForgotPassword": "Forgot password?",
   "authLoginButton": "Sign in",
-  "authOr": "or",
-  "authUseStaffCode": "Use staff code",
-  "authStaffCodeComingSoon": "Staff-code sign-in will be added later.",
   "authSecureSessionTitle": "Secure session",
   "authSecureSessionBody": "Locks automatically when idle and is protected by role.",
   "authSupportFooter": "Need help? Contact your hospital administrator.",
-  "authMissingCredentials": "Enter your email/staff code and password.",
+  "authMissingCredentials": "Enter your email and password.",
   "authEmailInvalid": "That email address is not valid.",
   "authServerUnreachable": "Couldn't reach the server. Please try again.",
 
@@ -144,9 +182,24 @@
   "authWorkspaceEyebrow": "MOBILE CLINICAL WORKSPACE",
   "authWelcomeGreeting": "Welcome, {name}",
   "authWelcomeSubtitle": "Ready to review today's respiratory cases.",
-  "authWelcomeBulletPatients": "12 patients under monitoring",
-  "authWelcomeBulletAttention": "3 cases need attention today",
-  "authWelcomeBulletSynced": "Data synced at 19:28",
+  "authWelcomeBulletPatients": "{count} patients under monitoring",
+  "@authWelcomeBulletPatients": {
+    "placeholders": {
+      "count": { "type": "String" }
+    }
+  },
+  "authWelcomeBulletAttention": "{count} cases under treatment today",
+  "@authWelcomeBulletAttention": {
+    "placeholders": {
+      "count": { "type": "String" }
+    }
+  },
+  "authWelcomeBulletSynced": "Data synced at {time}",
+  "@authWelcomeBulletSynced": {
+    "placeholders": {
+      "time": { "type": "String" }
+    }
+  },
   "authStart": "Get started",
   "authPrivacyFooter": "Medical data is protected by system-level access control.",
 
@@ -208,6 +261,7 @@
   "patientLastName": "Last name",
   "patientFirstName": "First name",
   "patientRecordCode": "Medical record code",
+  "patientRecordCodeHint": "e.g. BA-2026-0001",
   "patientDob": "Date of birth",
   "patientInsuranceCard": "Insurance card number",
   "patientPhone": "Phone number",
@@ -313,6 +367,7 @@
   "diagnosisAllergyUnknown": "Unknown / other allergy",
   "diagnosisAllergySelect": "Select the allergenic antibiotics",
   "diagnosisAllergyOther": "Describe the other allergy",
+  "diagnosisAllergyOtherHint": "e.g. amoxicillin rash, unknown beta-lactam reaction",
   "diagnosisEmptyForm": "No form data.",
   "diagnosisFormLoadFailed": "Unable to load the diagnosis form.",
   "diagnosisResultTitle": "Diagnosis result",
@@ -359,8 +414,34 @@
   "diagnosisFlowFormError": "Unable to load the diagnosis form.",
   "diagnosisFlowMissing": "Missing required information: {fields}.",
   "diagnosisMedicalHistory": "Medical history",
+  "diagnosisAssessment": "Severity & infection assessment",
+  "diagnosisClinical": "Clinical",
+  "diagnosisParaclinical": "Paraclinical",
+  "diagnosisVariableSearch": "Search variables",
+  "diagnosisVariableSearchHint": "Filter by name, code or description…",
+  "diagnosisAntibioticSearch": "Search antibiotics",
+  "diagnosisAntibioticSearchHint": "Type to filter by name or group…",
+  "diagnosisNormalRangeBoth": "normal: {min}-{max}",
+  "@diagnosisNormalRangeBoth": {
+    "placeholders": {
+      "min": { "type": "String" },
+      "max": { "type": "String" }
+    }
+  },
+  "diagnosisNormalRangeMin": "normal: ≥ {min}",
+  "@diagnosisNormalRangeMin": {
+    "placeholders": {
+      "min": { "type": "String" }
+    }
+  },
+  "diagnosisNormalRangeMax": "normal: ≤ {max}",
+  "@diagnosisNormalRangeMax": {
+    "placeholders": {
+      "max": { "type": "String" }
+    }
+  },
   "diagnosisSpecialHistory": "Special medical history",
-  "diagnosisSpecialHistoryHint": "Enter history not covered by the system",
+  "diagnosisSpecialHistoryHint": "e.g. prior pulmonary tuberculosis, recent chemotherapy",
   "diagnosisAdd": "Add",
   "diagnosisRemove": "Remove",
   "diagnosisOtherInfections": "Other infections",
@@ -379,6 +460,18 @@
   "@diagnosisInvalidNumber": {
     "placeholders": {
       "name": { "type": "String" }
+    }
+  },
+  "diagnosisInvalidFields": "Invalid data in: {fields}. Please review the values.",
+  "@diagnosisInvalidFields": {
+    "placeholders": {
+      "fields": { "type": "String" }
+    }
+  },
+  "diagnosisRangeWarning": "Outside the suggested range {range}. You can still continue.",
+  "@diagnosisRangeWarning": {
+    "placeholders": {
+      "range": { "type": "String" }
     }
   },
   "diagnosisEgfr": "eGFR",
@@ -401,6 +494,18 @@
   "diagnosisProtocolNoData": "No matching protocol.",
   "diagnosisProtocolSelect": "Select a medicine combination",
   "diagnosisProtocolNoMedicine": "No medicine combination.",
+  "diagnosisSelectDrugs": "Select antibiotics",
+  "diagnosisDrugSearch": "Search medicines",
+  "diagnosisDrugSearchHint": "Search by name or antibiotic group…",
+  "diagnosisSelectedDrugs": "{count} antibiotics selected",
+  "@diagnosisSelectedDrugs": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "diagnosisProtocolAdherent": "Adherent",
+  "diagnosisReasonRequired": "Please enter a reason for the medicine choice.",
+  "diagnosisNonAdherentReason": "The selected medicines do not match any protocol — please enter a reason.",
   "diagnosisConfirmTreatment": "Confirm treatment",
   "diagnosisReason": "Reason for medicine choice",
   "diagnosisReasonHint": "Required when choosing medicines outside the protocol",
@@ -631,6 +736,19 @@
   "treatmentProtocolPathogens": "Pathogens",
   "treatmentProtocolCombinations": "Antibiotic combinations",
   "treatmentProtocolPublisher": "Publisher",
+  "treatmentProtocolFilterSeverity": "Severity",
+  "treatmentProtocolFilterSite": "Treatment site",
+  "treatmentProtocolFilterPathogen": "Pathogen",
+  "treatmentProtocolFilterCriteria": "Criteria",
+  "treatmentProtocolFilterSearchPathogen": "Search pathogen...",
+  "treatmentProtocolFilterSearchCriteria": "Search criteria...",
+  "treatmentProtocolFilterSelectedCount": "{count} selected",
+  "@treatmentProtocolFilterSelectedCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "treatmentProtocolFilterLoadFailed": "Unable to load the filter options.",
 
   "analysisTitle": "Analysis reports",
   "analysisSubtitle": "Adherence & treatment outcomes",

@@ -202,6 +202,132 @@ class AppLocalizationsVi extends AppLocalizations {
   String get doctorProfileRetry => 'Thử lại';
 
   @override
+  String get doctorProfileEdit => 'Cập nhật thông tin';
+
+  @override
+  String get doctorProfileEditTitle => 'Cập nhật hồ sơ';
+
+  @override
+  String get doctorProfileEditSubtitle => 'Chỉnh sửa thông tin bác sĩ';
+
+  @override
+  String get doctorProfileAvatarChange => 'Đổi ảnh đại diện';
+
+  @override
+  String get doctorProfileAvatarHint => 'JPG, PNG hoặc WEBP · tối đa 5 MB';
+
+  @override
+  String get doctorProfileAvatarTooLarge => 'Ảnh đại diện phải nhỏ hơn 5 MB.';
+
+  @override
+  String get doctorProfileAvatarInvalid => 'Chỉ hỗ trợ ảnh JPG, PNG hoặc WEBP.';
+
+  @override
+  String get doctorProfileSectionSecurity => 'Bảo mật';
+
+  @override
+  String get doctorProfileDob => 'Ngày sinh';
+
+  @override
+  String get doctorProfileEmailHint => 'Email dùng để đăng nhập.';
+
+  @override
+  String get doctorProfileNewPassword => 'Mật khẩu mới';
+
+  @override
+  String get doctorProfileConfirmPassword => 'Xác nhận mật khẩu';
+
+  @override
+  String get doctorProfilePasswordHint => 'Để trống nếu không đổi mật khẩu.';
+
+  @override
+  String get doctorProfilePasswordMismatch => 'Mật khẩu xác nhận không khớp.';
+
+  @override
+  String get doctorProfilePasswordWeak =>
+      'Mật khẩu cần ít nhất 8 ký tự, gồm chữ hoa và số/ký tự đặc biệt.';
+
+  @override
+  String get doctorProfileErrEmail => 'Email không hợp lệ.';
+
+  @override
+  String get doctorProfileErrRequired =>
+      'Vui lòng nhập đầy đủ thông tin bắt buộc.';
+
+  @override
+  String get doctorProfileSave => 'Lưu thay đổi';
+
+  @override
+  String get doctorProfileSaving => 'Đang lưu…';
+
+  @override
+  String get doctorProfileSaveSuccess => 'Đã cập nhật hồ sơ bác sĩ.';
+
+  @override
+  String get doctorProfileSaveFailed => 'Không thể cập nhật hồ sơ bác sĩ.';
+
+  @override
+  String get doctorProfileSaveForbidden =>
+      'Bạn không có quyền cập nhật hồ sơ này.';
+
+  @override
+  String get doctorProfileSaveTimeout => 'Hết thời gian chờ cập nhật hồ sơ.';
+
+  @override
+  String get doctorDegreeProfessor => 'Giáo sư';
+
+  @override
+  String get doctorDegreeDoctor => 'Bác sĩ';
+
+  @override
+  String get doctorDegreeMaster => 'Thạc sĩ';
+
+  @override
+  String get doctorDegreeBachelor => 'Cử nhân';
+
+  @override
+  String get doctorDegreeAssociate => 'Cao đẳng';
+
+  @override
+  String get doctorDegreeUndergraduate => 'Sinh viên';
+
+  @override
+  String get doctorDegreeGraduate => 'Sau đại học';
+
+  @override
+  String get doctorDegreePhd => 'Tiến sĩ';
+
+  @override
+  String get doctorDegreePostDoc => 'Sau tiến sĩ';
+
+  @override
+  String get doctorTitleNone => 'Không';
+
+  @override
+  String get doctorTitleAssociateProfessor => 'Phó giáo sư';
+
+  @override
+  String get doctorTitleProfessor => 'Giáo sư';
+
+  @override
+  String get doctorPositionStaff => 'Bác sĩ';
+
+  @override
+  String get doctorPositionSenior => 'Bác sĩ chính';
+
+  @override
+  String get doctorPositionDeputyHead => 'Phó trưởng khoa';
+
+  @override
+  String get doctorPositionHead => 'Trưởng khoa';
+
+  @override
+  String get doctorPositionDeputyDirector => 'Phó giám đốc';
+
+  @override
+  String get doctorPositionDirector => 'Giám đốc';
+
+  @override
   String get settingsAppearance => 'Giao diện';
 
   @override
@@ -264,7 +390,7 @@ class AppLocalizationsVi extends AppLocalizations {
       'Tiếp tục vào không gian làm việc RespiraAMS.';
 
   @override
-  String get authEmailLabel => 'Email hoặc mã nhân viên';
+  String get authEmailLabel => 'Email';
 
   @override
   String get authPasswordLabel => 'Mật khẩu';
@@ -274,16 +400,6 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get authLoginButton => 'Đăng nhập';
-
-  @override
-  String get authOr => 'hoặc';
-
-  @override
-  String get authUseStaffCode => 'Dùng mã nhân viên';
-
-  @override
-  String get authStaffCodeComingSoon =>
-      'Đăng nhập bằng mã nhân viên sẽ được bổ sung sau.';
 
   @override
   String get authSecureSessionTitle => 'Phiên đăng nhập an toàn';
@@ -297,8 +413,7 @@ class AppLocalizationsVi extends AppLocalizations {
       'Cần hỗ trợ? Liên hệ quản trị viên bệnh viện.';
 
   @override
-  String get authMissingCredentials =>
-      'Vui lòng nhập email/mã nhân viên và mật khẩu.';
+  String get authMissingCredentials => 'Vui lòng nhập email và mật khẩu.';
 
   @override
   String get authEmailInvalid => 'Email chưa đúng định dạng.';
@@ -438,13 +553,19 @@ class AppLocalizationsVi extends AppLocalizations {
   String get authWelcomeSubtitle => 'Sẵn sàng theo dõi các ca hô hấp hôm nay.';
 
   @override
-  String get authWelcomeBulletPatients => '12 bệnh nhân đang theo dõi';
+  String authWelcomeBulletPatients(String count) {
+    return '$count bệnh nhân đang theo dõi';
+  }
 
   @override
-  String get authWelcomeBulletAttention => '3 ca cần chú ý trong ngày';
+  String authWelcomeBulletAttention(String count) {
+    return '$count ca đang điều trị trong ngày';
+  }
 
   @override
-  String get authWelcomeBulletSynced => 'Dữ liệu đồng bộ lúc 19:28';
+  String authWelcomeBulletSynced(String time) {
+    return 'Dữ liệu đồng bộ lúc $time';
+  }
 
   @override
   String get authStart => 'Bắt đầu';
@@ -627,6 +748,9 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get patientRecordCode => 'Mã bệnh án';
+
+  @override
+  String get patientRecordCodeHint => 'VD: BA-2026-0001';
 
   @override
   String get patientDob => 'Ngày sinh';
@@ -922,6 +1046,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get diagnosisAllergyOther => 'Mô tả dị ứng khác';
 
   @override
+  String get diagnosisAllergyOtherHint =>
+      'VD: dị ứng amoxicillin, phản ứng beta-lactam không rõ';
+
+  @override
   String get diagnosisEmptyForm => 'Không có dữ liệu biểu mẫu.';
 
   @override
@@ -1066,11 +1194,47 @@ class AppLocalizationsVi extends AppLocalizations {
   String get diagnosisMedicalHistory => 'Tiền sử bệnh';
 
   @override
+  String get diagnosisAssessment => 'Đánh giá mức độ & nhiễm khuẩn';
+
+  @override
+  String get diagnosisClinical => 'Lâm sàng';
+
+  @override
+  String get diagnosisParaclinical => 'Cận lâm sàng';
+
+  @override
+  String get diagnosisVariableSearch => 'Tìm biến số';
+
+  @override
+  String get diagnosisVariableSearchHint => 'Lọc theo tên, mã hoặc mô tả…';
+
+  @override
+  String get diagnosisAntibioticSearch => 'Tìm kháng sinh';
+
+  @override
+  String get diagnosisAntibioticSearchHint => 'Nhập để lọc theo tên hoặc nhóm…';
+
+  @override
+  String diagnosisNormalRangeBoth(String min, String max) {
+    return 'BT: $min–$max';
+  }
+
+  @override
+  String diagnosisNormalRangeMin(String min) {
+    return 'BT: ≥ $min';
+  }
+
+  @override
+  String diagnosisNormalRangeMax(String max) {
+    return 'BT: ≤ $max';
+  }
+
+  @override
   String get diagnosisSpecialHistory => 'Bệnh sử đặc biệt';
 
   @override
   String get diagnosisSpecialHistoryHint =>
-      'Nhập bệnh sử mà hệ thống chưa bao phủ';
+      'VD: lao phổi trước đây, hóa trị gần đây';
 
   @override
   String get diagnosisAdd => 'Thêm';
@@ -1123,6 +1287,16 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
+  String diagnosisInvalidFields(String fields) {
+    return 'Dữ liệu không hợp lệ ở: $fields. Vui lòng kiểm tra lại giá trị.';
+  }
+
+  @override
+  String diagnosisRangeWarning(String range) {
+    return 'Ngoài khoảng cho phép $range. Vẫn có thể tiếp tục.';
+  }
+
+  @override
   String get diagnosisEgfr => 'eGFR';
 
   @override
@@ -1165,6 +1339,30 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get diagnosisProtocolNoMedicine => 'Không có tổ hợp thuốc.';
+
+  @override
+  String get diagnosisSelectDrugs => 'Chọn kháng sinh';
+
+  @override
+  String get diagnosisDrugSearch => 'Tìm thuốc';
+
+  @override
+  String get diagnosisDrugSearchHint => 'Tìm theo tên hoặc nhóm kháng sinh…';
+
+  @override
+  String diagnosisSelectedDrugs(int count) {
+    return 'Đã chọn $count kháng sinh';
+  }
+
+  @override
+  String get diagnosisProtocolAdherent => 'Tuân thủ';
+
+  @override
+  String get diagnosisReasonRequired => 'Vui lòng nhập lý do chọn thuốc.';
+
+  @override
+  String get diagnosisNonAdherentReason =>
+      'Thuốc đã chọn không khớp phác đồ nào — vui lòng nhập lý do.';
 
   @override
   String get diagnosisConfirmTreatment => 'Xác nhận điều trị';
@@ -1772,6 +1970,33 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get treatmentProtocolPublisher => 'Nhà phát hành';
+
+  @override
+  String get treatmentProtocolFilterSeverity => 'Mức độ';
+
+  @override
+  String get treatmentProtocolFilterSite => 'Vị trí điều trị';
+
+  @override
+  String get treatmentProtocolFilterPathogen => 'Tác nhân gây bệnh';
+
+  @override
+  String get treatmentProtocolFilterCriteria => 'Tiêu chí';
+
+  @override
+  String get treatmentProtocolFilterSearchPathogen => 'Tìm tác nhân...';
+
+  @override
+  String get treatmentProtocolFilterSearchCriteria => 'Tìm tiêu chí...';
+
+  @override
+  String treatmentProtocolFilterSelectedCount(int count) {
+    return 'Đã chọn $count';
+  }
+
+  @override
+  String get treatmentProtocolFilterLoadFailed =>
+      'Không tải được danh sách bộ lọc.';
 
   @override
   String get analysisTitle => 'Báo cáo phân tích';

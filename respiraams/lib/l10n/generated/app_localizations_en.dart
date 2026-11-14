@@ -202,6 +202,134 @@ class AppLocalizationsEn extends AppLocalizations {
   String get doctorProfileRetry => 'Try again';
 
   @override
+  String get doctorProfileEdit => 'Edit profile';
+
+  @override
+  String get doctorProfileEditTitle => 'Edit profile';
+
+  @override
+  String get doctorProfileEditSubtitle => 'Update your doctor information';
+
+  @override
+  String get doctorProfileAvatarChange => 'Change photo';
+
+  @override
+  String get doctorProfileAvatarHint => 'JPG, PNG or WEBP · up to 5 MB';
+
+  @override
+  String get doctorProfileAvatarTooLarge =>
+      'The photo must be smaller than 5 MB.';
+
+  @override
+  String get doctorProfileAvatarInvalid =>
+      'Only JPG, PNG or WEBP images are supported.';
+
+  @override
+  String get doctorProfileSectionSecurity => 'Security';
+
+  @override
+  String get doctorProfileDob => 'Date of birth';
+
+  @override
+  String get doctorProfileEmailHint => 'This email is used to sign in.';
+
+  @override
+  String get doctorProfileNewPassword => 'New password';
+
+  @override
+  String get doctorProfileConfirmPassword => 'Confirm password';
+
+  @override
+  String get doctorProfilePasswordHint =>
+      'Leave blank to keep the current password.';
+
+  @override
+  String get doctorProfilePasswordMismatch => 'The passwords do not match.';
+
+  @override
+  String get doctorProfilePasswordWeak =>
+      'Use at least 8 characters with an uppercase letter and a number or symbol.';
+
+  @override
+  String get doctorProfileErrEmail => 'Invalid email address.';
+
+  @override
+  String get doctorProfileErrRequired => 'Please fill in all required fields.';
+
+  @override
+  String get doctorProfileSave => 'Save changes';
+
+  @override
+  String get doctorProfileSaving => 'Saving…';
+
+  @override
+  String get doctorProfileSaveSuccess => 'Doctor profile updated.';
+
+  @override
+  String get doctorProfileSaveFailed => 'Unable to update the doctor profile.';
+
+  @override
+  String get doctorProfileSaveForbidden =>
+      'You are not allowed to update this profile.';
+
+  @override
+  String get doctorProfileSaveTimeout => 'The profile update timed out.';
+
+  @override
+  String get doctorDegreeProfessor => 'Professor';
+
+  @override
+  String get doctorDegreeDoctor => 'Doctor';
+
+  @override
+  String get doctorDegreeMaster => 'Master';
+
+  @override
+  String get doctorDegreeBachelor => 'Bachelor';
+
+  @override
+  String get doctorDegreeAssociate => 'Associate';
+
+  @override
+  String get doctorDegreeUndergraduate => 'Undergraduate';
+
+  @override
+  String get doctorDegreeGraduate => 'Graduate';
+
+  @override
+  String get doctorDegreePhd => 'PhD';
+
+  @override
+  String get doctorDegreePostDoc => 'Post-doctorate';
+
+  @override
+  String get doctorTitleNone => 'None';
+
+  @override
+  String get doctorTitleAssociateProfessor => 'Associate professor';
+
+  @override
+  String get doctorTitleProfessor => 'Professor';
+
+  @override
+  String get doctorPositionStaff => 'Staff doctor';
+
+  @override
+  String get doctorPositionSenior => 'Senior doctor';
+
+  @override
+  String get doctorPositionDeputyHead => 'Department deputy head';
+
+  @override
+  String get doctorPositionHead => 'Head of department';
+
+  @override
+  String get doctorPositionDeputyDirector => 'Deputy director';
+
+  @override
+  String get doctorPositionDirector => 'Director';
+
+  @override
   String get settingsAppearance => 'Appearance';
 
   @override
@@ -263,7 +391,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get authLoginSubtitle => 'Continue to your RespiraAMS workspace.';
 
   @override
-  String get authEmailLabel => 'Email or staff code';
+  String get authEmailLabel => 'Email';
 
   @override
   String get authPasswordLabel => 'Password';
@@ -273,16 +401,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get authLoginButton => 'Sign in';
-
-  @override
-  String get authOr => 'or';
-
-  @override
-  String get authUseStaffCode => 'Use staff code';
-
-  @override
-  String get authStaffCodeComingSoon =>
-      'Staff-code sign-in will be added later.';
 
   @override
   String get authSecureSessionTitle => 'Secure session';
@@ -296,8 +414,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Need help? Contact your hospital administrator.';
 
   @override
-  String get authMissingCredentials =>
-      'Enter your email/staff code and password.';
+  String get authMissingCredentials => 'Enter your email and password.';
 
   @override
   String get authEmailInvalid => 'That email address is not valid.';
@@ -438,13 +555,19 @@ class AppLocalizationsEn extends AppLocalizations {
       'Ready to review today\'s respiratory cases.';
 
   @override
-  String get authWelcomeBulletPatients => '12 patients under monitoring';
+  String authWelcomeBulletPatients(String count) {
+    return '$count patients under monitoring';
+  }
 
   @override
-  String get authWelcomeBulletAttention => '3 cases need attention today';
+  String authWelcomeBulletAttention(String count) {
+    return '$count cases under treatment today';
+  }
 
   @override
-  String get authWelcomeBulletSynced => 'Data synced at 19:28';
+  String authWelcomeBulletSynced(String time) {
+    return 'Data synced at $time';
+  }
 
   @override
   String get authStart => 'Get started';
@@ -639,6 +762,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get patientRecordCode => 'Medical record code';
+
+  @override
+  String get patientRecordCodeHint => 'e.g. BA-2026-0001';
 
   @override
   String get patientDob => 'Date of birth';
@@ -937,6 +1063,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get diagnosisAllergyOther => 'Describe the other allergy';
 
   @override
+  String get diagnosisAllergyOtherHint =>
+      'e.g. amoxicillin rash, unknown beta-lactam reaction';
+
+  @override
   String get diagnosisEmptyForm => 'No form data.';
 
   @override
@@ -1083,11 +1213,49 @@ class AppLocalizationsEn extends AppLocalizations {
   String get diagnosisMedicalHistory => 'Medical history';
 
   @override
+  String get diagnosisAssessment => 'Severity & infection assessment';
+
+  @override
+  String get diagnosisClinical => 'Clinical';
+
+  @override
+  String get diagnosisParaclinical => 'Paraclinical';
+
+  @override
+  String get diagnosisVariableSearch => 'Search variables';
+
+  @override
+  String get diagnosisVariableSearchHint =>
+      'Filter by name, code or description…';
+
+  @override
+  String get diagnosisAntibioticSearch => 'Search antibiotics';
+
+  @override
+  String get diagnosisAntibioticSearchHint =>
+      'Type to filter by name or group…';
+
+  @override
+  String diagnosisNormalRangeBoth(String min, String max) {
+    return 'normal: $min-$max';
+  }
+
+  @override
+  String diagnosisNormalRangeMin(String min) {
+    return 'normal: ≥ $min';
+  }
+
+  @override
+  String diagnosisNormalRangeMax(String max) {
+    return 'normal: ≤ $max';
+  }
+
+  @override
   String get diagnosisSpecialHistory => 'Special medical history';
 
   @override
   String get diagnosisSpecialHistoryHint =>
-      'Enter history not covered by the system';
+      'e.g. prior pulmonary tuberculosis, recent chemotherapy';
 
   @override
   String get diagnosisAdd => 'Add';
@@ -1141,6 +1309,16 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String diagnosisInvalidFields(String fields) {
+    return 'Invalid data in: $fields. Please review the values.';
+  }
+
+  @override
+  String diagnosisRangeWarning(String range) {
+    return 'Outside the suggested range $range. You can still continue.';
+  }
+
+  @override
   String get diagnosisEgfr => 'eGFR';
 
   @override
@@ -1183,6 +1361,31 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get diagnosisProtocolNoMedicine => 'No medicine combination.';
+
+  @override
+  String get diagnosisSelectDrugs => 'Select antibiotics';
+
+  @override
+  String get diagnosisDrugSearch => 'Search medicines';
+
+  @override
+  String get diagnosisDrugSearchHint => 'Search by name or antibiotic group…';
+
+  @override
+  String diagnosisSelectedDrugs(int count) {
+    return '$count antibiotics selected';
+  }
+
+  @override
+  String get diagnosisProtocolAdherent => 'Adherent';
+
+  @override
+  String get diagnosisReasonRequired =>
+      'Please enter a reason for the medicine choice.';
+
+  @override
+  String get diagnosisNonAdherentReason =>
+      'The selected medicines do not match any protocol — please enter a reason.';
 
   @override
   String get diagnosisConfirmTreatment => 'Confirm treatment';
@@ -1792,6 +1995,33 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get treatmentProtocolPublisher => 'Publisher';
+
+  @override
+  String get treatmentProtocolFilterSeverity => 'Severity';
+
+  @override
+  String get treatmentProtocolFilterSite => 'Treatment site';
+
+  @override
+  String get treatmentProtocolFilterPathogen => 'Pathogen';
+
+  @override
+  String get treatmentProtocolFilterCriteria => 'Criteria';
+
+  @override
+  String get treatmentProtocolFilterSearchPathogen => 'Search pathogen...';
+
+  @override
+  String get treatmentProtocolFilterSearchCriteria => 'Search criteria...';
+
+  @override
+  String treatmentProtocolFilterSelectedCount(int count) {
+    return '$count selected';
+  }
+
+  @override
+  String get treatmentProtocolFilterLoadFailed =>
+      'Unable to load the filter options.';
 
   @override
   String get analysisTitle => 'Analysis reports';

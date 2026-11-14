@@ -100,6 +100,47 @@
   "doctorProfileError": "Không tải được hồ sơ bác sĩ.",
   "doctorProfileEmpty": "Chưa có thông tin hồ sơ.",
   "doctorProfileRetry": "Thử lại",
+  "doctorProfileEdit": "Cập nhật thông tin",
+  "doctorProfileEditTitle": "Cập nhật hồ sơ",
+  "doctorProfileEditSubtitle": "Chỉnh sửa thông tin bác sĩ",
+  "doctorProfileAvatarChange": "Đổi ảnh đại diện",
+  "doctorProfileAvatarHint": "JPG, PNG hoặc WEBP · tối đa 5 MB",
+  "doctorProfileAvatarTooLarge": "Ảnh đại diện phải nhỏ hơn 5 MB.",
+  "doctorProfileAvatarInvalid": "Chỉ hỗ trợ ảnh JPG, PNG hoặc WEBP.",
+  "doctorProfileSectionSecurity": "Bảo mật",
+  "doctorProfileDob": "Ngày sinh",
+  "doctorProfileEmailHint": "Email dùng để đăng nhập.",
+  "doctorProfileNewPassword": "Mật khẩu mới",
+  "doctorProfileConfirmPassword": "Xác nhận mật khẩu",
+  "doctorProfilePasswordHint": "Để trống nếu không đổi mật khẩu.",
+  "doctorProfilePasswordMismatch": "Mật khẩu xác nhận không khớp.",
+  "doctorProfilePasswordWeak": "Mật khẩu cần ít nhất 8 ký tự, gồm chữ hoa và số/ký tự đặc biệt.",
+  "doctorProfileErrEmail": "Email không hợp lệ.",
+  "doctorProfileErrRequired": "Vui lòng nhập đầy đủ thông tin bắt buộc.",
+  "doctorProfileSave": "Lưu thay đổi",
+  "doctorProfileSaving": "Đang lưu…",
+  "doctorProfileSaveSuccess": "Đã cập nhật hồ sơ bác sĩ.",
+  "doctorProfileSaveFailed": "Không thể cập nhật hồ sơ bác sĩ.",
+  "doctorProfileSaveForbidden": "Bạn không có quyền cập nhật hồ sơ này.",
+  "doctorProfileSaveTimeout": "Hết thời gian chờ cập nhật hồ sơ.",
+  "doctorDegreeProfessor": "Giáo sư",
+  "doctorDegreeDoctor": "Bác sĩ",
+  "doctorDegreeMaster": "Thạc sĩ",
+  "doctorDegreeBachelor": "Cử nhân",
+  "doctorDegreeAssociate": "Cao đẳng",
+  "doctorDegreeUndergraduate": "Sinh viên",
+  "doctorDegreeGraduate": "Sau đại học",
+  "doctorDegreePhd": "Tiến sĩ",
+  "doctorDegreePostDoc": "Sau tiến sĩ",
+  "doctorTitleNone": "Không",
+  "doctorTitleAssociateProfessor": "Phó giáo sư",
+  "doctorTitleProfessor": "Giáo sư",
+  "doctorPositionStaff": "Bác sĩ",
+  "doctorPositionSenior": "Bác sĩ chính",
+  "doctorPositionDeputyHead": "Phó trưởng khoa",
+  "doctorPositionHead": "Trưởng khoa",
+  "doctorPositionDeputyDirector": "Phó giám đốc",
+  "doctorPositionDirector": "Giám đốc",
 
   "settingsAppearance": "Giao diện",
   "settingsTheme": "Giao diện",
@@ -122,17 +163,14 @@
   "splashSubtitle": "Không gian làm việc lâm sàng cho hô hấp",
   "authLoginTitle": "Đăng nhập",
   "authLoginSubtitle": "Tiếp tục vào không gian làm việc RespiraAMS.",
-  "authEmailLabel": "Email hoặc mã nhân viên",
+  "authEmailLabel": "Email",
   "authPasswordLabel": "Mật khẩu",
   "authForgotPassword": "Quên mật khẩu?",
   "authLoginButton": "Đăng nhập",
-  "authOr": "hoặc",
-  "authUseStaffCode": "Dùng mã nhân viên",
-  "authStaffCodeComingSoon": "Đăng nhập bằng mã nhân viên sẽ được bổ sung sau.",
   "authSecureSessionTitle": "Phiên đăng nhập an toàn",
   "authSecureSessionBody": "Tự động khóa khi không hoạt động và bảo vệ theo vai trò.",
   "authSupportFooter": "Cần hỗ trợ? Liên hệ quản trị viên bệnh viện.",
-  "authMissingCredentials": "Vui lòng nhập email/mã nhân viên và mật khẩu.",
+  "authMissingCredentials": "Vui lòng nhập email và mật khẩu.",
   "authEmailInvalid": "Email chưa đúng định dạng.",
   "authServerUnreachable": "Không thể kết nối máy chủ. Vui lòng thử lại.",
 
@@ -200,9 +238,24 @@
     }
   },
   "authWelcomeSubtitle": "Sẵn sàng theo dõi các ca hô hấp hôm nay.",
-  "authWelcomeBulletPatients": "12 bệnh nhân đang theo dõi",
-  "authWelcomeBulletAttention": "3 ca cần chú ý trong ngày",
-  "authWelcomeBulletSynced": "Dữ liệu đồng bộ lúc 19:28",
+  "authWelcomeBulletPatients": "{count} bệnh nhân đang theo dõi",
+  "@authWelcomeBulletPatients": {
+    "placeholders": {
+      "count": { "type": "String" }
+    }
+  },
+  "authWelcomeBulletAttention": "{count} ca đang điều trị trong ngày",
+  "@authWelcomeBulletAttention": {
+    "placeholders": {
+      "count": { "type": "String" }
+    }
+  },
+  "authWelcomeBulletSynced": "Dữ liệu đồng bộ lúc {time}",
+  "@authWelcomeBulletSynced": {
+    "placeholders": {
+      "time": { "type": "String" }
+    }
+  },
   "authStart": "Bắt đầu",
   "authPrivacyFooter": "Dữ liệu y tế được bảo vệ theo phân quyền hệ thống.",
 
@@ -299,6 +352,7 @@
   "patientLastName": "Họ",
   "patientFirstName": "Tên",
   "patientRecordCode": "Mã bệnh án",
+  "patientRecordCodeHint": "VD: BA-2026-0001",
   "patientDob": "Ngày sinh",
   "patientInsuranceCard": "Số thẻ BHYT",
   "patientPhone": "Số điện thoại",
@@ -411,6 +465,7 @@
   "diagnosisAllergyUnknown": "Không rõ / dị ứng khác",
   "diagnosisAllergySelect": "Chọn kháng sinh dị ứng",
   "diagnosisAllergyOther": "Mô tả dị ứng khác",
+  "diagnosisAllergyOtherHint": "VD: dị ứng amoxicillin, phản ứng beta-lactam không rõ",
   "diagnosisEmptyForm": "Không có dữ liệu biểu mẫu.",
   "diagnosisFormLoadFailed": "Không thể tải biểu mẫu chẩn đoán.",
   "diagnosisResultTitle": "Kết quả chẩn đoán",
@@ -467,8 +522,34 @@
     }
   },
   "diagnosisMedicalHistory": "Tiền sử bệnh",
+  "diagnosisAssessment": "Đánh giá mức độ & nhiễm khuẩn",
+  "diagnosisClinical": "Lâm sàng",
+  "diagnosisParaclinical": "Cận lâm sàng",
+  "diagnosisVariableSearch": "Tìm biến số",
+  "diagnosisVariableSearchHint": "Lọc theo tên, mã hoặc mô tả…",
+  "diagnosisAntibioticSearch": "Tìm kháng sinh",
+  "diagnosisAntibioticSearchHint": "Nhập để lọc theo tên hoặc nhóm…",
+  "diagnosisNormalRangeBoth": "BT: {min}–{max}",
+  "@diagnosisNormalRangeBoth": {
+    "placeholders": {
+      "min": { "type": "String" },
+      "max": { "type": "String" }
+    }
+  },
+  "diagnosisNormalRangeMin": "BT: ≥ {min}",
+  "@diagnosisNormalRangeMin": {
+    "placeholders": {
+      "min": { "type": "String" }
+    }
+  },
+  "diagnosisNormalRangeMax": "BT: ≤ {max}",
+  "@diagnosisNormalRangeMax": {
+    "placeholders": {
+      "max": { "type": "String" }
+    }
+  },
   "diagnosisSpecialHistory": "Bệnh sử đặc biệt",
-  "diagnosisSpecialHistoryHint": "Nhập bệnh sử mà hệ thống chưa bao phủ",
+  "diagnosisSpecialHistoryHint": "VD: lao phổi trước đây, hóa trị gần đây",
   "diagnosisAdd": "Thêm",
   "diagnosisRemove": "Xóa",
   "diagnosisOtherInfections": "Nhiễm trùng khác",
@@ -487,6 +568,18 @@
   "@diagnosisInvalidNumber": {
     "placeholders": {
       "name": { "type": "String" }
+    }
+  },
+  "diagnosisInvalidFields": "Dữ liệu không hợp lệ ở: {fields}. Vui lòng kiểm tra lại giá trị.",
+  "@diagnosisInvalidFields": {
+    "placeholders": {
+      "fields": { "type": "String" }
+    }
+  },
+  "diagnosisRangeWarning": "Ngoài khoảng cho phép {range}. Vẫn có thể tiếp tục.",
+  "@diagnosisRangeWarning": {
+    "placeholders": {
+      "range": { "type": "String" }
     }
   },
   "diagnosisEgfr": "eGFR",
@@ -509,6 +602,18 @@
   "diagnosisProtocolNoData": "Không có phác đồ phù hợp.",
   "diagnosisProtocolSelect": "Chọn tổ hợp thuốc",
   "diagnosisProtocolNoMedicine": "Không có tổ hợp thuốc.",
+  "diagnosisSelectDrugs": "Chọn kháng sinh",
+  "diagnosisDrugSearch": "Tìm thuốc",
+  "diagnosisDrugSearchHint": "Tìm theo tên hoặc nhóm kháng sinh…",
+  "diagnosisSelectedDrugs": "Đã chọn {count} kháng sinh",
+  "@diagnosisSelectedDrugs": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "diagnosisProtocolAdherent": "Tuân thủ",
+  "diagnosisReasonRequired": "Vui lòng nhập lý do chọn thuốc.",
+  "diagnosisNonAdherentReason": "Thuốc đã chọn không khớp phác đồ nào — vui lòng nhập lý do.",
   "diagnosisConfirmTreatment": "Xác nhận điều trị",
   "diagnosisReason": "Lý do chọn thuốc",
   "diagnosisReasonHint": "Bắt buộc nếu chọn thuốc ngoài phác đồ",
@@ -779,6 +884,19 @@
   "treatmentProtocolPathogens": "Tác nhân",
   "treatmentProtocolCombinations": "Tổ hợp kháng sinh",
   "treatmentProtocolPublisher": "Nhà phát hành",
+  "treatmentProtocolFilterSeverity": "Mức độ",
+  "treatmentProtocolFilterSite": "Vị trí điều trị",
+  "treatmentProtocolFilterPathogen": "Tác nhân gây bệnh",
+  "treatmentProtocolFilterCriteria": "Tiêu chí",
+  "treatmentProtocolFilterSearchPathogen": "Tìm tác nhân...",
+  "treatmentProtocolFilterSearchCriteria": "Tìm tiêu chí...",
+  "treatmentProtocolFilterSelectedCount": "Đã chọn {count}",
+  "@treatmentProtocolFilterSelectedCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "treatmentProtocolFilterLoadFailed": "Không tải được danh sách bộ lọc.",
 
   "analysisTitle": "Báo cáo phân tích",
   "analysisSubtitle": "Tuân thủ & kết cục điều trị",
