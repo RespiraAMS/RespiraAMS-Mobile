@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../theme/theme_extensions.dart';
 import '../../../l10n/l10n.dart';
@@ -26,6 +27,8 @@ class AppUnitField extends StatefulWidget {
     this.description,
     this.enabled = true,
     this.semanticLabel,
+    this.expanded = false,
+    this.warningText,
   });
 
   final String label;
@@ -42,6 +45,17 @@ class AppUnitField extends StatefulWidget {
   final bool enabled;
 
   final String? semanticLabel;
+
+  /// When true the input takes half of the available row width (label takes
+  /// the other half) instead of the default fixed 144px — used by the patient
+  /// forms and by the diagnosis wizard (which mirrors the web form's
+  /// info-left / input-right layout).
+  final bool expanded;
+
+  /// Non-blocking advisory rendered under the whole row (warning color). Used
+  /// by the diagnosis wizard when the typed value is outside the variable's
+  /// accepted range — the doctor can still continue with it.
+  final String? warningText;
 
   @override
   State<AppUnitField> createState() => _AppUnitFieldState();
@@ -75,7 +89,52 @@ class _AppUnitFieldState extends State<AppUnitField> {
   Widget build(BuildContext context) {
     final c = context.respiraColors;
 
-    return Row(
+    final input = Container(
+      height: ControlSize.touchTargetMin,
+      width: widget.expanded ? double.infinity : 144,
+      padding: const EdgeInsets.symmetric(horizontal: Spacing.control),
+      decoration: BoxDecoration(
+        color: c.surface,
+        borderRadius: AppRadius.md,
+        border: Border.all(color: c.borderSubtle),
+      ),
+      // Centers the single-line field vertically inside the 44px box.
+      alignment: Alignment.center,
+      child: Row(
+        children: [
+          Expanded(
+            child: TextField(
+              controller: _controller,
+              onChanged: widget.onChanged,
+              enabled: widget.enabled,
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
+              ],
+              style: TextStyle(fontSize: 15, color: c.textPrimary),
+              cursorColor: c.primary,
+              decoration: InputDecoration(
+                isCollapsed: true,
+                border: InputBorder.none,
+                hintText: widget.hintText ?? context.l10n.commonEnterNumber,
+                hintStyle: TextStyle(fontSize: 15, color: c.textSecondary),
+              ),
+            ),
+          ),
+          if (widget.unit.isNotEmpty) ...[
+            const SizedBox(width: Spacing.xxs),
+            Text(
+              widget.unit,
+              style: TypographyTokens.label(context)
+                  .copyWith(color: c.textSecondary),
+            ),
+          ],
+        ],
+      ),
+    );
+
+    final row = Row(
       children: [
         Expanded(
           child: Column(
@@ -84,17 +143,13 @@ class _AppUnitFieldState extends State<AppUnitField> {
             children: [
               Text(
                 widget.label,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TypographyTokens.body(context)
-                    .copyWith(color: c.textPrimary),
+                style:
+                    TypographyTokens.body(context).copyWith(color: c.textPrimary),
               ),
               if (widget.description != null) ...[
                 const SizedBox(height: Spacing.xxxs),
                 Text(
                   widget.description!,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
                   style: TypographyTokens.caption(context)
                       .copyWith(color: c.textSecondary),
                 ),
@@ -103,50 +158,36 @@ class _AppUnitFieldState extends State<AppUnitField> {
           ),
         ),
         const SizedBox(width: Spacing.control),
-        Container(
-          height: ControlSize.touchTargetMin,
-          width: 144,
-          padding: const EdgeInsets.symmetric(horizontal: Spacing.control),
-          decoration: BoxDecoration(
-            color: c.surface,
-            borderRadius: AppRadius.md,
-            border: Border.all(color: c.borderSubtle),
-          ),
-          // Centers the single-line field vertically inside the 44px box.
-          alignment: Alignment.center,
-          child: Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: _controller,
-                  onChanged: widget.onChanged,
-                  enabled: widget.enabled,
-                  keyboardType: const TextInputType.numberWithOptions(
-                      decimal: true),
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
-                  ],
-                  style: TextStyle(fontSize: 15, color: c.textPrimary),
-                  cursorColor: c.primary,
-                  decoration: InputDecoration(
-                    isCollapsed: true,
-                    border: InputBorder.none,
-                    hintText: widget.hintText ?? context.l10n.commonEnterNumber,
-                    hintStyle:
-                        TextStyle(fontSize: 15, color: c.textSecondary),
-                  ),
-                ),
+        if (widget.expanded) Expanded(child: input) else input,
+      ],
+    );
+
+    final warning = widget.warningText;
+    if (warning == null || warning.isEmpty) return row;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        row,
+        const SizedBox(height: Spacing.xxxs),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(
+              LucideIcons.alertTriangle,
+              size: ControlSize.iconSm,
+              color: c.warning,
+            ),
+            const SizedBox(width: Spacing.xxxs),
+            Expanded(
+              child: Text(
+                warning,
+                style:
+                    TypographyTokens.caption(context).copyWith(color: c.warning),
               ),
-              if (widget.unit.isNotEmpty) ...[
-                const SizedBox(width: Spacing.xxs),
-                Text(
-                  widget.unit,
-                  style: TypographyTokens.label(context)
-                      .copyWith(color: c.textSecondary),
-                ),
-              ],
-            ],
-          ),
+            ),
+          ],
         ),
       ],
     );
