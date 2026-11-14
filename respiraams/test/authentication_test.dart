@@ -37,6 +37,9 @@ void main() {
       findsOneWidget,
     );
     expect(find.text('Quên mật khẩu?'), findsOneWidget);
+    // Staff-code sign-in was removed: only email + password remain.
+    expect(find.text('Email'), findsOneWidget);
+    expect(find.text('Dùng mã nhân viên'), findsNothing);
   });
 
   testWidgets('login lands on welcome, Bắt đầu enters the workspace', (
@@ -59,6 +62,13 @@ void main() {
     // Post-login landing page.
     expect(find.text('KHÔNG GIAN LÀM VIỆC LÂM SÀNG'), findsOneWidget);
     expect(find.text('Bắt đầu'), findsOneWidget);
+
+    // Counters come from GET /patients (fixture: 2 patients, both treating)
+    // and the doctor name/avatar from the session.
+    await settleApi(tester);
+    expect(find.text('2 bệnh nhân đang theo dõi'), findsOneWidget);
+    expect(find.text('2 ca đang điều trị trong ngày'), findsOneWidget);
+    expect(find.textContaining('Dữ liệu đồng bộ lúc'), findsOneWidget);
 
     // Enter the clinical workspace.
     await tester.tap(find.text('Bắt đầu'));

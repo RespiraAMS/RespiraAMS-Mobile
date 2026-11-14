@@ -9,7 +9,7 @@ import '../providers/login_controller.dart';
 import '../widgets/brand_header_widget.dart';
 import '../routes.dart';
 
-/// Route `/login` — email/staff-code sign-in.
+/// Route `/login` — email + password sign-in.
 class LoginScreen extends ConsumerWidget {
   const LoginScreen({super.key});
 
@@ -112,19 +112,6 @@ class LoginScreen extends ConsumerWidget {
                         onPressed: controller.canSubmit ? submit : null,
                       ),
                       const SizedBox(height: Spacing.section),
-                      _DividerWithLabel(label: l10n.authOr),
-                      const SizedBox(height: Spacing.control),
-                      AppButton(
-                        label: l10n.authUseStaffCode,
-                        type: AppButtonType.outline,
-                        expand: true,
-                        // Staff-code sign-in flow is not designed yet.
-                        onPressed: () => showAppToast(
-                          context,
-                          l10n.authStaffCodeComingSoon,
-                        ),
-                      ),
-                      const SizedBox(height: Spacing.section),
                       AppSurface(
                         radius: AppRadius.lgValue,
                         color: c.surfaceSecondary,
@@ -190,29 +177,3 @@ class LoginScreen extends ConsumerWidget {
   }
 }
 
-class _DividerWithLabel extends StatelessWidget {
-  const _DividerWithLabel({required this.label});
-
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    final c = context.respiraColors;
-
-    return Row(
-      children: [
-        Expanded(child: Container(height: 1, color: c.borderSubtle)),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: Spacing.control),
-          child: Text(
-            label,
-            style: TypographyTokens.caption(
-              context,
-            ).copyWith(color: c.textTertiary),
-          ),
-        ),
-        Expanded(child: Container(height: 1, color: c.borderSubtle)),
-      ],
-    );
-  }
-}
