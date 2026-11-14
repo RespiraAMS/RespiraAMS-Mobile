@@ -170,11 +170,16 @@ class DiagnosisFlowController extends _$DiagnosisFlowController {
         clearError: true,
       );
     } on ApiException catch (e) {
-      state = state.copyWith(diagnosing: false, errorMessage: e.message);
+      state = state.copyWith(
+        diagnosing: false,
+        errorMessage: _invalidFieldsMessage(form, e.details) ?? e.message,
+      );
     } on DioException catch (e) {
       state = state.copyWith(
         diagnosing: false,
-        errorMessage: dioErrorMessage(e),
+        errorMessage:
+            _invalidFieldsMessage(form, dioErrorDetails(e)) ??
+            dioErrorMessage(e),
       );
     }
   }
@@ -247,4 +252,26 @@ class DiagnosisFlowController extends _$DiagnosisFlowController {
       state = state.copyWith(clearConfirmError: true);
 
   void clearResult() => state = const DiagnosisFlowState();
+}
+
+/// `POST /diagnose` reports per-variable validation failures in
+/// `error.detail` (`variableId → reason`). Turn the ids into the field names
+/// the wizard shows, so the message points at the offending inputs instead of
+/// the generic "Invalid observation value".
+String? _invalidFieldsMessage(
+  DiagnosisFormDto form,
+  Map<String, String>? details,
+) {
+  if (details == null || details.isEmpty) return null;
+
+  final names = <String>[];
+  for (final id in details.keys) {
+    final index = form.variables.indexWhere((variable) => variable.id == id);
+    if (index < 0) continue;
+    final name = form.variables[index].name;
+    if (name.isNotEmpty && !names.contains(name)) names.add(name);
+  }
+  if (names.isEmpty) return null;
+
+  return '${LocalApiError.invalidObservationsPrefix}${names.join(', ')}';
 }

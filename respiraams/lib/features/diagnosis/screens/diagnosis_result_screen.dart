@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../core/utils/context_extensions.dart';
 import '../../../../design_system/design_system.dart';
@@ -15,8 +14,7 @@ import '../models/diagnosis_result.dart';
 import '../providers/diagnosis_controller.dart';
 import '../providers/diagnosis_flow_provider.dart';
 import '../providers/diagnosis_tab_controller.dart';
-import '../widgets/risk_pill_widget.dart';
-import '../widgets/selection_row_widget.dart';
+import '../widgets/aware_chip.dart';
 import '../widgets/stat_tile_widget.dart';
 
 import '../routes.dart';
@@ -95,7 +93,8 @@ class DiagnosisResultScreen extends ConsumerWidget {
                           expand: true,
                           loading: flow.confirming,
                           onPressed: hasProtocols
-                              ? () => _openConfirmSheet(context, ref, result)
+                              ? () =>
+                                  _openConfirmTreatment(context, ref, result)
                               : null,
                         ),
                       ),
@@ -110,16 +109,14 @@ class DiagnosisResultScreen extends ConsumerWidget {
     );
   }
 
-  Future<void> _openConfirmSheet(
+  Future<void> _openConfirmTreatment(
     BuildContext context,
     WidgetRef ref,
     DiagnoseResultDto result,
   ) async {
-    final saved = await showModalBottomSheet<bool>(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (_) => _ConfirmTreatmentSheet(result: result),
+    final saved = await context.push<bool>(
+      DiagnosisRoutes.confirmTreatment,
+      extra: result,
     );
     if (saved != true || !context.mounted) return;
 
@@ -133,7 +130,7 @@ class DiagnosisResultScreen extends ConsumerWidget {
     if (patient != null) {
       context.go('${PatientRoutes.detail}?id=${patient.id}');
     } else {
-      context.go(PatientRoutes.progress);
+      context.go(PatientRoutes.list);
     }
   }
 }
@@ -155,18 +152,10 @@ class _SectionTitle extends StatelessWidget {
 }
 
 String _severityLabel(String severity, AppLocalizations l10n) =>
-    switch (severity) {
-      'Mild' => l10n.severityMild,
-      'Moderate' => l10n.severityModerate,
-      'Severe' => l10n.severitySevere,
-      _ => severity,
-    };
+    severityLabel(severity, l10n);
 
-String _siteLabel(String site, AppLocalizations l10n) => switch (site) {
-      'Inpatient' => l10n.siteInpatient,
-      'IntensiveCareUnit' => l10n.siteIcu,
-      _ => l10n.siteOutpatient,
-    };
+String _siteLabel(String site, AppLocalizations l10n) =>
+    treatmentSiteLabel(site, l10n);
 
 String _allergyTypeLabel(String type, AppLocalizations l10n) =>
     switch (type) {
@@ -190,7 +179,6 @@ class _ResultTab extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = context.respiraColors;
     final l10n = context.l10n;
-    final severityIsHigh = result.severity == 'Severe';
     final allergy = result.allergy;
 
     return Column(
@@ -254,10 +242,6 @@ class _ResultTab extends StatelessWidget {
           ],
         ),
         const SizedBox(height: Spacing.block - 4),
-        RiskPillWidget(
-          label: severityIsHigh ? l10n.riskHigh : l10n.riskLow,
-          isHigh: severityIsHigh,
-        ),
         if (result.isPatientPregnantOrInLactationPhase) ...[
           const SizedBox(height: Spacing.control),
           ClinicalAlert(
@@ -272,7 +256,7 @@ class _ResultTab extends StatelessWidget {
             severity: ClinicalSeverity.needsAttention,
             title: l10n.alertMissingTitle,
             description: result.missingVariables
-                .map((v) => v.name)
+                .map((v) => v.displayLabel)
                 .take(6)
                 .join(', '),
           ),
@@ -426,6 +410,7 @@ class _MicrobialResultCard extends StatelessWidget {
           _KeyValueRow(
             label: l10n.diagnosisMicrobialPathogen,
             value: pathogen,
+            valueBold: true,
           ),
           _KeyValueRow(
             label: l10n.diagnosisMicrobialMicCategory,
@@ -442,14 +427,24 @@ class _MicrobialResultCard extends StatelessWidget {
   }
 }
 
-class _EvidencesTab extends StatelessWidget {
+class _EvidencesTab extends ConsumerWidget {
   const _EvidencesTab({required this.evidences});
 
   final List<EvidenceDto> evidences;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
+    // Evidence rows reference variables as `VariableRef` (code only); the form
+    // catalog provides the human-readable names.
+    final variables =
+        ref.watch(diagnosisFormProvider).valueOrNull?.variables ?? const [];
+    final namesByCode = <String, String>{
+      for (final variable in variables)
+        if (variable.code.isNotEmpty && variable.name.isNotEmpty)
+          variable.code: variable.name,
+    };
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -459,7 +454,8 @@ class _EvidencesTab extends StatelessWidget {
           AppText(l10n.diagnosisNoData, type: AppTextType.caption)
         else
           AppCard.divided([
-            for (final evidence in evidences) _EvidenceRow(evidence: evidence),
+            for (final evidence in evidences)
+              _EvidenceRow(evidence: evidence, namesByCode: namesByCode),
           ]),
       ],
     );
@@ -467,18 +463,24 @@ class _EvidencesTab extends StatelessWidget {
 }
 
 class _EvidenceRow extends StatelessWidget {
-  const _EvidenceRow({required this.evidence});
+  const _EvidenceRow({required this.evidence, required this.namesByCode});
 
   final EvidenceDto evidence;
+
+  /// `code → variable name`, used because evidence refs carry no name.
+  final Map<String, String> namesByCode;
+
+  String _label(VariableRefDto ref) =>
+      namesByCode[ref.code] ?? ref.displayLabel;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final related = evidence.relatedObservations
-        .map((o) => o.variable?.name ?? '')
+        .map((o) => o.variable == null ? '' : _label(o.variable!))
         .where((name) => name.isNotEmpty)
         .join(', ');
-    final missing = evidence.missingVariables.map((v) => v.name).join(', ');
+    final missing = evidence.missingVariables.map(_label).join(', ');
     final title = evidence.source.isEmpty ? l10n.evidenceSection : evidence.source;
     final trailing = _trailing(evidence, l10n);
 
@@ -503,13 +505,6 @@ class _EvidenceRow extends StatelessWidget {
                 AppText(trailing, type: AppTextType.caption),
             ],
           ),
-          if (evidence.formula.isNotEmpty) ...[
-            const SizedBox(height: Spacing.xxxs),
-            AppText(
-              l10n.diagnosisEvidenceFormula(evidence.formula),
-              type: AppTextType.caption,
-            ),
-          ],
           if (evidence.evaluatedValue != null) ...[
             const SizedBox(height: Spacing.xxxs),
             AppText(
@@ -604,9 +599,16 @@ class _ProtocolCard extends StatelessWidget {
             for (final combination in protocol.medicines)
               Padding(
                 padding: const EdgeInsets.only(bottom: Spacing.xxs),
-                child: Text(
-                  combination.map((a) => a.name).join(' + '),
-                  style: TypographyTokens.body(context),
+                child: Wrap(
+                  spacing: Spacing.xxxs,
+                  runSpacing: Spacing.xxxs,
+                  children: [
+                    for (final antibiotic in combination)
+                      AwareDrugChip(
+                        name: antibiotic.name,
+                        classification: antibiotic.classification,
+                      ),
+                  ],
                 ),
               ),
           if (protocol.pathogens.isNotEmpty) ...[
@@ -652,10 +654,15 @@ class _InfoChip extends StatelessWidget {
 }
 
 class _KeyValueRow extends StatelessWidget {
-  const _KeyValueRow({required this.label, required this.value});
+  const _KeyValueRow({
+    required this.label,
+    required this.value,
+    this.valueBold = false,
+  });
 
   final String label;
   final String value;
+  final bool valueBold;
 
   @override
   Widget build(BuildContext context) {
@@ -666,7 +673,12 @@ class _KeyValueRow extends StatelessWidget {
         children: [
           Text(label, style: TypographyTokens.caption(context)),
           const SizedBox(height: Spacing.xxxs),
-          Text(value, style: TypographyTokens.body(context)),
+          Text(
+            value,
+            style: TypographyTokens.body(context).copyWith(
+              fontWeight: valueBold ? FontWeight.w700 : null,
+            ),
+          ),
         ],
       ),
     );
@@ -692,224 +704,12 @@ class _RefRow extends StatelessWidget {
             child: Text(
               title,
               style: TypographyTokens.body(context)
-                  .copyWith(fontWeight: FontWeight.w600),
+                  .copyWith(fontWeight: FontWeight.w700),
             ),
           ),
           if (trailing != null)
             AppText(trailing!, type: AppTextType.caption),
         ],
-      ),
-    );
-  }
-}
-
-/// One selectable medicine combination inside the confirm sheet.
-class _CombinationOption {
-  const _CombinationOption({
-    required this.index,
-    required this.protocol,
-    required this.medicines,
-  });
-
-  final int index;
-  final TreatmentProtocolDto protocol;
-  final List<AntibioticRefDto> medicines;
-}
-
-class _ConfirmTreatmentSheet extends ConsumerStatefulWidget {
-  const _ConfirmTreatmentSheet({required this.result});
-
-  final DiagnoseResultDto result;
-
-  @override
-  ConsumerState<_ConfirmTreatmentSheet> createState() =>
-      _ConfirmTreatmentSheetState();
-}
-
-class _ConfirmTreatmentSheetState
-    extends ConsumerState<_ConfirmTreatmentSheet> {
-  final _reasonController = TextEditingController();
-  int? _selected;
-  bool _needWarning = false;
-  String? _error;
-
-  List<_CombinationOption> get _options {
-    final list = <_CombinationOption>[];
-    for (final protocol in widget.result.protocols) {
-      for (final medicines in protocol.medicines) {
-        list.add(
-          _CombinationOption(
-            index: list.length,
-            protocol: protocol,
-            medicines: medicines,
-          ),
-        );
-      }
-    }
-    return list;
-  }
-
-  @override
-  void dispose() {
-    _reasonController.dispose();
-    super.dispose();
-  }
-
-  Future<void> _select(int index) async {
-    final option = _options[index];
-    final ids = option.medicines.map((m) => m.id).toList();
-    setState(() {
-      _selected = index;
-      _error = null;
-      _needWarning = false;
-    });
-    ref.read(diagnosisFlowControllerProvider.notifier).clearConfirmError();
-    final warn = await ref
-        .read(diagnosisFlowControllerProvider.notifier)
-        .checkCombinationWarning(ids);
-    if (mounted) setState(() => _needWarning = warn);
-  }
-
-  Future<void> _confirm() async {
-    final selected = _selected;
-    if (selected == null) {
-      setState(() => _error = context.l10n.diagnosisSelectMedicineRequired);
-      return;
-    }
-    final option = _options[selected];
-    final ids = option.medicines.map((m) => m.id).toList();
-    final reason = _reasonController.text.trim();
-    final ok =
-        await ref.read(diagnosisFlowControllerProvider.notifier).confirmTreatment(
-              medicineIds: ids,
-              reasonForMedicineChoice: reason.isEmpty ? null : reason,
-            );
-    if (!mounted) return;
-    if (ok) {
-      Navigator.of(context).pop(true);
-      return;
-    }
-    final error = ref.read(diagnosisFlowControllerProvider).confirmError;
-    if (error != null) {
-      showAppToast(context, error.localizedError(context.l10n));
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    final c = context.respiraColors;
-    final flow = ref.watch(diagnosisFlowControllerProvider);
-    final options = _options;
-    final bottomInset = MediaQuery.viewInsetsOf(context).bottom;
-
-    return Padding(
-      padding: EdgeInsets.only(bottom: bottomInset),
-      child: SafeArea(
-        top: false,
-        child: Container(
-          constraints: BoxConstraints(
-            maxHeight: MediaQuery.sizeOf(context).height * 0.9,
-          ),
-          decoration: BoxDecoration(
-            color: c.surface,
-            borderRadius: const BorderRadius.vertical(
-              top: Radius.circular(AppRadius.lgValue + 4),
-            ),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(Spacing.group),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        l10n.diagnosisConfirmTreatment,
-                        style: TypographyTokens.h2(context),
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: () => Navigator.of(context).pop(false),
-                      icon: const Icon(LucideIcons.x),
-                    ),
-                  ],
-                ),
-              ),
-              Flexible(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.fromLTRB(
-                    Spacing.group,
-                    0,
-                    Spacing.group,
-                    Spacing.group,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text(
-                        l10n.diagnosisProtocolSelect,
-                        style: TypographyTokens.label(context),
-                      ),
-                      const SizedBox(height: Spacing.inline),
-                      if (options.isEmpty)
-                        AppText(
-                          l10n.diagnosisProtocolNoMedicine,
-                          type: AppTextType.caption,
-                        )
-                      else
-                        for (final option in options)
-                          Padding(
-                            padding:
-                                const EdgeInsets.only(bottom: Spacing.inline),
-                            child: SelectionRowWidget(
-                              title: option.medicines
-                                  .map((m) => m.name)
-                                  .join(' + '),
-                              description:
-                                  '${_severityLabel(option.protocol.severity, l10n)}'
-                                  ' · ${_siteLabel(option.protocol.treatmentSite, l10n)}',
-                              selected: _selected == option.index,
-                              onTap: () => _select(option.index),
-                            ),
-                          ),
-                      const SizedBox(height: Spacing.section),
-                      AppTextField(
-                        label: l10n.diagnosisReason,
-                        controller: _reasonController,
-                        hintText: l10n.diagnosisReasonHint,
-                      ),
-                      if (_needWarning) ...[
-                        const SizedBox(height: Spacing.section),
-                        ClinicalAlert(
-                          severity: ClinicalSeverity.needsAttention,
-                          title: l10n.diagnosisWarnCombinationTitle,
-                          description: l10n.diagnosisWarnCombinationDesc,
-                        ),
-                      ],
-                      if (_error != null) ...[
-                        const SizedBox(height: Spacing.control),
-                        Text(
-                          _error!,
-                          style: TypographyTokens.caption(context)
-                              .copyWith(color: c.error),
-                        ),
-                      ],
-                      const SizedBox(height: Spacing.block),
-                      AppButton(
-                        label: l10n.diagnosisConfirmTreatment,
-                        expand: true,
-                        loading: flow.confirming,
-                        onPressed: _selected == null ? null : _confirm,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }

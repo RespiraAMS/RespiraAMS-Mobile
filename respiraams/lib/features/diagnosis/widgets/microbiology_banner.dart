@@ -22,8 +22,13 @@ class BacteriaDisplayField extends StatelessWidget {
         ),
         const SizedBox(height: Spacing.inline),
         Container(
-          height: ControlSize.buttonLarge,
-          padding: const EdgeInsets.symmetric(horizontal: Spacing.group),
+          constraints: const BoxConstraints(
+            minHeight: ControlSize.buttonLarge,
+          ),
+          padding: const EdgeInsets.symmetric(
+            horizontal: Spacing.group,
+            vertical: Spacing.control,
+          ),
           decoration: BoxDecoration(
             color: c.surface,
             borderRadius: AppRadius.md,
@@ -34,8 +39,7 @@ class BacteriaDisplayField extends StatelessWidget {
             bacteria,
             type: AppTextType.body,
             color: c.textSecondary,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
+            fontWeight: FontWeight.w700,
           ),
         ),
       ],

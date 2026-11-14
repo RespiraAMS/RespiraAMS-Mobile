@@ -121,7 +121,7 @@ Map<String, dynamic> _$$NamedRefDtoImplToJson(_$NamedRefDtoImpl instance) =>
 _$VariableRefDtoImpl _$$VariableRefDtoImplFromJson(Map<String, dynamic> json) =>
     _$VariableRefDtoImpl(
       id: json['id'] as String,
-      name: json['name'] as String,
+      name: json['name'] as String? ?? '',
       code: json['code'] as String? ?? '',
     );
 

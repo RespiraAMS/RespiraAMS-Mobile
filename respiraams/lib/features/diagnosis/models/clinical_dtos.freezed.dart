@@ -1480,12 +1480,9 @@ class __$$VariableRefDtoImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$VariableRefDtoImpl implements _VariableRefDto {
-  const _$VariableRefDtoImpl({
-    required this.id,
-    required this.name,
-    this.code = '',
-  });
+class _$VariableRefDtoImpl extends _VariableRefDto {
+  const _$VariableRefDtoImpl({required this.id, this.name = '', this.code = ''})
+    : super._();
 
   factory _$VariableRefDtoImpl.fromJson(Map<String, dynamic> json) =>
       _$$VariableRefDtoImplFromJson(json);
@@ -1493,6 +1490,7 @@ class _$VariableRefDtoImpl implements _VariableRefDto {
   @override
   final String id;
   @override
+  @JsonKey()
   final String name;
   @override
   @JsonKey()
@@ -1534,12 +1532,13 @@ class _$VariableRefDtoImpl implements _VariableRefDto {
   }
 }
 
-abstract class _VariableRefDto implements VariableRefDto {
+abstract class _VariableRefDto extends VariableRefDto {
   const factory _VariableRefDto({
     required final String id,
-    required final String name,
+    final String name,
     final String code,
   }) = _$VariableRefDtoImpl;
+  const _VariableRefDto._() : super._();
 
   factory _VariableRefDto.fromJson(Map<String, dynamic> json) =
       _$VariableRefDtoImpl.fromJson;

@@ -92,17 +92,28 @@ class NamedRefDto with _$NamedRefDto {
 }
 
 /// Missing-variable reference on the diagnose result
-/// (`ClinicalVariableResult`).
+/// (`ClinicalVariableResult` for the top-level list, `VariableRef` inside an
+/// evidence).
+///
+/// The lightweight `VariableRef` used by evidence rows only carries
+/// `id`/`code`/`valueType` — no `name` — so [name] is optional and falls back
+/// to [code] for display.
 @freezed
 class VariableRefDto with _$VariableRefDto {
+  const VariableRefDto._();
+
   const factory VariableRefDto({
     required String id,
-    required String name,
+    @Default('') String name,
     @Default('') String code,
   }) = _VariableRefDto;
 
   factory VariableRefDto.fromJson(Map<String, dynamic> json) =>
       _$VariableRefDtoFromJson(json);
+
+  /// Human-readable label: the variable name when the payload has one,
+  /// otherwise its code (e.g. `CONFUSION`).
+  String get displayLabel => name.trim().isNotEmpty ? name.trim() : code;
 }
 
 /// Clinical observation echoed by an [EvidenceDto] (`ClinicalObservationRef`).

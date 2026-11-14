@@ -15,6 +15,7 @@ import '../models/diagnosis_labels.dart';
 import '../providers/diagnosis_controller.dart';
 import '../providers/diagnosis_flow_provider.dart';
 import '../routes.dart';
+import '../widgets/boolean_field_widget.dart';
 import '../widgets/selection_row_widget.dart';
 
 /// Route `/diagnosis` — dynamic empirical-diagnosis wizard. Its steps and
@@ -31,6 +32,50 @@ class DiagnosisWizardScreen extends ConsumerStatefulWidget {
 class _DiagnosisWizardScreenState extends ConsumerState<DiagnosisWizardScreen> {
   int _step = 0;
   bool _prefilled = false;
+  final TextEditingController _variableSearchController =
+      TextEditingController();
+  String _variableQuery = '';
+
+  @override
+  void initState() {
+    super.initState();
+    // A new visit starts from a clean form. Values from a previous patient or
+    // an abandoned attempt would otherwise leak in (the prefill only fills
+    // variables that are still empty) and can trip the BE validation.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        ref.read(diagnosisControllerProvider.notifier).reset();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _variableSearchController.dispose();
+    super.dispose();
+  }
+
+  /// Assessment sections after applying the "search variables" filter.
+  List<_VariableGroup> _visibleGroups(_Step step) {
+    final query = _variableQuery.trim().toLowerCase();
+    if (query.isEmpty) return step.groups;
+
+    final groups = <_VariableGroup>[];
+    for (final group in step.groups) {
+      final items = group.variables
+          .where(
+            (variable) =>
+                variable.name.toLowerCase().contains(query) ||
+                variable.code.toLowerCase().contains(query) ||
+                variable.description.toLowerCase().contains(query),
+          )
+          .toList();
+      if (items.isNotEmpty) {
+        groups.add(_VariableGroup(title: group.title, variables: items));
+      }
+    }
+    return groups;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +89,7 @@ class _DiagnosisWizardScreenState extends ConsumerState<DiagnosisWizardScreen> {
           child: formAsync.when(
             loading: () => const Center(child: CircularProgressIndicator()),
             error: (_, _) => _ErrorView(
-              onBack: () => context.goBackOr(PatientRoutes.progress),
+              onBack: () => context.goBackOr(PatientRoutes.list),
               onRetry: () => ref.invalidate(diagnosisFormProvider),
             ),
             data: (form) {
@@ -60,6 +105,8 @@ class _DiagnosisWizardScreenState extends ConsumerState<DiagnosisWizardScreen> {
               }
               final step = steps[_step.clamp(0, steps.length - 1)];
               final isLast = _step >= steps.length - 1;
+              final visibleGroups =
+                  step.kind == _StepKind.variables ? _visibleGroups(step) : null;
 
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -79,9 +126,34 @@ class _DiagnosisWizardScreenState extends ConsumerState<DiagnosisWizardScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          for (final variable in step.variables) ...[
-                            _VariableField(variable: variable),
-                            const SizedBox(height: Spacing.group),
+                          if (step.kind == _StepKind.variables) ...[
+                            AppTextField(
+                              label: l10n.diagnosisVariableSearch,
+                              controller: _variableSearchController,
+                              hintText: l10n.diagnosisVariableSearchHint,
+                              onChanged: (value) =>
+                                  setState(() => _variableQuery = value),
+                            ),
+                            const SizedBox(height: Spacing.section),
+                            if (visibleGroups == null ||
+                                visibleGroups.isEmpty)
+                              AppText(
+                                l10n.commonNoResults,
+                                type: AppTextType.caption,
+                              )
+                            else
+                              for (final group in visibleGroups) ...[
+                                _VariableGroupHeader(
+                                  title: group.title,
+                                  count: group.variables.length,
+                                ),
+                                const SizedBox(height: Spacing.control),
+                                for (final variable in group.variables) ...[
+                                  _VariableField(variable: variable),
+                                  const SizedBox(height: Spacing.group),
+                                ],
+                                const SizedBox(height: Spacing.control),
+                              ],
                           ],
                           if (step.kind == _StepKind.allergy)
                             _AllergySection(antibiotics: step.antibiotics),
@@ -140,7 +212,7 @@ class _DiagnosisWizardScreenState extends ConsumerState<DiagnosisWizardScreen> {
     if (_step > 0) {
       setState(() => _step -= 1);
     } else {
-      context.goBackOr(PatientRoutes.progress);
+      context.goBackOr(PatientRoutes.list);
     }
   }
 
@@ -167,7 +239,7 @@ class _DiagnosisWizardScreenState extends ConsumerState<DiagnosisWizardScreen> {
         case 'GENDER':
           controller.setValue(
             variable.id,
-            patient.gender == Gender.nam ? 'Male' : 'Female',
+            genderOptionFor(patient.gender, variable.acceptedValues),
           );
         case 'HEIGHT':
           if (patient.heightCm != null) {
@@ -239,61 +311,40 @@ class _DiagnosisWizardScreenState extends ConsumerState<DiagnosisWizardScreen> {
   ) {
     final variables = form.variables;
 
-    List<ClinicalVariableDto> where(bool Function(ClinicalVariableDto) test) =>
-        variables.where(test).toList();
-
-    // FiO₂ lives in the Clinical category but is only meaningful next to
-    // PaO₂ (the P/F ratio), so it is moved into the paraclinical step and
-    // placed immediately before PaO₂.
-    final clinicalNumeric = where(
-      (v) =>
-          v.valueType == 'Numeric' &&
-          v.category == 'Clinical' &&
-          v.code != 'FIO2',
-    );
-    final paraclinicalNumeric = where(
-      (v) => v.valueType == 'Numeric' && v.category == 'Paraclinical',
-    );
-    final fio2 = variables.where((v) => v.code == 'FIO2').toList();
-    if (fio2.isNotEmpty) {
-      final pao2Index = paraclinicalNumeric.indexWhere(
-        (v) => v.code == 'PAO2',
-      );
-      paraclinicalNumeric.insert(
-        pao2Index < 0 ? 0 : pao2Index,
-        fio2.first,
+    // Mirrors the web form (`diagnose.html`): step 1 holds every clinical
+    // variable grouped by its BE category, in the same order.
+    const categoryOrder = [
+      'PersonalInformation',
+      'MedicalHistory',
+      'Paraclinical',
+      'Clinical',
+    ];
+    final groups = <_VariableGroup>[];
+    for (final category in categoryOrder) {
+      final items = variables.where((v) => v.category == category).toList();
+      if (items.isEmpty) continue;
+      groups.add(
+        _VariableGroup(
+          title: _categoryLabel(category, l10n),
+          variables: items,
+        ),
       );
     }
-
-    final personal = where((v) => v.category == 'PersonalInformation');
-    final medicalHistory = where((v) => v.category == 'MedicalHistory');
-    final otherVariables = where(
-      (v) =>
-          v.category != 'PersonalInformation' &&
-          v.category != 'MedicalHistory' &&
-          v.valueType != 'Numeric',
-    );
-
-    // Safety net: never silently drop a variable the backend expects.
-    final assignedIds = {
-      ...personal.map((v) => v.id),
-      ...medicalHistory.map((v) => v.id),
-      ...clinicalNumeric.map((v) => v.id),
-      ...paraclinicalNumeric.map((v) => v.id),
-      ...otherVariables.map((v) => v.id),
-    };
-    final leftovers =
-        variables.where((v) => !assignedIds.contains(v.id)).toList();
+    // Safety net: categories the app does not know yet are still rendered.
+    final others = variables
+        .where((v) => !categoryOrder.contains(v.category))
+        .toList();
+    if (others.isNotEmpty) {
+      groups.add(_VariableGroup(title: l10n.commonOther, variables: others));
+    }
 
     final steps = <_Step>[
-      _Step.variables(l10n.diagnosisPersonalInfo, personal),
-      _Step.variables(l10n.diagnosisVitalSigns, clinicalNumeric),
-      _Step.variables(l10n.diagnosisLabResults, paraclinicalNumeric),
-      _Step.variables(l10n.diagnosisMedicalHistory, medicalHistory),
-      _Step.variables(l10n.diagnosisComorbidities, [
-        ...otherVariables,
-        ...leftovers,
-      ]),
+      _Step.variables(
+        l10n.diagnosisAssessment,
+        [for (final group in groups) ...group.variables],
+        groups: groups,
+      ),
+      _Step.allergy(l10n.diagnosisAllergy, form.antibiotics),
       _Step.specialHistory(l10n.diagnosisSpecialHistory),
       _Step.otherInfections(l10n.diagnosisOtherInfections),
       if (form.pathogens.isNotEmpty)
@@ -301,7 +352,6 @@ class _DiagnosisWizardScreenState extends ConsumerState<DiagnosisWizardScreen> {
           l10n.diagnosisMicrobialSamples,
           form.pathogens,
         ),
-      _Step.allergy(l10n.diagnosisAllergy, form.antibiotics),
     ];
     return steps
         .where(
@@ -311,11 +361,14 @@ class _DiagnosisWizardScreenState extends ConsumerState<DiagnosisWizardScreen> {
   }
 }
 
-/// Enum-free placeholder used to resolve the progress route without
-/// importing the patient routes (avoids a feature cycle).
-class PatientProgressRoute {
-  static const value = '/patient/progress';
-}
+String _categoryLabel(String category, AppLocalizations l10n) =>
+    switch (category) {
+      'PersonalInformation' => l10n.diagnosisPersonalInfo,
+      'MedicalHistory' => l10n.diagnosisMedicalHistory,
+      'Paraclinical' => l10n.diagnosisParaclinical,
+      'Clinical' => l10n.diagnosisClinical,
+      _ => category,
+    };
 
 enum _StepKind {
   variables,
@@ -326,7 +379,7 @@ enum _StepKind {
 }
 
 class _Step {
-  const _Step.variables(this.title, this.variables)
+  const _Step.variables(this.title, this.variables, {this.groups = const []})
       : kind = _StepKind.variables,
         antibiotics = const [],
         pathogens = const [];
@@ -334,45 +387,74 @@ class _Step {
   const _Step.allergy(this.title, this.antibiotics)
       : kind = _StepKind.allergy,
         variables = const [],
+        groups = const [],
         pathogens = const [];
 
   const _Step.specialHistory(this.title)
       : kind = _StepKind.specialHistory,
         variables = const [],
+        groups = const [],
         antibiotics = const [],
         pathogens = const [];
 
   const _Step.otherInfections(this.title)
       : kind = _StepKind.otherInfections,
         variables = const [],
+        groups = const [],
         antibiotics = const [],
         pathogens = const [];
 
   const _Step.microbialSamples(this.title, this.pathogens)
       : kind = _StepKind.microbialSamples,
         variables = const [],
+        groups = const [],
         antibiotics = const [];
 
   final String title;
   final _StepKind kind;
   final List<ClinicalVariableDto> variables;
+
+  /// Category sections of the assessment step (empty for other steps).
+  final List<_VariableGroup> groups;
   final List<AntibioticFormDto> antibiotics;
   final List<NamedRefDto> pathogens;
 }
 
+/// One category section of the assessment step (e.g. "Lâm sàng · 12").
+class _VariableGroup {
+  const _VariableGroup({required this.title, required this.variables});
+
+  final String title;
+  final List<ClinicalVariableDto> variables;
+}
+
 /// Allergy step: `AllergyType` selector plus the antibiotic multi-select /
 /// free-text fallback, matching `POST /diagnose`'s `AllergyQuery`.
-class _AllergySection extends ConsumerWidget {
+class _AllergySection extends ConsumerStatefulWidget {
   const _AllergySection({required this.antibiotics});
 
   final List<AntibioticFormDto> antibiotics;
 
+  @override
+  ConsumerState<_AllergySection> createState() => _AllergySectionState();
+}
+
+class _AllergySectionState extends ConsumerState<_AllergySection> {
   static const _types = [
     'No',
     'Yes',
     'NonRegisteredAntibiotic',
     'Unknown',
   ];
+
+  final TextEditingController _searchController = TextEditingController();
+  String _query = '';
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   String _typeLabel(String type, AppLocalizations l10n) => switch (type) {
         'No' => l10n.diagnosisAllergyNo,
@@ -382,10 +464,21 @@ class _AllergySection extends ConsumerWidget {
       };
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final l10n = context.l10n;
     final form = ref.watch(diagnosisControllerProvider);
     final controller = ref.read(diagnosisControllerProvider.notifier);
+
+    final query = _query.trim().toLowerCase();
+    final antibiotics = query.isEmpty
+        ? widget.antibiotics
+        : widget.antibiotics
+            .where(
+              (antibiotic) =>
+                  antibiotic.name.toLowerCase().contains(query) ||
+                  antibiotic.antibioticGroupName.toLowerCase().contains(query),
+            )
+            .toList();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -408,27 +501,42 @@ class _AllergySection extends ConsumerWidget {
           const SizedBox(height: Spacing.section),
           SectionLabelWidget(l10n.diagnosisAllergySelect),
           const SizedBox(height: Spacing.inline),
-          if (antibiotics.isEmpty)
+          if (widget.antibiotics.isEmpty)
             Text(
               l10n.diagnosisNoData,
               style: TypographyTokens.caption(context),
             )
-          else
-            for (final antibiotic in antibiotics)
-              Padding(
-                padding: const EdgeInsets.only(bottom: Spacing.inline),
-                child: SelectionRowWidget(
-                  title: antibiotic.name,
-                  selected:
-                      form.allergicAntibioticIds.contains(antibiotic.id),
-                  onTap: () => controller.toggleAllergy(antibiotic.id),
+          else ...[
+            AppTextField(
+              label: l10n.diagnosisAntibioticSearch,
+              controller: _searchController,
+              hintText: l10n.diagnosisAntibioticSearchHint,
+              onChanged: (value) => setState(() => _query = value),
+            ),
+            const SizedBox(height: Spacing.group),
+            if (antibiotics.isEmpty)
+              Text(
+                l10n.commonNoResults,
+                style: TypographyTokens.caption(context),
+              )
+            else
+              for (final antibiotic in antibiotics)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: Spacing.inline),
+                  child: SelectionRowWidget(
+                    title: antibiotic.name,
+                    selected:
+                        form.allergicAntibioticIds.contains(antibiotic.id),
+                    onTap: () => controller.toggleAllergy(antibiotic.id),
+                  ),
                 ),
-              ),
+          ],
         ],
         if (form.needsOtherAllergy) ...[
           const SizedBox(height: Spacing.section),
           AppTextField(
             label: l10n.diagnosisAllergyOther,
+            hintText: l10n.diagnosisAllergyOtherHint,
             initialValue: form.otherAllergy,
             onChanged: controller.setOtherAllergy,
           ),
@@ -790,16 +898,24 @@ class _DropdownField<T> extends StatelessWidget {
             child: DropdownButton<T>(
               value: value,
               isExpanded: true,
+              itemHeight: null,
               icon: Icon(LucideIcons.chevronDown, color: c.iconDefault),
-              items: [
-                for (final (itemValue, itemLabel) in items)
-                  DropdownMenuItem<T>(
-                    value: itemValue,
+              selectedItemBuilder: (context) => [
+                for (final (_, itemLabel) in items)
+                  Align(
+                    alignment: Alignment.centerLeft,
                     child: Text(
                       itemLabel,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
+                  ),
+              ],
+              items: [
+                for (final (itemValue, itemLabel) in items)
+                  DropdownMenuItem<T>(
+                    value: itemValue,
+                    child: Text(itemLabel),
                   ),
               ],
               onChanged: onChanged,
@@ -823,13 +939,11 @@ class _VariableField extends ConsumerWidget {
 
     switch (variable.valueType) {
       case 'Boolean':
-        return SelectionRowWidget(
-          title: _label(variable),
-          selected: form.isTrue(variable.id),
-          onTap: () => controller.setBool(
-            variable.id,
-            !form.isTrue(variable.id),
-          ),
+        return BooleanFieldWidget(
+          key: ValueKey('bool-field-${variable.id}'),
+          label: _label(variable),
+          value: form.isTrue(variable.id),
+          onChanged: (value) => controller.setBool(variable.id, value),
         );
       case 'Categorical':
         final selected = form.valueOf(variable.id);
@@ -853,13 +967,62 @@ class _VariableField extends ConsumerWidget {
           ],
         );
       default:
+        final raw = form.valueOf(variable.id) ?? '';
         return AppUnitField(
-          label: _label(variable),
+          label: variable.isRequired
+              ? '${_label(variable)} *'
+              : _label(variable),
+          description:
+              variable.description.trim().isEmpty ? null : variable.description,
           unit: _unit(variable),
-          initialValue: form.valueOf(variable.id) ?? '',
+          initialValue: raw,
+          hintText: _normalPlaceholder(variable, context.l10n),
+          expanded: true,
+          warningText: _rangeWarning(variable, raw, context.l10n),
           onChanged: (value) => controller.setValue(variable.id, value),
         );
     }
+  }
+}
+
+/// Category header of the assessment step ("Lâm sàng · 12").
+class _VariableGroupHeader extends StatelessWidget {
+  const _VariableGroupHeader({required this.title, required this.count});
+
+  final String title;
+  final int count;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.respiraColors;
+
+    return Row(
+      children: [
+        Expanded(
+          child: Text(
+            title,
+            style: TypographyTokens.h3(context)
+                .copyWith(color: c.textPrimary, fontWeight: FontWeight.w700),
+          ),
+        ),
+        const SizedBox(width: Spacing.control),
+        Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: Spacing.xxs,
+            vertical: 2,
+          ),
+          decoration: BoxDecoration(
+            color: c.surfaceSecondary,
+            borderRadius: AppRadius.full,
+          ),
+          child: AppText(
+            '$count',
+            type: AppTextType.caption,
+            color: c.textSecondary,
+          ),
+        ),
+      ],
+    );
   }
 }
 
@@ -955,6 +1118,84 @@ String _label(ClinicalVariableDto variable) =>
 
 String _unit(ClinicalVariableDto variable) =>
     _unitOverrides[variable.code] ?? variable.canonicalUnit ?? '';
+
+/// Placeholder hinting the normal range, mirroring `normalPlaceholder()` of
+/// the web form (`normal: min-max` / `normal: min+` / `normal: up to max`).
+String _normalPlaceholder(
+  ClinicalVariableDto variable,
+  AppLocalizations l10n,
+) {
+  final range = variable.normalRange;
+  if (range == null) return l10n.commonEnterNumber;
+
+  // "No maximum" is serialized by the BE as decimal.MaxValue.
+  final hasMax = range.max.toDouble() < 1e15;
+  final hasMin = range.min.toDouble() > -1e15;
+  if (hasMin && hasMax) {
+    return l10n.diagnosisNormalRangeBoth(
+      _formatNumber(range.min),
+      _formatNumber(range.max),
+    );
+  }
+  if (hasMin) return l10n.diagnosisNormalRangeMin(_formatNumber(range.min));
+  if (hasMax) return l10n.diagnosisNormalRangeMax(_formatNumber(range.max));
+  return l10n.commonEnterNumber;
+}
+
+/// Non-blocking hint when a numeric value falls outside the variable's
+/// `acceptedRange`. The BE rejects such values, so the doctor is warned but
+/// not prevented from continuing (the warning is advisory only).
+String? _rangeWarning(
+  ClinicalVariableDto variable,
+  String raw,
+  AppLocalizations l10n,
+) {
+  final range = variable.acceptedRange;
+  final value = double.tryParse(raw.trim());
+  if (range == null || value == null) return null;
+
+  final min = range.min.toDouble();
+  // "No maximum" is serialized by the BE as decimal.MaxValue.
+  final max = range.max.toDouble();
+  final hasMax = max < 1e15;
+
+  final belowMin = range.isMinExclusive ? value <= min : value < min;
+  final aboveMax =
+      hasMax && (range.isMaxExclusive ? value >= max : value > max);
+  if (!belowMin && !aboveMax) return null;
+
+  final unit = _unit(variable);
+  final label = _formatRange(range, hasMax: hasMax);
+  return l10n.diagnosisRangeWarning(unit.isEmpty ? label : '$label $unit');
+}
+
+String _formatRange(RangeDto range, {required bool hasMax}) {
+  final min = _formatNumber(range.min);
+  if (!hasMax) return '${range.isMinExclusive ? '>' : '≥'} $min';
+  return '$min – ${_formatNumber(range.max)}';
+}
+
+String _formatNumber(num value) {
+  final asDouble = value.toDouble();
+  if (asDouble == asDouble.roundToDouble()) {
+    return asDouble.toInt().toString();
+  }
+  return asDouble.toString();
+}
+
+/// Resolves the categorical option of the diagnose form that matches the
+/// patient's gender.
+///
+/// The clinical seed uses `MALE` / `FEMALE`, while the patient endpoint uses
+/// `Male` / `Female`; matching case-insensitively keeps the chip selected and
+/// makes the criteria that compare against the uppercase constants work.
+String genderOptionFor(Gender gender, List<String> acceptedValues) {
+  final wanted = gender == Gender.nam ? 'male' : 'female';
+  return acceptedValues.firstWhere(
+    (candidate) => candidate.toLowerCase() == wanted,
+    orElse: () => wanted.toUpperCase(),
+  );
+}
 
 int? _ageFromDob(String dob) {
   final parts = dob.split('/');

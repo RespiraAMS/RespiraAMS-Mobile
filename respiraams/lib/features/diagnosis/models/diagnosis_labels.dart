@@ -1,8 +1,7 @@
 import '../../../l10n/l10n.dart';
 
 /// `InfectionType` values accepted by `POST /diagnose.otherInfections`.
-const infectionTypes = <String>[
-  'SkinAndSoftTissueInfection',
+const infectionTypes = <String>[  'SkinAndSoftTissueInfection',
   'SepticArthritis',
   'Osteomyelitis',
   'BacterialMyositisOrMuscleAbscess',
@@ -109,4 +108,23 @@ String micCategoryLabel(String category, AppLocalizations l10n) =>
       'Intermediate' => l10n.micIntermediate,
       'Resistant' => l10n.micResistant,
       _ => category,
+    };
+
+/// `Mild | Moderate | Severe` — the severity carried by a stored diagnosis
+/// snapshot / treatment protocol.
+String severityLabel(String severity, AppLocalizations l10n) =>
+    switch (severity) {
+      'Mild' => l10n.severityMild,
+      'Moderate' => l10n.severityModerate,
+      'Severe' => l10n.severitySevere,
+      _ => severity,
+    };
+
+/// `Outpatient | Inpatient | IntensiveCareUnit`.
+String treatmentSiteLabel(String site, AppLocalizations l10n) =>
+    switch (site) {
+      'Outpatient' => l10n.siteOutpatient,
+      'Inpatient' => l10n.siteInpatient,
+      'IntensiveCareUnit' => l10n.siteIcu,
+      _ => site,
     };
