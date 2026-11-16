@@ -17,8 +17,6 @@ class ClinicalVariableRepository {
   Future<PaginatedClinicalVariableResponse> fetchVariables({
     int page = 1,
     int pageSize = 10,
-    String? name,
-    String? code,
     bool? isRequired,
     String? valueType,
     String? category,
@@ -44,25 +42,48 @@ class ClinicalVariableRepository {
         queryParameters: queryParams,
       );
 
-      final Map<String, dynamic> responseBody = response.data;
-      final Map<String, dynamic> data = responseBody['data'] ?? {};
-      
-      final List<dynamic> itemsJson = data['items'] ?? [];
-      final bool hasNext = data['metadata']?['hasNextPage'] ?? false;
-
-      return PaginatedClinicalVariableResponse(
-        items: itemsJson.map((item) => ClinicalVariable.fromJson(item)).toList(),
-        hasNextPage: hasNext,
-      );
+      return _parseResponse(response);
     } on DioException catch (e) {
-      if (e.response != null) {
-        throw Exception('Lỗi server: ${e.response?.statusCode}');
-      } else {
-        throw Exception('Network error: please check your connection');
-      }
+      throw _handleError(e);
+    } catch (e) {
+      throw Exception('Lỗi xử lý dữ liệu: $e');
+    }
+  }
+
+  Future<PaginatedClinicalVariableResponse> searchVariables({
+    int page = 1,
+    int pageSize = 10,
+    required String searchTerm,
+  }) async {
+    try {
+      final response = await apiClient.dio.get(
+        '/clinical-variables/search',
+        queryParameters: {
+          'page': page,
+          'pageSize': pageSize,
+          'SearchTerm': searchTerm,
+        },
+      );
+
+      return _parseResponse(response);
+    } on DioException catch (e) {
+      throw _handleError(e);
     } catch (e) {
       throw Exception('Failed to process data: $e');
     }
+  }
+
+  PaginatedClinicalVariableResponse _parseResponse(Response response) {
+    final Map<String, dynamic> responseBody = response.data;
+    final Map<String, dynamic> data = responseBody['data'] ?? {};
+    
+    final List<dynamic> itemsJson = data['items'] ?? [];
+    final bool hasNext = data['metadata']?['hasNextPage'] ?? false;
+
+    return PaginatedClinicalVariableResponse(
+      items: itemsJson.map((item) => ClinicalVariable.fromJson(item)).toList(),
+      hasNextPage: hasNext,
+    );
   }
 
   Future<ClinicalVariableDetail> fetchVariableDetail(String id) async {
@@ -74,13 +95,16 @@ class ClinicalVariableRepository {
       
       return ClinicalVariableDetail.fromJson(data);
     } on DioException catch (e) {
-      if (e.response != null) {
-        throw Exception('Lỗi server: ${e.response?.statusCode}');
-      } else {
-        throw Exception('Network error: please check your connection');
-      }
+      throw _handleError(e);
     } catch (e) {
       throw Exception('Failed to process data: $e');
     }
+  }
+
+  Exception _handleError(DioException e) {
+    if (e.response != null) {
+      return Exception('Lỗi server: ${e.response?.statusCode}');
+    }
+    return Exception('Lỗi kết nối mạng: Vui lòng kiểm tra internet');
   }
 }
