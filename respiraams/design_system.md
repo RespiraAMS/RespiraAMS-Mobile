@@ -35,65 +35,65 @@ lâm sàng.
 
 ### Semantic tokens
 
-| Token | Ý nghĩa |
-|---|---|
-| `background` | Nền chính của screen |
-| `foreground` | Nội dung chính trên background |
-| `surface` | Card / grouped surface |
-| `surface-secondary` | Nested surface / vùng phụ |
-| `surface-tertiary` | Vùng phụ cấp 3 khi cần |
-| `primary` | Action chính / active state |
-| `on-primary` | Nội dung trên primary |
-| `text-primary` | Nội dung chính |
-| `text-secondary` | Nội dung phụ |
-| `text-tertiary` | Metadata / caption |
-| `border-subtle` | Divider / border nhẹ |
-| `border-default` | Border tiêu chuẩn |
-| `border-strong` | Border cần nhấn mạnh |
-| `icon-default` | Icon mặc định |
-| `icon-muted` | Icon phụ |
-| `icon-primary` | Icon primary |
-| `icon-inverse` | Icon trên surface tối / primary |
-| `success` | Stable |
-| `warning` | Needs attention |
-| `error` | High risk / lỗi |
-| `info` | Information |
+| Token               | Ý nghĩa                         |
+| ------------------- | ------------------------------- |
+| `background`        | Nền chính của screen            |
+| `foreground`        | Nội dung chính trên background  |
+| `surface`           | Card / grouped surface          |
+| `surface-secondary` | Nested surface / vùng phụ       |
+| `surface-tertiary`  | Vùng phụ cấp 3 khi cần          |
+| `primary`           | Action chính / active state     |
+| `on-primary`        | Nội dung trên primary           |
+| `text-primary`      | Nội dung chính                  |
+| `text-secondary`    | Nội dung phụ                    |
+| `text-tertiary`     | Metadata / caption              |
+| `border-subtle`     | Divider / border nhẹ            |
+| `border-default`    | Border tiêu chuẩn               |
+| `border-strong`     | Border cần nhấn mạnh            |
+| `icon-default`      | Icon mặc định                   |
+| `icon-muted`        | Icon phụ                        |
+| `icon-primary`      | Icon primary                    |
+| `icon-inverse`      | Icon trên surface tối / primary |
+| `success`           | Stable                          |
+| `warning`           | Needs attention                 |
+| `error`             | High risk / lỗi                 |
+| `info`              | Information                     |
 
 ### Light
 
-| Token | Value |
-|---|---|
-| `background` | `#F7F9F9` |
-| `foreground` | `#0F1419` |
-| `surface` | `#FFFFFF` |
+| Token               | Value     |
+| ------------------- | --------- |
+| `background`        | `#F7F9F9` |
+| `foreground`        | `#0F1419` |
+| `surface`           | `#FFFFFF` |
 | `surface-secondary` | `#EFF3F4` |
-| `surface-tertiary` | `#E7ECEE` |
-| `primary` | `#1D9BF0` |
-| `on-primary` | `#FFFFFF` |
-| `text-primary` | `#0F1419` |
-| `text-secondary` | `#536471` |
-| `text-tertiary` | `#6E7C87` |
-| `border-subtle` | `#EFF3F4` |
-| `border-default` | `#DCE3E6` |
-| `border-strong` | `#B8C4CA` |
+| `surface-tertiary`  | `#E7ECEE` |
+| `primary`           | `#1D9BF0` |
+| `on-primary`        | `#FFFFFF` |
+| `text-primary`      | `#0F1419` |
+| `text-secondary`    | `#536471` |
+| `text-tertiary`     | `#6E7C87` |
+| `border-subtle`     | `#EFF3F4` |
+| `border-default`    | `#DCE3E6` |
+| `border-strong`     | `#B8C4CA` |
 
 ### Dark · Flat Surfaces
 
-| Token | Value |
-|---|---|
-| `background` | `#000000` |
-| `foreground` | `#FFFFFF` |
-| `surface` | `#1C1C1E` |
+| Token               | Value     |
+| ------------------- | --------- |
+| `background`        | `#000000` |
+| `foreground`        | `#FFFFFF` |
+| `surface`           | `#1C1C1E` |
 | `surface-secondary` | `#2C2C2E` |
-| `surface-tertiary` | `#38383A` |
-| `primary` | `#1D9BF0` |
-| `on-primary` | `#FFFFFF` |
-| `text-primary` | `#FFFFFF` |
-| `text-secondary` | `#8B98A5` |
-| `text-tertiary` | `#A7B0B7` |
-| `border-subtle` | `#2C2C2E` |
-| `border-default` | `#38383A` |
-| `border-strong` | `#545456` |
+| `surface-tertiary`  | `#38383A` |
+| `primary`           | `#1D9BF0` |
+| `on-primary`        | `#FFFFFF` |
+| `text-primary`      | `#FFFFFF` |
+| `text-secondary`    | `#8B98A5` |
+| `text-tertiary`     | `#A7B0B7` |
+| `border-subtle`     | `#2C2C2E` |
+| `border-default`    | `#38383A` |
+| `border-strong`     | `#545456` |
 
 ### Semantic states
 
@@ -123,18 +123,18 @@ critical clinical information.
 Font duy nhất là **Inter**. Ưu tiên sentence case, sử dụng nó và không dùng
 weight quá nặng.
 
-| Type | Example | Size / Line height / Weight |
-|---|---|---|
-| Display | `SpO₂ 93%` | 32px / 40px · Bold |
-| H1 | `Bệnh nhân` | 28px / 36px · Bold |
-| H2 | `Cần theo dõi` | 22px / 30px · Bold |
-| H3 | `Thông tin điều trị` | 18px / 26px · Semi Bold |
-| Body Large | `Nguyễn Minh Anh · 42 tuổi` | 17px / 25px · Regular |
-| Body | `Chọn bệnh nhân và phương pháp phù hợp` | 15px / 23px · Regular |
-| Body Medium | `Không tìm đang sử dụng` | 15px / 22px · Medium |
-| Button | `Bắt đầu chẩn đoán` | 16px / 20px · Semi Bold |
-| Caption | `Cập nhật lúc 13:28` | 13px / 18px · Regular |
-| Label | `NEEDS ATTENTION` | 12px / 16px · Semi Bold |
+| Type        | Example                                 | Size / Line height / Weight |
+| ----------- | --------------------------------------- | --------------------------- |
+| Display     | `SpO₂ 93%`                              | 32px / 40px · Bold          |
+| H1          | `Bệnh nhân`                             | 28px / 36px · Bold          |
+| H2          | `Cần theo dõi`                          | 22px / 30px · Bold          |
+| H3          | `Thông tin điều trị`                    | 18px / 26px · Semi Bold     |
+| Body Large  | `Nguyễn Minh Anh · 42 tuổi`             | 17px / 25px · Regular       |
+| Body        | `Chọn bệnh nhân và phương pháp phù hợp` | 15px / 23px · Regular       |
+| Body Medium | `Không tìm đang sử dụng`                | 15px / 22px · Medium        |
+| Button      | `Bắt đầu chẩn đoán`                     | 16px / 20px · Semi Bold     |
+| Caption     | `Cập nhật lúc 13:28`                    | 13px / 18px · Regular       |
+| Label       | `NEEDS ATTENTION`                       | 12px / 16px · Semi Bold     |
 
 Critical clinical values không được truncate nếu làm mất ý nghĩa.
 
@@ -147,23 +147,23 @@ Hệ 4px, card bo mềm, touch target tối thiểu 44px.
 ### Spacing scale
 
 | Token | Value |
-|---|---:|
-| `2XS` | 4px |
-| `XS` | 8px |
-| `SM` | 12px |
-| `MD` | 16px |
-| `LG` | 20px |
-| `XL` | 24px |
-| `2XL` | 32px |
-| `3XL` | 40px |
+| ----- | ----: |
+| `2XS` |   4px |
+| `XS`  |   8px |
+| `SM`  |  12px |
+| `MD`  |  16px |
+| `LG`  |  20px |
+| `XL`  |  24px |
+| `2XL` |  32px |
+| `3XL` |  40px |
 
 ### Radius
 
-| Token | Value |
-|---|---:|
-| `SM` | 12px |
-| `MD` | 16px |
-| `LG` | 24px |
+| Token  | Value |
+| ------ | ----: |
+| `SM`   |  12px |
+| `MD`   |  16px |
+| `LG`   |  24px |
 | `Full` | 999px |
 
 ### Control size
@@ -221,13 +221,13 @@ khi cần.
 Dùng semantic spacing theo quan hệ nội dung, không chọn khoảng cách theo cảm giác.
 
 | Value | Semantic |
-|---:|---|
-| 8px | Inline |
-| 12px | Control |
-| 16px | Group |
-| 20px | Block |
-| 24px | Section |
-| 32px | Screen |
+| ----: | -------- |
+|   8px | Inline   |
+|  12px | Control  |
+|  16px | Group    |
+|  20px | Block    |
+|  24px | Section  |
+|  32px | Screen   |
 
 ### Luật áp dụng
 
@@ -259,15 +259,15 @@ Các size được phép: `16 / 18 / 20 / 22 / 24`.
 
 ### Semantic icon colors
 
-| State | Token |
-|---|---|
+| State   | Token          |
+| ------- | -------------- |
 | Default | `icon-default` |
-| Muted | `icon-muted` |
+| Muted   | `icon-muted`   |
 | Primary | `icon-primary` |
 | Inverse | `icon-inverse` |
-| Success | `success` |
-| Warning | `warning` |
-| Error | `error` |
+| Success | `success`      |
+| Warning | `warning`      |
+| Error   | `error`        |
 
 ---
 
@@ -764,16 +764,16 @@ lib/
 
 ### Flutter mapping
 
-| Design System | Flutter |
-|---|---|
-| Color tokens | `ThemeExtension` |
-| Typography | `TextTheme` + custom typography |
-| Light/Dark | `ThemeData` |
-| Component variants | `enum` / typed API |
-| Interaction states | `WidgetState` |
-| Responsive layout | `LayoutBuilder` / constraints |
-| Safe area | `SafeArea` / `MediaQuery` |
-| Icons | Lucide icon package / approved icon source |
+| Design System      | Flutter                                    |
+| ------------------ | ------------------------------------------ |
+| Color tokens       | `ThemeExtension`                           |
+| Typography         | `TextTheme` + custom typography            |
+| Light/Dark         | `ThemeData`                                |
+| Component variants | `enum` / typed API                         |
+| Interaction states | `WidgetState`                              |
+| Responsive layout  | `LayoutBuilder` / constraints              |
+| Safe area          | `SafeArea` / `MediaQuery`                  |
+| Icons              | Lucide icon package / approved icon source |
 
 ### Rules
 
