@@ -1,0 +1,79 @@
+import 'package:dio/dio.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+import '../../../core/network/api_response.dart';
+import 'session_provider.dart';
+
+part 'login_controller.freezed.dart';
+part 'login_controller.g.dart';
+
+
+/// Login form state + submission. Submits through the real
+/// `POST /auth/login`; API failures surface as [LoginFailure] states
+/// (guidelines Rule 3/5 — error text, never color alone).
+@freezed
+class LoginUiState with _$LoginUiState {
+  const factory LoginUiState({
+    @Default('') String identifier,
+    @Default('') String password,
+    @Default(false) bool submitting,
+    String? errorMessage,
+    @Default(false) bool networkError,
+  }) = _LoginUiState;
+}
+
+@riverpod
+class LoginController extends _$LoginController {
+  @override
+  LoginUiState build() => const LoginUiState();
+
+  void setIdentifier(String value) => state = state.copyWith(
+        identifier: value,
+        errorMessage: null,
+        networkError: false,
+      );
+
+  void setPassword(String value) => state = state.copyWith(
+        password: value,
+        errorMessage: null,
+        networkError: false,
+      );
+
+  bool get canSubmit =>
+      state.identifier.trim().isNotEmpty && state.password.isNotEmpty;
+
+  /// Returns true on success; on failure sets [LoginUiState.errorMessage].
+  Future<bool> submit() async {
+    if (!canSubmit || state.submitting) return false;
+    state = state.copyWith(
+      submitting: true,
+      errorMessage: null,
+      networkError: false,
+    );
+    try {
+      await ref
+          .read(sessionControllerProvider.notifier)
+          .login(email: state.identifier.trim(), password: state.password);
+      state = state.copyWith(submitting: false);
+      return true;
+    } on ApiException catch (e) {
+      state = state.copyWith(submitting: false, errorMessage: e.message);
+      return false;
+    } on DioException catch (e) {
+      final message = dioErrorMessage(e);
+      state = state.copyWith(
+        submitting: false,
+        errorMessage: message,
+        networkError: message == LocalApiError.connectivity,
+      );
+      return false;
+    } catch (_) {
+      state = state.copyWith(
+        submitting: false,
+        networkError: true,
+      );
+      return false;
+    }
+  }
+}

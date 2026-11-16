@@ -1,0 +1,306 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:lucide_icons/lucide_icons.dart';
+
+import '../../../../core/navigation/app_nav_items.dart';
+import '../../../../design_system/design_system.dart';
+import '../../../../l10n/l10n.dart';
+import '../../../../features/calculator/routes.dart';
+import '../../../../features/analysis/analysis_routes.dart';
+import '../../../../features/lookup/lookup_route.dart';
+import '../../../../features/patient/routes.dart';
+import '../../settings/settings_menu_button.dart';
+import '../models/statistics_view.dart';
+import '../providers/statistics_provider.dart';
+import '../widgets/kpi_tile_widget.dart';
+import '../widgets/pathogen_row_widget.dart';
+import '../widgets/weekly_bars_widget.dart';
+
+/// Route `/statistics` — treatment activity overview (bottom-nav tab 5).
+class StatisticsScreen extends ConsumerWidget {
+  const StatisticsScreen({super.key});
+
+  void _showTabPlaceholder(BuildContext context, String label) {
+    showAppToast(context, context.l10n.commonTabComingSoon(label));
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final c = context.respiraColors;
+    final l10n = context.l10n;
+    final period = ref.watch(statisticsPeriodControllerProvider);
+    final periodController =
+        ref.read(statisticsPeriodControllerProvider.notifier);
+    final view = ref.watch(statisticsViewProvider);
+    final maxPathogenCount =
+        view.pathogens.fold<int>(1, (a, p) => p.count > a ? p.count : a);
+
+    final navItems = appBottomNavItems(context);
+
+    return Scaffold(
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(
+            Spacing.group,
+            Spacing.inline,
+            Spacing.group,
+            Spacing.group,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _Header(),
+              const SizedBox(height: Spacing.section),
+              AppSegmentedTabs<PeriodRange>(
+                segments: [
+                  for (final range in PeriodRange.values)
+                    (range, range.label(l10n)),
+                ],
+                selected: period,
+                onChanged: periodController.setPeriod,
+              ),
+              const SizedBox(height: Spacing.section),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          for (final kpi in view.kpis) ...[
+                            if (kpi != view.kpis.first)
+                              const SizedBox(width: Spacing.inline),
+                            Expanded(child: KpiTileWidget(stat: kpi)),
+                          ],
+                        ],
+                      ),
+                      const SizedBox(height: Spacing.section),
+                      Text(
+                        l10n.statisticsWeekly,
+                        style: TypographyTokens.bodyMedium(context)
+                            .copyWith(fontWeight: FontWeight.w600),
+                      ),
+                      const SizedBox(height: Spacing.inline),
+                      WeeklyBarsWidget(bars: view.bars),
+                      const SizedBox(height: Spacing.section),
+                      Text(
+                        l10n.statisticsTopPathogens,
+                        style: TypographyTokens.bodyLarge(context)
+                            .copyWith(fontWeight: FontWeight.w700),
+                      ),
+                      const SizedBox(height: Spacing.inline),
+                      Container(
+                        padding: const EdgeInsets.all(Spacing.group),
+                        decoration: BoxDecoration(
+                          color: c.surface,
+                          borderRadius: AppRadius.md,
+                          border: Border.all(color: c.borderSubtle),
+                        ),
+                        child: Column(
+                          children: [
+                            for (final pathogen in view.pathogens) ...[
+                              if (pathogen != view.pathogens.first)
+                                const SizedBox(height: Spacing.block),
+                              PathogenRowWidget(
+                                stat: pathogen,
+                                maxCount: maxPathogenCount,
+                              ),
+                            ],
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: Spacing.section),
+                      _AnalysisReportEntry(),
+                      const SizedBox(height: Spacing.section),
+                      _SyncBanner(),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: Spacing.inline),
+              AppBottomNavigation(
+                items: navItems,
+                activeIndex: 4,
+                onTap: (index) {
+                  if (index == 0) {
+                    context.go(PatientRoutes.list);
+                  } else if (index == 1) {
+                    // Tra cứu entry: medical lookup catalogue.
+                    context.push(LookupRoutes.lookup);
+                  } else if (index == 2) {
+                    // Diagnosis entry: create a patient, then continue with
+                    // the empirical-treatment flow for them.
+                    context.push(PatientRoutes.addPatientForDiagnosis);
+                  } else if (index == 3) {
+                    context.push(CalculatorRoutes.list);
+                  } else if (index != 4) {
+                    _showTabPlaceholder(context, navItems[index].label);
+                  }
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _Header extends ConsumerWidget {
+  const _Header();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final c = context.respiraColors;
+    final l10n = context.l10n;
+
+    return Row(
+      children: [
+        const SettingsMenuButton(),
+        const SizedBox(width: Spacing.group),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                l10n.statisticsTitle,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style:
+                    TypographyTokens.h3(context).copyWith(color: c.textPrimary),
+              ),
+              const SizedBox(height: 2),
+              AppText(l10n.statisticsSubtitle,
+                  type: AppTextType.caption, maxLines: 1),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _AnalysisReportEntry extends StatelessWidget {
+  const _AnalysisReportEntry();
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.respiraColors;
+    final l10n = context.l10n;
+
+    return Material(
+      color: c.surface,
+      borderRadius: AppRadius.lg,
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: () => context.push(AnalysisRoutes.list),
+        child: Container(
+          padding: const EdgeInsets.all(Spacing.group),
+          decoration: BoxDecoration(
+            borderRadius: AppRadius.lg,
+            border: Border.all(color: c.borderSubtle),
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: ControlSize.touchTargetMin,
+                height: ControlSize.touchTargetMin,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: c.primarySoft,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  LucideIcons.clipboardList,
+                  size: ControlSize.iconLg,
+                  color: c.primary,
+                ),
+              ),
+              const SizedBox(width: Spacing.control),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      l10n.analysisEntryTitle,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TypographyTokens.bodyMedium(context).copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: c.textPrimary,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    AppText(
+                      l10n.analysisEntrySubtitle,
+                      type: AppTextType.caption,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: Spacing.inline),
+              Icon(
+                LucideIcons.chevronRight,
+                size: ControlSize.iconLg,
+                color: c.iconMuted,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _SyncBanner extends StatelessWidget {
+  const _SyncBanner();
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.respiraColors;
+    final l10n = context.l10n;
+
+    return Container(
+      padding: const EdgeInsets.all(Spacing.xxs + 2),
+      decoration: BoxDecoration(
+        color: c.primarySoft,
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: ControlSize.touchTargetMin,
+            height: ControlSize.touchTargetMin,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(color: c.surface, shape: BoxShape.circle),
+            child: Icon(LucideIcons.refreshCw,
+                size: ControlSize.iconLg, color: c.primary),
+          ),
+          const SizedBox(width: Spacing.control),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  l10n.statisticsSynced,
+                  style: TypographyTokens.label(context)
+                      .copyWith(color: c.textPrimary),
+                ),
+                const SizedBox(height: 2),
+                AppText(l10n.statisticsUpdated,
+                    type: AppTextType.caption, maxLines: 1),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
