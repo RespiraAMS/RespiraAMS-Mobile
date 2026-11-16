@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../design_system/design_system.dart';
+import '../../../../l10n/l10n.dart';
 import '../widgets/brand_header_widget.dart';
 import '../routes.dart';
 
@@ -14,6 +15,7 @@ class PasswordResetSuccessScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final c = context.respiraColors;
+    final l10n = context.l10n;
 
     return Scaffold(
       body: SafeArea(
@@ -59,7 +61,7 @@ class PasswordResetSuccessScreen extends ConsumerWidget {
                       ),
                       const SizedBox(height: Spacing.section),
                       Text(
-                        'Mật khẩu đã được cập nhật',
+                        l10n.authResetSuccessTitle,
                         textAlign: TextAlign.center,
                         style: TypographyTokens.h1(
                           context,
@@ -67,7 +69,7 @@ class PasswordResetSuccessScreen extends ConsumerWidget {
                       ),
                       const SizedBox(height: Spacing.control + 4),
                       AppText(
-                        'Bạn có thể đăng nhập lại và tiếp tục công việc trên RespiraAMS.',
+                        l10n.authResetSuccessBody,
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: Spacing.section),
@@ -83,14 +85,14 @@ class PasswordResetSuccessScreen extends ConsumerWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'BS. Lê Hoàng Minh',
+                                    l10n.authDemoDoctorName,
                                     style: TypographyTokens.body(
                                       context,
                                     ).copyWith(fontWeight: FontWeight.w700),
                                   ),
                                   const SizedBox(height: Spacing.xxs - 4),
                                   AppText(
-                                    'Chuyên khoa Hô hấp · Tài khoản đã xác minh',
+                                    l10n.authDoctorRoleVerified,
                                     type: AppTextType.caption,
                                   ),
                                 ],
@@ -112,14 +114,14 @@ class PasswordResetSuccessScreen extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Không gian làm việc đã sẵn sàng',
+                              l10n.authWorkspaceReady,
                               style: TypographyTokens.body(
                                 context,
                               ).copyWith(fontWeight: FontWeight.w700),
                             ),
                             const SizedBox(height: Spacing.inline - 4),
                             AppText(
-                              'Dữ liệu và quyền truy cập sẽ được khôi phục sau đăng nhập.',
+                              l10n.authRestoreAccess,
                               type: AppTextType.caption,
                             ),
                           ],
@@ -131,14 +133,14 @@ class PasswordResetSuccessScreen extends ConsumerWidget {
                         child: Column(
                           children: [
                             AppButton(
-                              label: 'Đăng nhập ngay',
+                              label: l10n.authLoginNow,
                               expand: true,
                               onPressed: () =>
                                   context.go(AuthenticationRoutes.login),
                             ),
                             const SizedBox(height: Spacing.control),
                             AppLinkText(
-                              'Về trang chào mừng',
+                              l10n.authBackToWelcome,
                               onPressed: () =>
                                   context.go(AuthenticationRoutes.welcome),
                             ),

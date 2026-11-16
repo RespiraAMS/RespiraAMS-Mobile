@@ -43,10 +43,15 @@ class RiskFactor {
   final RiskFactorPathogen pathogen;
   final RiskFactorCriterion criterion;
 
+  /// A critical factor is more credible than a non-critical one when
+  /// assessing infection risk (`PagedRiskFactorItem.IsCriticalFactor`).
+  final bool isCriticalFactor;
+
   const RiskFactor({
     required this.id,
     required this.pathogen,
     required this.criterion,
+    this.isCriticalFactor = false,
   });
 
   factory RiskFactor.fromJson(Map<String, dynamic> json) {
@@ -54,6 +59,7 @@ class RiskFactor {
       id: json['id'] ?? '',
       pathogen: RiskFactorPathogen.fromJson(json['pathogen'] ?? {}),
       criterion: RiskFactorCriterion.fromJson(json['criterion'] ?? {}),
+      isCriticalFactor: json['isCriticalFactor'] ?? false,
     );
   }
 }

@@ -1,0 +1,1136 @@
+{
+  "@@locale": "vi",
+
+  "commonRetry": "Thử lại",
+  "commonNoResults": "Không tìm thấy kết quả nào.",
+  "commonLoadMoreFailed": "Không thể tải thêm. Nhấn để thử lại",
+  "commonLoadDataError": "Không thể tải dữ liệu",
+  "commonLoadInfoError": "Không tải được thông tin",
+  "commonNoData": "Không có dữ liệu",
+  "commonYes": "Có",
+  "commonNo": "Không",
+  "commonDescription": "Mô tả",
+  "commonCode": "Mã",
+  "commonApply": "Áp dụng",
+  "commonClearFilters": "Xóa bộ lọc",
+  "commonAll": "Tất cả",
+  "commonFilters": "Bộ lọc dữ liệu",
+  "commonCancel": "Hủy",
+  "commonBack": "Quay lại",
+  "commonComingSoon": "Tính năng đang phát triển.",
+  "commonTabComingSoon": "Tab \"{label}\" sẽ được bổ sung sau.",
+  "@commonTabComingSoon": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "commonFeatureComingSoon": "Tính năng {feature} đang phát triển",
+  "@commonFeatureComingSoon": {
+    "placeholders": {
+      "feature": {
+        "type": "String"
+      }
+    }
+  },
+  "commonNotAvailable": "Chưa có thông tin",
+  "commonNone": "Không có",
+  "commonOptional": "Tùy chọn",
+  "commonRequired": "Bắt buộc nhập",
+  "commonActive": "Đang áp dụng",
+  "commonVersion": "Phiên bản: {version}",
+  "@commonVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "commonPoints": "{score} điểm",
+  "@commonPoints": {
+    "placeholders": {
+      "score": {
+        "type": "String"
+      }
+    }
+  },
+  "commonAddPoints": "+ {score} điểm",
+  "@commonAddPoints": {
+    "placeholders": {
+      "score": {
+        "type": "String"
+      }
+    }
+  },
+  "commonLoading": "Đang tải...",
+  "commonLoadFailedShort": "Lỗi tải dữ liệu",
+
+  "navPatients": "Bệnh nhân",
+  "navLookup": "Tra cứu",
+  "navDiagnosis": "Chẩn đoán",
+  "navCalculators": "Máy tính",
+  "navStatistics": "Thống kê",
+
+  "settingsTitle": "Cài đặt",
+  "settingsSubtitle": "Cá nhân hóa trải nghiệm",
+  "settingsOpen": "Mở cài đặt",
+  "settingsClose": "Đóng cài đặt",
+  "settingsProfileSpecialty": "Chuyên khoa Hô hấp",
+  "settingsDoctorFallback": "Bác sĩ",
+
+  "doctorProfileTitle": "Hồ sơ bác sĩ",
+  "doctorProfileSubtitle": "Thông tin tài khoản",
+  "doctorProfileOpen": "Mở hồ sơ bác sĩ",
+  "doctorProfileSectionProfessional": "Chuyên môn",
+  "doctorProfileSectionContact": "Liên hệ",
+  "doctorProfileSectionPersonal": "Cá nhân",
+  "doctorProfileAcademicTitle": "Học hàm / học vị",
+  "doctorProfileDegrees": "Bằng cấp",
+  "doctorProfilePosition": "Chức vụ",
+  "doctorProfileRole": "Vai trò",
+  "doctorProfileEmail": "Email",
+  "doctorProfilePhone": "Điện thoại",
+  "doctorProfileAddress": "Địa chỉ",
+  "doctorProfileGender": "Giới tính",
+  "doctorProfileCitizenId": "CCCD",
+  "doctorProfileRoleDoctor": "Bác sĩ",
+  "doctorProfileRoleAdmin": "Quản trị viên",
+  "doctorProfileGenderOther": "Khác",
+  "doctorProfileError": "Không tải được hồ sơ bác sĩ.",
+  "doctorProfileEmpty": "Chưa có thông tin hồ sơ.",
+  "doctorProfileRetry": "Thử lại",
+  "doctorProfileEdit": "Cập nhật thông tin",
+  "doctorProfileEditTitle": "Cập nhật hồ sơ",
+  "doctorProfileEditSubtitle": "Chỉnh sửa thông tin bác sĩ",
+  "doctorProfileAvatarChange": "Đổi ảnh đại diện",
+  "doctorProfileAvatarHint": "JPG, PNG hoặc WEBP · tối đa 5 MB",
+  "doctorProfileAvatarTooLarge": "Ảnh đại diện phải nhỏ hơn 5 MB.",
+  "doctorProfileAvatarInvalid": "Chỉ hỗ trợ ảnh JPG, PNG hoặc WEBP.",
+  "doctorProfileSectionSecurity": "Bảo mật",
+  "doctorProfileDob": "Ngày sinh",
+  "doctorProfileEmailHint": "Email dùng để đăng nhập.",
+  "doctorProfileNewPassword": "Mật khẩu mới",
+  "doctorProfileConfirmPassword": "Xác nhận mật khẩu",
+  "doctorProfilePasswordHint": "Để trống nếu không đổi mật khẩu.",
+  "doctorProfilePasswordMismatch": "Mật khẩu xác nhận không khớp.",
+  "doctorProfilePasswordWeak": "Mật khẩu cần ít nhất 8 ký tự, gồm chữ hoa và số/ký tự đặc biệt.",
+  "doctorProfileErrEmail": "Email không hợp lệ.",
+  "doctorProfileErrRequired": "Vui lòng nhập đầy đủ thông tin bắt buộc.",
+  "doctorProfileSave": "Lưu thay đổi",
+  "doctorProfileSaving": "Đang lưu…",
+  "doctorProfileSaveSuccess": "Đã cập nhật hồ sơ bác sĩ.",
+  "doctorProfileSaveFailed": "Không thể cập nhật hồ sơ bác sĩ.",
+  "doctorProfileSaveForbidden": "Bạn không có quyền cập nhật hồ sơ này.",
+  "doctorProfileSaveTimeout": "Hết thời gian chờ cập nhật hồ sơ.",
+  "doctorDegreeProfessor": "Giáo sư",
+  "doctorDegreeDoctor": "Bác sĩ",
+  "doctorDegreeMaster": "Thạc sĩ",
+  "doctorDegreeBachelor": "Cử nhân",
+  "doctorDegreeAssociate": "Cao đẳng",
+  "doctorDegreeUndergraduate": "Sinh viên",
+  "doctorDegreeGraduate": "Sau đại học",
+  "doctorDegreePhd": "Tiến sĩ",
+  "doctorDegreePostDoc": "Sau tiến sĩ",
+  "doctorTitleNone": "Không",
+  "doctorTitleAssociateProfessor": "Phó giáo sư",
+  "doctorTitleProfessor": "Giáo sư",
+  "doctorPositionStaff": "Bác sĩ",
+  "doctorPositionSenior": "Bác sĩ chính",
+  "doctorPositionDeputyHead": "Phó trưởng khoa",
+  "doctorPositionHead": "Trưởng khoa",
+  "doctorPositionDeputyDirector": "Phó giám đốc",
+  "doctorPositionDirector": "Giám đốc",
+
+  "settingsAppearance": "Giao diện",
+  "settingsTheme": "Giao diện",
+  "settingsThemeSubtitle": "Sáng hoặc tối",
+  "settingsThemeSheetTitle": "Chế độ hiển thị",
+  "settingsThemeSystem": "Hệ thống",
+  "settingsThemeLight": "Sáng",
+  "settingsThemeDark": "Tối",
+  "settingsFontSize": "Cỡ chữ",
+  "settingsTextSmall": "Nhỏ",
+  "settingsTextStandard": "Mặc định",
+  "settingsTextLarge": "Lớn",
+  "settingsLanguage": "Ngôn ngữ",
+  "settingsLanguageVietnamese": "Tiếng Việt",
+  "settingsLanguageEnglish": "English",
+  "settingsLogout": "Đăng xuất",
+  "settingsLogoutConfirmTitle": "Đăng xuất?",
+  "settingsLogoutConfirmBody": "Bạn sẽ cần đăng nhập lại để tiếp tục sử dụng RespiraAMS.",
+
+  "splashSubtitle": "Không gian làm việc lâm sàng cho hô hấp",
+  "authLoginTitle": "Đăng nhập",
+  "authLoginSubtitle": "Tiếp tục vào không gian làm việc RespiraAMS.",
+  "authEmailLabel": "Email",
+  "authPasswordLabel": "Mật khẩu",
+  "authForgotPassword": "Quên mật khẩu?",
+  "authLoginButton": "Đăng nhập",
+  "authSecureSessionTitle": "Phiên đăng nhập an toàn",
+  "authSecureSessionBody": "Tự động khóa khi không hoạt động và bảo vệ theo vai trò.",
+  "authSupportFooter": "Cần hỗ trợ? Liên hệ quản trị viên bệnh viện.",
+  "authMissingCredentials": "Vui lòng nhập email và mật khẩu.",
+  "authEmailInvalid": "Email chưa đúng định dạng.",
+  "authServerUnreachable": "Không thể kết nối máy chủ. Vui lòng thử lại.",
+
+  "authForgotTitle": "Quên mật khẩu?",
+  "authForgotBody": "Nhập email công việc. Hệ thống sẽ gửi mã xác thực gồm 6 chữ số.",
+  "authWorkEmailLabel": "Email công việc",
+  "authSendCode": "Gửi mã xác thực",
+  "authBackToLogin": "Quay lại đăng nhập",
+  "authNoEmailTitle": "Không nhận được email?",
+  "authNoEmailBody": "Kiểm tra thư rác hoặc liên hệ quản trị viên để xác minh tài khoản.",
+
+  "authOtpTitle": "Nhập mã xác thực",
+  "authOtpSentTo": "Mã 6 chữ số đã được gửi đến {email}",
+  "@authOtpSentTo": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "authResend": "Gửi lại mã",
+  "authResendIn": "Gửi lại mã sau 00:{seconds}",
+  "@authResendIn": {
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
+  "authConfirm": "Xác nhận",
+  "authAccountSecurityTitle": "Bảo mật tài khoản",
+  "authAccountSecurityBody": "Không chia sẻ mã xác thực. Mã sẽ hết hiệu lực sau 10 phút và chỉ dùng một lần.",
+  "authChangeEmail": "Đổi email nhận mã",
+  "authStepIdentity": "Bước 1/2 · Xác minh danh tính",
+
+  "authNewPasswordTitle": "Tạo mật khẩu mới",
+  "authNewPasswordBody": "Chọn mật khẩu mạnh để bảo vệ dữ liệu bệnh nhân và phiên làm việc.",
+  "authNewPasswordLabel": "Mật khẩu mới",
+  "authConfirmPasswordLabel": "Xác nhận mật khẩu",
+  "authPasswordRequirements": "Mật khẩu cần có",
+  "authMinLength": "Tối thiểu 8 ký tự",
+  "authUppercase": "Ít nhất 1 chữ in hoa",
+  "authDigitOrSpecial": "Ít nhất 1 số hoặc ký tự đặc biệt",
+  "authPasswordMismatch": "Mật khẩu xác nhận chưa khớp.",
+  "authUpdatePassword": "Cập nhật mật khẩu",
+  "authCancelBack": "Hủy và quay lại",
+  "authStepPassword": "Bước 2/2 · Thiết lập mật khẩu",
+
+  "authResetSuccessTitle": "Mật khẩu đã được cập nhật",
+  "authResetSuccessBody": "Bạn có thể đăng nhập lại và tiếp tục công việc trên RespiraAMS.",
+  "authDemoDoctorName": "BS. Lê Hoàng Minh",
+  "authDoctorRoleVerified": "Chuyên khoa Hô hấp · Tài khoản đã xác minh",
+  "authWorkspaceReady": "Không gian làm việc đã sẵn sàng",
+  "authRestoreAccess": "Dữ liệu và quyền truy cập sẽ được khôi phục sau đăng nhập.",
+  "authLoginNow": "Đăng nhập ngay",
+  "authBackToWelcome": "Về trang chào mừng",
+
+  "authWorkspaceEyebrow": "KHÔNG GIAN LÀM VIỆC LÂM SÀNG",
+  "authWelcomeGreeting": "Chào mừng, {name}",
+  "@authWelcomeGreeting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "authWelcomeSubtitle": "Sẵn sàng theo dõi các ca hô hấp hôm nay.",
+  "authWelcomeBulletPatients": "{count} bệnh nhân đang theo dõi",
+  "@authWelcomeBulletPatients": {
+    "placeholders": {
+      "count": { "type": "String" }
+    }
+  },
+  "authWelcomeBulletAttention": "{count} ca đang điều trị trong ngày",
+  "@authWelcomeBulletAttention": {
+    "placeholders": {
+      "count": { "type": "String" }
+    }
+  },
+  "authWelcomeBulletSynced": "Dữ liệu đồng bộ lúc {time}",
+  "@authWelcomeBulletSynced": {
+    "placeholders": {
+      "time": { "type": "String" }
+    }
+  },
+  "authStart": "Bắt đầu",
+  "authPrivacyFooter": "Dữ liệu y tế được bảo vệ theo phân quyền hệ thống.",
+
+  "commonTryAgain": "Thử lại",
+  "commonEnterNumber": "Nhập số",
+  "commonServerUnreachable": "Không thể kết nối máy chủ. Vui lòng kiểm tra kết nối mạng.",
+  "commonBadRequest": "Yêu cầu không hợp lệ (mã {status}).",
+  "@commonBadRequest": {
+    "placeholders": {
+      "status": { "type": "int" }
+    }
+  },
+  "commonLoadErrorWith": "Không thể tải dữ liệu: {error}",
+  "@commonLoadErrorWith": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "commonLoadInfoErrorWith": "Không tải được thông tin: {error}",
+  "@commonLoadInfoErrorWith": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "commonOther": "Khác",
+  "commonYesNo": "Có / Không",
+  "commonAll": "Tất cả",
+  "commonMlPerMin": "mL/phút",
+
+  "genderMale": "Nam",
+  "genderFemale": "Nữ",
+  "patientStatusTreating": "Đang điều trị",
+  "patientStatusRecovered": "Hồi phục",
+  "patientStatusDeceased": "Tử vong",
+  "patientStatusOutOfScope": "Ngoài phạm vi điều trị",
+  "patientAge": "{age} tuổi",
+  "@patientAge": {
+    "placeholders": {
+      "age": { "type": "int" }
+    }
+  },
+
+  "patientListTitle": "Danh sách bệnh nhân",
+  "patientFollowingCount": "{count} bệnh nhân đang theo dõi",
+  "@patientFollowingCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "patientFilterAll": "Tất cả",
+  "patientFilterAttention": "Cần chú ý",
+  "patientFilterHighRisk": "Nguy cơ cao",
+  "patientCount": "{count} bệnh nhân",
+  "@patientCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "patientPrioritySort": "Ưu tiên",
+  "patientSearchHint": "Tìm theo tên hoặc mã bệnh án",
+  "patientAddSemantic": "Thêm bệnh nhân",
+  "patientEmpty": "Không tìm thấy bệnh nhân phù hợp.",
+
+  "patientDetailTitle": "Chi tiết bệnh nhân",
+  "patientDetailSubtitle": "Thông tin chỉ đọc và tiến trình điều trị",
+  "patientProfileError": "Không thể tải hồ sơ bệnh nhân.",
+  "patientNoSelection": "Chưa chọn bệnh nhân.",
+  "patientRecordSection": "Thông tin hồ sơ",
+  "patientDobGender": "Ngày sinh · Giới tính",
+  "patientInsurance": "BHYT",
+  "patientAddress": "Địa chỉ",
+  "patientVitals": "Thể trạng",
+  "patientTreatmentStatus": "Trạng thái điều trị",
+  "patientProgressSection": "Tiến trình điều trị",
+  "patientNoProgress": "Chưa có diễn biến điều trị.",
+  "patientAddTreatment": "Thêm điều trị",
+  "patientUpdateStatus": "Cập nhật trạng thái",
+  "patientEpisode": "Đợt {index}",
+  "@patientEpisode": {
+    "placeholders": {
+      "index": { "type": "int" }
+    }
+  },
+  "patientSavedTreatment": "Điều trị đã lưu",
+  "treatmentPlanInProgress": "Đang thực hiện",
+  "treatmentPlanClosed": "Đã kết thúc",
+  "adherenceAdhere": "Tuân thủ phác đồ",
+  "adherenceNotAdhere": "Không tuân thủ",
+  "adherenceNotAdhereValid": "Không tuân thủ (chấp nhận)",
+  "adherenceNotAdhereInvalid": "Không tuân thủ (không hợp lệ)",
+
+  "patientAddTitle": "Thêm bệnh nhân",
+  "patientAddSubtitle": "Tạo hồ sơ bệnh nhân mới",
+  "patientLastName": "Họ",
+  "patientFirstName": "Tên",
+  "patientRecordCode": "Mã bệnh án",
+  "patientRecordCodeHint": "VD: BA-2026-0001",
+  "patientDob": "Ngày sinh",
+  "patientInsuranceCard": "Số thẻ BHYT",
+  "patientPhone": "Số điện thoại",
+  "patientHeight": "Chiều cao",
+  "patientWeight": "Cân nặng",
+  "patientProvince": "Tỉnh/Thành phố",
+  "patientGender": "Giới tính",
+  "patientSaving": "Đang lưu…",
+  "patientSaveRecord": "Lưu hồ sơ",
+  "patientErrName": "Vui lòng nhập họ và tên.",
+  "patientErrCode": "Vui lòng nhập mã bệnh án.",
+  "patientErrDob": "Vui lòng nhập ngày sinh.",
+  "patientErrDobFormat": "Ngày sinh không hợp lệ (định dạng dd/MM/yyyy).",
+  "patientErrPhone": "Số điện thoại không hợp lệ.",
+  "patientErrInsurance": "Số thẻ BHYT phải gồm 10 chữ số.",
+  "patientErrHeight": "Chiều cao phải lớn hơn 0.",
+  "patientErrWeight": "Cân nặng phải lớn hơn 0.",
+  "patientErrAddress": "Vui lòng nhập địa chỉ.",
+  "patientErrCity": "Vui lòng nhập tỉnh/thành phố.",
+  "patientCreateFailed": "Không thể tạo bệnh nhân. Vui lòng thử lại.",
+  "patientMenuSemantic": "Tùy chọn bệnh nhân",
+  "patientMenuEdit": "Edit",
+  "patientMenuDelete": "Delete",
+  "patientEditTitle": "Chỉnh sửa bệnh nhân",
+  "patientEditSubtitle": "Cập nhật thông tin hành chính & lâm sàng",
+  "patientEditCancel": "Hủy bỏ",
+  "patientEditSave": "Lưu cập nhật",
+  "patientEditSuccess": "Đã cập nhật bệnh nhân.",
+  "patientEditFailed": "Không thể cập nhật bệnh nhân.",
+  "patientEditLoadFailed": "Không thể tải hồ sơ bệnh nhân.",
+  "patientEditClinicalLocked": "Không thể sửa ngày sinh, giới tính, cân nặng và chiều cao sau khi bệnh nhân đã có điều trị.",
+  "patientFullName": "Họ và tên bệnh nhân",
+  "patientSectionAdmin": "Thông tin hành chính",
+  "patientSectionVitals": "Thể trạng",
+  "patientRequiredHint": "Bắt buộc (*)",
+  "patientDeleteTitle": "Xóa bệnh nhân",
+  "patientDeleteDescription": "Hồ sơ bệnh nhân sẽ bị xóa vĩnh viễn. Thao tác này không thể hoàn tác.",
+  "patientDeleteConfirm": "Xóa",
+  "patientDeleteSuccess": "Đã xóa bệnh nhân.",
+  "patientDeleteFailed": "Không thể xóa bệnh nhân.",
+  "patientDischarge": "Xuất viện",
+  "patientDischargeTitle": "Xuất viện bệnh nhân",
+  "patientDischargeAdmission": "Ngày nhập viện",
+  "patientDischargeOutcomeLabel": "KẾT QUẢ ĐIỀU TRỊ *",
+  "patientDischargeRecovered": "Hồi phục",
+  "patientDischargeRecoveredDesc": "Bệnh nhân thuyên giảm triệu chứng, đủ điều kiện ra viện",
+  "patientDischargeDeath": "Tử vong",
+  "patientDischargeDeathDesc": "Ghi nhận tử vong trong quá trình điều trị nội trú",
+  "patientDischargeOutOfScope": "Ngoài phạm vi điều trị",
+  "patientDischargeOutOfScopeDesc": "Chuyển viện tuyến trên hoặc gia đình xin về",
+  "patientDischargeSelected": "Đã chọn kết quả: {outcome}. Sẵn sàng lưu vào hệ thống bệnh án.",
+  "@patientDischargeSelected": {
+    "placeholders": {
+      "outcome": { "type": "String" }
+    }
+  },
+  "patientDischargeConfirm": "Xác nhận xuất viện",
+  "patientDischargeCancel": "Hủy bỏ",
+  "patientDischargeSuccess": "Đã xuất viện bệnh nhân.",
+  "patientDischargeFailed": "Không thể xuất viện. Vui lòng thử lại.",
+  "patientDischargedBanner": "Bệnh nhân đã xuất viện",
+  "patientDischargedAt": "{date} · {outcome}",
+  "@patientDischargedAt": {
+    "placeholders": {
+      "date": { "type": "String" },
+      "outcome": { "type": "String" }
+    }
+  },
+
+  "progressTitle": "Thêm diễn biến",
+  "progressSubtitleTargeted": "Dựa trên kết quả vi sinh đã có",
+  "progressSubtitleEmpirical": "Ghi nhận thay đổi điều trị mới nhất",
+  "progressTreatmentTypeNext": "Loại điều trị tiếp theo",
+  "progressTreatmentType": "Loại điều trị",
+  "progressContinueTargeted": "Tiếp tục điều trị đích",
+  "progressSave": "Lưu diễn biến",
+  "progressReason": "Lý do thay đổi",
+  "progressHasMicro": "Có kết quả vi sinh",
+  "progressHasMicroDesc": "Chuyển sang điều trị đích khi phù hợp.",
+  "progressPoorResponse": "Đáp ứng kém",
+  "progressPoorResponseDesc": "Triệu chứng không cải thiện sau theo dõi.",
+  "progressLockTitle": "Không thể chỉnh sửa sau khi lưu",
+  "progressLockDesc": "Tạo diễn biến mới nếu cần cập nhật tiếp.",
+  "progressTargetedAlertTitle": "Điều trị đích dựa trên kết quả vi sinh",
+  "progressTargetedAlertDesc": "Kiểm tra tác nhân và kháng sinh đồ trước khi chọn thuốc.",
+  "treatmentEmpirical": "Kinh nghiệm",
+  "treatmentTargeted": "Điều trị đích",
+
+  "diagnosisTitle": "Chẩn đoán kinh nghiệm",
+  "diagnosisStepProgress": "Bước {step}/{total} · {title}",
+  "@diagnosisStepProgress": {
+    "placeholders": {
+      "step": { "type": "int" },
+      "total": { "type": "int" },
+      "title": { "type": "String" }
+    }
+  },
+  "diagnosisBack": "Quay lại",
+  "diagnosisContinue": "Tiếp tục",
+  "diagnosisRun": "Chẩn đoán",
+  "diagnosisPersonalInfo": "Thông tin cá nhân",
+  "diagnosisVitalSigns": "Chỉ số sinh tồn",
+  "diagnosisLabResults": "Kết quả xét nghiệm",
+  "diagnosisComorbidities": "Bệnh nền & nguy cơ",
+  "diagnosisAllergy": "Dị ứng",
+  "diagnosisAllergyType": "Tình trạng dị ứng kháng sinh",
+  "diagnosisAllergyNo": "Không dị ứng",
+  "diagnosisAllergyYes": "Có dị ứng kháng sinh",
+  "diagnosisAllergyNonRegistered": "Dị ứng kháng sinh ngoài danh mục",
+  "diagnosisAllergyUnknown": "Không rõ / dị ứng khác",
+  "diagnosisAllergySelect": "Chọn kháng sinh dị ứng",
+  "diagnosisAllergyOther": "Mô tả dị ứng khác",
+  "diagnosisAllergyOtherHint": "VD: dị ứng amoxicillin, phản ứng beta-lactam không rõ",
+  "diagnosisEmptyForm": "Không có dữ liệu biểu mẫu.",
+  "diagnosisFormLoadFailed": "Không thể tải biểu mẫu chẩn đoán.",
+  "diagnosisResultTitle": "Kết quả chẩn đoán",
+  "diagnosisResultSubtitle": "Kinh nghiệm · Viêm phổi cộng đồng",
+  "diagnosisSaveResult": "Lưu kết quả",
+  "diagnosisTabResult": "Kết quả",
+  "diagnosisTabSuspected": "Căn nguyên",
+  "diagnosisTabEvidences": "Bằng chứng",
+  "diagnosisSectionDiagnosis": "Chẩn đoán",
+  "diagnosisCommunityPneumonia": "Viêm phổi cộng đồng",
+  "diagnosisEmpiricalLabel": "Chẩn đoán kinh nghiệm",
+  "diagnosisSectionAssessment": "Đánh giá",
+  "diagnosisSeverity": "Mức độ",
+  "diagnosisTreatment": "Điều trị",
+  "diagnosisConfirmNote": "Kết quả cần được bác sĩ xác nhận trước khi áp dụng điều trị.",
+  "suspectedHeavy": "Căn nguyên nghi ngờ cao",
+  "suspectedWorth": "Căn nguyên cần lưu ý",
+  "evidenceSection": "Bằng chứng lâm sàng",
+  "diagnosisNoData": "Không có dữ liệu.",
+  "evidencePoints": "Điểm {score}",
+  "@evidencePoints": {
+    "placeholders": {
+      "score": { "type": "int" }
+    }
+  },
+  "evidenceMajor": "Chính",
+  "evidenceMinor": "Phụ",
+  "severityMild": "Nhẹ",
+  "severityModerate": "Trung bình",
+  "severitySevere": "Nặng",
+  "siteInpatient": "Nội trú",
+  "siteOutpatient": "Ngoại trú",
+  "siteIcu": "ICU",
+  "riskHigh": "Nguy cơ cao",
+  "riskLow": "Nguy cơ thấp",
+  "riskWatch": "Cần theo dõi",
+  "alertPregnantTitle": "Bệnh nhân đang mang thai / cho con bú",
+  "alertPregnantDesc": "Cân nhắc kỹ trước khi chỉ định kháng sinh.",
+  "alertMissingTitle": "Thiếu thông tin cần thiết",
+  "targetedTitle": "Chẩn đoán vi sinh",
+  "targetedSubtitle": "Mỗi đường dùng là một lựa chọn thuốc riêng",
+  "targetedLoadError": "Không thể tải khuyến nghị. Vui lòng thử lại.",
+  "targetedSelectDrugs": "Chọn thuốc + đường dùng",
+  "targetedSelectedSummary": "Đã chọn theo thuốc + đường dùng",
+  "targetedSave": "Lưu điều trị đích",
+  "microBacteria": "Vi khuẩn",
+  "microLatestAntibiogram": "Kháng sinh đồ gần nhất",
+  "diagnosisFlowNoPatient": "Chưa chọn bệnh nhân.",
+  "diagnosisFlowFormError": "Không thể tải biểu mẫu chẩn đoán.",
+  "diagnosisFlowMissing": "Thiếu thông tin bắt buộc: {fields}.",
+  "@diagnosisFlowMissing": {
+    "placeholders": {
+      "fields": { "type": "String" }
+    }
+  },
+  "diagnosisMedicalHistory": "Tiền sử bệnh",
+  "diagnosisAssessment": "Đánh giá mức độ & nhiễm khuẩn",
+  "diagnosisClinical": "Lâm sàng",
+  "diagnosisParaclinical": "Cận lâm sàng",
+  "diagnosisVariableSearch": "Tìm biến số",
+  "diagnosisVariableSearchHint": "Lọc theo tên, mã hoặc mô tả…",
+  "diagnosisAntibioticSearch": "Tìm kháng sinh",
+  "diagnosisAntibioticSearchHint": "Nhập để lọc theo tên hoặc nhóm…",
+  "diagnosisNormalRangeBoth": "BT: {min}–{max}",
+  "@diagnosisNormalRangeBoth": {
+    "placeholders": {
+      "min": { "type": "String" },
+      "max": { "type": "String" }
+    }
+  },
+  "diagnosisNormalRangeMin": "BT: ≥ {min}",
+  "@diagnosisNormalRangeMin": {
+    "placeholders": {
+      "min": { "type": "String" }
+    }
+  },
+  "diagnosisNormalRangeMax": "BT: ≤ {max}",
+  "@diagnosisNormalRangeMax": {
+    "placeholders": {
+      "max": { "type": "String" }
+    }
+  },
+  "diagnosisSpecialHistory": "Bệnh sử đặc biệt",
+  "diagnosisSpecialHistoryHint": "VD: lao phổi trước đây, hóa trị gần đây",
+  "diagnosisAdd": "Thêm",
+  "diagnosisRemove": "Xóa",
+  "diagnosisOtherInfections": "Nhiễm trùng khác",
+  "diagnosisOtherInfectionsSelect": "Chọn nhiễm trùng kèm theo",
+  "diagnosisMicrobialSamples": "Mẫu xét nghiệm vi sinh",
+  "diagnosisMicrobialAdd": "Thêm mẫu",
+  "diagnosisMicrobialSampleType": "Loại mẫu",
+  "diagnosisMicrobialMicCategory": "Mức MIC",
+  "diagnosisMicrobialPathogen": "Tác nhân",
+  "diagnosisMicrobialPathogenHint": "Chọn tác nhân",
+  "diagnosisMicrobialPathogenRequired": "Vui lòng chọn tác nhân cho tất cả mẫu vi sinh.",
+  "diagnosisAllergyRequired": "Vui lòng chọn tình trạng dị ứng kháng sinh.",
+  "diagnosisAllergyYesRequired": "Vui lòng chọn ít nhất một kháng sinh dị ứng.",
+  "diagnosisAllergyOtherRequired": "Vui lòng mô tả dị ứng khác.",
+  "diagnosisInvalidNumber": "Giá trị \"{name}\" phải là số.",
+  "@diagnosisInvalidNumber": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "diagnosisInvalidFields": "Dữ liệu không hợp lệ ở: {fields}. Vui lòng kiểm tra lại giá trị.",
+  "@diagnosisInvalidFields": {
+    "placeholders": {
+      "fields": { "type": "String" }
+    }
+  },
+  "diagnosisRangeWarning": "Ngoài khoảng cho phép {range}. Vẫn có thể tiếp tục.",
+  "@diagnosisRangeWarning": {
+    "placeholders": {
+      "range": { "type": "String" }
+    }
+  },
+  "diagnosisEgfr": "eGFR",
+  "diagnosisOtherInfectionsTitle": "Nhiễm trùng khác",
+  "diagnosisAllergyTitle": "Dị ứng kháng sinh",
+  "diagnosisAllergyNoValue": "Không có",
+  "diagnosisSectionMetrics": "Chi tiết điểm",
+  "diagnosisMetricsMajorMinor": "Chính {major} · Phụ {minor}",
+  "@diagnosisMetricsMajorMinor": {
+    "placeholders": {
+      "major": { "type": "int" },
+      "minor": { "type": "int" }
+    }
+  },
+  "diagnosisTabProtocols": "Phác đồ",
+  "diagnosisSectionProtocols": "Phác đồ điều trị",
+  "diagnosisProtocolMedicines": "Tổ hợp thuốc",
+  "diagnosisProtocolPathogens": "Tác nhân",
+  "diagnosisProtocolCriteria": "Tiêu chí",
+  "diagnosisProtocolNoData": "Không có phác đồ phù hợp.",
+  "diagnosisProtocolSelect": "Chọn tổ hợp thuốc",
+  "diagnosisProtocolNoMedicine": "Không có tổ hợp thuốc.",
+  "diagnosisSelectDrugs": "Chọn kháng sinh",
+  "diagnosisDrugSearch": "Tìm thuốc",
+  "diagnosisDrugSearchHint": "Tìm theo tên hoặc nhóm kháng sinh…",
+  "diagnosisSelectedDrugs": "Đã chọn {count} kháng sinh",
+  "@diagnosisSelectedDrugs": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "diagnosisProtocolAdherent": "Tuân thủ",
+  "diagnosisReasonRequired": "Vui lòng nhập lý do chọn thuốc.",
+  "diagnosisNonAdherentReason": "Thuốc đã chọn không khớp phác đồ nào — vui lòng nhập lý do.",
+  "diagnosisConfirmTreatment": "Xác nhận điều trị",
+  "diagnosisReason": "Lý do chọn thuốc",
+  "diagnosisReasonHint": "Bắt buộc nếu chọn thuốc ngoài phác đồ",
+  "diagnosisWarnCombinationTitle": "Cảnh báo phối hợp kháng sinh",
+  "diagnosisWarnCombinationDesc": "Tổ hợp thuốc đã chọn cần được kiểm tra trước khi chỉ định.",
+  "diagnosisConfirmSuccess": "Đã lưu kết quả điều trị.",
+  "diagnosisConfirmFailed": "Không thể lưu kết quả điều trị.",
+  "diagnosisConfirmMissingResult": "Không có kết quả chẩn đoán để lưu.",
+  "diagnosisSelectMedicineRequired": "Vui lòng chọn tổ hợp thuốc.",
+  "diagnosisNoProtocolToSave": "Không có phác đồ phù hợp để lưu.",
+  "diagnosisEvidenceFormula": "Công thức: {formula}",
+  "@diagnosisEvidenceFormula": {
+    "placeholders": {
+      "formula": { "type": "String" }
+    }
+  },
+  "diagnosisEvidenceValue": "Giá trị: {value}",
+  "@diagnosisEvidenceValue": {
+    "placeholders": {
+      "value": { "type": "String" }
+    }
+  },
+  "diagnosisEvidenceRelated": "Biến liên quan: {variables}",
+  "@diagnosisEvidenceRelated": {
+    "placeholders": {
+      "variables": { "type": "String" }
+    }
+  },
+  "diagnosisEvidenceMissing": "Thiếu: {variables}",
+  "@diagnosisEvidenceMissing": {
+    "placeholders": {
+      "variables": { "type": "String" }
+    }
+  },
+  "diagnosisMicrobialResultTitle": "Kết quả vi sinh",
+  "diagnosisMicrobialAntibiotics": "Kháng sinh nhạy cảm",
+  "diagnosisDiagnosisId": "Mã chẩn đoán",
+
+  "infectionSkinSoftTissue": "Nhiễm khuẩn da / mô mềm",
+  "infectionSepticArthritis": "Viêm khớp nhiễm khuẩn",
+  "infectionOsteomyelitis": "Viêm tủy xương nhiễm khuẩn",
+  "infectionBacterialMyositis": "Viêm cơ / áp xe cơ nhiễm khuẩn",
+  "infectionInfectedGoutyTophus": "Nhiễm khuẩn hạt tophi",
+  "infectionPyelonephritis": "Viêm / áp xe thận - bể thận",
+  "infectionAcuteCystitis": "Viêm bàng quang cấp",
+  "infectionAcuteNonGonococcalUrethritis": "Viêm niệu đạo cấp không do lậu",
+  "infectionBacterialVaginourethritis": "Viêm âm đạo - niệu đạo do vi khuẩn",
+  "infectionBacterialEndometritis": "Viêm tử cung do vi khuẩn",
+  "infectionPurulentMeningitis": "Viêm màng não mủ",
+  "infectionBacterialEncephalitis": "Viêm não do vi khuẩn",
+  "infectionPleuralEmpyema": "Tràn mủ màng phổi",
+  "infectionMediastinalAbscess": "Áp xe trung thất",
+  "infectionInfectiveEndocarditis": "Viêm nội tâm mạc nhiễm khuẩn",
+  "infectionBacterialMyocarditis": "Viêm cơ tim do vi khuẩn",
+  "infectionBacterialPericarditis": "Viêm màng ngoài tim do vi khuẩn",
+  "infectionPulmonaryTuberculosis": "Lao phổi",
+  "infectionExtrapulmonaryTuberculosis": "Lao ngoài phổi",
+  "infectionBiliaryTract": "Nhiễm trùng đường mật",
+  "infectionBacterialLiverAbscess": "Áp xe gan do vi khuẩn",
+  "infectionInfectedAcutePancreatitis": "Viêm tụy cấp nhiễm khuẩn",
+  "infectionBacterialPeritonitis": "Viêm phúc mạc nhiễm khuẩn",
+  "infectionBacterialDiarrhea": "Tiêu chảy do vi khuẩn",
+  "infectionHelicobacterPylori": "Nhiễm Helicobacter pylori",
+  "infectionSepsis": "Nhiễm trùng huyết",
+  "infectionOrbitalCellulitis": "Viêm tổ chức hốc mắt",
+  "infectionConjunctivitis": "Viêm kết mạc mắt",
+  "infectionKeratitis": "Viêm giác mạc mắt",
+  "infectionDacryocystitis": "Viêm túi lệ mắt",
+  "infectionMaxillofacialAbscess": "Áp xe vùng hàm - mặt",
+  "infectionOther": "Khác",
+
+  "sampleSputum": "Đờm",
+  "sampleBronchoalveolarLavageFluid": "Dịch rửa phế quản / phế nang",
+  "samplePleuralFluid": "Dịch màng phổi",
+  "sampleUrine": "Nước tiểu",
+  "sampleBlood": "Máu",
+  "sampleAbdominalFluid": "Dịch ổ bụng",
+  "sampleCerebrospinalFluid": "Dịch não tủy",
+  "sampleWoundExudate": "Dịch tiết vết thương",
+  "sampleOther": "Khác",
+
+  "micSusceptible": "Nhạy cảm",
+  "micIntermediate": "Trung gian",
+  "micResistant": "Kháng thuốc",
+
+  "routeIntravenous": "Tiêm tĩnh mạch",
+  "routeOral": "Uống",
+  "routeIntramuscular": "Tiêm bắp",
+  "routeAbbrevIv": "TM",
+  "routeAbbrevOral": "Uống",
+
+  "calculatorTitle": "Máy tính",
+  "calculatorSubtitle": "Công cụ tính lâm sàng",
+  "calculatorCommonTools": "Công cụ thường dùng",
+  "calculatorComingSoon": "Máy tính \"{title}\" sẽ được bổ sung sau.",
+  "@calculatorComingSoon": {
+    "placeholders": {
+      "title": { "type": "String" }
+    }
+  },
+  "calcCurb65Desc": "Đánh giá mức độ nặng viêm phổi",
+  "calcEgfrDesc": "Ước tính chức năng thận",
+  "calcCrclDesc": "Độ thanh thải creatinin",
+  "calcBmiDesc": "Chỉ số khối cơ thể",
+  "calcQsofaDesc": "Đánh giá nhanh nguy cơ nhiễm khuẩn",
+  "calcClinicalCalculator": "Máy tính lâm sàng",
+  "calcInputTab": "Nhập liệu",
+  "calcExplanationTab": "Giải thích",
+  "calcCriteriaBanner": "Tiêu chí CURB-65",
+  "calcConfusion": "Lú lẫn mới xuất hiện",
+  "calcConfusionDesc": "Confusion",
+  "calcUrea": "Urea",
+  "calcUreaDesc": "Ngưỡng > 7 mmol/L",
+  "calcRespRate": "Nhịp thở",
+  "calcRespRateDesc": "Ngưỡng ≥ 30 lần/phút",
+  "calcRespRateUnit": "lần/phút",
+  "calcBloodPressure": "Huyết áp",
+  "calcBpThreshold": "Ngưỡng: SBP < 90 mmHg hoặc DBP ≤ 60 mmHg",
+  "calcAge": "Tuổi",
+  "calcAgeDesc": "Ngưỡng ≥ 65 tuổi",
+  "calcAgeUnit": "tuổi",
+  "calcCalculate": "Tính",
+  "calcMethodTitle": "Phương pháp tính",
+  "calcMethodBody": "Điểm CURB-65 = tổng số tiêu chí được đáp ứng, từ 0 đến 5 điểm. Mỗi tiêu chí đáp ứng đóng góp 1 điểm.",
+  "calcDescriptionTitle": "Mô tả",
+  "calcDescriptionBody": "CURB-65 hỗ trợ đánh giá mức độ nặng của viêm phổi cộng đồng.",
+  "calcConfirmNote": "Kết quả cần được bác sĩ xác nhận trong bối cảnh lâm sàng.",
+  "calcComponentsTitle": "Các thành phần",
+  "calcComponentsBody": "Lú lẫn · Urea > 7 mmol/L · Nhịp thở ≥ 30 · Huyết áp thấp · Tuổi ≥ 65.",
+  "calcThresholdNote": "Chi tiết ngưỡng được hiển thị tại tab Nhập liệu.",
+  "calcScorePoints": "{score} điểm",
+  "@calcScorePoints": {
+    "placeholders": {
+      "score": { "type": "int" }
+    }
+  },
+  "calcAdviceHigh": "Điểm {score} → cân nhắc điều trị nội trú",
+  "@calcAdviceHigh": {
+    "placeholders": {
+      "score": { "type": "int" }
+    }
+  },
+  "calcAdviceMedium": "Điểm {score} → cân nhắc nhập viện ngắn hạn",
+  "@calcAdviceMedium": {
+    "placeholders": {
+      "score": { "type": "int" }
+    }
+  },
+  "calcAdviceLow": "Điểm {score} → có thể điều trị ngoại trú",
+  "@calcAdviceLow": {
+    "placeholders": {
+      "score": { "type": "int" }
+    }
+  },
+
+  "lookupTitle": "Tra cứu",
+  "lookupSubtitle": "Tài liệu y tế dành cho bác sĩ",
+  "lookupCategories": "Danh mục",
+  "lookupSearchHint": "Tìm thuốc, vi khuẩn, bệnh lý...",
+  "categoryAntibioticGroups": "Nhóm kháng sinh",
+  "categoryAntibioticGroupsSub": "Phân loại và mô tả",
+  "categoryAntibiotics": "Kháng sinh",
+  "categoryAntibioticsSub": "Liều dùng và phổ tác dụng",
+  "categoryPathogens": "Tác nhân gây bệnh",
+  "categoryPathogensSub": "Mô tả và độ nhạy",
+  "categoryClinicalVariables": "Biến số lâm sàng",
+  "categoryClinicalVariablesSub": "Các biến số dùng cho tiêu chí",
+  "categorySuspectedCauses": "Nguyên nhân nghi ngờ",
+  "categorySuspectedCausesSub": "Theo bệnh và mức độ",
+  "categoryCriteria": "Tiêu chí đánh giá",
+  "categoryCriteriaSub": "Danh sách các tiêu chí",
+  "categoryRiskFactors": "Yếu tố nguy cơ",
+  "categoryRiskFactorsSub": "Nguy cơ theo tác nhân",
+  "categoryClinicalScores": "Thang điểm lâm sàng",
+  "categoryClinicalScoresSub": "Các bộ tiêu chí & đánh giá",
+  "categoryAntibiograms": "Kháng sinh đồ",
+  "categoryAntibiogramsSub": "MIC và kháng sinh",
+  "categoryTreatmentProtocols": "Phác đồ điều trị",
+  "categoryTreatmentProtocolsSub": "Theo mức độ & vị trí",
+  "recentItemDrugTitle": "Ceftriaxone",
+  "recentItemDrugSubtitle": "Cephalosporin thế hệ 3",
+  "recentItemDrugTag": "Thuốc",
+  "recentItemDiseaseTitle": "Viêm phổi cộng đồng",
+  "recentItemDiseaseSubtitle": "5 tiêu chí đánh giá",
+  "recentItemDiseaseTag": "Bệnh",
+
+  "statisticsTitle": "Thống kê",
+  "statisticsSubtitle": "Tổng quan hoạt động điều trị",
+  "statisticsWeekly": "Chẩn đoán theo tuần",
+  "statisticsTopPathogens": "Tác nhân thường gặp",
+  "statisticsSynced": "Dữ liệu đã đồng bộ",
+  "statisticsUpdated": "Cập nhật lúc 19:28 hôm nay",
+  "periodLast30Days": "30 ngày",
+  "periodThisQuarter": "Quý này",
+  "periodThisYear": "Năm nay",
+  "kpiDiagnoses": "Chẩn đoán",
+  "kpiSaved": "Đã lưu",
+  "kpiMicrobiology": "Vi sinh",
+  "statisticsWeek": "T{week}",
+  "@statisticsWeek": {
+    "placeholders": {
+      "week": { "type": "int" }
+    }
+  },
+
+  "antibioticTitle": "Kháng sinh",
+  "antibioticSubtitle": "Danh mục hoạt chất",
+  "antibioticSearchHint": "Tìm kiếm kháng sinh...",
+  "antibioticEmpty": "Không có dữ liệu kháng sinh",
+  "antibioticDetailSubtitle": "Thông tin kháng sinh",
+  "antibioticDosage": "Liều dùng",
+  "antibioticStandardDose": "Liều chuẩn",
+  "antibioticNoInfo": "Chưa có thông tin",
+  "antibioticGfrAdjust": "Điều chỉnh theo GFR",
+
+  "antibioticGroupTitle": "Nhóm kháng sinh",
+  "antibioticGroupSubtitle": "Phân loại và mô tả",
+  "antibioticGroupSearchHint": "Tìm kiếm nhóm...",
+  "antibioticGroupDetailWithParent": "Nhóm kháng sinh · {parent}",
+  "@antibioticGroupDetailWithParent": {
+    "placeholders": {
+      "parent": { "type": "String" }
+    }
+  },
+  "antibioticGroupDetail": "Nhóm kháng sinh",
+  "antibioticGroupInfo": "Thông tin nhóm",
+  "antibioticGroupParent": "Nhóm cha",
+  "antibioticGroupDescription": "Mô tả",
+  "antibioticGroupNone": "Không có",
+  "antibioticGroupNoData": "Không có dữ liệu",
+  "antibioticGroupAntibioticsInGroup": "Kháng sinh trong nhóm",
+  "antibioticGroupLoadError": "Không tải được dữ liệu",
+  "antibioticGroupEmpty": "Chưa có kháng sinh nào trong nhóm này",
+  "antibioticGroupClassification": "Phân loại: {classification}",
+  "@antibioticGroupClassification": {
+    "placeholders": {
+      "classification": { "type": "String" }
+    }
+  },
+
+  "pathogenTitle": "Tác nhân gây bệnh",
+  "pathogenSubtitle": "Mô tả và độ nhạy",
+  "pathogenSearchHint": "Tìm kiếm tác nhân...",
+  "pathogenAtypical": "Không điển hình",
+  "pathogenDescription": "Mô tả",
+
+  "antibiogramTitle": "Kháng sinh đồ",
+  "antibiogramSubtitle": "Tác nhân · MIC · kháng sinh",
+  "antibiogramSearchHint": "Tìm tác nhân hoặc kháng sinh...",
+  "antibiogramEmpty": "Chưa có dữ liệu kháng sinh đồ.",
+  "antibiogramAntibiotics": "Kháng sinh ({count})",
+  "@antibiogramAntibiotics": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "micSusceptible": "Nhạy cảm",
+  "micIntermediate": "Trung gian",
+  "micResistant": "Kháng",
+
+  "treatmentProtocolTitle": "Phác đồ điều trị",
+  "treatmentProtocolSubtitle": "Mức độ · vị trí · kháng sinh",
+  "treatmentProtocolSearchHint": "Tìm tác nhân, tiêu chí, kháng sinh...",
+  "treatmentProtocolEmpty": "Chưa có phác đồ điều trị.",
+  "treatmentProtocolApplied": "Đang áp dụng",
+  "treatmentProtocolNotApplied": "Ngừng áp dụng",
+  "treatmentProtocolCriteria": "Tiêu chí",
+  "treatmentProtocolPathogens": "Tác nhân",
+  "treatmentProtocolCombinations": "Tổ hợp kháng sinh",
+  "treatmentProtocolPublisher": "Nhà phát hành",
+  "treatmentProtocolFilterSeverity": "Mức độ",
+  "treatmentProtocolFilterSite": "Vị trí điều trị",
+  "treatmentProtocolFilterPathogen": "Tác nhân gây bệnh",
+  "treatmentProtocolFilterCriteria": "Tiêu chí",
+  "treatmentProtocolFilterSearchPathogen": "Tìm tác nhân...",
+  "treatmentProtocolFilterSearchCriteria": "Tìm tiêu chí...",
+  "treatmentProtocolFilterSelectedCount": "Đã chọn {count}",
+  "@treatmentProtocolFilterSelectedCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "treatmentProtocolFilterLoadFailed": "Không tải được danh sách bộ lọc.",
+
+  "analysisTitle": "Báo cáo phân tích",
+  "analysisSubtitle": "Tuân thủ & kết cục điều trị",
+  "analysisEntryTitle": "Báo cáo phân tích điều trị",
+  "analysisEntrySubtitle": "Tuân thủ & kết cục theo bác sĩ",
+  "analysisEmpty": "Chưa có báo cáo phân tích.",
+  "analysisLoadFailed": "Không thể tải báo cáo phân tích.",
+  "analysisDetailTitle": "Chi tiết báo cáo",
+  "analysisDetailSubtitle": "Chỉ số tuân thủ & kết cục",
+  "analysisPeriod": "Kỳ phân tích",
+  "analysisCreatedAt": "Tạo lúc {date}",
+  "@analysisCreatedAt": {
+    "placeholders": {
+      "date": { "type": "String" }
+    }
+  },
+  "analysisAllDoctors": "Tất cả bác sĩ",
+  "analysisDoctorFallback": "Bác sĩ #{id}",
+  "@analysisDoctorFallback": {
+    "placeholders": {
+      "id": { "type": "String" }
+    }
+  },
+  "analysisTotalPatients": "Tổng bệnh nhân",
+  "analysisTotalPlans": "Tổng phác đồ",
+  "analysisAdherenceRate": "Tỷ lệ tuân thủ",
+  "analysisPendingRate": "Tỷ lệ chờ đánh giá",
+  "analysisAdherent": "Tuân thủ",
+  "analysisNonAdherent": "Không tuân thủ",
+  "analysisPendingReview": "Chờ đánh giá",
+  "analysisOutcomes": "Kết cục điều trị",
+  "analysisRecovered": "Hồi phục",
+  "analysisDeceased": "Tử vong",
+  "analysisOtherOutcome": "Khác",
+  "analysisByDoctor": "Theo bác sĩ",
+  "analysisByMedicine": "Theo thuốc",
+  "analysisMedicine": "Thuốc",
+  "analysisClassification": "Phân loại",
+  "analysisPatientsCount": "{count} bệnh nhân",
+  "@analysisPatientsCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "analysisPlansCount": "{count} phác đồ",
+  "@analysisPlansCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "analysisNoDoctors": "Báo cáo không có dữ liệu bác sĩ.",
+  "analysisNoMedicines": "Báo cáo không có dữ liệu thuốc.",
+  "analysisNoData": "Chưa có dữ liệu.",
+
+  "nextOfKinSection": "Người thân liên hệ",
+  "nextOfKinEmpty": "Chưa có thông tin người thân",
+  "nextOfKinEmptyDesc": "Thêm người thân để lưu thông tin liên hệ khi cần thiết.",
+  "nextOfKinAdd": "Thêm người thân",
+  "nextOfKinAddTitle": "Thêm người thân",
+  "nextOfKinEditTitle": "Chỉnh sửa người thân",
+  "nextOfKinSubtitle": "Thông tin liên hệ của bệnh nhân",
+  "nextOfKinInfoSection": "Thông tin người thân",
+  "nextOfKinFullName": "Họ và tên",
+  "nextOfKinFullNameHint": "Nhập họ và tên",
+  "nextOfKinRelationship": "Mối quan hệ",
+  "nextOfKinRelationshipHint": "Chọn mối quan hệ",
+  "nextOfKinPhone": "Số điện thoại",
+  "nextOfKinPhoneHint": "0912 345 678",
+  "nextOfKinSave": "Lưu người thân",
+  "nextOfKinUpdate": "Lưu thay đổi",
+  "nextOfKinMenuSemantic": "Tùy chọn người thân",
+  "nextOfKinMenuEdit": "Sửa",
+  "nextOfKinMenuDelete": "Xóa",
+  "nextOfKinDeleteTitle": "Xóa người thân?",
+  "nextOfKinDeleteDesc": "Bạn có chắc chắn muốn xóa thông tin người thân khỏi hồ sơ bệnh nhân không? Hành động này không thể hoàn tác.",
+  "nextOfKinDeleteConfirm": "Xóa người thân",
+  "nextOfKinDeleteSuccess": "Đã xóa người thân.",
+  "nextOfKinDeleteFailed": "Không thể xóa người thân.",
+  "nextOfKinCreateSuccess": "Đã thêm người thân.",
+  "nextOfKinCreateFailed": "Không thể thêm người thân.",
+  "nextOfKinUpdateSuccess": "Đã cập nhật người thân.",
+  "nextOfKinUpdateFailed": "Không thể cập nhật người thân.",
+  "nextOfKinErrName": "Vui lòng nhập họ và tên người thân.",
+  "nextOfKinErrPhone": "Số điện thoại không hợp lệ.",
+  "nextOfKinErrRelationship": "Vui lòng chọn mối quan hệ.",
+  "nextOfKinRelationshipOther": "Khác",
+  "nextOfKinRelationshipOtherHint": "Nhập mối quan hệ",
+  "relationshipSpouse": "Vợ/Chồng",
+  "relationshipParent": "Cha/Mẹ",
+  "relationshipChild": "Con",
+  "relationshipSibling": "Anh/Chị/Em",
+  "relationshipGrandparent": "Ông/Bà",
+
+  "treatmentPlanDetailTitle": "Chi tiết phác đồ",
+  "treatmentPlanDetailSubtitle": "Thông tin điều trị đã lưu",
+  "treatmentPlanLoadFailed": "Không thể tải phác đồ điều trị.",
+  "treatmentPlanStatusInProgress": "Đang điều trị",
+  "treatmentPlanStatusClosed": "Đã đóng",
+  "treatmentPlanSeverity": "Mức độ",
+  "treatmentPlanSite": "Vị trí điều trị",
+  "treatmentPlanAdherenceLabel": "Tuân thủ phác đồ",
+  "treatmentPlanSuspected": "Căn nguyên nghi ngờ",
+  "treatmentPlanMedicines": "Kháng sinh",
+  "treatmentPlanNoMedicines": "Chưa có kháng sinh.",
+  "treatmentPlanReasonForChoice": "Lý do chọn thuốc",
+  "treatmentPlanClose": "Dừng phác đồ",
+  "treatmentPlanCloseTitle": "Dừng phác đồ điều trị",
+  "treatmentPlanCloseDescriptionPrefix": "Phác đồ của bệnh nhân {name} sẽ được dừng lại. Sau khi hoàn tất, phác đồ chuyển sang lưu trữ và ",
+  "@treatmentPlanCloseDescriptionPrefix": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "treatmentPlanCloseWarning": "không thể chỉnh sửa",
+  "treatmentPlanCloseDescriptionSuffix": " thêm nội dung.",
+  "treatmentPlanCloseReasonLabel": "Lý do dừng phác đồ",
+  "treatmentPlanCloseReasonHint": "Nhập lý do dừng phác đồ (bệnh nhân hồi phục, chuyển viện, thay đổi phác đồ)...",
+  "treatmentPlanCloseReasonCounter": "{count}/500 ký tự",
+  "@treatmentPlanCloseReasonCounter": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "treatmentPlanCloseConfirm": "Dừng phác đồ",
+  "treatmentPlanCloseSuccess": "Đã dừng phác đồ điều trị.",
+  "treatmentPlanCloseFailed": "Không thể dừng phác đồ. Vui lòng thử lại.",
+  "treatmentPlanErrReasonRequired": "Vui lòng nhập lý do dừng phác đồ.",
+  "treatmentPlanViewSemantic": "Xem chi tiết phác đồ",
+
+  "clinicalVariableTitle": "Biến số lâm sàng",
+  "clinicalVariableSubtitle": "Quản lý tham số",
+  "clinicalVariableDetailTitle": "Chi tiết biến số",
+  "clinicalVariableSearchHint": "Tìm kiếm tên hoặc mã...",
+  "clinicalVariableRequired": "Bắt buộc",
+  "clinicalVariableDetailConfig": "Cấu hình biến số",
+  "clinicalVariableValueType": "Loại dữ liệu",
+  "clinicalVariableCanonicalUnit": "Đơn vị chuẩn",
+  "clinicalVariableIsRequired": "Tính bắt buộc",
+  "clinicalVariableRequiredYes": "Bắt buộc nhập",
+  "clinicalVariableOptional": "Tùy chọn",
+  "clinicalVariablePrerequisite": "Điều kiện tiên quyết",
+  "clinicalVariableRange": "Khoảng giá trị",
+  "clinicalVariableAccepted": "Chấp nhận",
+  "clinicalVariableNormal": "Bình thường",
+  "clinicalVariableOptions": "Danh sách lựa chọn",
+  "valueTypeNumeric": "Nhập số",
+  "valueTypeBoolean": "Có / Không",
+  "valueTypeCategorical": "Phân loại",
+  "valueTypeOther": "Khác",
+  "variableCategoryPersonal": "Thông tin cá nhân",
+  "variableCategoryPersonalShort": "Cá nhân",
+  "variableCategoryMedicalHistory": "Tiền sử bệnh",
+  "variableCategoryParaclinical": "Cận lâm sàng",
+  "variableCategoryClinical": "Lâm sàng",
+  "variableCategoryOther": "Khác",
+  "filterTitle": "Bộ lọc dữ liệu",
+  "filterRequired": "Tính bắt buộc",
+  "filterRequiredYes": "Bắt buộc",
+  "filterRequiredNo": "Không bắt buộc",
+  "filterCategory": "Phân loại",
+  "filterValueType": "Loại giá trị",
+  "filterClear": "Xóa bộ lọc",
+  "filterApply": "Áp dụng",
+  "rangeUnlimited": "Không giới hạn{unit}",
+  "@rangeUnlimited": {
+    "placeholders": {
+      "unit": { "type": "String" }
+    }
+  },
+  "rangeSingle": "Giá trị {symbol} {value}{unit}",
+  "@rangeSingle": {
+    "placeholders": {
+      "symbol": { "type": "String" },
+      "value": { "type": "String" },
+      "unit": { "type": "String" }
+    }
+  },
+  "rangeBetween": "Giá trị {minSymbol} {min}{unit} và {maxSymbol} {max}{unit}",
+  "@rangeBetween": {
+    "placeholders": {
+      "minSymbol": { "type": "String" },
+      "min": { "type": "String" },
+      "unit": { "type": "String" },
+      "maxSymbol": { "type": "String" },
+      "max": { "type": "String" }
+    }
+  },
+
+  "clinicalMetricTitle": "Thang điểm lâm sàng",
+  "clinicalMetricSubtitle": "Các bộ tiêu chí & đánh giá",
+  "clinicalMetricSearchHint": "Tìm kiếm tên thang điểm...",
+  "clinicalMetricDetailTitle": "Chi tiết thang điểm",
+  "clinicalMetricDetailSubtitle": "Thang điểm đánh giá",
+  "clinicalMetricApplied": "Đang áp dụng",
+  "clinicalMetricVersion": "Phiên bản: {version}",
+  "@clinicalMetricVersion": {
+    "placeholders": {
+      "version": { "type": "String" }
+    }
+  },
+  "clinicalMetricGeneral": "Thông tin chung",
+  "clinicalMetricCode": "Mã",
+  "clinicalMetricPublisher": "Phát hành",
+  "clinicalMetricDescription": "Mô tả",
+  "clinicalMetricMajor": "Tiêu chí chính",
+  "clinicalMetricMinor": "Tiêu chí phụ",
+  "clinicalMetricScoring": "Các tiêu chí tính điểm",
+  "clinicalMetricPoints": "+ {points} điểm",
+  "@clinicalMetricPoints": {
+    "placeholders": {
+      "points": { "type": "String" }
+    }
+  },
+
+  "criteriaTitle": "Tiêu chí",
+  "criteriaSubtitle": "Danh sách các tiêu chí đánh giá",
+  "criteriaSearchHint": "Tìm kiếm tên tiêu chí...",
+
+  "riskFactorTitle": "Yếu tố nguy cơ",
+  "riskFactorSubtitle": "Theo tác nhân gây bệnh",
+  "riskFactorListLabel": "Danh sách yếu tố",
+  "riskFactorDetailTitle": "Chi tiết yếu tố",
+  "riskFactorDetailSubtitle": "Nguy cơ theo tác nhân",
+  "riskFactorPathogen": "Tác nhân liên quan",
+  "riskFactorFormula": "Công thức điều kiện",
+  "riskFactorLoadInfo": "Không tải được thông tin",
+  "riskFactorPathogensList": "Không tải được danh sách tác nhân",
+  "riskFactorAllPathogens": "Tất cả tác nhân",
+  "riskFactorPathogenLabel": "Tác nhân",
+
+  "suspectedCauseTitle": "Nguyên nhân nghi ngờ",
+  "suspectedCauseSubtitle": "Mức độ & nơi điều trị",
+  "suspectedCauseListLabel": "Danh sách tác nhân",
+  "suspectedCausePathogen": "Tác nhân (Pathogen)",
+  "suspectedCauseSeverity": "Mức độ nghiêm trọng",
+  "suspectedCauseSite": "Nơi điều trị"
+}

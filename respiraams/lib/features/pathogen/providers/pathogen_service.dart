@@ -20,15 +20,19 @@ class PathogenRepository {
     bool? isAtypical,
   }) async {
     try {
+      final search = name?.trim() ?? '';
       final queryParams = <String, dynamic>{
         'page': page,
-        'pageSize': pageSize,
+        'size': pageSize,
+        if (search.isNotEmpty) 'searchTerm': search,
       };
+      // Free-text search lives on `/pathogens/search`; the paged endpoint
+      // only supports the `isAtypical` filter.
 
       if (isAtypical != null) queryParams['IsAtypical'] = isAtypical;
 
       final response = await apiClient.dio.get(
-        '/pathogens',
+        search.isEmpty ? '/pathogens' : '/pathogens/search',
         queryParameters: queryParams,
       );
 
@@ -59,7 +63,7 @@ class PathogenRepository {
     } on DioException catch (e) {
       throw _handleError(e);
     } catch (e) {
-      throw Exception('Lỗi xử lý dữ liệu: $e');
+      throw Exception('Failed to process data: $e');
     }
   }
 

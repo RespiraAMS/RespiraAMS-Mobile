@@ -5,6 +5,7 @@ import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../core/utils/context_extensions.dart';
 import '../../../../design_system/design_system.dart';
+import '../../../../l10n/l10n.dart';
 import '../providers/forgot_password_controller.dart';
 import '../widgets/brand_header_widget.dart';
 import '../routes.dart';
@@ -18,6 +19,7 @@ class ForgotPasswordScreen extends ConsumerWidget {
     final form = ref.watch(forgotPasswordControllerProvider);
     final controller = ref.read(forgotPasswordControllerProvider.notifier);
     final c = context.respiraColors;
+    final l10n = context.l10n;
 
     void submit() {
       if (controller.submit()) {
@@ -49,34 +51,35 @@ class ForgotPasswordScreen extends ConsumerWidget {
                       const Center(child: RespiraLogoMarkWidget(size: 48)),
                       const SizedBox(height: Spacing.section),
                       Text(
-                        'Quên mật khẩu?',
+                        l10n.authForgotTitle,
                         style: TypographyTokens.h1(
                           context,
                         ).copyWith(color: c.textPrimary),
                       ),
                       const SizedBox(height: Spacing.inline),
                       AppText(
-                        'Nhập email công việc. Hệ thống sẽ gửi mã xác thực gồm 6 chữ số.',
+                        l10n.authForgotBody,
                       ),
                       const SizedBox(height: Spacing.section + 4),
                       AppTextField(
-                        label: 'Email công việc',
+                        label: l10n.authWorkEmailLabel,
                         initialValue: form.email,
                         onChanged: controller.setEmail,
                         keyboardType: TextInputType.emailAddress,
                         textInputAction: TextInputAction.done,
                         hintText: 'bs.minh@respira.vn',
-                        errorText: form.errorMessage,
+                        errorText:
+                            form.emailInvalid ? l10n.authEmailInvalid : null,
                       ),
                       const SizedBox(height: Spacing.section),
                       AppButton(
-                        label: 'Gửi mã xác thực',
+                        label: l10n.authSendCode,
                         expand: true,
                         onPressed: submit,
                       ),
                       const SizedBox(height: Spacing.control),
                       AppButton(
-                        label: 'Quay lại đăng nhập',
+                        label: l10n.authBackToLogin,
                         type: AppButtonType.secondary,
                         expand: true,
                         onPressed: () =>
@@ -90,14 +93,14 @@ class ForgotPasswordScreen extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Không nhận được email?',
+                              l10n.authNoEmailTitle,
                               style: TypographyTokens.bodyMedium(
                                 context,
                               ).copyWith(fontWeight: FontWeight.w700),
                             ),
                             const SizedBox(height: Spacing.inline - 4),
                             AppText(
-                              'Kiểm tra thư rác hoặc liên hệ quản trị viên để xác minh tài khoản.',
+                              l10n.authNoEmailBody,
                               type: AppTextType.caption,
                             ),
                           ],

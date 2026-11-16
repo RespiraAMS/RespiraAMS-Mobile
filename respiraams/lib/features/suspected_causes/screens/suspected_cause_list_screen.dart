@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../../../../design_system/design_system.dart';
+import '../../../../l10n/l10n.dart';
 import '../providers/suspected_cause_provider.dart';
 import '../models/suspected_cause.dart';
 import '../models/pathogen_summary.dart';
@@ -48,27 +49,10 @@ class _SuspectedCauseListScreenState extends State<SuspectedCauseListScreen> {
     );
   }
 
-  String _translateSeverity(DiseaseSeverity s) {
-    switch (s) {
-      case DiseaseSeverity.mild: return 'Nhẹ';
-      case DiseaseSeverity.moderate: return 'Trung bình';
-      case DiseaseSeverity.severe: return 'Nặng';
-      default: return 'Khác';
-    }
-  }
-
-  String _translateSite(TreatmentSite s) {
-    switch (s) {
-      case TreatmentSite.outpatient: return 'Ngoại trú';
-      case TreatmentSite.inpatient: return 'Nội trú';
-      case TreatmentSite.intensiveCareUnit: return 'ICU';
-      default: return 'Khác';
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final c = context.respiraColors;
+    final l10n = context.l10n;
 
     return Scaffold(
       backgroundColor: c.background,
@@ -78,8 +62,8 @@ class _SuspectedCauseListScreenState extends State<SuspectedCauseListScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: Spacing.group, vertical: 8),
               child: AppAppBar(
-                title: 'Nguyên nhân nghi ngờ',
-                subtitle: 'Mức độ & Nơi điều trị',
+                title: l10n.suspectedCauseTitle,
+                subtitle: l10n.suspectedCauseSubtitle,
                 onBack: () => Navigator.pop(context),
               ),
             ),
@@ -89,7 +73,7 @@ class _SuspectedCauseListScreenState extends State<SuspectedCauseListScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  AppText('Danh sách tác nhân', type: AppTextType.bodyMedium, fontWeight: FontWeight.w700),
+                  AppText(l10n.suspectedCauseListLabel, type: AppTextType.bodyMedium, fontWeight: FontWeight.w700),
                   Consumer<SuspectedCauseProvider>(
                     builder: (context, provider, child) {
                       final hasFilter = provider.hasActiveFilters;
@@ -120,7 +104,7 @@ class _SuspectedCauseListScreenState extends State<SuspectedCauseListScreen> {
                 builder: (context, provider, child) {
                   if (provider.errorMessage != null && provider.items.isNotEmpty) {
                     WidgetsBinding.instance.addPostFrameCallback((_) {
-                      showAppToast(context, provider.errorMessage!);
+                      showAppToast(context, provider.errorMessage!.localizedError(l10n));
                       provider.clearError();
                     });
                   }
@@ -136,7 +120,7 @@ class _SuspectedCauseListScreenState extends State<SuspectedCauseListScreen> {
                         children: [
                           Icon(LucideIcons.folderSearch, size: 48, color: c.textSecondary.withValues(alpha: 0.5)),
                           const SizedBox(height: 16),
-                          AppText('Không tìm thấy kết quả nào.', color: c.textSecondary),
+                          AppText(l10n.commonNoResults, color: c.textSecondary),
                         ],
                       ),
                     );
@@ -169,9 +153,9 @@ class _SuspectedCauseListScreenState extends State<SuspectedCauseListScreen> {
                             const SizedBox(height: 12),
                             Row(
                               children: [
-                                _buildTag(c, LucideIcons.activity, _translateSeverity(item.severity), bg: sevBg, color: sevColor),
+                                _buildTag(c, LucideIcons.activity, item.severity.label(l10n), bg: sevBg, color: sevColor),
                                 const SizedBox(width: 8),
-                                _buildTag(c, LucideIcons.mapPin, _translateSite(item.treatmentSite)),
+                                _buildTag(c, LucideIcons.mapPin, item.treatmentSite.label(l10n)),
                               ],
                             )
                           ],
@@ -248,6 +232,7 @@ class _FilterBottomSheetState extends State<_FilterBottomSheet> {
   @override
   Widget build(BuildContext context) {
     final c = context.respiraColors;
+    final l10n = context.l10n;
     
     return Padding(
       padding: const EdgeInsets.all(Spacing.group),
@@ -259,10 +244,10 @@ class _FilterBottomSheetState extends State<_FilterBottomSheet> {
             child: Container(width: 40, height: 4, decoration: BoxDecoration(color: c.borderSubtle, borderRadius: BorderRadius.circular(2))),
           ),
           const SizedBox(height: Spacing.section),
-          AppText('Bộ lọc dữ liệu', type: AppTextType.h3, fontWeight: FontWeight.bold),
+          AppText(l10n.filterTitle, type: AppTextType.h3, fontWeight: FontWeight.bold),
           const SizedBox(height: Spacing.section),
 
-          AppText('Tác nhân (Pathogen)', type: AppTextType.bodyMedium, fontWeight: FontWeight.w600),
+          AppText(l10n.suspectedCausePathogen, type: AppTextType.bodyMedium, fontWeight: FontWeight.w600),
           const SizedBox(height: 8),
           FutureBuilder<List<PathogenSummary>>(
             future: _pathogenListFuture,
@@ -271,7 +256,7 @@ class _FilterBottomSheetState extends State<_FilterBottomSheet> {
                 return const Center(child: CircularProgressIndicator());
               }
               if (snapshot.hasError) {
-                return AppText('Không tải được danh sách tác nhân', color: c.error);
+                return AppText(l10n.riskFactorPathogensList, color: c.error);
               }
               
               final pathogens = snapshot.data ?? [];
@@ -286,13 +271,13 @@ class _FilterBottomSheetState extends State<_FilterBottomSheet> {
                   child: DropdownButton<String?>(
                     isExpanded: true,
                     value: _selectedPathogenId,
-                    hint: AppText('Tất cả tác nhân', color: c.textSecondary),
+                    hint: AppText(l10n.riskFactorAllPathogens, color: c.textSecondary),
                     dropdownColor: c.surface,
                     icon: Icon(LucideIcons.chevronDown, color: c.iconDefault),
                     items: [
                       DropdownMenuItem(
                         value: null,
-                        child: AppText('Tất cả tác nhân'),
+                        child: AppText(l10n.riskFactorAllPathogens),
                       ),
                       ...pathogens.map((p) => DropdownMenuItem(
                         value: p.id,
@@ -307,28 +292,28 @@ class _FilterBottomSheetState extends State<_FilterBottomSheet> {
           ),
           const SizedBox(height: Spacing.section),
 
-          AppText('Mức độ nghiêm trọng', type: AppTextType.bodyMedium, fontWeight: FontWeight.w600),
+          AppText(l10n.suspectedCauseSeverity, type: AppTextType.bodyMedium, fontWeight: FontWeight.w600),
           const SizedBox(height: 8),
           Wrap(
             spacing: 8, runSpacing: 8,
             children: [
-              _buildChoiceChip('Tất cả', _selectedSeverity == null, () => setState(() => _selectedSeverity = null)),
-              _buildChoiceChip('Nhẹ', _selectedSeverity == 'Mild', () => setState(() => _selectedSeverity = 'Mild')),
-              _buildChoiceChip('Trung bình', _selectedSeverity == 'Moderate', () => setState(() => _selectedSeverity = 'Moderate')),
-              _buildChoiceChip('Nặng', _selectedSeverity == 'Severe', () => setState(() => _selectedSeverity = 'Severe')),
+              _buildChoiceChip(l10n.commonAll, _selectedSeverity == null, () => setState(() => _selectedSeverity = null)),
+              _buildChoiceChip(l10n.severityMild, _selectedSeverity == 'Mild', () => setState(() => _selectedSeverity = 'Mild')),
+              _buildChoiceChip(l10n.severityModerate, _selectedSeverity == 'Moderate', () => setState(() => _selectedSeverity = 'Moderate')),
+              _buildChoiceChip(l10n.severitySevere, _selectedSeverity == 'Severe', () => setState(() => _selectedSeverity = 'Severe')),
             ],
           ),
           const SizedBox(height: Spacing.section),
 
-          AppText('Nơi điều trị', type: AppTextType.bodyMedium, fontWeight: FontWeight.w600),
+          AppText(l10n.suspectedCauseSite, type: AppTextType.bodyMedium, fontWeight: FontWeight.w600),
           const SizedBox(height: 8),
           Wrap(
             spacing: 8, runSpacing: 8,
             children: [
-              _buildChoiceChip('Tất cả', _selectedSite == null, () => setState(() => _selectedSite = null)),
-              _buildChoiceChip('Ngoại trú', _selectedSite == 'Outpatient', () => setState(() => _selectedSite = 'Outpatient')),
-              _buildChoiceChip('Nội trú', _selectedSite == 'Inpatient', () => setState(() => _selectedSite = 'Inpatient')),
-              _buildChoiceChip('ICU', _selectedSite == 'IntensiveCareUnit', () => setState(() => _selectedSite = 'IntensiveCareUnit')),
+              _buildChoiceChip(l10n.commonAll, _selectedSite == null, () => setState(() => _selectedSite = null)),
+              _buildChoiceChip(l10n.siteOutpatient, _selectedSite == 'Outpatient', () => setState(() => _selectedSite = 'Outpatient')),
+              _buildChoiceChip(l10n.siteInpatient, _selectedSite == 'Inpatient', () => setState(() => _selectedSite = 'Inpatient')),
+              _buildChoiceChip(l10n.siteIcu, _selectedSite == 'IntensiveCareUnit', () => setState(() => _selectedSite = 'IntensiveCareUnit')),
             ],
           ),
           const SizedBox(height: Spacing.section),
@@ -337,14 +322,14 @@ class _FilterBottomSheetState extends State<_FilterBottomSheet> {
             children: [
               Expanded(
                 child: AppButton(
-                  label: 'Xóa bộ lọc',
+                  label: l10n.filterClear,
                   onPressed: _reset,
                 ),
               ),
               const SizedBox(width: 16),
               Expanded(
                 child: AppButton(
-                  label: 'Áp dụng',
+                  label: l10n.filterApply,
                   onPressed: _apply,
                 ),
               ),

@@ -24,8 +24,4 @@ class OtpState with _$OtpState {
 
 extension OtpStateX on OtpState {
   bool get isComplete => digits.length == 6;
-
-  /// "00:42" style label for the countdown row.
-  String get countdownLabel =>
-      'Gửi lại mã sau 00:${secondsRemaining.toString().padLeft(2, '0')}';
 }

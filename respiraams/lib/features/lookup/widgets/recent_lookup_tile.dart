@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../design_system/design_system.dart';
+import '../../../../l10n/l10n.dart';
 import '../models/recent_item.dart';
 
 class RecentLookupTile extends StatelessWidget {
@@ -10,6 +11,7 @@ class RecentLookupTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.respiraColors;
+    final l10n = context.l10n;
 
     return Container(
       margin: const EdgeInsets.only(bottom: Spacing.control),
@@ -27,7 +29,7 @@ class RecentLookupTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  item.title,
+                  item.id.title(l10n),
                   style: TypographyTokens.caption(context).copyWith(
                     fontWeight: FontWeight.w600,
                     color: c.textPrimary,
@@ -35,7 +37,7 @@ class RecentLookupTile extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  item.subtitle,
+                  item.id.subtitle(l10n),
                   style: TextStyle(fontSize: 10, color: c.textSecondary),
                 ),
               ],
@@ -49,7 +51,7 @@ class RecentLookupTile extends StatelessWidget {
               borderRadius: BorderRadius.circular(15),
             ),
             child: Text(
-              item.tag,
+              item.id.tag(l10n),
               style: TextStyle(
                 fontSize: 11,
                 fontWeight: FontWeight.w600,

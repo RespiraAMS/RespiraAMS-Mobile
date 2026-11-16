@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../../../../design_system/design_system.dart';
+import '../../../../l10n/l10n.dart';
 import '../providers/criterion_provider.dart';
 import '../../clinical_variables/widgets/formula_display_widget.dart';
 
@@ -53,6 +54,7 @@ class _CriterionListScreenState extends State<CriterionListScreen> {
   @override
   Widget build(BuildContext context) {
     final c = context.respiraColors;
+    final l10n = context.l10n;
 
     return Scaffold(
       backgroundColor: c.background,
@@ -62,8 +64,8 @@ class _CriterionListScreenState extends State<CriterionListScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: Spacing.group, vertical: 8),
               child: AppAppBar(
-                title: 'Tiêu chí',
-                subtitle: 'Danh sách các tiêu chí đánh giá',
+                title: l10n.criteriaTitle,
+                subtitle: l10n.criteriaSubtitle,
                 onBack: () => Navigator.pop(context),
               ),
             ),
@@ -74,7 +76,7 @@ class _CriterionListScreenState extends State<CriterionListScreen> {
                 controller: _searchController,
                 onChanged: _onSearchChanged,
                 decoration: InputDecoration(
-                  hintText: 'Tìm kiếm tên tiêu chí...',
+                  hintText: l10n.criteriaSearchHint,
                   hintStyle: TextStyle(color: c.textSecondary),
                   prefixIcon: Icon(LucideIcons.search, color: c.iconDefault, size: 20),
                   filled: true,
@@ -92,7 +94,7 @@ class _CriterionListScreenState extends State<CriterionListScreen> {
                 builder: (context, provider, child) {
                   if (provider.errorMessage != null && provider.items.isNotEmpty) {
                     WidgetsBinding.instance.addPostFrameCallback((_) {
-                      showAppToast(context, provider.errorMessage!);
+                      showAppToast(context, provider.errorMessage!.localizedError(l10n));
                       provider.clearError();
                     });
                   }
@@ -106,13 +108,13 @@ class _CriterionListScreenState extends State<CriterionListScreen> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          AppText(provider.errorMessage!, color: c.error),
+                          AppText(provider.errorMessage!.localizedError(l10n), color: c.error),
                           const SizedBox(height: 12),
                           GestureDetector(
                             onTap: () => provider.fetchPage(),
                             child: AppSurface(
                               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                              child: AppText('Thử lại', color: c.primary),
+                              child: AppText(l10n.commonRetry, color: c.primary),
                             ),
                           ),
                         ],
@@ -121,7 +123,7 @@ class _CriterionListScreenState extends State<CriterionListScreen> {
                   }
 
                   if (provider.items.isEmpty && !provider.isLoading) {
-                    return Center(child: AppText('Không tìm thấy kết quả nào.', color: c.textSecondary));
+                    return Center(child: AppText(l10n.commonNoResults, color: c.textSecondary));
                   }
 
                   return ListView.separated(
@@ -137,7 +139,7 @@ class _CriterionListScreenState extends State<CriterionListScreen> {
                             child: provider.errorMessage != null
                                 ? GestureDetector(
                                     onTap: () => provider.fetchPage(),
-                                    child: AppText('Không thể tải thêm. Nhấn để thử lại', type: AppTextType.caption, color: c.error),
+                                    child: AppText(l10n.commonLoadMoreFailed, type: AppTextType.caption, color: c.error),
                                   )
                                 : CircularProgressIndicator(color: c.primary),
                           ),

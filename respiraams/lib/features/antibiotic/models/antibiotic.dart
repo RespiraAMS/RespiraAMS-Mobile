@@ -15,7 +15,9 @@ class Antibiotic {
     return Antibiotic(
       id: json['id'] ?? '',
       name: json['name'] ?? '',
-      groupName: json['antibioticGroup'] != null ? json['antibioticGroup']['name'] ?? '' : '',
+      groupName: json['antibioticGroup'] != null
+          ? json['antibioticGroup']['name'] ?? ''
+          : '',
       classification: json['classification'] ?? '',
     );
   }
@@ -26,8 +28,15 @@ class Crcl {
   final bool isMinExclusive;
   final num? max;
   final bool isMaxExclusive;
+  final String? unit;
 
-  Crcl({this.min, this.isMinExclusive = false, this.max, this.isMaxExclusive = false});
+  Crcl({
+    this.min,
+    this.isMinExclusive = false,
+    this.max,
+    this.isMaxExclusive = false,
+    this.unit,
+  });
 
   factory Crcl.fromJson(Map<String, dynamic> json) {
     return Crcl(
@@ -35,6 +44,7 @@ class Crcl {
       isMinExclusive: json['isMinExclusive'] ?? false,
       max: json['max'],
       isMaxExclusive: json['isMaxExclusive'] ?? false,
+      unit: json['unit'],
     );
   }
 }

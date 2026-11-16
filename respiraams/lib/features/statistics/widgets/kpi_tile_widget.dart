@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:respiraams/design_system/design_system.dart';
+import 'package:respiraams/l10n/l10n.dart';
 
 import '../models/statistics_view.dart';
 
@@ -29,7 +30,7 @@ class KpiTileWidget extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            stat.label,
+            stat.id.label(context.l10n),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: TypographyTokens.label(context)

@@ -22,17 +22,21 @@ class AntibioticGroupRepository {
     String? parentId,
   }) async {
     try {
+      final search = name?.trim() ?? '';
       final queryParams = <String, dynamic>{
         'page': page,
-        'pageSize': pageSize,
+        'size': pageSize,
+        if (search.isNotEmpty) 'searchTerm': search,
       };
 
+      // Free-text search lives on `/antibiotic-groups/search`; the paged
+      // endpoint only supports the `parentId` filter.
       if (parentId != null) {
         queryParams['ParentId'] = parentId;
       }
 
       final response = await apiClient.dio.get(
-        '/antibiotic-groups',
+        search.isEmpty ? '/antibiotic-groups' : '/antibiotic-groups/search',
         queryParameters: queryParams,
       );
 
@@ -63,7 +67,7 @@ class AntibioticGroupRepository {
     } on DioException catch (e) {
       throw _handleError(e);
     } catch (e) {
-      throw Exception('Lỗi xử lý dữ liệu: $e');
+      throw Exception('Failed to process data: $e');
     }
   }
 
@@ -106,7 +110,8 @@ class AntibioticGroupRepository {
       final response = await apiClient.dio.get(
         '/antibiotics',
         queryParameters: {
-          'AntibioticGroupId': groupId,
+          'antibioticGroupId': groupId,
+          'size': 100,
         },
       );
 
@@ -119,10 +124,10 @@ class AntibioticGroupRepository {
       if (e.response != null) {
         throw Exception('Lỗi server: ${e.response?.statusCode}');
       } else {
-        throw Exception('Lỗi kết nối mạng: Vui lòng kiểm tra internet');
+        throw Exception('Network error: please check your connection');
       }
     } catch (e) {
-      throw Exception('Lỗi xử lý dữ liệu: $e');
+      throw Exception('Failed to process data: $e');
     }
   }
 }

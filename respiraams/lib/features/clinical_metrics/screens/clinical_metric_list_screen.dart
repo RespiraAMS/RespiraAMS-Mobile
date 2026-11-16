@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../../../../design_system/design_system.dart';
+import '../../../../l10n/l10n.dart';
 import '../providers/clinical_metric_provider.dart';
 import 'clinical_metric_detail_screen.dart';
 
@@ -70,6 +71,7 @@ class _ClinicalMetricListScreenState extends State<ClinicalMetricListScreen> {
   @override
   Widget build(BuildContext context) {
     final c = context.respiraColors;
+    final l10n = context.l10n;
 
     return Scaffold(
       backgroundColor: c.background,
@@ -79,8 +81,8 @@ class _ClinicalMetricListScreenState extends State<ClinicalMetricListScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: Spacing.group, vertical: 8),
               child: AppAppBar(
-                title: 'Thang điểm lâm sàng',
-                subtitle: 'Các bộ tiêu chí & Đánh giá',
+                title: l10n.clinicalMetricTitle,
+                subtitle: l10n.clinicalMetricSubtitle,
                 onBack: () => Navigator.pop(context),
               ),
             ),
@@ -94,7 +96,7 @@ class _ClinicalMetricListScreenState extends State<ClinicalMetricListScreen> {
                       controller: _searchController,
                       onChanged: _onSearchChanged,
                       decoration: InputDecoration(
-                        hintText: 'Tìm kiếm tên thang điểm...',
+                        hintText: l10n.clinicalMetricSearchHint,
                         hintStyle: TextStyle(color: c.textSecondary),
                         prefixIcon: Icon(LucideIcons.search, color: c.iconDefault, size: 20),
                         filled: true,
@@ -138,7 +140,7 @@ class _ClinicalMetricListScreenState extends State<ClinicalMetricListScreen> {
                   // Xử lý báo lỗi
                   if (provider.errorMessage != null && provider.items.isNotEmpty) {
                     WidgetsBinding.instance.addPostFrameCallback((_) {
-                      showAppToast(context, provider.errorMessage!);
+                      showAppToast(context, provider.errorMessage!.localizedError(l10n));
                       provider.clearError();
                     });
                   }
@@ -152,13 +154,13 @@ class _ClinicalMetricListScreenState extends State<ClinicalMetricListScreen> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          AppText(provider.errorMessage!, color: c.error),
+                          AppText(provider.errorMessage!.localizedError(l10n), color: c.error),
                           const SizedBox(height: 12),
                           GestureDetector(
                             onTap: () => provider.fetchPage(),
                             child: AppSurface(
                               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                              child: AppText('Thử lại', color: c.primary),
+                              child: AppText(l10n.commonRetry, color: c.primary),
                             ),
                           ),
                         ],
@@ -167,7 +169,7 @@ class _ClinicalMetricListScreenState extends State<ClinicalMetricListScreen> {
                   }
 
                   if (provider.items.isEmpty && !provider.isLoading) {
-                    return Center(child: AppText('Không tìm thấy kết quả nào.', color: c.textSecondary));
+                    return Center(child: AppText(l10n.commonNoResults, color: c.textSecondary));
                   }
 
                   return ListView.separated(
@@ -183,7 +185,7 @@ class _ClinicalMetricListScreenState extends State<ClinicalMetricListScreen> {
                             child: provider.errorMessage != null
                                 ? GestureDetector(
                                     onTap: () => provider.fetchPage(),
-                                    child: AppText('Không thể tải thêm. Nhấn để thử lại', type: AppTextType.caption, color: c.error),
+                                    child: AppText(l10n.commonLoadMoreFailed, type: AppTextType.caption, color: c.error),
                                   )
                                 : CircularProgressIndicator(color: c.primary),
                           ),
@@ -222,7 +224,7 @@ class _ClinicalMetricListScreenState extends State<ClinicalMetricListScreen> {
                                     Container(
                                       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                                       decoration: BoxDecoration(color: c.successSoft, borderRadius: BorderRadius.circular(4)),
-                                      child: AppText('Đang áp dụng', type: AppTextType.caption, color: c.success),
+                                      child: AppText(l10n.clinicalMetricApplied, type: AppTextType.caption, color: c.success),
                                     )
                                 ],
                               ),

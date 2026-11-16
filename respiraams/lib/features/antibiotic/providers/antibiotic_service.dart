@@ -22,16 +22,20 @@ class AntibioticRepository {
     String? classification,
   }) async {
     try {
+      final search = name?.trim() ?? '';
       final queryParams = <String, dynamic>{
         'page': page,
-        'pageSize': pageSize,
+        'size': pageSize,
+        if (search.isNotEmpty) 'searchTerm': search,
       };
 
+      // Free-text search lives on `/antibiotics/search`; the paged endpoint
+      // only supports `antibioticGroupId` / `classification` filters.
       if (groupId != null) queryParams['AntibioticGroupId'] = groupId;
       if (classification != null) queryParams['Classification'] = classification;
 
       final response = await apiClient.dio.get(
-        '/antibiotics',
+        search.isEmpty ? '/antibiotics' : '/antibiotics/search',
         queryParameters: queryParams,
       );
 
@@ -62,7 +66,7 @@ class AntibioticRepository {
     } on DioException catch (e) {
       throw _handleError(e);
     } catch (e) {
-      throw Exception('Lỗi xử lý dữ liệu: $e');
+      throw Exception('Failed to process data: $e');
     }
   }
 
@@ -100,10 +104,10 @@ class AntibioticRepository {
       if (e.response != null) {
         throw Exception('Lỗi server: ${e.response?.statusCode}');
       } else {
-        throw Exception('Lỗi kết nối mạng: Vui lòng kiểm tra internet');
+        throw Exception('Network error: please check your connection');
       }
     } catch (e) {
-      throw Exception('Lỗi xử lý dữ liệu: $e');
+      throw Exception('Failed to process data: $e');
     }
   }
 

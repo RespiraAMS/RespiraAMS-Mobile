@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 import 'package:respiraams/design_system/design_system.dart';
+import 'package:respiraams/l10n/l10n.dart';
 
+import '../models/patient.dart';
 import '../models/patient_summary.dart';
 
 /// One roster card: glyph avatar · identity · status dot + label · chevron.
@@ -20,6 +22,7 @@ class PatientCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.respiraColors;
+    final l10n = context.l10n;
 
     final dotColor = switch (patient.status) {
       PatientStatus.treating => c.warning,
@@ -47,7 +50,7 @@ class PatientCardWidget extends StatelessWidget {
               AvatarGlyphWidget(
                 // Offline-safe glyph instead of the template's network
                 // placeholders; derived from gender.
-                glyph: patient.genderLabel == 'Nữ' ? '👩🏾' : '👨🏻',
+                glyph: patient.gender == Gender.nu ? '👩🏾' : '👨🏻',
                 size: ControlSize.touchTargetMin,
               ),
               const SizedBox(width: Spacing.group),
@@ -65,8 +68,8 @@ class PatientCardWidget extends StatelessWidget {
                     ),
                     const SizedBox(height: Spacing.xxxs),
                     AppText(
-                      '${patient.code} · ${patient.genderLabel} · '
-                      '${patient.age} tuổi',
+                      '${patient.code} · ${patient.gender.label(l10n)} · '
+                      '${l10n.patientAge(patient.age)}',
                       type: AppTextType.caption,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -82,7 +85,7 @@ class PatientCardWidget extends StatelessWidget {
                         ),
                         const SizedBox(width: Spacing.xxxs + 2),
                         Text(
-                          patient.status.displayName,
+                          patient.status.label(l10n),
                           style: TypographyTokens.label(context)
                               .copyWith(color: c.textPrimary),
                         ),

@@ -24,7 +24,7 @@ ForgotPasswordFormState _$ForgotPasswordFormStateFromJson(
 /// @nodoc
 mixin _$ForgotPasswordFormState {
   String get email => throw _privateConstructorUsedError;
-  String? get errorMessage => throw _privateConstructorUsedError;
+  bool get emailInvalid => throw _privateConstructorUsedError;
 
   /// Serializes this ForgotPasswordFormState to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -43,7 +43,7 @@ abstract class $ForgotPasswordFormStateCopyWith<$Res> {
     $Res Function(ForgotPasswordFormState) then,
   ) = _$ForgotPasswordFormStateCopyWithImpl<$Res, ForgotPasswordFormState>;
   @useResult
-  $Res call({String email, String? errorMessage});
+  $Res call({String email, bool emailInvalid});
 }
 
 /// @nodoc
@@ -63,17 +63,17 @@ class _$ForgotPasswordFormStateCopyWithImpl<
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? email = null, Object? errorMessage = freezed}) {
+  $Res call({Object? email = null, Object? emailInvalid = null}) {
     return _then(
       _value.copyWith(
             email: null == email
                 ? _value.email
                 : email // ignore: cast_nullable_to_non_nullable
                       as String,
-            errorMessage: freezed == errorMessage
-                ? _value.errorMessage
-                : errorMessage // ignore: cast_nullable_to_non_nullable
-                      as String?,
+            emailInvalid: null == emailInvalid
+                ? _value.emailInvalid
+                : emailInvalid // ignore: cast_nullable_to_non_nullable
+                      as bool,
           )
           as $Val,
     );
@@ -89,7 +89,7 @@ abstract class _$$ForgotPasswordFormStateImplCopyWith<$Res>
   ) = __$$ForgotPasswordFormStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String email, String? errorMessage});
+  $Res call({String email, bool emailInvalid});
 }
 
 /// @nodoc
@@ -109,17 +109,17 @@ class __$$ForgotPasswordFormStateImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? email = null, Object? errorMessage = freezed}) {
+  $Res call({Object? email = null, Object? emailInvalid = null}) {
     return _then(
       _$ForgotPasswordFormStateImpl(
         email: null == email
             ? _value.email
             : email // ignore: cast_nullable_to_non_nullable
                   as String,
-        errorMessage: freezed == errorMessage
-            ? _value.errorMessage
-            : errorMessage // ignore: cast_nullable_to_non_nullable
-                  as String?,
+        emailInvalid: null == emailInvalid
+            ? _value.emailInvalid
+            : emailInvalid // ignore: cast_nullable_to_non_nullable
+                  as bool,
       ),
     );
   }
@@ -128,7 +128,10 @@ class __$$ForgotPasswordFormStateImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$ForgotPasswordFormStateImpl implements _ForgotPasswordFormState {
-  const _$ForgotPasswordFormStateImpl({this.email = '', this.errorMessage});
+  const _$ForgotPasswordFormStateImpl({
+    this.email = '',
+    this.emailInvalid = false,
+  });
 
   factory _$ForgotPasswordFormStateImpl.fromJson(Map<String, dynamic> json) =>
       _$$ForgotPasswordFormStateImplFromJson(json);
@@ -137,11 +140,12 @@ class _$ForgotPasswordFormStateImpl implements _ForgotPasswordFormState {
   @JsonKey()
   final String email;
   @override
-  final String? errorMessage;
+  @JsonKey()
+  final bool emailInvalid;
 
   @override
   String toString() {
-    return 'ForgotPasswordFormState(email: $email, errorMessage: $errorMessage)';
+    return 'ForgotPasswordFormState(email: $email, emailInvalid: $emailInvalid)';
   }
 
   @override
@@ -150,13 +154,13 @@ class _$ForgotPasswordFormStateImpl implements _ForgotPasswordFormState {
         (other.runtimeType == runtimeType &&
             other is _$ForgotPasswordFormStateImpl &&
             (identical(other.email, email) || other.email == email) &&
-            (identical(other.errorMessage, errorMessage) ||
-                other.errorMessage == errorMessage));
+            (identical(other.emailInvalid, emailInvalid) ||
+                other.emailInvalid == emailInvalid));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, email, errorMessage);
+  int get hashCode => Object.hash(runtimeType, email, emailInvalid);
 
   /// Create a copy of ForgotPasswordFormState
   /// with the given fields replaced by the non-null parameter values.
@@ -178,7 +182,7 @@ class _$ForgotPasswordFormStateImpl implements _ForgotPasswordFormState {
 abstract class _ForgotPasswordFormState implements ForgotPasswordFormState {
   const factory _ForgotPasswordFormState({
     final String email,
-    final String? errorMessage,
+    final bool emailInvalid,
   }) = _$ForgotPasswordFormStateImpl;
 
   factory _ForgotPasswordFormState.fromJson(Map<String, dynamic> json) =
@@ -187,7 +191,7 @@ abstract class _ForgotPasswordFormState implements ForgotPasswordFormState {
   @override
   String get email;
   @override
-  String? get errorMessage;
+  bool get emailInvalid;
 
   /// Create a copy of ForgotPasswordFormState
   /// with the given fields replaced by the non-null parameter values.

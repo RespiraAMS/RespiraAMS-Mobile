@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/utils/context_extensions.dart';
 import '../../../../design_system/design_system.dart';
+import '../../../../l10n/l10n.dart';
 import 'package:respiraams/features/calculator/routes.dart';
 import 'package:respiraams/features/diagnosis/widgets/criteria_banner_widget.dart';
 import 'package:respiraams/features/diagnosis/widgets/selection_row_widget.dart';
@@ -17,6 +18,7 @@ class CalculatorDetailScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.l10n;
     final tabIndex = ref.watch(calculatorDetailTabControllerProvider);
     final tabController =
         ref.read(calculatorDetailTabControllerProvider.notifier);
@@ -32,12 +34,15 @@ class CalculatorDetailScreen extends ConsumerWidget {
             children: [
               AppAppBar(
                 title: 'CURB-65',
-                subtitle: 'Máy tính lâm sàng',
+                subtitle: l10n.calcClinicalCalculator,
                 onBack: () => context.goBackOr(CalculatorRoutes.list),
               ),
               const SizedBox(height: Spacing.control),
               AppSegmentedTabs<int>(
-                segments: const [(0, 'Nhập liệu'), (1, 'Giải thích')],
+                segments: [
+                  (0, l10n.calcInputTab),
+                  (1, l10n.calcExplanationTab),
+                ],
                 selected: tabIndex,
                 onChanged: tabController.setTab,
               ),
@@ -58,7 +63,7 @@ class CalculatorDetailScreen extends ConsumerWidget {
                 ),
                 child: tabIndex == 0
                     ? AppButton(
-                        label: 'Tính',
+                        label: l10n.calcCalculate,
                         expand: true,
                         onPressed: controller.calculate,
                       )
@@ -81,6 +86,7 @@ class _InputTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final input = state.input;
+    final l10n = context.l10n;
 
     return SingleChildScrollView(
       child: Column(
@@ -95,20 +101,20 @@ class _InputTab extends StatelessWidget {
             ),
             child: Column(
               children: [
-                const CriteriaBannerWidget('Tiêu chí CURB-65'),
+                CriteriaBannerWidget(l10n.calcCriteriaBanner),
                 const SizedBox(height: Spacing.control),
                 // C — confusion checkbox.
                 SelectionRowWidget(
-                  title: 'Lú lẫn mới xuất hiện',
-                  description: 'Confusion',
+                  title: l10n.calcConfusion,
+                  description: l10n.calcConfusionDesc,
                   selected: input.confusion,
                   onTap: controller.toggleConfusion,
                 ),
                 const SizedBox(height: Spacing.inline),
                 _RowCard(
                   child: AppUnitField(
-                    label: 'Urea',
-                    description: 'Ngưỡng > 7 mmol/L',
+                    label: l10n.calcUrea,
+                    description: l10n.calcUreaDesc,
                     unit: 'mmol/L',
                     initialValue: input.urea,
                     onChanged: controller.setUrea,
@@ -117,9 +123,9 @@ class _InputTab extends StatelessWidget {
                 const SizedBox(height: Spacing.inline),
                 _RowCard(
                   child: AppUnitField(
-                    label: 'Nhịp thở',
-                    description: 'Ngưỡng ≥ 30 lần/phút',
-                    unit: 'lần/phút',
+                    label: l10n.calcRespRate,
+                    description: l10n.calcRespRateDesc,
+                    unit: l10n.calcRespRateUnit,
                     initialValue: input.respRate,
                     onChanged: controller.setRespRate,
                   ),
@@ -130,13 +136,13 @@ class _InputTab extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Huyết áp',
+                        l10n.calcBloodPressure,
                         style: TypographyTokens.body(context).copyWith(
                             color: context.respiraColors.textPrimary),
                       ),
                       const SizedBox(height: Spacing.xxxs),
                       AppText(
-                        'Ngưỡng: SBP < 90 mmHg hoặc DBP ≤ 60 mmHg',
+                        l10n.calcBpThreshold,
                         type: AppTextType.caption,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -169,9 +175,9 @@ class _InputTab extends StatelessWidget {
                 const SizedBox(height: Spacing.inline),
                 _RowCard(
                   child: AppUnitField(
-                    label: 'Tuổi',
-                    description: 'Ngưỡng ≥ 65 tuổi',
-                    unit: 'tuổi',
+                    label: l10n.calcAge,
+                    description: l10n.calcAgeDesc,
+                    unit: l10n.calcAgeUnit,
                     initialValue: input.age,
                     onChanged: controller.setAge,
                   ),
@@ -216,48 +222,47 @@ class _ExplanationTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
 
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           _ExplanationCard(
-            title: 'Phương pháp tính',
+            title: l10n.calcMethodTitle,
             children: [
               AppText(
-                'Điểm CURB-65 = tổng số tiêu chí được đáp ứng, từ 0 đến 5 '
-                'điểm. Mỗi tiêu chí đáp ứng đóng góp 1 điểm.',
+                l10n.calcMethodBody,
                 type: AppTextType.body,
               ),
             ],
           ),
           const SizedBox(height: Spacing.section),
           _ExplanationCard(
-            title: 'Mô tả',
+            title: l10n.calcDescriptionTitle,
             children: [
               AppText(
-                'CURB-65 hỗ trợ đánh giá mức độ nặng của viêm phổi cộng đồng.',
+                l10n.calcDescriptionBody,
                 type: AppTextType.body,
               ),
               const SizedBox(height: Spacing.inline),
               AppText(
-                'Kết quả cần được bác sĩ xác nhận trong bối cảnh lâm sàng.',
+                l10n.calcConfirmNote,
                 type: AppTextType.caption,
               ),
             ],
           ),
           const SizedBox(height: Spacing.section),
           _ExplanationCard(
-            title: 'Các thành phần',
+            title: l10n.calcComponentsTitle,
             children: [
               AppText(
-                'Lú lẫn · Urea > 7 mmol/L · Nhịp thở ≥ 30 · Huyết áp thấp · '
-                'Tuổi ≥ 65.',
+                l10n.calcComponentsBody,
                 type: AppTextType.body,
               ),
               const SizedBox(height: Spacing.inline),
               AppText(
-                'Chi tiết ngưỡng được hiển thị tại tab Nhập liệu.',
+                l10n.calcThresholdNote,
                 type: AppTextType.caption,
               ),
             ],

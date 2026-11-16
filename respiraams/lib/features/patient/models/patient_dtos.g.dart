@@ -66,13 +66,25 @@ Map<String, dynamic> _$$NextOfKinItemDtoImplToJson(
   'relationship': instance.relationship,
 };
 
-_$TreatmentItemDtoImpl _$$TreatmentItemDtoImplFromJson(
+_$TreatmentPlanItemDtoImpl _$$TreatmentPlanItemDtoImplFromJson(
   Map<String, dynamic> json,
-) => _$TreatmentItemDtoImpl(id: json['id'] as String);
+) => _$TreatmentPlanItemDtoImpl(
+  id: json['id'] as String,
+  adherenceState: json['adherenceState'] as String? ?? 'Adhere',
+  treatmentPlanStatus: json['treatmentPlanStatus'] == null
+      ? 0
+      : _treatmentPlanStatusFromJson(json['treatmentPlanStatus']),
+  updatedAt: json['updatedAt'] as String? ?? '',
+);
 
-Map<String, dynamic> _$$TreatmentItemDtoImplToJson(
-  _$TreatmentItemDtoImpl instance,
-) => <String, dynamic>{'id': instance.id};
+Map<String, dynamic> _$$TreatmentPlanItemDtoImplToJson(
+  _$TreatmentPlanItemDtoImpl instance,
+) => <String, dynamic>{
+  'id': instance.id,
+  'adherenceState': instance.adherenceState,
+  'treatmentPlanStatus': instance.treatmentPlanStatus,
+  'updatedAt': instance.updatedAt,
+};
 
 _$PatientDetailDtoImpl _$$PatientDetailDtoImplFromJson(
   Map<String, dynamic> json,
@@ -99,9 +111,9 @@ _$PatientDetailDtoImpl _$$PatientDetailDtoImplFromJson(
           ?.map((e) => NextOfKinItemDto.fromJson(e as Map<String, dynamic>))
           .toList() ??
       const [],
-  treatments:
-      (json['treatments'] as List<dynamic>?)
-          ?.map((e) => TreatmentItemDto.fromJson(e as Map<String, dynamic>))
+  treatmentPlans:
+      (json['treatmentPlans'] as List<dynamic>?)
+          ?.map((e) => TreatmentPlanItemDto.fromJson(e as Map<String, dynamic>))
           .toList() ??
       const [],
 );
@@ -124,5 +136,68 @@ Map<String, dynamic> _$$PatientDetailDtoImplToJson(
   'discharge': instance.discharge,
   'treatmentOutcome': _$PatientStatusDtoEnumMap[instance.treatmentOutcome]!,
   'nextOfKins': instance.nextOfKins,
-  'treatments': instance.treatments,
+  'treatmentPlans': instance.treatmentPlans,
+};
+
+_$TreatmentPlanPatientDtoImpl _$$TreatmentPlanPatientDtoImplFromJson(
+  Map<String, dynamic> json,
+) => _$TreatmentPlanPatientDtoImpl(
+  id: json['id'] as String,
+  name: json['name'] as String,
+);
+
+Map<String, dynamic> _$$TreatmentPlanPatientDtoImplToJson(
+  _$TreatmentPlanPatientDtoImpl instance,
+) => <String, dynamic>{'id': instance.id, 'name': instance.name};
+
+_$TreatmentMedicineDtoImpl _$$TreatmentMedicineDtoImplFromJson(
+  Map<String, dynamic> json,
+) => _$TreatmentMedicineDtoImpl(
+  id: json['id'] as String,
+  name: json['name'] as String,
+  classification: json['classification'] as String? ?? '',
+);
+
+Map<String, dynamic> _$$TreatmentMedicineDtoImplToJson(
+  _$TreatmentMedicineDtoImpl instance,
+) => <String, dynamic>{
+  'id': instance.id,
+  'name': instance.name,
+  'classification': instance.classification,
+};
+
+_$TreatmentPlanDetailDtoImpl _$$TreatmentPlanDetailDtoImplFromJson(
+  Map<String, dynamic> json,
+) => _$TreatmentPlanDetailDtoImpl(
+  id: json['id'] as String,
+  patient: TreatmentPlanPatientDto.fromJson(
+    json['patient'] as Map<String, dynamic>,
+  ),
+  doctorId: json['doctorId'] as String? ?? '',
+  diagnosis: json['diagnosis'] as String? ?? '',
+  medicines:
+      (json['medicines'] as List<dynamic>?)
+          ?.map((e) => TreatmentMedicineDto.fromJson(e as Map<String, dynamic>))
+          .toList() ??
+      const [],
+  reasonForMedicineChoice: json['reasonForMedicineChoice'] as String?,
+  adherenceState: json['adherenceState'] as String? ?? 'Adhere',
+  status: json['status'] == null
+      ? 0
+      : _treatmentPlanStatusFromJson(json['status']),
+  closeReason: json['closeReason'] as String?,
+);
+
+Map<String, dynamic> _$$TreatmentPlanDetailDtoImplToJson(
+  _$TreatmentPlanDetailDtoImpl instance,
+) => <String, dynamic>{
+  'id': instance.id,
+  'patient': instance.patient,
+  'doctorId': instance.doctorId,
+  'diagnosis': instance.diagnosis,
+  'medicines': instance.medicines,
+  'reasonForMedicineChoice': instance.reasonForMedicineChoice,
+  'adherenceState': instance.adherenceState,
+  'status': instance.status,
+  'closeReason': instance.closeReason,
 };

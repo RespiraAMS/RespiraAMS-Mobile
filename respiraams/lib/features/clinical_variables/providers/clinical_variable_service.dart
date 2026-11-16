@@ -22,17 +22,23 @@ class ClinicalVariableRepository {
     String? category,
   }) async {
     try {
+      final search = (name ?? code ?? '').trim();
       final queryParams = <String, dynamic>{
         'page': page,
-        'pageSize': pageSize,
+        'size': pageSize,
       };
 
-      if (isRequired != null) queryParams['isRequired'] = isRequired;
-      if (valueType != null) queryParams['valueType'] = valueType;
-      if (category != null) queryParams['category'] = category;
+      if (search.isNotEmpty) {
+        // Free-text search lives on `/clinical-variables/search`.
+        queryParams['searchTerm'] = search;
+      } else {
+        if (isRequired != null) queryParams['isRequired'] = isRequired;
+        if (valueType != null) queryParams['valueType'] = valueType;
+        if (category != null) queryParams['category'] = category;
+      }
 
       final response = await apiClient.dio.get(
-        '/clinical-variables',
+        search.isEmpty ? '/clinical-variables' : '/clinical-variables/search',
         queryParameters: queryParams,
       );
 
@@ -63,7 +69,7 @@ class ClinicalVariableRepository {
     } on DioException catch (e) {
       throw _handleError(e);
     } catch (e) {
-      throw Exception('Lỗi xử lý dữ liệu: $e');
+      throw Exception('Failed to process data: $e');
     }
   }
 
@@ -91,7 +97,7 @@ class ClinicalVariableRepository {
     } on DioException catch (e) {
       throw _handleError(e);
     } catch (e) {
-      throw Exception('Lỗi xử lý dữ liệu: $e');
+      throw Exception('Failed to process data: $e');
     }
   }
 

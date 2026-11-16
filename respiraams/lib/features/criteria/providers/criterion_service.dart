@@ -20,14 +20,12 @@ class CriterionRepository {
     String? name,
   }) async {
     try {
+      // `GET /criteria` has no search endpoint; only page/size are supported.
+      // Free-text matching is applied client-side by [CriterionProvider].
       final queryParams = <String, dynamic>{
         'page': page,
-        'pageSize': pageSize,
+        'size': pageSize,
       };
-
-      if (name != null && name.trim().isNotEmpty) {
-        queryParams['name'] = name.trim();
-      }
 
       final response = await apiClient.dio.get(
         '/criteria',
@@ -48,10 +46,10 @@ class CriterionRepository {
       if (e.response != null) {
         throw Exception('Lỗi server: ${e.response?.statusCode}');
       } else {
-        throw Exception('Lỗi kết nối mạng: Vui lòng kiểm tra internet');
+        throw Exception('Network error: please check your connection');
       }
     } catch (e) {
-      throw Exception('Lỗi xử lý dữ liệu: $e');
+      throw Exception('Failed to process data: $e');
     }
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../../../../design_system/design_system.dart';
+import '../../../../l10n/l10n.dart';
 import '../models/antibiotic.dart';
 import '../providers/antibiotic_provider.dart';
 import '../widgets/detail_row.dart';
@@ -25,31 +26,27 @@ class _AntibioticDetailScreenState extends State<AntibioticDetailScreen> {
     _detailFuture = context.read<AntibioticProvider>().fetchAntibioticDetail(widget.antibiotic.id);
   }
 
-  String _translateRoute(String route) {
-    switch (route.toLowerCase()) {
-      case 'oral': return 'Đường uống';
-      case 'intravenous': return 'Tiêm tĩnh mạch';
-      case 'intramuscular': return 'Tiêm bắp';
-      default: return route;
-    }
-  }
+  String _translateRoute(String route, AppLocalizations l10n) =>
+      routeLabel(route, l10n);
 
-  String _buildGfrTitle(Crcl crcl) {
+  String _buildGfrTitle(Crcl crcl, AppLocalizations l10n) {
     final min = crcl.min ?? 0;
     final max = crcl.max ?? double.infinity;
-    
+    final unit = l10n.commonMlPerMin;
+
     if (max > 1000) {
-      return 'GFR ${crcl.isMinExclusive ? '>' : '≥'} $min mL/phút';
+      return 'GFR ${crcl.isMinExclusive ? '>' : '≥'} $min $unit';
     }
     if (min == 0) {
-      return 'GFR ${crcl.isMaxExclusive ? '<' : '≤'} $max mL/phút';
+      return 'GFR ${crcl.isMaxExclusive ? '<' : '≤'} $max $unit';
     }
-    return 'GFR $min – $max mL/phút';
+    return 'GFR $min – $max $unit';
   }
 
   @override
   Widget build(BuildContext context) {
     final c = context.respiraColors;
+    final l10n = context.l10n;
 
     return Scaffold(
       backgroundColor: c.background,
@@ -64,7 +61,7 @@ class _AntibioticDetailScreenState extends State<AntibioticDetailScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: Spacing.group, vertical: 8),
                     child: AppAppBar(
                       title: widget.antibiotic.name,
-                      subtitle: 'Thông tin kháng sinh',
+                      subtitle: l10n.antibioticDetailSubtitle,
                       onBack: () => Navigator.pop(context),
                     ),
                   ),
@@ -74,7 +71,7 @@ class _AntibioticDetailScreenState extends State<AntibioticDetailScreen> {
             }
 
             if (snapshot.hasError || !snapshot.hasData) {
-              return Center(child: AppText('Không thể tải dữ liệu: ${snapshot.error}', color: c.error));
+              return Center(child: AppText(l10n.commonLoadDataError, color: c.error));
             }
 
             final detail = snapshot.data!;
@@ -88,7 +85,7 @@ class _AntibioticDetailScreenState extends State<AntibioticDetailScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: Spacing.group, vertical: 8),
                   child: AppAppBar(
                     title: detail.name,
-                    subtitle: 'Thông tin kháng sinh',
+                    subtitle: l10n.antibioticDetailSubtitle,
                     onBack: () => Navigator.pop(context),
                   ),
                 ),
@@ -125,21 +122,21 @@ class _AntibioticDetailScreenState extends State<AntibioticDetailScreen> {
                       ),
                       const SizedBox(height: Spacing.section),
 
-                      AppText('Liều dùng', type: AppTextType.bodyLarge, fontWeight: FontWeight.w700),
+                      AppText(l10n.antibioticDosage, type: AppTextType.bodyLarge, fontWeight: FontWeight.w700),
                       const SizedBox(height: Spacing.control),
                       AppCard.divided(
                         padding: const EdgeInsets.symmetric(vertical: 4),
                         standardDosages.isEmpty 
-                            ? [const DetailRow(label: 'Liều chuẩn', value: 'Chưa có thông tin')]
+                            ? [DetailRow(label: l10n.antibioticStandardDose, value: l10n.antibioticNoInfo)]
                             : standardDosages.map((d) => DetailRow(
-                                label: _translateRoute(d.routeOfAdministration), 
+                                label: _translateRoute(d.routeOfAdministration, l10n), 
                                 value: d.dose,
                               )).toList(),
                       ),
                       const SizedBox(height: Spacing.section),
 
                       if (adjustedDosages.isNotEmpty) ...[
-                        AppText('Điều chỉnh theo GFR', type: AppTextType.bodyLarge, fontWeight: FontWeight.w700),
+                        AppText(l10n.antibioticGfrAdjust, type: AppTextType.bodyLarge, fontWeight: FontWeight.w700),
                         const SizedBox(height: Spacing.control),
                         ...adjustedDosages.map((d) {
                           final crcl = d.crcl!;
@@ -167,7 +164,7 @@ class _AntibioticDetailScreenState extends State<AntibioticDetailScreen> {
                           // );
 
 
-                          String tag = _translateRoute(d.routeOfAdministration);
+                          String tag = _translateRoute(d.routeOfAdministration, l10n);
                           Color tagBg = c.warningSoft;
                           Color tagColor = c.warning;
                           if(d.routeOfAdministration.toLowerCase() == 'oral') {
@@ -184,7 +181,7 @@ class _AntibioticDetailScreenState extends State<AntibioticDetailScreen> {
                           return Padding(
                             padding: const EdgeInsets.only(bottom: Spacing.control),
                             child: GfrCard(
-                              title: _buildGfrTitle(crcl),
+                              title: _buildGfrTitle(crcl, l10n),
                               sub: d.dose,
                               tag: tag,
                               tagBg: tagBg,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../../../../design_system/design_system.dart';
+import '../../../../l10n/l10n.dart';
 import '../../antibiotic/models/antibiotic.dart';
 import '../models/antibiotic_group.dart';
 import '../providers/antibiotic_group_provider.dart';
@@ -29,9 +30,10 @@ class _AntibioticGroupDetailScreenState extends State<AntibioticGroupDetailScree
   @override
   Widget build(BuildContext context) {
     final c = context.respiraColors;
+    final l10n = context.l10n;
     final subtitleText = widget.group.parentName != null 
-        ? 'Nhóm kháng sinh · ${widget.group.parentName}' 
-        : 'Nhóm kháng sinh';
+        ? l10n.antibioticGroupDetailWithParent(widget.group.parentName!)
+        : l10n.antibioticGroupDetail;
 
     return Scaffold(
       backgroundColor: c.background,
@@ -80,18 +82,18 @@ class _AntibioticGroupDetailScreenState extends State<AntibioticGroupDetailScree
                   ),
                   const SizedBox(height: Spacing.section),
 
-                  AppText('Thông tin nhóm', type: AppTextType.button, fontWeight: FontWeight.w700),
+                  AppText(l10n.antibioticGroupInfo, type: AppTextType.button, fontWeight: FontWeight.w700),
                   const SizedBox(height: Spacing.control),
                   AppCard.divided(
                     padding: const EdgeInsets.symmetric(vertical: 4),
                     [
-                      _InfoRow(label: 'Nhóm cha', value: widget.group.parentName ?? 'Không có'),
-                      _InfoRow(label: 'Mô tả', value: widget.group.description ?? 'Không có dữ liệu'),
+                      _InfoRow(label: l10n.antibioticGroupParent, value: widget.group.parentName ?? l10n.antibioticGroupNone),
+                      _InfoRow(label: l10n.antibioticGroupDescription, value: widget.group.description ?? l10n.antibioticGroupNoData),
                     ],
                   ),
                   const SizedBox(height: Spacing.section),
 
-                  AppText('Kháng sinh trong nhóm', type: AppTextType.button, fontWeight: FontWeight.w700),
+                  AppText(l10n.antibioticGroupAntibioticsInGroup, type: AppTextType.button, fontWeight: FontWeight.w700),
                   const SizedBox(height: Spacing.control),
                   FutureBuilder<List<Antibiotic>>(
                     future: _antibioticsFuture,
@@ -106,19 +108,19 @@ class _AntibioticGroupDetailScreenState extends State<AntibioticGroupDetailScree
                       }
                       
                       if (snapshot.hasError) {
-                        return AppText('Không tải được dữ liệu', color: c.error);
+                        return AppText(l10n.antibioticGroupLoadError, color: c.error);
                       }
 
                       final antibiotics = snapshot.data ?? [];
                       if (antibiotics.isEmpty) {
-                        return AppText('Chưa có kháng sinh nào trong nhóm này', color: c.textSecondary);
+                        return AppText(l10n.antibioticGroupEmpty, color: c.textSecondary);
                       }
 
                       return AppCard.divided(
                         padding: const EdgeInsets.symmetric(vertical: 4),
                         antibiotics.map((a) => _DrugListRow(
                           title: a.name, 
-                          subtitle: 'Phân loại: ${a.classification}'
+                          subtitle: l10n.antibioticGroupClassification(a.classification)
                         )).toList(),
                       );
                     },

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../../../../design_system/design_system.dart';
+import '../../../../l10n/l10n.dart';
 import '../models/clinical_variable.dart';
 import '../providers/clinical_variable_provider.dart';
 import '../widgets/formula_display_widget.dart';
@@ -24,27 +25,10 @@ class _ClinicalVariableDetailScreenState extends State<ClinicalVariableDetailScr
     _detailFuture = context.read<ClinicalVariableProvider>().fetchVariableDetail(widget.variableId);
   }
 
-  String _translateValueType(ValueType type) {
-    switch (type) {
-      case ValueType.numeric: return 'Nhập số';
-      case ValueType.boolean: return 'Có / Không';
-      case ValueType.categorical: return 'Phân loại';
-      default: return 'Khác';
-    }
-  }
-
-  String _translateCategory(VariableCategory cat) {
-    switch (cat) {
-      case VariableCategory.personalInformation: return 'Thông tin cá nhân';
-      case VariableCategory.paraclinical: return 'Cận lâm sàng';
-      case VariableCategory.clinical: return 'Lâm sàng';
-      default: return 'Khác';
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final c = context.respiraColors;
+    final l10n = context.l10n;
 
     return Scaffold(
       backgroundColor: c.background,
@@ -58,8 +42,8 @@ class _ClinicalVariableDetailScreenState extends State<ClinicalVariableDetailScr
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: Spacing.group, vertical: 8),
                     child: AppAppBar(
-                      title: 'Chi tiết biến số',
-                      subtitle: 'Đang tải...',
+                      title: l10n.clinicalVariableDetailTitle,
+                      subtitle: l10n.commonLoading,
                       onBack: () => Navigator.pop(context),
                     ),
                   ),
@@ -74,12 +58,12 @@ class _ClinicalVariableDetailScreenState extends State<ClinicalVariableDetailScr
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: Spacing.group, vertical: 8),
                     child: AppAppBar(
-                      title: 'Chi tiết biến số',
-                      subtitle: 'Lỗi tải dữ liệu',
+                      title: l10n.clinicalVariableDetailTitle,
+                      subtitle: l10n.commonLoadFailedShort,
                       onBack: () => Navigator.pop(context),
                     ),
                   ),
-                  Expanded(child: Center(child: AppText('Không tải được thông tin: ${snapshot.error}', color: c.error))),
+                  Expanded(child: Center(child: AppText(l10n.commonLoadInfoError, color: c.error))),
                 ],
               );
             }
@@ -92,7 +76,7 @@ class _ClinicalVariableDetailScreenState extends State<ClinicalVariableDetailScr
                   padding: const EdgeInsets.symmetric(horizontal: Spacing.group, vertical: 8),
                   child: AppAppBar(
                     title: detail.code,
-                    subtitle: 'Biến số lâm sàng',
+                    subtitle: l10n.clinicalVariableTitle,
                     onBack: () => Navigator.pop(context),
                   ),
                 ),
@@ -122,7 +106,7 @@ class _ClinicalVariableDetailScreenState extends State<ClinicalVariableDetailScr
                                 children: [
                                   AppText(detail.name, type: AppTextType.h3, fontWeight: FontWeight.w700),
                                   const SizedBox(height: 4),
-                                  AppText(_translateCategory(detail.category), type: AppTextType.caption),
+                                  AppText(detail.category.label(l10n), type: AppTextType.caption),
                                 ],
                               ),
                             ),
@@ -132,23 +116,23 @@ class _ClinicalVariableDetailScreenState extends State<ClinicalVariableDetailScr
                       const SizedBox(height: Spacing.section),
 
                       if (detail.description.isNotEmpty) ...[
-                        AppText('Mô tả', type: AppTextType.bodyLarge, fontWeight: FontWeight.w700),
+                        AppText(l10n.pathogenDescription, type: AppTextType.bodyLarge, fontWeight: FontWeight.w700),
                         const SizedBox(height: Spacing.control),
                         AppText(detail.description, type: AppTextType.body, color: c.textPrimary),
                         const SizedBox(height: Spacing.section),
                       ],
 
-                      AppText('Cấu hình biến số', type: AppTextType.bodyLarge, fontWeight: FontWeight.w700),
+                      AppText(l10n.clinicalVariableDetailConfig, type: AppTextType.bodyLarge, fontWeight: FontWeight.w700),
                       const SizedBox(height: Spacing.control),
                       AppCard.divided(
                         padding: const EdgeInsets.symmetric(vertical: 4),
                         [
-                          _InfoRow(label: 'Loại dữ liệu', value: _translateValueType(detail.valueType)),
+                          _InfoRow(label: l10n.clinicalVariableValueType, value: detail.valueType.label(l10n)),
                           if (detail.canonicalUnit != null)
-                            _InfoRow(label: 'Đơn vị chuẩn', value: detail.canonicalUnit!),
+                            _InfoRow(label: l10n.clinicalVariableCanonicalUnit, value: detail.canonicalUnit!),
                           _InfoRow(
-                            label: 'Tính bắt buộc', 
-                            value: detail.isRequired ? 'Bắt buộc nhập' : 'Tùy chọn',
+                            label: l10n.clinicalVariableIsRequired, 
+                            value: detail.isRequired ? l10n.clinicalVariableRequiredYes : l10n.clinicalVariableOptional,
                             valueColor: detail.isRequired ? c.error : c.textPrimary,
                           ),
                         ],
@@ -156,7 +140,7 @@ class _ClinicalVariableDetailScreenState extends State<ClinicalVariableDetailScr
                       const SizedBox(height: Spacing.section),
 
                       if (detail.prerequisite != null && detail.prerequisite!.isNotEmpty) ...[
-                        AppText('Điều kiện tiên quyết', type: AppTextType.bodyLarge, fontWeight: FontWeight.w700),
+                        AppText(l10n.clinicalVariablePrerequisite, type: AppTextType.bodyLarge, fontWeight: FontWeight.w700),
                         const SizedBox(height: Spacing.control),
                         
                         FormulaDisplayWidget(rawFormula: detail.prerequisite!),
@@ -165,17 +149,17 @@ class _ClinicalVariableDetailScreenState extends State<ClinicalVariableDetailScr
                       ],
 
                       if (detail.valueType == ValueType.numeric && (detail.acceptedRange != null || detail.normalRange != null)) ...[
-                        AppText('Khoảng giá trị', type: AppTextType.bodyLarge, fontWeight: FontWeight.w700),
+                        AppText(l10n.clinicalVariableRange, type: AppTextType.bodyLarge, fontWeight: FontWeight.w700),
                         const SizedBox(height: Spacing.control),
                         AppCard.divided(
                           padding: const EdgeInsets.symmetric(vertical: 4),
                           [
                             if (detail.acceptedRange != null)
-                              _InfoRow(label: 'Chấp nhận', value: detail.acceptedRange!.formatDisplay()),
+                              _InfoRow(label: l10n.clinicalVariableAccepted, value: detail.acceptedRange!.formatDisplay(l10n)),
                             if (detail.normalRange != null)
                               _InfoRow(
-                                label: 'Bình thường', 
-                                value: detail.normalRange!.formatDisplay(),
+                                label: l10n.clinicalVariableNormal, 
+                                value: detail.normalRange!.formatDisplay(l10n),
                                 valueColor: c.success,
                               ),
                           ],
@@ -184,7 +168,7 @@ class _ClinicalVariableDetailScreenState extends State<ClinicalVariableDetailScr
                       ],
 
                       if (detail.valueType == ValueType.categorical && detail.acceptedValues != null && detail.acceptedValues!.isNotEmpty) ...[
-                        AppText('Danh sách lựa chọn', type: AppTextType.bodyLarge, fontWeight: FontWeight.w700),
+                        AppText(l10n.clinicalVariableOptions, type: AppTextType.bodyLarge, fontWeight: FontWeight.w700),
                         const SizedBox(height: Spacing.control),
                         AppCard.divided(
                           padding: const EdgeInsets.symmetric(vertical: 4),

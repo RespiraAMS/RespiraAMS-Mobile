@@ -19,7 +19,9 @@ class PatientHeader extends StatelessWidget {
     required this.name,
     required this.metadata,
     this.avatarGlyph,
+    this.avatarImageUrl,
     this.variant = PatientHeaderVariant.card,
+    this.trailing,
   });
 
   final String name;
@@ -27,7 +29,15 @@ class PatientHeader extends StatelessWidget {
 
   /// Emoji or initials shown inside the flat circular avatar.
   final String? avatarGlyph;
+
+  /// Optional avatar photo; falls back to [avatarGlyph] while loading or on
+  /// failure (patients have no photo, doctors may).
+  final String? avatarImageUrl;
   final PatientHeaderVariant variant;
+
+  /// Optional action rendered at the trailing edge of the name row
+  /// (e.g. the patient overflow menu).
+  final Widget? trailing;
 
   @override
   Widget build(BuildContext context) {
@@ -41,21 +51,31 @@ class PatientHeader extends StatelessWidget {
       padding: const EdgeInsets.all(Spacing.group),
       child: Row(
         children: [
-          _Avatar(glyph: avatarGlyph),
+          _Avatar(glyph: avatarGlyph, imageUrl: avatarImageUrl),
           const SizedBox(width: Spacing.group),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Identity hierarchy: name above metadata.
-                Text(
-                  name,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TypographyTokens.bodyLarge(context).copyWith(
-                    fontWeight: FontWeight.w700,
-                    color: c.textPrimary,
-                  ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        name,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TypographyTokens.bodyLarge(context).copyWith(
+                          fontWeight: FontWeight.w700,
+                          color: c.textPrimary,
+                        ),
+                      ),
+                    ),
+                    if (trailing != null) ...[
+                      const SizedBox(width: Spacing.inline),
+                      trailing!,
+                    ],
+                  ],
                 ),
                 const SizedBox(height: Spacing.xxs),
                 AppText(
@@ -76,12 +96,13 @@ class PatientHeader extends StatelessWidget {
 enum PatientHeaderVariant { card, nested }
 
 class _Avatar extends StatelessWidget {
-  const _Avatar({this.glyph});
+  const _Avatar({this.glyph, this.imageUrl});
 
   final String? glyph;
+  final String? imageUrl;
 
   @override
   Widget build(BuildContext context) {
-    return AvatarGlyphWidget(glyph: glyph ?? '👤');
+    return AvatarGlyphWidget(glyph: glyph ?? '👤', imageUrl: imageUrl);
   }
 }

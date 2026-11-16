@@ -37,7 +37,9 @@ void main() {
     await _pumpList(tester);
 
     await tester.enterText(find.byType(TextField).first, '0002');
-    // setQuery triggers a fresh API call — give it real async time.
+    // setQuery debounces for 350 ms before firing the search request.
+    await tester.pump(const Duration(milliseconds: 400));
+    // The search call itself is real async work.
     await pumpAsync(tester);
     await pumpAsync(tester);
 

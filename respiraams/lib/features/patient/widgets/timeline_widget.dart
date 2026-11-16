@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 import 'package:respiraams/design_system/design_system.dart';
 
@@ -8,12 +9,16 @@ class TreatmentTimelineEntry {
     required this.dateLabel,
     required this.title,
     required this.status,
+    this.onTap,
   });
 
   /// e.g. "Hôm nay", "03/08".
   final String dateLabel;
   final String title;
   final String status;
+
+  /// When set, the row becomes tappable (e.g. opens the treatment plan).
+  final VoidCallback? onTap;
 }
 
 /// Vertical timeline (§16 Data · Timeline): primary dots joined by a subtle
@@ -80,22 +85,44 @@ class _TimelineItem extends StatelessWidget {
           Expanded(
             child: Padding(
               padding: EdgeInsets.only(bottom: isLast ? 0 : Spacing.block),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  AppText(entry.dateLabel,
-                      type: AppTextType.label, color: c.primary),
-                  const SizedBox(height: Spacing.xxxs),
-                  Text(
-                    entry.title,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TypographyTokens.body(context)
-                        .copyWith(fontWeight: FontWeight.w600),
-                  ),
-                  const SizedBox(height: Spacing.xxxs),
-                  AppText(entry.status, type: AppTextType.caption),
-                ],
+              child: InkWell(
+                onTap: entry.onTap,
+                borderRadius: AppRadius.sm,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          AppText(entry.dateLabel,
+                              type: AppTextType.label, color: c.primary),
+                          const SizedBox(height: Spacing.xxxs),
+                          Text(
+                            entry.title,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TypographyTokens.body(context)
+                                .copyWith(fontWeight: FontWeight.w600),
+                          ),
+                          const SizedBox(height: Spacing.xxxs),
+                          AppText(entry.status, type: AppTextType.caption),
+                        ],
+                      ),
+                    ),
+                    if (entry.onTap != null) ...[
+                      const SizedBox(width: Spacing.xxs),
+                      Padding(
+                        padding: const EdgeInsets.only(top: Spacing.xxxs),
+                        child: AppIcon(
+                          LucideIcons.chevronRight,
+                          size: ControlSize.iconLg,
+                          color: c.iconMuted,
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
               ),
             ),
           ),

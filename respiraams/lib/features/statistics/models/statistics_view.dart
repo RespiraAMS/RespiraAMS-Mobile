@@ -3,22 +3,19 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'statistics_view.freezed.dart';
 part 'statistics_view.g.dart';
 
-/// Overview ranges of the statistics screen.
-enum PeriodRange {
-  last30Days('30 ngày'),
-  thisQuarter('Quý này'),
-  thisYear('Năm nay');
+/// Overview ranges of the statistics screen. Display labels are provided by
+/// `l10n_labels.dart`.
+enum PeriodRange { last30Days, thisQuarter, thisYear }
 
-  const PeriodRange(this.displayName);
-
-  final String displayName;
-}
+/// Headline KPIs of the statistics screen. Display labels are provided by
+/// `l10n_labels.dart`.
+enum KpiId { diagnoses, saved, microbiology }
 
 /// One headline KPI tile ("Chẩn đoán · 128 · +12%").
 @freezed
 class KpiStat with _$KpiStat {
   const factory KpiStat({
-    required String label,
+    required KpiId id,
     required int value,
     required int deltaPercent,
   }) = _KpiStat;

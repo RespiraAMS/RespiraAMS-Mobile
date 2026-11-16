@@ -7,13 +7,13 @@ part of 'theme_mode_provider.dart';
 // **************************************************************************
 
 String _$themeModeControllerHash() =>
-    r'673f01f753ee0f36aafff3ccda7b265593802dfe';
+    r'28ee461dd9888b228252fef45392ae5db5dd3440';
 
 /// App brightness mode (guidelines §2.1 Riverpod codegen).
 ///
-/// App-wide singleton (`keepAlive`) — defaults to [ThemeMode.system]; a
-/// settings screen can switch to light/dark at runtime via
-/// [setLight]/[setDark]/[setSystem].
+/// App-wide singleton (`keepAlive`) — defaults to [ThemeMode.system] and is
+/// persisted under `settings.themeMode`, so the settings sheet can switch
+/// light/dark/system at runtime and keep the choice across restarts.
 ///
 /// Copied from [ThemeModeController].
 @ProviderFor(ThemeModeController)

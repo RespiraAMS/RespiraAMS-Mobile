@@ -53,8 +53,6 @@ class SelectionRowWidget extends StatelessWidget {
                   children: [
                     Text(
                       title,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
                       style: TypographyTokens.body(context)
                           .copyWith(fontWeight: FontWeight.w600),
                     ),
@@ -63,8 +61,6 @@ class SelectionRowWidget extends StatelessWidget {
                       AppText(
                         description!,
                         type: AppTextType.caption,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
                       ),
                     ],
                   ],

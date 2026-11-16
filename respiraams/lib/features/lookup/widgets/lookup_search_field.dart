@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../../../../design_system/design_system.dart';
+import '../../../../l10n/l10n.dart';
 
 class LookupSearchField extends StatelessWidget {
   const LookupSearchField({super.key});
@@ -23,7 +24,7 @@ class LookupSearchField extends StatelessWidget {
           const SizedBox(width: Spacing.control),
           Expanded(
             child: Text(
-              'Tìm thuốc, vi khuẩn, bệnh lý...',
+              context.l10n.lookupSearchHint,
               style: TypographyTokens.bodyMedium(context).copyWith(
                 color: c.textSecondary,
               ),

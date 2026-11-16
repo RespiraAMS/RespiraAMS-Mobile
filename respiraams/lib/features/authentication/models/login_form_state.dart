@@ -7,7 +7,7 @@ part 'login_form_state.g.dart';
 @freezed
 class LoginFormState with _$LoginFormState {
   const factory LoginFormState({
-    /// Email or staff code ("Email hoặc mã nhân viên").
+    /// Email used to sign in.
     @Default('') String identifier,
     @Default('') String password,
   }) = _LoginFormState;

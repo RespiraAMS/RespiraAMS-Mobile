@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import '../../../../design_system/design_system.dart';
+import '../../../../l10n/l10n.dart';
+import '../../../core/network/api_client.dart';
 import '../providers/antibiotic_provider.dart';
 import '../models/antibiotic_group_summary.dart';
 import 'antibiotic_detail_screen.dart';
@@ -75,6 +77,7 @@ class _AntibioticListScreenState extends State<AntibioticListScreen> {
   @override
   Widget build(BuildContext context) {
     final c = context.respiraColors;
+    final l10n = context.l10n;
 
     return Scaffold(
       backgroundColor: c.background,
@@ -84,8 +87,8 @@ class _AntibioticListScreenState extends State<AntibioticListScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: Spacing.group, vertical: 8),
               child: AppAppBar(
-                title: 'Kháng sinh',
-                subtitle: 'Danh mục hoạt chất',
+                title: l10n.antibioticTitle,
+                subtitle: l10n.antibioticSubtitle,
                 onBack: () => Navigator.pop(context),
               ),
             ),
@@ -99,7 +102,7 @@ class _AntibioticListScreenState extends State<AntibioticListScreen> {
                       controller: _searchController,
                       onChanged: _onSearchChanged,
                       decoration: InputDecoration(
-                        hintText: 'Tìm kiếm kháng sinh...',
+                        hintText: l10n.antibioticSearchHint,
                         hintStyle: TextStyle(color: c.textSecondary),
                         prefixIcon: Icon(LucideIcons.search, color: c.iconDefault, size: 20),
                         filled: true,
@@ -144,7 +147,7 @@ class _AntibioticListScreenState extends State<AntibioticListScreen> {
                 builder: (context, provider, child) {
                   if (provider.errorMessage != null && provider.items.isNotEmpty) {
                     WidgetsBinding.instance.addPostFrameCallback((_) {
-                      showAppToast(context, provider.errorMessage!);
+                      showAppToast(context, provider.errorMessage!.localizedError(l10n));
                       provider.clearError();
                     });
                   }
@@ -158,13 +161,13 @@ class _AntibioticListScreenState extends State<AntibioticListScreen> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          AppText(provider.errorMessage!, color: c.error),
+                          AppText(provider.errorMessage!.localizedError(l10n), color: c.error),
                           const SizedBox(height: 12),
                           GestureDetector(
                             onTap: () => provider.fetchPage(),
                             child: AppSurface(
                               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                              child: AppText('Thử lại', color: c.primary),
+                              child: AppText(l10n.commonRetry, color: c.primary),
                             ),
                           ),
                         ],
@@ -174,7 +177,13 @@ class _AntibioticListScreenState extends State<AntibioticListScreen> {
 
                   if (provider.items.isEmpty) {
                     return Center(
-                      child: AppText('Không tìm thấy kháng sinh nào', color: c.textSecondary),
+                      child: AppText(l10n.antibioticEmpty),
+                    );
+                  }
+
+                  if (provider.items.isEmpty && !provider.isLoading) {
+                    return Center(
+                      child: AppText(l10n.commonNoResults, color: c.textSecondary),
                     );
                   }
                   
@@ -191,7 +200,11 @@ class _AntibioticListScreenState extends State<AntibioticListScreen> {
                             child: provider.errorMessage != null
                                 ? GestureDetector(
                                     onTap: () => provider.fetchPage(),
-                                    child: AppText('Không thể tải thêm. Nhấn để thử lại', type: AppTextType.caption, color: c.error),
+                                    child: AppText(
+                                      l10n.commonLoadMoreFailed,
+                                      type: AppTextType.caption,
+                                      color: c.error,
+                                    ),
                                   )
                                 : CircularProgressIndicator(color: c.primary),
                           ),

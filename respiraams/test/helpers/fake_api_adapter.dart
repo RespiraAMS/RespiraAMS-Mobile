@@ -18,9 +18,14 @@ class FakeApiAdapter implements HttpClientAdapter {
   FakeApiAdapter({Map<String, MockedResponse> overrides = const {}})
       : _handlers = {..._defaultHandlers, ...overrides};
 
-  /// Key format: `'METHOD /api/1/...'` (path may be a substring of the
-  /// real path; first matching entry wins).
+  /// Key format: `'METHOD /patients/...'` (path may be a substring of the
+  /// real path; first matching entry wins). The version prefix lives in the
+  /// Dio base URL, so [RequestOptions.path] carries only the relative path.
   final Map<String, MockedResponse> _handlers;
+
+  /// Every request served, in order — lets tests assert the query string a
+  /// screen sent (e.g. the server-side filters of the protocol lookup).
+  final List<RequestOptions> requests = [];
 
   void add(String key, MockedResponse response) =>
       _handlers[key] = response;
@@ -34,6 +39,7 @@ class FakeApiAdapter implements HttpClientAdapter {
     Stream<Uint8List>? requestStream,
     Future<void>? cancelFuture,
   ) async {
+    requests.add(options);
     for (final entry in _handlers.entries) {
       final space = entry.key.indexOf(' ');
       final method = entry.key.substring(0, space);
@@ -48,9 +54,12 @@ class FakeApiAdapter implements HttpClientAdapter {
     }
     return ResponseBody.fromString(
       jsonEncode({
-        'statusCode': 404,
-        'success': false,
-        'message': 'Not mocked: ${options.method} ${options.path}',
+        'statusCode': 'FAILURE-RESOURCE-NOT-FOUND',
+        'error': {
+          'statusCode': 'FAILURE-RESOURCE-NOT-FOUND',
+          'description': 'Not mocked: ${options.method} ${options.path}',
+        },
+        'data': null,
       }),
       404,
       headers: _jsonHeaders,
@@ -61,57 +70,76 @@ class FakeApiAdapter implements HttpClientAdapter {
     Headers.contentTypeHeader: [Headers.jsonContentType],
   };
 
-  static Map<String, dynamic> envelope(Map<String, dynamic> data,
-      {int code = 200}) =>
-      {
-        'statusCode': code,
-        'success': true,
+  static Map<String, dynamic> envelope(Map<String, dynamic> data) => {
+        'statusCode': 'SUCCESS',
+        'error': null,
+        'data': data,
+      };
+
+  /// `Result<Guid>`-style envelope (`data` is a scalar, not an object).
+  static Map<String, dynamic> scalarEnvelope(Object? data) => {
+        'statusCode': 'SUCCESS',
+        'error': null,
         'data': data,
       };
 
   // ── Default demo dataset (mirrors the retired demo providers) ──────
 
-  static const _sampleDoctorId = '3fa85f64-5717-4562-b3fc-2c963f66afa6';
-
   static final Map<String, MockedResponse> _defaultHandlers = {
-    'POST /api/1/auth/login': MockedResponse(
+    // ── Auth / session ────────────────────────────────────────────
+    'POST /auth/login': MockedResponse(
       200,
       envelope({
-        'accessToken':
-            'header.${base64Url.encode(utf8.encode(jsonEncode({'X-ID': _sampleDoctorId})))}.sig',
-        'refreshToken': 'fake-refresh-token',
+        // Payload: {"sub":"account-1","email":"bs.minh@respira.vn",
+        // "role":"Doctor"} — signature is never verified by the client.
+        'accessToken': 'eyJhbGciOiJIUzI1NiJ9.'
+            'eyJzdWIiOiJhY2NvdW50LTEiLCJlbWFpbCI6ImJzLm1pbmhAcmVzcGlyYS52biIsInJvbGUiOiJEb2N0b3IifQ'
+            '.signature',
+        'refreshToken': 'refresh-token-1',
       }),
     ),
-    'POST /api/1/auth/logout': MockedResponse(
-      200,
-      envelope({'message': 'Logout successful'}),
-    ),
-    'POST /api/1/auth/refresh': MockedResponse(
-      200,
-      envelope({
-        'accessToken': 'fake-access-2',
-        'refreshToken': 'fake-refresh-2',
-      }),
-    ),
-    'GET /api/1/doctors/': MockedResponse(
+    // Token rotation (used after a password change).
+    'POST /auth/refresh': MockedResponse(
       200,
       envelope({
-        'email': 'bs.minh@respira.vn',
-        'phone': '0900000000',
-        'role': 'Doctor',
-        'isEmailConfirmed': true,
-        'status': 'Active',
-        'firstName': 'Lê Hoàng',
-        'lastName': 'Minh',
-        'degrees': [],
-        'academicTitle': 'BS.',
-        'position': 'Doctor',
-        'gender': 'Male',
-        'citizenIdentificationNumber': '012345678901',
-        'address': 'Cần Thơ',
+        'accessToken': 'eyJhbGciOiJIUzI1NiJ9.'
+            'eyJzdWIiOiJhY2NvdW50LTEiLCJlbWFpbCI6ImJzLm1pbmhAcmVzcGlyYS52biIsInJvbGUiOiJEb2N0b3IifQ'
+            '.signature',
+        'refreshToken': 'refresh-token-2',
       }),
     ),
-    'GET /api/1/patients': MockedResponse(
+    // Placed before the list handler: `/doctors` is a substring of the
+    // by-id path, and the first match wins.
+    'GET /doctors/': MockedResponse(
+      200,
+      envelope(doctorProfile()),
+    ),
+    'GET /doctors': MockedResponse(
+      200,
+      doctorsEnvelope(doctorProfile()),
+    ),
+    // Placed before the list handler: `/patients` is a substring of both
+    // the detail and search paths, and the first match wins.
+    'GET /patients/search': MockedResponse(
+      200,
+      envelope({
+        'metadata': {
+          'hasNextPage': false,
+          'hasPreviousPage': false,
+          'totalItemCount': 1,
+          'pageCount': 1,
+          'currentPage': 1,
+          'pageSize': 10,
+        },
+        'items': [_patient('An', 'BA-2026-0002', 47, 'InTreatment')],
+      }),
+    ),
+    // Generic detail route (any id, including the UUID returned by create).
+    'GET /patients/': MockedResponse(
+      200,
+      envelope(_patientDetail()),
+    ),
+    'GET /patients': MockedResponse(
       200,
       envelope({
         'metadata': {
@@ -128,125 +156,424 @@ class FakeApiAdapter implements HttpClientAdapter {
         ],
       }),
     ),
-    'POST /api/1/patients': MockedResponse(
+    'POST /patients': MockedResponse(
       201,
       envelope({
         'id': '11111111-1111-1111-1111-111111111111',
       }),
     ),
-    'GET /api/1/diseases/list': MockedResponse(
+    // More specific diagnose routes must come before the base POST route,
+    // because matching is substring-based.
+    'POST /diagnose/warn-antibiotic-combination': MockedResponse(
       200,
-      envelope({
-        'diseases': [
-          {'id': 'disease-1', 'name': 'Viêm phổi cộng đồng'},
-        ],
-      }),
+      envelope({'needWarning': false}),
     ),
-    'GET /api/1/diseases/disease-1/criteria': MockedResponse(
+    'POST /diagnose/confirm-treatment': MockedResponse(
       200,
-      envelope({
-        'icuHospitalizeCriteria': [
-          {'id': 'icu-1', 'name': 'Cần thở máy xâm nhập', 'type': 'Boolean'},
-          {'id': 'icu-2', 'name': 'Sốc nhiễm khuẩn', 'type': 'Boolean'},
-        ],
-        'resistanceRiskFactorCriteria': [
-          {
-            'id': 'rrf-1',
-            'name': 'Dùng kháng sinh 90 ngày gần đây',
-            'type': 'Boolean',
-          },
-          {'id': 'rrf-2', 'name': 'Nằm viện ≥ 5 ngày', 'type': 'Boolean'},
-        ],
-        'otherCriteria': [
-          {'id': 'other-1', 'name': 'Không dung nạp thuốc', 'type': 'Boolean'},
-        ],
-      }),
+      envelope(<String, dynamic>{}),
     ),
-    'POST /api/1/patients/': MockedResponse(
-      204,
-      envelope({}),
+    'GET /diagnose': MockedResponse(
+      200,
+      envelope(_diagnosisForm()),
     ),
-    'POST /api/1/diagnose/empirical': MockedResponse(
+    'POST /diagnose': MockedResponse(
       200,
       envelope(_empiricalResult()),
     ),
-    'POST /api/1/diagnose/target': MockedResponse(
+
+    // ── Treatment-protocol lookup (+ its filter options) ──────────
+    'GET /treatment-protocols': MockedResponse(
       200,
       envelope({
-        'crcl': 92.5,
-        'recommendations': [
-          _medicine('Meropenem', 'Intravenous'),
-          _medicine('Amoxicillin', 'Oral'),
-          _medicine('Amikacin', 'Intravenous'),
+        'metadata': {
+          'hasNextPage': false,
+          'hasPreviousPage': false,
+          'totalItemCount': 1,
+          'pageCount': 1,
+          'currentPage': 1,
+          'pageSize': 10,
+        },
+        'items': [_treatmentProtocol()],
+      }),
+    ),
+    'GET /pathogens': MockedResponse(
+      200,
+      envelope({
+        'metadata': {
+          'hasNextPage': false,
+          'hasPreviousPage': false,
+          'totalItemCount': 2,
+          'pageCount': 1,
+          'currentPage': 1,
+          'pageSize': 200,
+        },
+        'items': [
+          {'id': 'pathogen-1', 'name': 'Klebsiella pneumoniae'},
+          {'id': 'pathogen-2', 'name': 'Streptococcus pneumoniae'},
         ],
       }),
     ),
-    'GET /api/1/pathogens/list': MockedResponse(
+    'GET /criteria': MockedResponse(
       200,
       envelope({
-        'pathogens': [
-          {'id': 'k-pneumoniae-id', 'name': 'Klebsiella pneumoniae'},
+        'metadata': {
+          'hasNextPage': false,
+          'hasPreviousPage': false,
+          'totalItemCount': 1,
+          'pageCount': 1,
+          'currentPage': 1,
+          'pageSize': 200,
+        },
+        'items': [
+          {'id': 'criterion-1', 'name': 'CURB-65 ≥ 3', 'formula': 'CURB-65 >= 3'},
         ],
       }),
+    ),
+
+    // ── Doctor profile update saga ────────────────────────────────
+    'POST /profile/update': MockedResponse(
+      201,
+      scalarEnvelope('saga-1'),
+    ),
+    // Completed runs are deleted from saga storage, so the status endpoint
+    // answers 404 once the flow has finished — that is the happy path for
+    // the profile-edit screen (it then verifies by re-fetching the profile).
+    'GET /profile/update': MockedResponse(
+      404,
+      {
+        'statusCode': 'FAILURE-RESOURCE-NOT-FOUND',
+        'error': {
+          'statusCode': 'FAILURE-RESOURCE-NOT-FOUND',
+          'description': 'No profile update with this id is in progress',
+        },
+        'data': null,
+      },
     ),
   };
+
+  /// Doctor of the `/doctors` fixture; override individual fields to model
+  /// the profile after an edit.
+  static Map<String, dynamic> doctorProfile({
+    String firstName = 'Minh',
+    String lastName = 'Nguyễn',
+    String email = 'bs.minh@respira.vn',
+    String phone = '0901234567',
+    List<String> degrees = const ['ThS', 'BS'],
+    String academicTitle = 'PGS.TS',
+    String position = 'Trưởng khoa Hô hấp',
+    String gender = 'Male',
+    String address = 'Quận 1, TP. Hồ Chí Minh',
+    String citizenId = '079123456789',
+    String? dateOfBirth = '1971-04-12',
+    String? avatarUrl,
+  }) => {
+        'id': 'doctor-1',
+        'accountId': 'account-1',
+        'firstName': firstName,
+        'lastName': lastName,
+        'degrees': degrees,
+        'role': 'Doctor',
+        'academicTitle': academicTitle,
+        'position': position,
+        'gender': gender,
+        'citizenIdentificationNumber': citizenId,
+        'address': address,
+        'email': email,
+        'phone': phone,
+        'dateOfBirth': ?dateOfBirth,
+        'avatarUrl': ?avatarUrl,
+      };
+
+  /// Page envelope of `GET /doctors` with a single [doctor].
+  static Map<String, dynamic> doctorsEnvelope(Map<String, dynamic> doctor) =>
+      envelope({
+        'metadata': {
+          'hasNextPage': false,
+          'hasPreviousPage': false,
+          'totalItemCount': 1,
+          'pageCount': 1,
+          'currentPage': 1,
+          'pageSize': 100,
+        },
+        'items': [doctor],
+      });
+
+  static Map<String, dynamic> _treatmentProtocol() => {
+        'id': 'protocol-1',
+        'severity': 'Severe',
+        'treatmentSite': 'Inpatient',
+        'version': 'v1',
+        'publisher': 'Bộ Y tế',
+        'isApplied': true,
+        'treatments': [
+          [
+            {
+              'id': 'abx-meropenem',
+              'name': 'Meropenem',
+              'antibioticGroupId': 'group-carbapenem',
+              'antibioticGroupName': 'Carbapenem',
+              'classification': 'Watch',
+            },
+          ],
+        ],
+        'pathogens': [
+          {'id': 'pathogen-2', 'name': 'Streptococcus pneumoniae'},
+        ],
+        'criteria': [
+          {'id': 'criterion-1', 'name': 'CURB-65 ≥ 3', 'formula': 'CURB-65 >= 3'},
+        ],
+      };
 
   static Map<String, dynamic> _patient(
     String name,
     String code,
     int age,
-    String status,
+    String outcome,
   ) =>
       {
         'id': 'patient-$code',
         'fullName': name,
+        'dateOfBirth': '1971-04-12',
         'age': age,
-        'isMale': true,
+        'gender': 'Male',
         'medicalRecordCode': code,
-        'status': status,
+        'treatmentOutcome': outcome,
       };
 
-  static Map<String, dynamic> _medicine(
-    String name,
-    String route,
-  ) =>
-      {
-        'id': 'med-$name',
-        'name': name,
-        'antibioticGroupId': 'group-1',
-        'antibioticGroupName': 'Beta-lactam',
-        'classification': 'Access',
-        'dosages': [
-          {'routeOfAdministration': route, 'dose': '1 g mỗi 8 giờ'},
-        ],
+  static Map<String, dynamic> _patientDetail() => {
+        'id': 'patient-BA-2026-0001',
+        'fullName': 'Khoa',
+        'phoneNumber': '0900000000',
+        'dateOfBirth': '1971-04-12',
+        'gender': 'Male',
+        'height': 170.0,
+        'weight': 65.0,
+        'medicalRecordCode': 'BA-2026-0001',
+        'healthInsuranceCard': '0123456789',
+        'address': 'Cần Thơ',
+        'city': 'Cần Thơ',
+        'admission': '2026-01-02',
+        'treatmentOutcome': 'InTreatment',
+        'nextOfKins': <Map<String, dynamic>>[],
+        'treatments': <Map<String, dynamic>>[],
       };
 
   static Map<String, dynamic> _empiricalResult() => {
-        'crcl': 84.2,
+        'diagnosisId': '0192f5db-7f3a-7b2c-9d1e-8a6b5c4d3e2f',
         'severity': 'Severe',
         'treatmentSite': 'Inpatient',
-        'medicines': [
-          _medicine('Meropenem', 'Intravenous'),
-          _medicine('Amoxicillin', 'Oral'),
-        ],
-        'recommendations': [
-          _medicine('Meropenem', 'Intravenous'),
-        ],
-        'infectionProbabilities': [
+        'metricsSeverityDiagnosis': [
           {
-            'pathogenId': 'k-pneumoniae-id',
-            'pathogenName': 'Klebsiella pneumoniae',
-            'probability': 0.72,
+            'code': 'CURB-65',
+            'severity': 'Severe',
+            'treatmentSite': 'Inpatient',
+            'score': 3,
+            'evidences': [
+              {
+                'source': 'CURB-65',
+                'formula': 'Confusion + Urea',
+                'score': 3,
+              },
+            ],
           },
         ],
-        'references': [
+        'worthSuspected': [
+          {'id': 'pathogen-1', 'name': 'Klebsiella pneumoniae'},
+        ],
+        'heavySuspected': [
+          {'id': 'pathogen-2', 'name': 'Streptococcus pneumoniae'},
+        ],
+        'evidences': [
           {
-            'id': 'ref-1',
-            'name': 'Phác đồ A · Viêm phổi cộng đồng',
-            'issuer': 'Bộ Y tế',
-            'issueDate': '2024-01-01',
-            'version': 3,
+            'source': 'CURB-65',
+            'formula': 'Confusion + Urea',
+            'evaluatedValue': true,
+            'score': 3,
+            // BE serializes evidence refs as `VariableRef` (no `name`).
+            'relatedObservations': [
+              {
+                'variable': {
+                  'id': 'var-confusion',
+                  'code': 'CONFUSION',
+                  'valueType': 'Boolean',
+                },
+                'value': true,
+              },
+            ],
+            'missingVariables': [
+              {
+                'id': 'var-urea',
+                'code': 'UREA',
+                'valueType': 'Numeric',
+              },
+            ],
           },
+        ],
+        'missingVariables': <Map<String, dynamic>>[],
+        'allergy': {
+          'type': 'No',
+          'allergicAntibiotics': <Map<String, dynamic>>[],
+          'otherAllergy': null,
+        },
+        'isPatientPregnantOrInLactationPhase': false,
+        'egfr': 78.0,
+        'otherInfections': ['Sepsis'],
+        'microbialTestResults': [
+          {
+            'sampleType': 'Sputum',
+            'category': 'Susceptible',
+            'pathogen': {'id': 'pathogen-1', 'name': 'Klebsiella pneumoniae'},
+            'antibiotics': [
+              {'id': 'abx-meropenem', 'name': 'Meropenem', 'classification': 'Watch'},
+            ],
+          },
+        ],
+        'protocols': [
+          {
+            'id': 'protocol-severe-inpatient',
+            'severity': 'Severe',
+            'treatmentSite': 'Inpatient',
+            'medicines': [
+              [
+                {
+                  'id': 'abx-meropenem',
+                  'name': 'Meropenem',
+                  'classification': 'Watch',
+                },
+              ],
+            ],
+            'pathogens': [
+              {'id': 'pathogen-2', 'name': 'Streptococcus pneumoniae'},
+            ],
+            'criteria': [
+              {'id': 'criterion-1', 'name': 'CURB-65 ≥ 3', 'formula': 'CURB-65 >= 3'},
+            ],
+          },
+        ],
+      };
+
+  static Map<String, dynamic> _diagnosisForm() => {
+        'clinicalVariables': [
+          {
+            'id': 'var-age',
+            'name': 'Tuổi',
+            'description': '',
+            'code': 'AGE',
+            'valueType': 'Numeric',
+            'canonicalUnit': 'tuổi',
+            'isRequired': true,
+            'category': 'PersonalInformation',
+            'acceptedValues': <String>[],
+          },
+          {
+            'id': 'var-gender',
+            'name': 'Giới tính',
+            'description': '',
+            'code': 'GENDER',
+            'valueType': 'Categorical',
+            'isRequired': true,
+            'category': 'PersonalInformation',
+            'acceptedValues': ['MALE', 'FEMALE'],
+          },
+          {
+            'id': 'var-rr',
+            'name': 'Nhịp thở',
+            'description': 'Nhịp thở bệnh nhân',
+            'code': 'RR',
+            'valueType': 'Numeric',
+            'canonicalUnit': 'lần/phút',
+            'isRequired': true,
+            'category': 'Clinical',
+            'acceptedRange': {
+              'min': 12,
+              'max': 20,
+              'unit': 'lần/phút',
+              'isMinExclusive': false,
+              'isMaxExclusive': false,
+            },
+            'normalRange': {
+              'min': 12,
+              'max': 20,
+              'unit': 'lần/phút',
+              'isMinExclusive': false,
+              'isMaxExclusive': false,
+            },
+          },
+          {
+            'id': 'var-fio2',
+            'name': 'Phân suất oxy trong khí hít vào bệnh nhân (FiO₂)',
+            'description': '',
+            'code': 'FIO2',
+            'valueType': 'Numeric',
+            'canonicalUnit': '%',
+            'isRequired': true,
+            'category': 'Clinical',
+            'acceptedRange': {
+              'min': 21,
+              'max': 100,
+              'unit': '%',
+              'isMinExclusive': false,
+              'isMaxExclusive': false,
+            },
+          },
+          {
+            'id': 'var-pao2',
+            'name': 'Phân áp oxy trong máu động mạch bệnh nhân (PaO₂)',
+            'description': '',
+            'code': 'PAO2',
+            'valueType': 'Numeric',
+            'canonicalUnit': 'mmHg',
+            'isRequired': false,
+            'category': 'Clinical',
+          },
+          {
+            'id': 'var-confusion',
+            'name': 'Lú lẫn mới xuất hiện',
+            'description': '',
+            'code': 'CONFUSION',
+            'valueType': 'Boolean',
+            'isRequired': false,
+            'category': 'Clinical',
+          },
+          {
+            'id': 'var-wbc',
+            'name': 'Bạch cầu',
+            'description': '',
+            'code': 'WBC',
+            'valueType': 'Numeric',
+            'canonicalUnit': 'G/L',
+            'isRequired': false,
+            'category': 'Paraclinical',
+          },
+          {
+            'id': 'var-ckd',
+            'name': 'Bệnh thận mạn',
+            'description': '',
+            'code': 'CKD',
+            'valueType': 'Boolean',
+            'isRequired': false,
+            'category': 'MedicalHistory',
+          },
+        ],
+        'antibiotics': [
+          {
+            'id': 'abx-meropenem',
+            'name': 'Meropenem',
+            'antibioticGroupId': 'group-carbapenem',
+            'antibioticGroupName': 'Carbapenem',
+            'classification': 'Watch',
+          },
+          {
+            'id': 'abx-amoxicillin',
+            'name': 'Amoxicillin',
+            'antibioticGroupId': 'group-penicillin',
+            'antibioticGroupName': 'Penicillin',
+            'classification': 'Access',
+          },
+        ],
+        'pathogens': [
+          {'id': 'pathogen-1', 'name': 'Klebsiella pneumoniae'},
+          {'id': 'pathogen-2', 'name': 'Streptococcus pneumoniae'},
         ],
       };
 }

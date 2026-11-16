@@ -21,7 +21,7 @@ KpiStat _$KpiStatFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$KpiStat {
-  String get label => throw _privateConstructorUsedError;
+  KpiId get id => throw _privateConstructorUsedError;
   int get value => throw _privateConstructorUsedError;
   int get deltaPercent => throw _privateConstructorUsedError;
 
@@ -39,7 +39,7 @@ abstract class $KpiStatCopyWith<$Res> {
   factory $KpiStatCopyWith(KpiStat value, $Res Function(KpiStat) then) =
       _$KpiStatCopyWithImpl<$Res, KpiStat>;
   @useResult
-  $Res call({String label, int value, int deltaPercent});
+  $Res call({KpiId id, int value, int deltaPercent});
 }
 
 /// @nodoc
@@ -57,16 +57,16 @@ class _$KpiStatCopyWithImpl<$Res, $Val extends KpiStat>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? label = null,
+    Object? id = null,
     Object? value = null,
     Object? deltaPercent = null,
   }) {
     return _then(
       _value.copyWith(
-            label: null == label
-                ? _value.label
-                : label // ignore: cast_nullable_to_non_nullable
-                      as String,
+            id: null == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as KpiId,
             value: null == value
                 ? _value.value
                 : value // ignore: cast_nullable_to_non_nullable
@@ -89,7 +89,7 @@ abstract class _$$KpiStatImplCopyWith<$Res> implements $KpiStatCopyWith<$Res> {
   ) = __$$KpiStatImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String label, int value, int deltaPercent});
+  $Res call({KpiId id, int value, int deltaPercent});
 }
 
 /// @nodoc
@@ -106,16 +106,16 @@ class __$$KpiStatImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? label = null,
+    Object? id = null,
     Object? value = null,
     Object? deltaPercent = null,
   }) {
     return _then(
       _$KpiStatImpl(
-        label: null == label
-            ? _value.label
-            : label // ignore: cast_nullable_to_non_nullable
-                  as String,
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as KpiId,
         value: null == value
             ? _value.value
             : value // ignore: cast_nullable_to_non_nullable
@@ -133,7 +133,7 @@ class __$$KpiStatImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$KpiStatImpl implements _KpiStat {
   const _$KpiStatImpl({
-    required this.label,
+    required this.id,
     required this.value,
     required this.deltaPercent,
   });
@@ -142,7 +142,7 @@ class _$KpiStatImpl implements _KpiStat {
       _$$KpiStatImplFromJson(json);
 
   @override
-  final String label;
+  final KpiId id;
   @override
   final int value;
   @override
@@ -150,7 +150,7 @@ class _$KpiStatImpl implements _KpiStat {
 
   @override
   String toString() {
-    return 'KpiStat(label: $label, value: $value, deltaPercent: $deltaPercent)';
+    return 'KpiStat(id: $id, value: $value, deltaPercent: $deltaPercent)';
   }
 
   @override
@@ -158,7 +158,7 @@ class _$KpiStatImpl implements _KpiStat {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$KpiStatImpl &&
-            (identical(other.label, label) || other.label == label) &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.value, value) || other.value == value) &&
             (identical(other.deltaPercent, deltaPercent) ||
                 other.deltaPercent == deltaPercent));
@@ -166,7 +166,7 @@ class _$KpiStatImpl implements _KpiStat {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, label, value, deltaPercent);
+  int get hashCode => Object.hash(runtimeType, id, value, deltaPercent);
 
   /// Create a copy of KpiStat
   /// with the given fields replaced by the non-null parameter values.
@@ -184,7 +184,7 @@ class _$KpiStatImpl implements _KpiStat {
 
 abstract class _KpiStat implements KpiStat {
   const factory _KpiStat({
-    required final String label,
+    required final KpiId id,
     required final int value,
     required final int deltaPercent,
   }) = _$KpiStatImpl;
@@ -192,7 +192,7 @@ abstract class _KpiStat implements KpiStat {
   factory _KpiStat.fromJson(Map<String, dynamic> json) = _$KpiStatImpl.fromJson;
 
   @override
-  String get label;
+  KpiId get id;
   @override
   int get value;
   @override

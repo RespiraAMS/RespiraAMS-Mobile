@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 import 'package:respiraams/design_system/design_system.dart';
+import 'package:respiraams/l10n/l10n.dart';
 
 import '../models/microbiology_result.dart';
 
@@ -70,17 +71,13 @@ class TreatmentOptionRowWidget extends StatelessWidget {
                   children: [
                     Text(
                       option.drug,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
                       style: TypographyTokens.caption(context)
                           .copyWith(color: c.textPrimary),
                     ),
                     const SizedBox(height: Spacing.xxxs),
                     AppText(
-                      '${option.route} · ${option.dosage}',
+                      '${routeLabel(option.route, context.l10n)} · ${option.dosage}',
                       type: AppTextType.caption,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
                     ),
                   ],
                 ),

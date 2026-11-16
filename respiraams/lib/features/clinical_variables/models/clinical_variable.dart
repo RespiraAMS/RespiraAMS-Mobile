@@ -1,5 +1,12 @@
 enum ValueType { numeric, boolean, categorical, unknown }
-enum VariableCategory { personalInformation, paraclinical, clinical, unknown }
+
+enum VariableCategory {
+  personalInformation,
+  medicalHistory,
+  paraclinical,
+  clinical,
+  unknown,
+}
 
 class ClinicalVariable {
   final String id;
@@ -34,19 +41,29 @@ class ClinicalVariable {
 
   static ValueType parseValueType(String? type) {
     switch (type) {
-      case 'Numeric': return ValueType.numeric;
-      case 'Boolean': return ValueType.boolean;
-      case 'Categorical': return ValueType.categorical;
-      default: return ValueType.unknown;
+      case 'Numeric':
+        return ValueType.numeric;
+      case 'Boolean':
+        return ValueType.boolean;
+      case 'Categorical':
+        return ValueType.categorical;
+      default:
+        return ValueType.unknown;
     }
   }
 
   static VariableCategory parseCategory(String? cat) {
     switch (cat) {
-      case 'PersonalInformation': return VariableCategory.personalInformation;
-      case 'Paraclinical': return VariableCategory.paraclinical;
-      case 'Clinical': return VariableCategory.clinical;
-      default: return VariableCategory.unknown;
+      case 'PersonalInformation':
+        return VariableCategory.personalInformation;
+      case 'MedicalHistory':
+        return VariableCategory.medicalHistory;
+      case 'Paraclinical':
+        return VariableCategory.paraclinical;
+      case 'Clinical':
+        return VariableCategory.clinical;
+      default:
+        return VariableCategory.unknown;
     }
   }
 }
@@ -75,40 +92,15 @@ class VariableRange {
       unit: json['unit'],
     );
   }
-
-  String _formatNum(num value) {
-    if (value is int || value == value.roundToDouble()) {
-      return value.toInt().toString();
-    }
-    return value.toString();
-  }
-
-  String formatDisplay() {
-    final minSymbol = isMinExclusive ? '>' : '≥';
-    final maxSymbol = isMaxExclusive ? '<' : '≤';
-    final unitStr = (unit != null && unit!.isNotEmpty) ? ' $unit' : '';
-    
-    final bool hasNoMax = max >= 7e28;
-    final bool hasNoMin = min <= -7e28;
-
-    final String minText = _formatNum(min);
-    final String maxText = _formatNum(max);
-
-    if (hasNoMin && hasNoMax) {
-      return 'Không giới hạn$unitStr';
-    } else if (hasNoMin) {
-      return 'Giá trị $maxSymbol $maxText$unitStr';
-    } else if (hasNoMax) {
-      return 'Giá trị $minSymbol $minText$unitStr';
-    } else {
-      return 'Giá trị $minSymbol $minText và $maxSymbol $maxText$unitStr';
-    }
-  }
 }
 
 class ClinicalVariableDetail extends ClinicalVariable {
   final String description;
   final String? prerequisite;
+
+  /// Structured form of [prerequisite] (`PrerequisiteFormula`, a recursive
+  /// `FormulaDto`). Kept raw because the app only displays the string form.
+  final Map<String, dynamic>? prerequisiteFormula;
   final VariableRange? acceptedRange;
   final VariableRange? normalRange;
   final List<String>? acceptedValues;
@@ -123,6 +115,7 @@ class ClinicalVariableDetail extends ClinicalVariable {
     required super.category,
     required this.description,
     this.prerequisite,
+    this.prerequisiteFormula,
     this.acceptedRange,
     this.normalRange,
     this.acceptedValues,
@@ -135,13 +128,22 @@ class ClinicalVariableDetail extends ClinicalVariable {
       code: json['code'] ?? '',
       isRequired: json['isRequired'] ?? false,
       canonicalUnit: json['canonicalUnit'],
-      valueType: ClinicalVariable.parseValueType(json['valueType']), 
+      valueType: ClinicalVariable.parseValueType(json['valueType']),
       category: ClinicalVariable.parseCategory(json['category']),
       description: json['description'] ?? '',
       prerequisite: json['prerequisite'],
-      acceptedRange: json['acceptedRange'] != null ? VariableRange.fromJson(json['acceptedRange']) : null,
-      normalRange: json['normalRange'] != null ? VariableRange.fromJson(json['normalRange']) : null,
-      acceptedValues: (json['acceptedValues'] as List?)?.map((e) => e.toString()).toList(),
+      prerequisiteFormula: json['prerequisiteFormula'] is Map<String, dynamic>
+          ? json['prerequisiteFormula'] as Map<String, dynamic>
+          : null,
+      acceptedRange: json['acceptedRange'] != null
+          ? VariableRange.fromJson(json['acceptedRange'])
+          : null,
+      normalRange: json['normalRange'] != null
+          ? VariableRange.fromJson(json['normalRange'])
+          : null,
+      acceptedValues: (json['acceptedValues'] as List?)
+          ?.map((e) => e.toString())
+          .toList(),
     );
   }
 }

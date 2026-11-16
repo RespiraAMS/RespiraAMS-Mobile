@@ -1,19 +1,13 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'patient.dart';
+
 part 'patient_summary.freezed.dart';
 part 'patient_summary.g.dart';
 
 /// Clinical status shown on patient list cards (dot + label, never color
-/// alone §12).
-enum PatientStatus {
-  treating('Đang điều trị'),
-  recovered('Hồi phục'),
-  deceased('Tử vong');
-
-  const PatientStatus(this.displayName);
-
-  final String displayName;
-}
+/// alone §12). Display labels are provided by `l10n_labels.dart`.
+enum PatientStatus { treating, recovered, deceased }
 
 /// Lightweight row model of the patient list screen.
 @freezed
@@ -22,7 +16,7 @@ class PatientSummary with _$PatientSummary {
     required String id,
     required String name,
     required String code,
-    required String genderLabel,
+    required Gender gender,
     required int age,
     required PatientStatus status,
   }) = _PatientSummary;

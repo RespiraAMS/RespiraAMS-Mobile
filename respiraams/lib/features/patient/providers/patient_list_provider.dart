@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -5,6 +7,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../core/network/api_client.dart';
 import '../../../core/network/api_response.dart';
 import '../../../core/network/pagination_dto.dart';
+import '../models/patient.dart';
 import '../models/patient_dtos.dart';
 import '../models/patient_summary.dart';
 import '../services/patient_service.dart';
@@ -37,15 +40,20 @@ class PatientListState with _$PatientListState {
 
 @Riverpod(keepAlive: true)
 class PatientListController extends _$PatientListController {
-  PatientService get _service =>
-      PatientService(ref.watch(apiClientProvider));
+  PatientService get _service => PatientService(ref.watch(apiClientProvider));
+
+  Timer? _searchDebounce;
 
   @override
-  PatientListState build() => const PatientListState();
+  PatientListState build() {
+    ref.onDispose(() => _searchDebounce?.cancel());
+    return const PatientListState();
+  }
 
   void setQuery(String value) {
     state = state.copyWith(query: value);
-    refresh();
+    _searchDebounce?.cancel();
+    _searchDebounce = Timer(const Duration(milliseconds: 350), refresh);
   }
 
   void setFilter(PatientListFilter filter) =>
@@ -68,10 +76,7 @@ class PatientListController extends _$PatientListController {
     } on ApiException catch (e) {
       state = state.copyWith(loading: false, errorMessage: e.message);
     } on DioException catch (e) {
-      state = state.copyWith(
-        loading: false,
-        errorMessage: dioErrorMessage(e),
-      );
+      state = state.copyWith(loading: false, errorMessage: dioErrorMessage(e));
     }
   }
 
@@ -114,7 +119,7 @@ class PatientListController extends _$PatientListController {
           id: dto.id,
           name: dto.fullName,
           code: dto.medicalRecordCode,
-          genderLabel: dto.gender == 'Male' ? 'Nam' : 'Nữ',
+          gender: dto.gender == 'Male' ? Gender.nam : Gender.nu,
           age: dto.age,
           status: status,
         );
@@ -136,10 +141,10 @@ List<PatientSummary> visiblePatients(VisiblePatientsRef ref) {
 
   if (listState.prioritySort) {
     int rank(PatientStatus s) => switch (s) {
-          PatientStatus.deceased => 0,
-          PatientStatus.treating => 1,
-          PatientStatus.recovered => 2,
-        };
+      PatientStatus.deceased => 0,
+      PatientStatus.treating => 1,
+      PatientStatus.recovered => 2,
+    };
     patients.sort((a, b) {
       final byRank = rank(a.status).compareTo(rank(b.status));
       return byRank != 0 ? byRank : a.name.compareTo(b.name);

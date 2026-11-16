@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/utils/context_extensions.dart';
 import '../../../../design_system/design_system.dart';
+import '../../../../l10n/l10n.dart';
 import '../models/otp_state.dart';
 import '../providers/otp_controller.dart';
 import '../widgets/brand_header_widget.dart';
@@ -19,6 +20,7 @@ class OtpVerificationScreen extends ConsumerWidget {
     final otp = ref.watch(otpControllerProvider);
     final controller = ref.read(otpControllerProvider.notifier);
     final c = context.respiraColors;
+    final l10n = context.l10n;
 
     return Scaffold(
       body: SafeArea(
@@ -64,13 +66,13 @@ class OtpVerificationScreen extends ConsumerWidget {
                       ),
                       const SizedBox(height: Spacing.section),
                       Text(
-                        'Nhập mã xác thực',
+                        l10n.authOtpTitle,
                         style: TypographyTokens.h1(
                           context,
                         ).copyWith(color: c.textPrimary),
                       ),
                       const SizedBox(height: Spacing.inline),
-                      AppText('Mã 6 chữ số đã được gửi đến bs.m***@respira.vn'),
+                      AppText(l10n.authOtpSentTo('bs.m***@respira.vn')),
                       const SizedBox(height: Spacing.section),
                       OtpInputWidget(
                         value: otp.digits,
@@ -81,24 +83,26 @@ class OtpVerificationScreen extends ConsumerWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           AppText(
-                            otp.countdownLabel,
+                            l10n.authResendIn(
+                              otp.secondsRemaining.toString().padLeft(2, '0'),
+                            ),
                             type: AppTextType.caption,
                           ),
                           if (otp.secondsRemaining == 0)
                             AppLinkText(
-                              'Gửi lại mã',
+                              l10n.authResend,
                               onPressed: controller.resend,
                             )
                           else
                             Opacity(
                               opacity: 0.5,
-                              child: AppLinkText('Gửi lại mã'),
+                              child: AppLinkText(l10n.authResend),
                             ),
                         ],
                       ),
                       const SizedBox(height: Spacing.control + 4),
                       AppButton(
-                        label: 'Xác nhận',
+                        label: l10n.authConfirm,
                         expand: true,
                         onPressed: otp.isComplete
                             ? () =>
@@ -115,14 +119,14 @@ class OtpVerificationScreen extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Bảo mật tài khoản',
+                              l10n.authAccountSecurityTitle,
                               style: TypographyTokens.bodyLarge(
                                 context,
                               ).copyWith(fontWeight: FontWeight.w700),
                             ),
                             const SizedBox(height: Spacing.inline - 4),
                             AppText(
-                              'Không chia sẻ mã xác thực. Mã sẽ hết hiệu lực sau 10 phút và chỉ dùng một lần.',
+                              l10n.authAccountSecurityBody,
                               type: AppTextType.caption,
                             ),
                           ],
@@ -132,7 +136,7 @@ class OtpVerificationScreen extends ConsumerWidget {
                       Padding(
                         padding: const EdgeInsets.only(bottom: Spacing.inline),
                         child: AppButton(
-                          label: 'Đổi email nhận mã',
+                          label: l10n.authChangeEmail,
                           type: AppButtonType.secondary,
                           expand: true,
                           onPressed: () => context.goBackOr(
@@ -141,7 +145,7 @@ class OtpVerificationScreen extends ConsumerWidget {
                         ),
                       ),
                       AppText(
-                        'Bước 1/2 · Xác minh danh tính',
+                        l10n.authStepIdentity,
                         type: AppTextType.caption,
                         color: c.textTertiary,
                         textAlign: TextAlign.center,

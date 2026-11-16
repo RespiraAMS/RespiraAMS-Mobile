@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../../../../design_system/design_system.dart';
+import '../../../../l10n/l10n.dart';
 import '../models/risk_factor.dart';
 import '../providers/risk_factor_provider.dart';
 // Import Widget hiển thị Formula
@@ -28,6 +29,7 @@ class _RiskFactorDetailScreenState extends State<RiskFactorDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final c = context.respiraColors;
+    final l10n = context.l10n;
 
     return Scaffold(
       backgroundColor: c.background,
@@ -39,7 +41,7 @@ class _RiskFactorDetailScreenState extends State<RiskFactorDetailScreen> {
               return Center(child: CircularProgressIndicator(color: c.primary));
             }
             if (!snapshot.hasData || snapshot.hasError) {
-              return Center(child: AppText('Không tải được thông tin', color: c.error));
+              return Center(child: AppText(l10n.riskFactorLoadInfo, color: c.error));
             }
 
             final detail = snapshot.data!;
@@ -49,8 +51,8 @@ class _RiskFactorDetailScreenState extends State<RiskFactorDetailScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: Spacing.group, vertical: 8),
                   child: AppAppBar(
-                    title: 'Chi tiết Yếu tố',
-                    subtitle: 'Nguy cơ theo tác nhân',
+                    title: l10n.riskFactorDetailTitle,
+                    subtitle: l10n.riskFactorDetailSubtitle,
                     onBack: () => Navigator.pop(context),
                   ),
                 ),
@@ -79,7 +81,7 @@ class _RiskFactorDetailScreenState extends State<RiskFactorDetailScreen> {
                                 children: [
                                   AppText(detail.criterion.name, type: AppTextType.h3, fontWeight: FontWeight.w700),
                                   const SizedBox(height: 4),
-                                  AppText('Yếu tố nguy cơ', type: AppTextType.caption),
+                                  AppText(l10n.riskFactorTitle, type: AppTextType.caption),
                                 ],
                               ),
                             ),
@@ -88,7 +90,7 @@ class _RiskFactorDetailScreenState extends State<RiskFactorDetailScreen> {
                       ),
                       const SizedBox(height: Spacing.section),
 
-                      AppText('Tác nhân liên quan', type: AppTextType.bodyLarge, fontWeight: FontWeight.w700),
+                      AppText(l10n.riskFactorPathogen, type: AppTextType.bodyLarge, fontWeight: FontWeight.w700),
                       const SizedBox(height: Spacing.control),
                       AppSurface(
                         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
@@ -107,14 +109,14 @@ class _RiskFactorDetailScreenState extends State<RiskFactorDetailScreen> {
                               Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                                 decoration: BoxDecoration(color: c.warningSoft, borderRadius: AppRadius.full),
-                                child: AppText('Không điển hình', type: AppTextType.label, color: c.warning),
+                                child: AppText(l10n.pathogenAtypical, type: AppTextType.label, color: c.warning),
                               ),
                           ],
                         ),
                       ),
                       const SizedBox(height: Spacing.section),
 
-                      AppText('Công thức điều kiện', type: AppTextType.bodyLarge, fontWeight: FontWeight.w700),
+                      AppText(l10n.riskFactorFormula, type: AppTextType.bodyLarge, fontWeight: FontWeight.w700),
                       const SizedBox(height: Spacing.control),
                       FormulaDisplayWidget(rawFormula: detail.criterion.formula),
                     ],

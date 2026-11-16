@@ -1,6 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../features/analysis/analysis_routes.dart';
 import '../../features/diagnosis/routes.dart';
 import '../../features/authentication/routes.dart';
 import '../../features/calculator/routes.dart';
@@ -22,6 +23,7 @@ GoRouter buildAppRouter({
       ...statisticsRoutes,
       ...calculatorRoutes,
       ...lookupRoutes,
+      ...analysisRoutes,
     ],
   );
 }

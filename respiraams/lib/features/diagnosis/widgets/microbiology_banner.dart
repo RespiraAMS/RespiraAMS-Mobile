@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:respiraams/design_system/design_system.dart';
+import 'package:respiraams/l10n/l10n.dart';
 
 /// Read-only display field for the identified bacteria ("Vi khuẩn").
 class BacteriaDisplayField extends StatelessWidget {
@@ -16,13 +17,18 @@ class BacteriaDisplayField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Vi khuẩn',
+          context.l10n.microBacteria,
           style: TypographyTokens.label(context).copyWith(color: c.textPrimary),
         ),
         const SizedBox(height: Spacing.inline),
         Container(
-          height: ControlSize.buttonLarge,
-          padding: const EdgeInsets.symmetric(horizontal: Spacing.group),
+          constraints: const BoxConstraints(
+            minHeight: ControlSize.buttonLarge,
+          ),
+          padding: const EdgeInsets.symmetric(
+            horizontal: Spacing.group,
+            vertical: Spacing.control,
+          ),
           decoration: BoxDecoration(
             color: c.surface,
             borderRadius: AppRadius.md,
@@ -33,8 +39,7 @@ class BacteriaDisplayField extends StatelessWidget {
             bacteria,
             type: AppTextType.body,
             color: c.textSecondary,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
+            fontWeight: FontWeight.w700,
           ),
         ),
       ],
@@ -66,7 +71,7 @@ class AntibiogramBanner extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Kháng sinh đồ gần nhất',
+            context.l10n.microLatestAntibiogram,
             style: TypographyTokens.label(context)
                 .copyWith(color: c.textSecondary),
           ),

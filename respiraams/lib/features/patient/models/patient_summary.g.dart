@@ -11,7 +11,7 @@ _$PatientSummaryImpl _$$PatientSummaryImplFromJson(Map<String, dynamic> json) =>
       id: json['id'] as String,
       name: json['name'] as String,
       code: json['code'] as String,
-      genderLabel: json['genderLabel'] as String,
+      gender: $enumDecode(_$GenderEnumMap, json['gender']),
       age: (json['age'] as num).toInt(),
       status: $enumDecode(_$PatientStatusEnumMap, json['status']),
     );
@@ -22,10 +22,12 @@ Map<String, dynamic> _$$PatientSummaryImplToJson(
   'id': instance.id,
   'name': instance.name,
   'code': instance.code,
-  'genderLabel': instance.genderLabel,
+  'gender': _$GenderEnumMap[instance.gender]!,
   'age': instance.age,
   'status': _$PatientStatusEnumMap[instance.status]!,
 };
+
+const _$GenderEnumMap = {Gender.nam: 'nam', Gender.nu: 'nu'};
 
 const _$PatientStatusEnumMap = {
   PatientStatus.treating: 'treating',

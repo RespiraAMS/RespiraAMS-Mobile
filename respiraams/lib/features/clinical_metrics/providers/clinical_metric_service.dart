@@ -20,15 +20,18 @@ class ClinicalMetricRepository {
     bool? isApplied,
   }) async {
     try {
+      final search = (name ?? code ?? '').trim();
       final queryParams = <String, dynamic>{
         'page': page,
-        'pageSize': pageSize,
+        'size': pageSize,
+        if (search.isNotEmpty) 'searchTerm': search,
       };
 
+      // Free-text search lives on `/clinical-metrics/search`.
       if (isApplied != null) queryParams['IsApplied'] = isApplied;
 
       final response = await apiClient.dio.get(
-        '/clinical-metrics',
+        search.isEmpty ? '/clinical-metrics' : '/clinical-metrics/search',
         queryParameters: queryParams,
       );
 
@@ -59,7 +62,7 @@ class ClinicalMetricRepository {
     } on DioException catch (e) {
       throw _handleError(e);
     } catch (e) {
-      throw Exception('Lỗi xử lý dữ liệu: $e');
+      throw Exception('Failed to process data: $e');
     }
   }
 
@@ -95,10 +98,10 @@ class ClinicalMetricRepository {
       if (e.response != null) {
         throw Exception('Lỗi server: ${e.response?.statusCode}');
       } else {
-        throw Exception('Lỗi kết nối mạng: Vui lòng kiểm tra internet');
+        throw Exception('Network error: please check your connection');
       }
     } catch (e) {
-      throw Exception('Lỗi xử lý dữ liệu: $e');
+      throw Exception('Failed to process data: $e');
     }
   }
 }

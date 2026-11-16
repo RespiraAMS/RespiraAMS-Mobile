@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../../../../design_system/design_system.dart';
+import '../../../../l10n/l10n.dart';
 import '../../../core/network/api_client.dart';
 import '../providers/pathogen_provider.dart';
 import '../providers/pathogen_service.dart';
@@ -73,6 +74,7 @@ class _PathogenListScreenState extends State<PathogenListScreen> {
   @override
   Widget build(BuildContext context) {
     final c = context.respiraColors;
+    final l10n = context.l10n;
 
     return Scaffold(
       backgroundColor: c.background,
@@ -82,8 +84,8 @@ class _PathogenListScreenState extends State<PathogenListScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: Spacing.group, vertical: 8),
               child: AppAppBar(
-                title: 'Tác nhân gây bệnh',
-                subtitle: 'Mô tả và độ nhạy',
+                title: l10n.pathogenTitle,
+                subtitle: l10n.pathogenSubtitle,
                 onBack: () => Navigator.pop(context),
               ),
             ),
@@ -97,7 +99,7 @@ class _PathogenListScreenState extends State<PathogenListScreen> {
                       controller: _searchController,
                       onChanged: _onSearchChanged,
                       decoration: InputDecoration(
-                        hintText: 'Tìm kiếm tác nhân...',
+                        hintText: l10n.pathogenSearchHint,
                         hintStyle: TextStyle(color: c.textSecondary),
                         prefixIcon: Icon(LucideIcons.search, color: c.iconDefault, size: 20),
                         filled: true,
@@ -144,7 +146,7 @@ class _PathogenListScreenState extends State<PathogenListScreen> {
                   // Xử lý báo lỗi
                   if (provider.errorMessage != null && provider.items.isNotEmpty) {
                     WidgetsBinding.instance.addPostFrameCallback((_) {
-                      showAppToast(context, provider.errorMessage!);
+                      showAppToast(context, provider.errorMessage!.localizedError(l10n));
                       provider.clearError();
                     });
                   }
@@ -174,7 +176,7 @@ class _PathogenListScreenState extends State<PathogenListScreen> {
 
                   if (provider.items.isEmpty && !provider.isLoading) {
                     return Center(
-                      child: AppText('Không tìm thấy kết quả nào.', color: c.textSecondary),
+                      child: AppText(l10n.commonNoResults, color: c.textSecondary),
                     );
                   }
 
@@ -234,7 +236,7 @@ class _PathogenListScreenState extends State<PathogenListScreen> {
                                         color: c.warningSoft,
                                         borderRadius: AppRadius.full,
                                       ),
-                                      child: AppText('Không điển hình', type: AppTextType.label, color: c.warning),
+                                      child: AppText(l10n.pathogenAtypical, type: AppTextType.label, color: c.warning),
                                     ),
                                   ],
                                 ],

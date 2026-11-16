@@ -14,7 +14,11 @@ class CriteriaBannerWidget extends StatelessWidget {
     final c = context.respiraColors;
 
     return Container(
-      height: 44,
+      constraints: const BoxConstraints(minHeight: 44),
+      padding: const EdgeInsets.symmetric(
+        horizontal: Spacing.control,
+        vertical: Spacing.control,
+      ),
       alignment: Alignment.center,
       decoration: BoxDecoration(
         color: c.primarySoft,
@@ -26,8 +30,6 @@ class CriteriaBannerWidget extends StatelessWidget {
         color: c.textPrimary,
         fontWeight: FontWeight.w600,
         textAlign: TextAlign.center,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
       ),
     );
   }

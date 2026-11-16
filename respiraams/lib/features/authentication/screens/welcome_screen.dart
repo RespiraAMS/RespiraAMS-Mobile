@@ -1,19 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 
 import 'package:respiraams/features/patient/routes.dart';
 
+import '../../../../core/utils/name_initials.dart';
 import '../../../../design_system/design_system.dart';
+import '../../../../l10n/l10n.dart';
+import '../providers/session_provider.dart';
+import '../providers/welcome_summary_provider.dart';
 import '../widgets/brand_header_widget.dart';
 
 /// Route `/welcome` — post-login landing page with workspace summary.
+///
+/// The doctor identity comes from the session and the counters from
+/// `GET /patients` (`welcomeSummaryProvider`).
 class WelcomeScreen extends ConsumerWidget {
   const WelcomeScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final c = context.respiraColors;
+    final l10n = context.l10n;
+    final doctor = ref.watch(sessionDoctorProvider);
+    final summary = ref.watch(welcomeSummaryProvider);
+
+    final name = (doctor?.name.trim().isNotEmpty ?? false)
+        ? doctor!.name.trim()
+        : l10n.settingsDoctorFallback;
+    final initials = initialsFor(name);
+    final data = summary.valueOrNull;
+    final total = data?.totalPatients.toString() ?? '—';
+    final treating = data?.treatingPatients.toString() ?? '—';
+    final syncedAt = data == null
+        ? '—'
+        : DateFormat.Hm().format(data.syncedAt);
 
     return Scaffold(
       body: SafeArea(
@@ -29,12 +51,11 @@ class WelcomeScreen extends ConsumerWidget {
                     children: [
                       const BrandHeaderWidget(),
                       const SizedBox(height: Spacing.lg),
-                      // Hero placeholder (offline-safe avatar glyph instead
-                      // of the template's network images).
                       Center(
                         child: AvatarGlyphWidget(
-                          glyph: '👨🏻‍⚕️',
+                          glyph: initials,
                           size: 180,
+                          imageUrl: doctor?.avatarUrl,
                         ),
                       ),
                       const SizedBox(height: Spacing.group),
@@ -51,7 +72,7 @@ class WelcomeScreen extends ConsumerWidget {
                                 BorderRadius.circular(AppRadius.mdValue),
                           ),
                           child: Text(
-                            'MOBILE CLINICAL WORKSPACE',
+                            l10n.authWorkspaceEyebrow,
                             style: TypographyTokens.label(context)
                                 .copyWith(color: c.primary),
                           ),
@@ -67,7 +88,11 @@ class WelcomeScreen extends ConsumerWidget {
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                AvatarGlyphWidget(glyph: '👨🏻', size: 48),
+                                AvatarGlyphWidget(
+                                  glyph: initials,
+                                  size: 48,
+                                  imageUrl: doctor?.avatarUrl,
+                                ),
                                 const SizedBox(width: Spacing.group),
                                 Expanded(
                                   child: Column(
@@ -75,7 +100,7 @@ class WelcomeScreen extends ConsumerWidget {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Chào mừng, BS. Lê Hoàng Minh',
+                                        l10n.authWelcomeGreeting(name),
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
                                         style: TypographyTokens.body(context)
@@ -84,7 +109,7 @@ class WelcomeScreen extends ConsumerWidget {
                                       ),
                                       const SizedBox(height: Spacing.xxs),
                                       AppText(
-                                        'Sẵn sàng theo dõi các ca hô hấp hôm nay.',
+                                        l10n.authWelcomeSubtitle,
                                         type: AppTextType.caption,
                                       ),
                                     ],
@@ -93,11 +118,17 @@ class WelcomeScreen extends ConsumerWidget {
                               ],
                             ),
                             const SizedBox(height: Spacing.control),
-                            _BulletRow(text: '12 bệnh nhân đang theo dõi'),
+                            _BulletRow(
+                              text: l10n.authWelcomeBulletPatients(total),
+                            ),
                             const SizedBox(height: Spacing.inline - 4),
-                            _BulletRow(text: '3 ca cần chú ý trong ngày'),
+                            _BulletRow(
+                              text: l10n.authWelcomeBulletAttention(treating),
+                            ),
                             const SizedBox(height: Spacing.inline - 4),
-                            _BulletRow(text: 'Dữ liệu đồng bộ lúc 19:28'),
+                            _BulletRow(
+                              text: l10n.authWelcomeBulletSynced(syncedAt),
+                            ),
                           ],
                         ),
                       ),
@@ -108,7 +139,7 @@ class WelcomeScreen extends ConsumerWidget {
                         child: Column(
                           children: [
                             AppButton(
-                              label: 'Bắt đầu',
+                              label: l10n.authStart,
                               expand: true,
                               // Enters the clinical workspace, clearing the
                               // auth stack.
@@ -118,7 +149,7 @@ class WelcomeScreen extends ConsumerWidget {
                             ),
                             const SizedBox(height: Spacing.control),
                             AppText(
-                              'Dữ liệu y tế được bảo vệ theo phân quyền hệ thống.',
+                              l10n.authPrivacyFooter,
                               type: AppTextType.caption,
                               color: c.textTertiary,
                               textAlign: TextAlign.center,

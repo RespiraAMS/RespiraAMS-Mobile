@@ -6,7 +6,7 @@ part of 'session_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$tokenStorageHash() => r'6338266ab8753606ba7255b3c996d0e724b41a42';
+String _$tokenStorageHash() => r'faa01d05a6e7c4303b0272d5e3090458f9eef88b';
 
 /// Exposed for services that only need token storage.
 ///
@@ -45,7 +45,7 @@ final sessionDoctorProvider = AutoDisposeProvider<DoctorProfile?>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef SessionDoctorRef = AutoDisposeProviderRef<DoctorProfile?>;
-String _$sessionControllerHash() => r'5e7da7d620c1c386c9326cef5f7771d143d0c334';
+String _$sessionControllerHash() => r'9900ecdf31d382f1c25cdbad28ec417880488be6';
 
 /// Holds the active session (null = logged out). The login screen drives
 /// [login]; the app header's logout button drives [logout].
