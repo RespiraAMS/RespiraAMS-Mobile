@@ -16,13 +16,11 @@ class AnalysisService {
 
   /// `GET /analysis/reports` — paged snapshots, newest first.
   ///
-  /// `page` starts at 1 and `size` must be within 1–100. Doctors are scoped
-  /// to their own reports by the backend, so [doctorId] is only useful for
-  /// Admin / HeadDepartmentDoctor accounts.
+  /// `page` starts at 1 and `size` must be within 1–100. The backend scopes a
+  /// Doctor account to its own reports, so no `doctorId` filter is sent.
   Future<Paged<AnalysisReportListItem>> getReports({
     int page = 1,
     int size = 10,
-    String? doctorId,
     String? searchTerm,
   }) async {
     final res = await _dio.get(
@@ -30,7 +28,6 @@ class AnalysisService {
       queryParameters: {
         'page': page,
         'size': size,
-        if (doctorId != null && doctorId.isNotEmpty) 'doctorId': doctorId,
         if (searchTerm != null && searchTerm.trim().isNotEmpty)
           'searchTerm': searchTerm.trim(),
       },

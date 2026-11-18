@@ -187,6 +187,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get doctorProfileRoleDoctor => 'Bác sĩ';
 
   @override
+  String get doctorProfileRoleHeadDepartmentDoctor => 'Trưởng khoa';
+
+  @override
   String get doctorProfileRoleAdmin => 'Quản trị viên';
 
   @override
@@ -421,6 +424,10 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get authServerUnreachable =>
       'Không thể kết nối máy chủ. Vui lòng thử lại.';
+
+  @override
+  String get authRoleNotAllowed =>
+      'Ứng dụng di động chỉ dành cho tài khoản bác sĩ. Vui lòng đăng nhập bằng tài khoản bác sĩ hoặc liên hệ quản trị viên.';
 
   @override
   String get authForgotTitle => 'Quên mật khẩu?';

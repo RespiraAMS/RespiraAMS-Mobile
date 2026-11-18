@@ -261,6 +261,9 @@ extension LocalizedApiErrorX on String {
     if (this == LocalApiError.selectMedicineRequired) {
       return l10n.diagnosisSelectMedicineRequired;
     }
+    if (this == LocalApiError.roleNotAllowed) {
+      return l10n.authRoleNotAllowed;
+    }
     return this;
   }
 }

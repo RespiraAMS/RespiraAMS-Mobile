@@ -399,6 +399,7 @@ String? _roleLabel(String? role, AppLocalizations l10n) {
   if (value == null || value.isEmpty) return null;
   return switch (value.toLowerCase()) {
     'doctor' => l10n.doctorProfileRoleDoctor,
+    'headdepartmentdoctor' => l10n.doctorProfileRoleHeadDepartmentDoctor,
     'admin' => l10n.doctorProfileRoleAdmin,
     _ => value,
   };

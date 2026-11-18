@@ -369,17 +369,19 @@ class _EditFormState extends ConsumerState<_EditForm> {
   /// The saga is deleted once it finishes, so completion is verified by
   /// re-fetching the profile (retrying briefly for read-after-write lag).
   ///
-  /// The by-id endpoint does not enrich account-level fields (email, phone,
-  /// avatar), so the roster endpoint is preferred here.
+  /// `GET /doctors/me` is the enriched, account-scoped endpoint: it returns the
+  /// account-level fields (email, phone, avatar) as well as the profile ones.
   Future<DoctorProfileDto> _refetchProfile(
     ProfileUpdatePayload payload,
   ) async {
     final service = ref.read(doctorServiceProvider);
 
     Future<DoctorProfileDto> fetch() async {
-      final enriched =
-          await service.findByAccountId(widget.doctor.accountId);
-      return enriched ?? service.getDoctor(widget.doctor.id);
+      final me = await service.getMe();
+      if (me == null) {
+        throw const ApiException(404, 'The doctor profile is not available.');
+      }
+      return me;
     }
 
     var latest = await fetch();
@@ -395,8 +397,8 @@ class _EditFormState extends ConsumerState<_EditForm> {
     if (doctor.firstName.trim() != payload.firstName) return false;
     if (doctor.lastName.trim() != payload.lastName) return false;
 
-    // Account-level fields are only present on the enriched roster response;
-    // compare them when available and rely on the profile fields otherwise.
+    // Account-level fields come from `GET /doctors/me`; compare them when
+    // available and rely on the profile fields otherwise.
     final email = doctor.email?.trim();
     if (email != null && email.isNotEmpty && email != payload.email) {
       return false;

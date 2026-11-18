@@ -434,6 +434,12 @@ abstract class AppLocalizations {
   /// **'Bác sĩ'**
   String get doctorProfileRoleDoctor;
 
+  /// No description provided for @doctorProfileRoleHeadDepartmentDoctor.
+  ///
+  /// In vi, this message translates to:
+  /// **'Trưởng khoa'**
+  String get doctorProfileRoleHeadDepartmentDoctor;
+
   /// No description provided for @doctorProfileRoleAdmin.
   ///
   /// In vi, this message translates to:
@@ -889,6 +895,12 @@ abstract class AppLocalizations {
   /// In vi, this message translates to:
   /// **'Không thể kết nối máy chủ. Vui lòng thử lại.'**
   String get authServerUnreachable;
+
+  /// No description provided for @authRoleNotAllowed.
+  ///
+  /// In vi, this message translates to:
+  /// **'Ứng dụng di động chỉ dành cho tài khoản bác sĩ. Vui lòng đăng nhập bằng tài khoản bác sĩ hoặc liên hệ quản trị viên.'**
+  String get authRoleNotAllowed;
 
   /// No description provided for @authForgotTitle.
   ///

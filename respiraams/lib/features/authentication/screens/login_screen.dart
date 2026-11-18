@@ -87,7 +87,7 @@ class LoginScreen extends ConsumerWidget {
                               child: Text(
                                 form.networkError
                                     ? l10n.authServerUnreachable
-                                    : form.errorMessage!,
+                                    : form.errorMessage!.localizedError(l10n),
                                 style: TypographyTokens.caption(context)
                                     .copyWith(color: c.error),
                               ),

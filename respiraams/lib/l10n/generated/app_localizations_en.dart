@@ -187,6 +187,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get doctorProfileRoleDoctor => 'Doctor';
 
   @override
+  String get doctorProfileRoleHeadDepartmentDoctor => 'Head of department';
+
+  @override
   String get doctorProfileRoleAdmin => 'Administrator';
 
   @override
@@ -422,6 +425,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get authServerUnreachable =>
       'Couldn\'t reach the server. Please try again.';
+
+  @override
+  String get authRoleNotAllowed =>
+      'The mobile app is for doctor accounts only. Sign in with a doctor account or contact your administrator.';
 
   @override
   String get authForgotTitle => 'Forgot password?';

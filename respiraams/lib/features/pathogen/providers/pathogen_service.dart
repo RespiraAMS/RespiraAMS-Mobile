@@ -20,11 +20,9 @@ class PathogenRepository {
     bool? isAtypical,
   }) async {
     try {
-      final search = name?.trim() ?? '';
       final queryParams = <String, dynamic>{
         'page': page,
         'size': pageSize,
-        if (search.isNotEmpty) 'searchTerm': search,
       };
       // Free-text search lives on `/pathogens/search`; the paged endpoint
       // only supports the `isAtypical` filter.
@@ -32,7 +30,7 @@ class PathogenRepository {
       if (isAtypical != null) queryParams['IsAtypical'] = isAtypical;
 
       final response = await apiClient.dio.get(
-        search.isEmpty ? '/pathogens' : '/pathogens/search',
+        '/pathogens',
         queryParameters: queryParams,
       );
 
@@ -54,7 +52,7 @@ class PathogenRepository {
         '/pathogens/search',
         queryParameters: {
           'page': page,
-          'pageSize': pageSize,
+          'size': pageSize,
           'SearchTerm': searchTerm,
         },
       );
