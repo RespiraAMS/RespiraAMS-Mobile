@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/network/api_client.dart';
 import '../../../../core/network/api_response.dart';
+import '../../../../core/validation/input_formatters.dart';
+import '../../../../core/validation/validators.dart';
 import '../../../../design_system/design_system.dart';
 import '../../../../l10n/l10n.dart';
 import '../models/next_of_kin_relationship.dart';
@@ -102,9 +104,6 @@ class _NextOfKinForm extends ConsumerStatefulWidget {
 }
 
 class _NextOfKinFormState extends ConsumerState<_NextOfKinForm> {
-  static final _phonePattern =
-      RegExp(r'^(0[35789]|84[35789]|\+84[35789])\d{8}$');
-
   final TextEditingController _fullName = TextEditingController();
   final TextEditingController _phone = TextEditingController();
   final TextEditingController _otherRelationship = TextEditingController();
@@ -159,7 +158,7 @@ class _NextOfKinFormState extends ConsumerState<_NextOfKinForm> {
   bool _validate(AppLocalizations l10n) {
     setState(() {
       _nameError = _fullName.text.trim().isEmpty ? l10n.nextOfKinErrName : null;
-      _phoneError = _phonePattern.hasMatch(_phone.text.trim())
+      _phoneError = isValidVietnamesePhone(_phone.text)
           ? null
           : l10n.nextOfKinErrPhone;
       _relationshipError =
@@ -206,11 +205,20 @@ class _NextOfKinFormState extends ConsumerState<_NextOfKinForm> {
       if (!mounted) return;
 
       ref.invalidate(patientDetailProvider(widget.patient.id));
+      // Wait for the refreshed record so the detail screen already shows the
+      // new kin when this form closes.
+      try {
+        await ref.read(patientDetailProvider(widget.patient.id).future);
+      } catch (_) {
+        // The mutation succeeded; a failed refresh is retried by the screen.
+      }
+      if (!mounted) return;
+
       showAppToast(
         context,
         _isEditing ? l10n.nextOfKinUpdateSuccess : l10n.nextOfKinCreateSuccess,
       );
-      Navigator.pop(context);
+      Navigator.pop(context, true);
     } on ApiException catch (e) {
       if (mounted) showAppToast(context, e.message);
     } on DioException catch (e) {
@@ -291,6 +299,7 @@ class _NextOfKinFormState extends ConsumerState<_NextOfKinForm> {
                               controller: _fullName,
                               hintText: l10n.nextOfKinFullNameHint,
                               errorText: _nameError,
+                              inputFormatters: personNameInputFormatters(),
                               onChanged: (_) {
                                 if (_nameError != null) {
                                   setState(() => _nameError = null);
@@ -331,6 +340,7 @@ class _NextOfKinFormState extends ConsumerState<_NextOfKinForm> {
                               hintText: l10n.nextOfKinPhoneHint,
                               keyboardType: TextInputType.phone,
                               errorText: _phoneError,
+                              inputFormatters: phoneInputFormatters(),
                               onChanged: (_) {
                                 if (_phoneError != null) {
                                   setState(() => _phoneError = null);

@@ -4,7 +4,6 @@ import 'package:dio/dio.dart';
 import '../../../core/network/api_client.dart';
 import '../../../core/network/api_response.dart';
 import '../../authentication/providers/current_doctor_provider.dart';
-import '../../authentication/services/doctor_service.dart';
 import '../models/analysis_report.dart';
 import '../services/analysis_service.dart';
 
@@ -135,38 +134,18 @@ final analysisReportProvider =
 
 /// `accountId → doctor display name`.
 ///
-/// The analysis payload only carries the doctor's **account** id, while
-/// `GET /doctors/{id}` resolves by **profile** id. Walking the roster once
-/// and caching the map is cheaper than one 404 per doctor row.
+/// The analysis payload only carries the doctor's **account** id. The mobile
+/// app is doctor-facing only and the backend scopes a Doctor account to its
+/// own reports, so the signed-in profile covers every row; unknown ids fall
+/// back to a shortened id in the UI.
 final doctorNamesProvider = FutureProvider<Map<String, String>>((ref) async {
-  final names = <String, String>{};
-
   try {
     final current = await ref.watch(currentDoctorProvider.future);
-    if (current != null && current.accountId.isNotEmpty) {
-      names[current.accountId] = current.fullName.trim();
-    }
+    if (current == null || current.accountId.isEmpty) return const {};
+    final name = current.fullName.trim();
+    return name.isEmpty ? const {} : {current.accountId: name};
   } catch (_) {
-    // The signed-in doctor may not have a profile (e.g. Admin accounts).
+    // Names are cosmetic: fall back to the ids already displayed.
+    return const {};
   }
-
-  try {
-    final service = ref.watch(doctorServiceProvider);
-    var page = 1;
-    const pageSize = 100;
-    while (true) {
-      final items = await service.listDoctors(page: page, size: pageSize);
-      for (final doctor in items) {
-        if (doctor.accountId.isEmpty) continue;
-        final name = doctor.fullName.trim();
-        if (name.isNotEmpty) names[doctor.accountId] = name;
-      }
-      if (items.length < pageSize) break;
-      page++;
-    }
-  } catch (_) {
-    // Names are cosmetic: fall back to the ids already collected.
-  }
-
-  return names;
 });

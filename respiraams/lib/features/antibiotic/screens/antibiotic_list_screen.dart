@@ -4,7 +4,6 @@ import 'package:lucide_icons/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import '../../../../design_system/design_system.dart';
 import '../../../../l10n/l10n.dart';
-import '../../../core/network/api_client.dart';
 import '../providers/antibiotic_provider.dart';
 import '../models/antibiotic_group_summary.dart';
 import 'antibiotic_detail_screen.dart';

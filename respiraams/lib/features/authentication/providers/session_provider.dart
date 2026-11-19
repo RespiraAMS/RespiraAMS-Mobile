@@ -1,6 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/network/api_client.dart';
+import '../../../core/network/api_response.dart';
 import '../../../core/network/token_storage.dart';
 import '../services/auth_service.dart';
 import '../services/doctor_service.dart';
@@ -28,6 +29,12 @@ class SessionController extends _$SessionController {
     final storage = TokenStorage(ref.read(sharedPreferencesProvider));
     final id = storage.doctorId;
     if (!storage.hasSession || id == null) return null;
+
+    // The mobile client is doctor-facing only: a session restored from a
+    // non-doctor account (e.g. saved before this restriction) is discarded.
+    final role = storage.role?.trim().toLowerCase();
+    if (role != null && role.isNotEmpty && role != 'doctor') return null;
+
     final name = storage.doctorName ?? storage.email ?? id;
     return DoctorProfile(id: id, name: name);
   }
@@ -43,18 +50,24 @@ class SessionController extends _$SessionController {
         .read(authServiceProvider)
         .login(email: email, password: password);
 
+    // The mobile client is doctor-facing only. Other roles are blocked by the
+    // service-level role matrix, so reject them before entering the workspace
+    // instead of letting every screen fail with 403.
+    if ((session.role ?? '').trim().toLowerCase() != 'doctor') {
+      await ref.read(authServiceProvider).logout();
+      throw const ApiException(403, LocalApiError.roleNotAllowed);
+    }
+
     var name = session.email;
     String? avatarUrl;
     try {
-      final doctor = await ref
-          .read(doctorServiceProvider)
-          .findByAccountId(session.accountId);
+      final doctor = await ref.read(doctorServiceProvider).getMe();
       if (doctor != null) {
         if (doctor.fullName.trim().isNotEmpty) name = doctor.fullName;
         avatarUrl = doctor.avatarUrl;
       }
     } catch (_) {
-      // Doctor directory unavailable — the email still identifies the user.
+      // Doctor profile unavailable — the email still identifies the user.
     }
 
     await storage.saveIdentity(displayName: name);

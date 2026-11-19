@@ -208,6 +208,13 @@ void main() {
     await _settleNavigation(tester);
     await settleApi(tester);
 
+    // ── Confirm treatment: two tabs (protocols / full catalogue) ───
+    expect(find.text('Phác đồ tuân thủ'), findsOneWidget);
+    expect(find.text('Tất cả thuốc'), findsOneWidget);
+
+    // Manual pick lives in the catalogue tab.
+    await tester.tap(find.text('Tất cả thuốc'));
+    await tester.pump(const Duration(milliseconds: 200));
     expect(find.text('Tìm thuốc'), findsOneWidget);
     expect(find.text('Xác nhận điều trị'), findsWidgets);
 
@@ -221,13 +228,13 @@ void main() {
     await tester.pump(const Duration(milliseconds: 200));
     expect(find.text('Vui lòng nhập lý do chọn thuốc.'), findsOneWidget);
 
-    // Switch to the protocol combination → marked as adherent.
-    await tester.tap(amoxicillinRow);
+    // Protocol tab: one tap selects the whole combination → adherent.
+    await tester.tap(find.text('Phác đồ tuân thủ'));
     await tester.pump(const Duration(milliseconds: 200));
-    final meropenemRow = find.byKey(const ValueKey('drug-abx-meropenem'));
-    await tester.ensureVisible(meropenemRow);
+    final combination = find.text('Meropenem · Watch');
+    await tester.ensureVisible(combination);
     await tester.pump(const Duration(milliseconds: 200));
-    await tester.tap(meropenemRow);
+    await tester.tap(combination);
     await tester.pump(const Duration(milliseconds: 300));
     await settleApi(tester);
     expect(find.text('Tuân thủ'), findsOneWidget);
@@ -351,6 +358,45 @@ void main() {
     await tester.tap(find.text('Tiếp tục'));
     await _settleNavigation(tester);
     expect(find.text('Bước 2/5 · Dị ứng'), findsOneWidget);
+  });
+
+  testWidgets('keeps focus when a typed value triggers the range warning', (
+    tester,
+  ) async {
+    await _pumpWizard(tester);
+
+    final field = find.widgetWithText(AppUnitField, 'FiO2 *');
+    await tester.ensureVisible(field);
+    await tester.pump(const Duration(milliseconds: 100));
+
+    // The first digit already sits outside 21–100, so the warning appears
+    // mid-typing. The field must keep the caret instead of being remounted.
+    await tester.enterText(field, '1');
+    await tester.pump(const Duration(milliseconds: 150));
+
+    expect(
+      find.text('Ngoài khoảng cho phép 21 – 100 %. Vẫn có thể tiếp tục.'),
+      findsOneWidget,
+    );
+
+    final editable = tester.widget<EditableText>(
+      find.descendant(of: field, matching: find.byType(EditableText)),
+    );
+    expect(editable.focusNode.hasFocus, isTrue);
+    expect(editable.controller.text, '1');
+
+    // Typing continues normally after the warning appeared.
+    await tester.enterText(field, '15');
+    await tester.pump(const Duration(milliseconds: 150));
+    expect(
+      tester
+          .widget<EditableText>(
+            find.descendant(of: field, matching: find.byType(EditableText)),
+          )
+          .controller
+          .text,
+      '15',
+    );
   });
 
   testWidgets('opening the wizard clears values from a previous attempt', (

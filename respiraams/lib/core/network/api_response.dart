@@ -23,6 +23,9 @@ abstract final class LocalApiError {
   static const noProtocolToSave = 'local:noProtocolToSave';
   static const selectMedicineRequired = 'local:selectMedicineRequired';
 
+  /// The account's role is not supported by this client (Doctor-only).
+  static const roleNotAllowed = 'local:roleNotAllowed';
+
   /// Prefix of the "which fields failed BE validation" message; the rest of
   /// the token is the comma-separated field names.
   static const invalidObservationsPrefix = 'local:invalidObservations:';
@@ -48,8 +51,9 @@ class ApiException implements Exception {
   String toString() => 'ApiException($statusCode): $message';
 }
 
-/// True for statuses where a token refresh + retry can recover the call.
-bool isAuthRetryable(int statusCode) => statusCode == 401 || statusCode == 403;
+/// True only for the status a token refresh can recover (an expired session).
+/// A 403 means the caller lacks permission, so refreshing cannot help.
+bool isAuthRetryable(int statusCode) => statusCode == 401;
 
 /// The backend answers with `Result` / `Result<T>`
 /// (`Respira.ServiceDefaults.Contracts.Results`), serialized as:

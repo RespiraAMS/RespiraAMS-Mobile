@@ -10,6 +10,7 @@ import 'package:lucide_icons/lucide_icons.dart';
 import '../../../core/network/api_response.dart';
 import '../../../core/utils/context_extensions.dart';
 import '../../../core/utils/name_initials.dart';
+import '../../../core/validation/input_formatters.dart';
 import '../../../design_system/design_system.dart';
 import '../../../l10n/l10n.dart';
 import '../../patient/models/patient.dart';
@@ -100,6 +101,10 @@ class _EditFormState extends ConsumerState<_EditForm> {
   late String _address;
   late String _dob;
   late DoctorGender? _gender;
+
+  /// Owns the date-of-birth text so the picker can write into the same field
+  /// the keyboard edits.
+  late final TextEditingController _dobController;
   late DoctorAcademicTitle _academicTitle;
   late DoctorPosition _position;
   late Set<DoctorDegree> _degrees;
@@ -123,6 +128,7 @@ class _EditFormState extends ConsumerState<_EditForm> {
     _dob = doctor.dateOfBirth == null
         ? ''
         : isoDateToDdMmYyyy(doctor.dateOfBirth!);
+    _dobController = TextEditingController(text: _dob);
     _gender = DoctorGender.fromWire(doctor.gender);
     _academicTitle =
         DoctorAcademicTitle.fromWire(doctor.academicTitle) ??
@@ -140,6 +146,12 @@ class _EditFormState extends ConsumerState<_EditForm> {
         .where((part) => part.isNotEmpty)
         .join(' ');
     return name.isEmpty ? widget.doctor.fullName : name;
+  }
+
+  @override
+  void dispose() {
+    _dobController.dispose();
+    super.dispose();
   }
 
   Future<void> _pickAvatar() async {
@@ -369,17 +381,19 @@ class _EditFormState extends ConsumerState<_EditForm> {
   /// The saga is deleted once it finishes, so completion is verified by
   /// re-fetching the profile (retrying briefly for read-after-write lag).
   ///
-  /// The by-id endpoint does not enrich account-level fields (email, phone,
-  /// avatar), so the roster endpoint is preferred here.
+  /// `GET /doctors/me` is the enriched, account-scoped endpoint: it returns the
+  /// account-level fields (email, phone, avatar) as well as the profile ones.
   Future<DoctorProfileDto> _refetchProfile(
     ProfileUpdatePayload payload,
   ) async {
     final service = ref.read(doctorServiceProvider);
 
     Future<DoctorProfileDto> fetch() async {
-      final enriched =
-          await service.findByAccountId(widget.doctor.accountId);
-      return enriched ?? service.getDoctor(widget.doctor.id);
+      final me = await service.getMe();
+      if (me == null) {
+        throw const ApiException(404, 'The doctor profile is not available.');
+      }
+      return me;
     }
 
     var latest = await fetch();
@@ -395,8 +409,8 @@ class _EditFormState extends ConsumerState<_EditForm> {
     if (doctor.firstName.trim() != payload.firstName) return false;
     if (doctor.lastName.trim() != payload.lastName) return false;
 
-    // Account-level fields are only present on the enriched roster response;
-    // compare them when available and rely on the profile fields otherwise.
+    // Account-level fields come from `GET /doctors/me`; compare them when
+    // available and rely on the profile fields otherwise.
     final email = doctor.email?.trim();
     if (email != null && email.isNotEmpty && email != payload.email) {
       return false;
@@ -448,6 +462,7 @@ class _EditFormState extends ConsumerState<_EditForm> {
                         label: '${l10n.patientLastName}$requiredMark',
                         initialValue: _lastName,
                         textInputAction: TextInputAction.next,
+                        inputFormatters: personNameInputFormatters(),
                         onChanged: (value) => _lastName = value,
                       ),
                       const SizedBox(height: Spacing.group),
@@ -455,16 +470,22 @@ class _EditFormState extends ConsumerState<_EditForm> {
                         label: '${l10n.patientFirstName}$requiredMark',
                         initialValue: _firstName,
                         textInputAction: TextInputAction.next,
+                        inputFormatters: personNameInputFormatters(),
                         onChanged: (value) => _firstName = value,
                       ),
                       const SizedBox(height: Spacing.group),
                       AppTextField(
                         label: l10n.doctorProfileDob,
-                        initialValue: _dob,
+                        controller: _dobController,
                         hintText: 'dd/MM/yyyy',
                         keyboardType: TextInputType.datetime,
                         textInputAction: TextInputAction.next,
+                        inputFormatters: dateInputFormatters(),
                         onChanged: (value) => _dob = value,
+                        suffixIcon: DatePickerButton(
+                          controller: _dobController,
+                          onPicked: (value) => _dob = value,
+                        ),
                       ),
                       const SizedBox(height: Spacing.group),
                       AppText(
@@ -498,6 +519,7 @@ class _EditFormState extends ConsumerState<_EditForm> {
                         initialValue: _citizenId,
                         keyboardType: TextInputType.number,
                         textInputAction: TextInputAction.next,
+                        inputFormatters: digitsInputFormatters(12),
                         onChanged: (value) => _citizenId = value,
                       ),
                       const SizedBox(height: Spacing.group),
@@ -507,6 +529,7 @@ class _EditFormState extends ConsumerState<_EditForm> {
                         maxLines: 2,
                         minLines: 2,
                         textInputAction: TextInputAction.newline,
+                        inputFormatters: addressInputFormatters(),
                         onChanged: (value) => _address = value,
                       ),
                     ],
@@ -526,6 +549,7 @@ class _EditFormState extends ConsumerState<_EditForm> {
                         helperText: l10n.doctorProfileEmailHint,
                         keyboardType: TextInputType.emailAddress,
                         textInputAction: TextInputAction.next,
+                        inputFormatters: addressInputFormatters(max: 100),
                         onChanged: (value) => _email = value,
                       ),
                       const SizedBox(height: Spacing.group),
@@ -534,6 +558,7 @@ class _EditFormState extends ConsumerState<_EditForm> {
                         initialValue: _phone,
                         keyboardType: TextInputType.phone,
                         textInputAction: TextInputAction.next,
+                        inputFormatters: phoneInputFormatters(),
                         onChanged: (value) => _phone = value,
                       ),
                     ],

@@ -22,23 +22,18 @@ class ClinicalVariableRepository {
     String? category,
   }) async {
     try {
-      final search = (name ?? code ?? '').trim();
       final queryParams = <String, dynamic>{
         'page': page,
         'size': pageSize,
       };
 
-      if (search.isNotEmpty) {
-        // Free-text search lives on `/clinical-variables/search`.
-        queryParams['searchTerm'] = search;
-      } else {
-        if (isRequired != null) queryParams['isRequired'] = isRequired;
-        if (valueType != null) queryParams['valueType'] = valueType;
-        if (category != null) queryParams['category'] = category;
-      }
+      // Free-text search lives on `/clinical-variables/search`.
+      if (isRequired != null) queryParams['isRequired'] = isRequired;
+      if (valueType != null) queryParams['valueType'] = valueType;
+      if (category != null) queryParams['category'] = category;
 
       final response = await apiClient.dio.get(
-        search.isEmpty ? '/clinical-variables' : '/clinical-variables/search',
+        '/clinical-variables',
         queryParameters: queryParams,
       );
 
@@ -60,7 +55,7 @@ class ClinicalVariableRepository {
         '/clinical-variables/search',
         queryParameters: {
           'page': page,
-          'pageSize': pageSize,
+          'size': pageSize,
           'SearchTerm': searchTerm,
         },
       );

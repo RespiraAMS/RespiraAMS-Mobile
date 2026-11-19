@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 
 import 'package:respiraams/design_system/design_system.dart';
-import 'package:respiraams/l10n/l10n.dart';
 
 import '../models/statistics_view.dart';
 
-/// "Chẩn đoán theo tuần" chart card: bottom-aligned primary bars whose
-/// heights are proportional to the max value — pure Flutter, no chart
-/// dependency. 200ms height animation on period switches (§13 Default).
-class WeeklyBarsWidget extends StatelessWidget {
-  const WeeklyBarsWidget({super.key, required this.bars});
+/// Distribution chart card: bottom-aligned primary bars whose heights are
+/// proportional to the max value — pure Flutter, no chart dependency.
+/// 200ms height animation on period switches (§13 Default).
+class DistributionBarsWidget extends StatelessWidget {
+  const DistributionBarsWidget({super.key, required this.bars});
 
   static const double _chartAreaHeight = 116;
 
-  final List<WeeklyBar> bars;
+  final List<DistributionBar> bars;
 
   @override
   Widget build(BuildContext context) {
     final c = context.respiraColors;
-    final maxValue = bars.map((b) => b.value).fold<int>(1, (a, b) => a > b ? a : b);
+    final maxValue =
+        bars.map((b) => b.value).fold<int>(1, (a, b) => a > b ? a : b);
 
     return Container(
       height: 180,
@@ -46,8 +46,7 @@ class WeeklyBarsWidget extends StatelessWidget {
                     duration: const Duration(milliseconds: 200),
                     curve: Curves.easeOut,
                     width: 28,
-                    height:
-                        (bar.value / maxValue) * _chartAreaHeight,
+                    height: (bar.value / maxValue) * _chartAreaHeight,
                     decoration: BoxDecoration(
                       color: c.primary,
                       borderRadius: BorderRadius.circular(8),
@@ -55,7 +54,7 @@ class WeeklyBarsWidget extends StatelessWidget {
                   ),
                   const SizedBox(height: Spacing.inline),
                   Text(
-                    localizedWeekLabel(bar.label, context.l10n),
+                    bar.label,
                     maxLines: 1,
                     style: TypographyTokens.label(context)
                         .copyWith(color: c.textSecondary),

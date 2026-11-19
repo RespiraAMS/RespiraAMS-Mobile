@@ -4,6 +4,7 @@ import 'package:lucide_icons/lucide_icons.dart';
 import 'package:respiraams/design_system/design_system.dart';
 import 'package:respiraams/l10n/l10n.dart';
 
+import '../../../core/validation/input_formatters.dart';
 import '../models/next_of_kin_relationship.dart';
 import 'section_label_widget.dart';
 
@@ -82,6 +83,7 @@ class NextOfKinRelationshipField extends StatelessWidget {
             controller: otherController,
             hintText: l10n.nextOfKinRelationshipOtherHint,
             errorText: otherErrorText,
+            inputFormatters: personNameInputFormatters(),
             onChanged: onOtherChanged,
           ),
         ],
