@@ -359,7 +359,10 @@ class _SuspectedTab extends StatelessWidget {
         _SectionTitle(l10n.suspectedHeavy),
         const SizedBox(height: Spacing.control + 4),
         if (result.heavySuspected.isEmpty)
-          AppText(l10n.diagnosisNoData, type: AppTextType.caption)
+          AppText(
+            l10n.diagnosisSuspectedHeavyEmpty,
+            type: AppTextType.caption,
+          )
         else
           AppCard.divided([
             for (final pathogen in result.heavySuspected)
@@ -369,7 +372,10 @@ class _SuspectedTab extends StatelessWidget {
         _SectionTitle(l10n.suspectedWorth),
         const SizedBox(height: Spacing.control + 4),
         if (result.worthSuspected.isEmpty)
-          AppText(l10n.diagnosisNoData, type: AppTextType.caption)
+          AppText(
+            l10n.diagnosisSuspectedWorthEmpty,
+            type: AppTextType.caption,
+          )
         else
           AppCard.divided([
             for (final pathogen in result.worthSuspected)

@@ -149,7 +149,10 @@ class _DiagnosisWizardScreenState extends ConsumerState<DiagnosisWizardScreen> {
                                 ),
                                 const SizedBox(height: Spacing.control),
                                 for (final variable in group.variables) ...[
-                                  _VariableField(variable: variable),
+                                  _VariableField(
+                                    key: ValueKey('var-${variable.id}'),
+                                    variable: variable,
+                                  ),
                                   const SizedBox(height: Spacing.group),
                                 ],
                                 const SizedBox(height: Spacing.control),
@@ -928,7 +931,7 @@ class _DropdownField<T> extends StatelessWidget {
 }
 
 class _VariableField extends ConsumerWidget {
-  const _VariableField({required this.variable});
+  const _VariableField({super.key, required this.variable});
 
   final ClinicalVariableDto variable;
 
