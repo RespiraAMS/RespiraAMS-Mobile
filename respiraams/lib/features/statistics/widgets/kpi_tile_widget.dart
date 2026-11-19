@@ -5,7 +5,7 @@ import 'package:respiraams/l10n/l10n.dart';
 
 import '../models/statistics_view.dart';
 
-/// Headline KPI tile ("Chẩn đoán · 128 · +12%"): label · value · delta.
+/// Headline KPI tile ("Đang điều trị · 24"): label · value.
 class KpiTileWidget extends StatelessWidget {
   const KpiTileWidget({super.key, required this.stat});
 
@@ -14,9 +14,6 @@ class KpiTileWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.respiraColors;
-    final deltaText =
-        '${stat.deltaPercent >= 0 ? '+' : ''}${stat.deltaPercent}%';
-    final deltaColor = stat.deltaPercent >= 0 ? c.success : c.error;
 
     return Container(
       padding: const EdgeInsets.all(Spacing.control + 2),
@@ -31,13 +28,12 @@ class KpiTileWidget extends StatelessWidget {
         children: [
           Text(
             stat.id.label(context.l10n),
-            maxLines: 1,
+            maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: TypographyTokens.label(context)
                 .copyWith(color: c.textSecondary),
           ),
           const SizedBox(height: Spacing.xxxs),
-          // Scale step closest to the template's 24px within the type scale.
           FittedBox(
             fit: BoxFit.scaleDown,
             child: Text(
@@ -45,11 +41,6 @@ class KpiTileWidget extends StatelessWidget {
               style: TypographyTokens.h2(context)
                   .copyWith(color: c.textPrimary),
             ),
-          ),
-          const SizedBox(height: Spacing.xxxs),
-          Text(
-            deltaText,
-            style: TypographyTokens.label(context).copyWith(color: deltaColor),
           ),
         ],
       ),

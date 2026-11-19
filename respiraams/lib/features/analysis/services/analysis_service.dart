@@ -22,6 +22,7 @@ class AnalysisService {
     int page = 1,
     int size = 10,
     String? searchTerm,
+    DateTime? createdFrom,
   }) async {
     final res = await _dio.get(
       '/analysis/reports',
@@ -30,6 +31,7 @@ class AnalysisService {
         'size': size,
         if (searchTerm != null && searchTerm.trim().isNotEmpty)
           'searchTerm': searchTerm.trim(),
+        if (createdFrom != null) 'createdFrom': createdFrom.toIso8601String(),
       },
     );
     final json = unwrapEnvelope(res);
