@@ -9,12 +9,15 @@ import 'package:respiraams/features/diagnosis/widgets/criteria_banner_widget.dar
 import 'package:respiraams/features/diagnosis/widgets/selection_row_widget.dart';
 import '../models/calculator.dart';
 import '../providers/calculator_providers.dart';
+import '../widgets/calculator_forms.dart';
 import '../widgets/curb65_result_card.dart';
 
-/// Route `/calculators/curb-65` — Nhập liệu (inputs + Tính → result) and
-/// Giải thích (method explanation) tabs.
+/// Route `/calculators/<id>` — Nhập liệu (inputs + Tính → result) and
+/// Giải thích (method explanation) tabs, shared by every calculator.
 class CalculatorDetailScreen extends ConsumerWidget {
-  const CalculatorDetailScreen({super.key});
+  const CalculatorDetailScreen({super.key, required this.calculator});
+
+  final CalculatorId calculator;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -24,6 +27,7 @@ class CalculatorDetailScreen extends ConsumerWidget {
         ref.read(calculatorDetailTabControllerProvider.notifier);
     final state = ref.watch(curb65CalculatorControllerProvider);
     final controller = ref.read(curb65CalculatorControllerProvider.notifier);
+    final isCurb65 = calculator == CalculatorId.curb65;
 
     return Scaffold(
       body: SafeArea(
@@ -33,7 +37,7 @@ class CalculatorDetailScreen extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               AppAppBar(
-                title: 'CURB-65',
+                title: calculator.title,
                 subtitle: l10n.calcClinicalCalculator,
                 onBack: () => context.goBackOr(CalculatorRoutes.list),
               ),
@@ -49,26 +53,34 @@ class CalculatorDetailScreen extends ConsumerWidget {
               const SizedBox(height: Spacing.section),
               Expanded(
                 child: tabIndex == 0
-                    ? _InputTab(state: state, controller: controller)
-                    : const _ExplanationTab(),
+                    ? switch (calculator) {
+                        CalculatorId.curb65 => _Curb65InputTab(
+                            state: state,
+                            controller: controller,
+                          ),
+                        CalculatorId.egfr => const EgfrForm(),
+                        CalculatorId.crcl => const CrclForm(),
+                        CalculatorId.bmi => const BmiForm(),
+                        CalculatorId.qsofa => const QsofaForm(),
+                      }
+                    : _ExplanationTab(calculator: calculator),
               ),
-              // 'Tính' stays pinned at the bottom; the result card appears
-              // inside the scrollable content right above it.
-              Padding(
-                padding: const EdgeInsets.fromLTRB(
-                  0,
-                  Spacing.inline,
-                  0,
-                  Spacing.lg,
+              // CURB-65 keeps 'Tính' pinned at the bottom; the other forms
+              // carry their own button at the end of the scroll.
+              if (isCurb65 && tabIndex == 0)
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                    0,
+                    Spacing.inline,
+                    0,
+                    Spacing.lg,
+                  ),
+                  child: AppButton(
+                    label: l10n.calcCalculate,
+                    expand: true,
+                    onPressed: controller.calculate,
+                  ),
                 ),
-                child: tabIndex == 0
-                    ? AppButton(
-                        label: l10n.calcCalculate,
-                        expand: true,
-                        onPressed: controller.calculate,
-                      )
-                    : const SizedBox.shrink(),
-              ),
             ],
           ),
         ),
@@ -77,8 +89,8 @@ class CalculatorDetailScreen extends ConsumerWidget {
   }
 }
 
-class _InputTab extends StatelessWidget {
-  const _InputTab({required this.state, required this.controller});
+class _Curb65InputTab extends StatelessWidget {
+  const _Curb65InputTab({required this.state, required this.controller});
 
   final Curb65CalculatorState state;
   final Curb65CalculatorController controller;
@@ -218,11 +230,47 @@ class _RowCard extends StatelessWidget {
 }
 
 class _ExplanationTab extends StatelessWidget {
-  const _ExplanationTab();
+  const _ExplanationTab({required this.calculator});
+
+  final CalculatorId calculator;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+
+    if (calculator != CalculatorId.curb65) {
+      final (formula, explanation) = switch (calculator) {
+        CalculatorId.egfr => (l10n.calcEgfrFormula, l10n.calcEgfrExplain),
+        CalculatorId.crcl => (l10n.calcCrclFormula, l10n.calcCrclExplain),
+        CalculatorId.bmi => (l10n.calcBmiFormula, l10n.calcBmiExplain),
+        CalculatorId.qsofa => (l10n.calcQsofaFormula, l10n.calcQsofaExplain),
+        CalculatorId.curb65 => ('', ''),
+      };
+
+      return SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            _ExplanationCard(
+              title: l10n.calcFormulaTitle,
+              children: [
+                AppText(formula, type: AppTextType.body),
+              ],
+            ),
+            const SizedBox(height: Spacing.section),
+            _ExplanationCard(
+              title: l10n.calcDescriptionTitle,
+              children: [
+                AppText(explanation, type: AppTextType.body),
+                const SizedBox(height: Spacing.inline),
+                AppText(l10n.calcConfirmNote, type: AppTextType.caption),
+              ],
+            ),
+            const SizedBox(height: Spacing.section),
+          ],
+        ),
+      );
+    }
 
     return SingleChildScrollView(
       child: Column(
@@ -231,40 +279,25 @@ class _ExplanationTab extends StatelessWidget {
           _ExplanationCard(
             title: l10n.calcMethodTitle,
             children: [
-              AppText(
-                l10n.calcMethodBody,
-                type: AppTextType.body,
-              ),
+              AppText(l10n.calcMethodBody, type: AppTextType.body),
             ],
           ),
           const SizedBox(height: Spacing.section),
           _ExplanationCard(
             title: l10n.calcDescriptionTitle,
             children: [
-              AppText(
-                l10n.calcDescriptionBody,
-                type: AppTextType.body,
-              ),
+              AppText(l10n.calcDescriptionBody, type: AppTextType.body),
               const SizedBox(height: Spacing.inline),
-              AppText(
-                l10n.calcConfirmNote,
-                type: AppTextType.caption,
-              ),
+              AppText(l10n.calcConfirmNote, type: AppTextType.caption),
             ],
           ),
           const SizedBox(height: Spacing.section),
           _ExplanationCard(
             title: l10n.calcComponentsTitle,
             children: [
-              AppText(
-                l10n.calcComponentsBody,
-                type: AppTextType.body,
-              ),
+              AppText(l10n.calcComponentsBody, type: AppTextType.body),
               const SizedBox(height: Spacing.inline),
-              AppText(
-                l10n.calcThresholdNote,
-                type: AppTextType.caption,
-              ),
+              AppText(l10n.calcThresholdNote, type: AppTextType.caption),
             ],
           ),
           const SizedBox(height: Spacing.section),
