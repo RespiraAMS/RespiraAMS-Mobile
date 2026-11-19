@@ -54,6 +54,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonCancel => 'Cancel';
 
   @override
+  String get commonPickDate => 'Pick a date';
+
+  @override
   String get commonBack => 'Back';
 
   @override
@@ -813,6 +816,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get patientErrDobFormat => 'Invalid date of birth (dd/MM/yyyy).';
 
   @override
+  String get patientErrDobFuture => 'Date of birth cannot be in the future.';
+
+  @override
   String get patientErrPhone => 'Invalid phone number.';
 
   @override
@@ -1127,6 +1133,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get suspectedWorth => 'Etiology to note';
 
   @override
+  String get diagnosisSuspectedHeavyEmpty => 'No highly suspected etiology';
+
+  @override
+  String get diagnosisSuspectedWorthEmpty => 'No etiology to note';
+
+  @override
   String get evidenceSection => 'Clinical evidence';
 
   @override
@@ -1371,6 +1383,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get diagnosisSelectDrugs => 'Select antibiotics';
+
+  @override
+  String get diagnosisTabAdherentProtocols => 'Adherent protocols';
+
+  @override
+  String get diagnosisTabAllDrugs => 'All medicines';
 
   @override
   String get diagnosisDrugSearch => 'Search medicines';
@@ -1717,6 +1735,164 @@ class AppLocalizationsEn extends AppLocalizations {
       'Threshold details are shown in the Input tab.';
 
   @override
+  String get calcFormulaTitle => 'Formula';
+
+  @override
+  String get calcSex => 'Sex';
+
+  @override
+  String get calcWeight => 'Weight';
+
+  @override
+  String get calcWeightUnit => 'kg';
+
+  @override
+  String get calcHeight => 'Height';
+
+  @override
+  String get calcHeightUnit => 'cm';
+
+  @override
+  String get calcCreatinine => 'Creatinine';
+
+  @override
+  String get calcCreatinineUnit => 'Creatinine unit';
+
+  @override
+  String get calcUnitUmol => 'µmol/L';
+
+  @override
+  String get calcUnitMgDl => 'mg/dL';
+
+  @override
+  String get calcInvalidInput => 'Enter complete and valid values.';
+
+  @override
+  String get calcEgfrUnit => 'mL/min/1.73m²';
+
+  @override
+  String get calcCrclUnit => 'mL/min';
+
+  @override
+  String get calcBmiUnit => 'kg/m²';
+
+  @override
+  String get calcEgfrG1 => 'G1 · Normal or high';
+
+  @override
+  String get calcEgfrG2 => 'G2 · Mildly decreased';
+
+  @override
+  String get calcEgfrG3a => 'G3a · Mildly to moderately decreased';
+
+  @override
+  String get calcEgfrG3b => 'G3b · Moderately to severely decreased';
+
+  @override
+  String get calcEgfrG4 => 'G4 · Severely decreased';
+
+  @override
+  String get calcEgfrG5 => 'G5 · Kidney failure';
+
+  @override
+  String get calcCrclNormal => 'Normal';
+
+  @override
+  String get calcCrclMild => 'Mildly reduced';
+
+  @override
+  String get calcCrclModerate => 'Moderately reduced';
+
+  @override
+  String get calcCrclSevere => 'Severely reduced';
+
+  @override
+  String get calcCrclFailure => 'Kidney failure';
+
+  @override
+  String get calcBmiUnderweight => 'Underweight';
+
+  @override
+  String get calcBmiNormal => 'Normal';
+
+  @override
+  String get calcBmiOverweight => 'Overweight';
+
+  @override
+  String get calcBmiObese => 'Obese';
+
+  @override
+  String get calcQsofaRespRate => 'Respiratory rate ≥ 22 breaths/min';
+
+  @override
+  String get calcQsofaRespRateDesc => 'Respiratory criterion';
+
+  @override
+  String get calcQsofaSbp => 'Systolic blood pressure ≤ 100 mmHg';
+
+  @override
+  String get calcQsofaSbpDesc => 'Circulatory criterion';
+
+  @override
+  String get calcQsofaGcs => 'GCS < 15';
+
+  @override
+  String get calcQsofaGcsDesc => 'Mental status criterion';
+
+  @override
+  String get calcQsofaLow => 'Low risk';
+
+  @override
+  String get calcQsofaHigh => 'High risk (≥ 2 criteria)';
+
+  @override
+  String get calcEgfrFormula =>
+      'eGFR = 142 × min(Scr/κ, 1)^α × max(Scr/κ, 1)^−1.200 × 0.9938^Age × (1.012 if female)';
+
+  @override
+  String get calcCrclFormula =>
+      'CrCl = ((140 − Age) × Weight) / (72 × Scr) × 0.85 (female)';
+
+  @override
+  String get calcBmiFormula => 'BMI = Weight (kg) / Height (m)²';
+
+  @override
+  String get calcQsofaFormula =>
+      'Score = (Respiratory rate ≥ 22) + (SBP ≤ 100) + (GCS < 15)';
+
+  @override
+  String get calcEgfrExplain =>
+      'CKD-EPI 2021 estimates the glomerular filtration rate from serum creatinine, age and sex; no race coefficient is used.';
+
+  @override
+  String get calcCrclExplain =>
+      'Cockcroft-Gault estimates creatinine clearance, used to adjust antibiotic doses for kidney function.';
+
+  @override
+  String get calcBmiExplain =>
+      'BMI assesses nutritional status; classification follows the Asia-Pacific cut-offs.';
+
+  @override
+  String get calcQsofaExplain =>
+      'qSOFA quickly flags the risk of death in patients with suspected infection; two or more criteria mean high risk.';
+
+  @override
+  String get calcEgfrNote =>
+      'An estimate only; it does not replace a measured GFR.';
+
+  @override
+  String get calcCrclNote =>
+      'Used for drug dose adjustment; use the actual body weight.';
+
+  @override
+  String get calcBmiNote =>
+      'Overweight from 23 and obesity from 25 by the Asia-Pacific cut-offs.';
+
+  @override
+  String get calcQsofaNote =>
+      'qSOFA ≥ 2 suggests high risk and warrants early assessment and management.';
+
+  @override
   String calcScorePoints(int score) {
     return '$score points';
   }
@@ -1843,6 +2019,43 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get statisticsUpdated => 'Updated at 19:28 today';
+
+  @override
+  String get statisticsKpiPatients => 'Total patients';
+
+  @override
+  String get statisticsKpiInTreatment => 'In treatment';
+
+  @override
+  String get statisticsKpiRecovered => 'Recovered';
+
+  @override
+  String get statisticsAgeDistribution => 'Age distribution';
+
+  @override
+  String get statisticsOutcomes => 'Cases by treatment outcome';
+
+  @override
+  String get statisticsLatestReport => 'Latest report';
+
+  @override
+  String get statisticsLatestReportEmpty =>
+      'No analysis report in this period.';
+
+  @override
+  String get statisticsAdherenceRate => 'Adherence rate';
+
+  @override
+  String get statisticsTreatmentPlans => 'Treatment plans';
+
+  @override
+  String get statisticsReportPatients => 'Patients';
+
+  @override
+  String get statisticsOpenReport => 'Open report details';
+
+  @override
+  String get statisticsEmpty => 'No statistics available yet.';
 
   @override
   String get periodLast30Days => '30 days';

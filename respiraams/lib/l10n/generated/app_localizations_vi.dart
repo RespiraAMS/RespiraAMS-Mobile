@@ -54,6 +54,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get commonCancel => 'Hủy';
 
   @override
+  String get commonPickDate => 'Chọn ngày';
+
+  @override
   String get commonBack => 'Quay lại';
 
   @override
@@ -800,6 +803,9 @@ class AppLocalizationsVi extends AppLocalizations {
       'Ngày sinh không hợp lệ (định dạng dd/MM/yyyy).';
 
   @override
+  String get patientErrDobFuture => 'Ngày sinh không được ở tương lai.';
+
+  @override
   String get patientErrPhone => 'Số điện thoại không hợp lệ.';
 
   @override
@@ -1109,6 +1115,12 @@ class AppLocalizationsVi extends AppLocalizations {
   String get suspectedWorth => 'Căn nguyên cần lưu ý';
 
   @override
+  String get diagnosisSuspectedHeavyEmpty => 'Không có căn nguyên nghi ngờ cao';
+
+  @override
+  String get diagnosisSuspectedWorthEmpty => 'Không có căn nguyên cần lưu ý';
+
+  @override
   String get evidenceSection => 'Bằng chứng lâm sàng';
 
   @override
@@ -1349,6 +1361,12 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get diagnosisSelectDrugs => 'Chọn kháng sinh';
+
+  @override
+  String get diagnosisTabAdherentProtocols => 'Phác đồ tuân thủ';
+
+  @override
+  String get diagnosisTabAllDrugs => 'Tất cả thuốc';
 
   @override
   String get diagnosisDrugSearch => 'Tìm thuốc';
@@ -1692,6 +1710,164 @@ class AppLocalizationsVi extends AppLocalizations {
       'Chi tiết ngưỡng được hiển thị tại tab Nhập liệu.';
 
   @override
+  String get calcFormulaTitle => 'Công thức';
+
+  @override
+  String get calcSex => 'Giới tính';
+
+  @override
+  String get calcWeight => 'Cân nặng';
+
+  @override
+  String get calcWeightUnit => 'kg';
+
+  @override
+  String get calcHeight => 'Chiều cao';
+
+  @override
+  String get calcHeightUnit => 'cm';
+
+  @override
+  String get calcCreatinine => 'Creatinin';
+
+  @override
+  String get calcCreatinineUnit => 'Đơn vị creatinin';
+
+  @override
+  String get calcUnitUmol => 'µmol/L';
+
+  @override
+  String get calcUnitMgDl => 'mg/dL';
+
+  @override
+  String get calcInvalidInput => 'Vui lòng nhập đầy đủ và đúng giá trị.';
+
+  @override
+  String get calcEgfrUnit => 'mL/phút/1,73m²';
+
+  @override
+  String get calcCrclUnit => 'mL/phút';
+
+  @override
+  String get calcBmiUnit => 'kg/m²';
+
+  @override
+  String get calcEgfrG1 => 'G1 · Bình thường hoặc cao';
+
+  @override
+  String get calcEgfrG2 => 'G2 · Giảm nhẹ';
+
+  @override
+  String get calcEgfrG3a => 'G3a · Giảm nhẹ đến trung bình';
+
+  @override
+  String get calcEgfrG3b => 'G3b · Giảm trung bình đến nặng';
+
+  @override
+  String get calcEgfrG4 => 'G4 · Giảm nặng';
+
+  @override
+  String get calcEgfrG5 => 'G5 · Suy thận';
+
+  @override
+  String get calcCrclNormal => 'Bình thường';
+
+  @override
+  String get calcCrclMild => 'Giảm nhẹ';
+
+  @override
+  String get calcCrclModerate => 'Giảm trung bình';
+
+  @override
+  String get calcCrclSevere => 'Giảm nặng';
+
+  @override
+  String get calcCrclFailure => 'Suy thận';
+
+  @override
+  String get calcBmiUnderweight => 'Gầy';
+
+  @override
+  String get calcBmiNormal => 'Bình thường';
+
+  @override
+  String get calcBmiOverweight => 'Thừa cân';
+
+  @override
+  String get calcBmiObese => 'Béo phì';
+
+  @override
+  String get calcQsofaRespRate => 'Nhịp thở ≥ 22 lần/phút';
+
+  @override
+  String get calcQsofaRespRateDesc => 'Tiêu chí hô hấp';
+
+  @override
+  String get calcQsofaSbp => 'Huyết áp tâm thu ≤ 100 mmHg';
+
+  @override
+  String get calcQsofaSbpDesc => 'Tiêu chí tuần hoàn';
+
+  @override
+  String get calcQsofaGcs => 'GCS < 15';
+
+  @override
+  String get calcQsofaGcsDesc => 'Tiêu chí tri giác';
+
+  @override
+  String get calcQsofaLow => 'Nguy cơ thấp';
+
+  @override
+  String get calcQsofaHigh => 'Nguy cơ cao (≥ 2 tiêu chí)';
+
+  @override
+  String get calcEgfrFormula =>
+      'eGFR = 142 × min(Scr/κ, 1)^α × max(Scr/κ, 1)^−1,200 × 0,9938^Tuổi × (1,012 nếu nữ)';
+
+  @override
+  String get calcCrclFormula =>
+      'CrCl = ((140 − Tuổi) × Cân nặng) / (72 × Scr) × 0,85 (nữ)';
+
+  @override
+  String get calcBmiFormula => 'BMI = Cân nặng (kg) / Chiều cao (m)²';
+
+  @override
+  String get calcQsofaFormula =>
+      'Điểm = (Nhịp thở ≥ 22) + (HATT ≤ 100) + (GCS < 15)';
+
+  @override
+  String get calcEgfrExplain =>
+      'CKD-EPI 2021 ước tính mức lọc cầu thận từ creatinin huyết thanh, tuổi và giới; không dùng hệ số chủng tộc.';
+
+  @override
+  String get calcCrclExplain =>
+      'Cockcroft-Gault ước tính độ thanh thải creatinin, dùng để hiệu chỉnh liều kháng sinh theo chức năng thận.';
+
+  @override
+  String get calcBmiExplain =>
+      'BMI đánh giá tình trạng dinh dưỡng; phân loại theo ngưỡng châu Á – Thái Bình Dương.';
+
+  @override
+  String get calcQsofaExplain =>
+      'qSOFA đánh giá nhanh nguy cơ tử vong ở bệnh nhân nghi nhiễm khuẩn; từ 2 tiêu chí trở lên là nguy cơ cao.';
+
+  @override
+  String get calcEgfrNote =>
+      'Chỉ số ước tính, không thay thế đo mức lọc cầu thận thực tế.';
+
+  @override
+  String get calcCrclNote =>
+      'Dùng cho hiệu chỉnh liều thuốc; cân nặng nên là cân nặng thực tế.';
+
+  @override
+  String get calcBmiNote =>
+      'Thừa cân từ 23 và béo phì từ 25 theo ngưỡng châu Á – Thái Bình Dương.';
+
+  @override
+  String get calcQsofaNote =>
+      'qSOFA ≥ 2 gợi ý nguy cơ cao, cần đánh giá và xử trí sớm.';
+
+  @override
   String calcScorePoints(int score) {
     return '$score điểm';
   }
@@ -1818,6 +1994,43 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get statisticsUpdated => 'Cập nhật lúc 19:28 hôm nay';
+
+  @override
+  String get statisticsKpiPatients => 'Tổng bệnh nhân';
+
+  @override
+  String get statisticsKpiInTreatment => 'Đang điều trị';
+
+  @override
+  String get statisticsKpiRecovered => 'Đã khỏi';
+
+  @override
+  String get statisticsAgeDistribution => 'Phân bố nhóm tuổi';
+
+  @override
+  String get statisticsOutcomes => 'Ca theo kết cục điều trị';
+
+  @override
+  String get statisticsLatestReport => 'Báo cáo gần nhất';
+
+  @override
+  String get statisticsLatestReportEmpty =>
+      'Chưa có báo cáo phân tích trong kỳ này.';
+
+  @override
+  String get statisticsAdherenceRate => 'Tỷ lệ tuân thủ';
+
+  @override
+  String get statisticsTreatmentPlans => 'Ca điều trị';
+
+  @override
+  String get statisticsReportPatients => 'Bệnh nhân';
+
+  @override
+  String get statisticsOpenReport => 'Xem chi tiết báo cáo';
+
+  @override
+  String get statisticsEmpty => 'Chưa có dữ liệu thống kê.';
 
   @override
   String get periodLast30Days => '30 ngày';
