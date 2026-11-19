@@ -11,7 +11,7 @@ import 'package:respiraams/features/settings/settings_menu_button.dart';
 import 'helpers/fake_api_adapter.dart';
 import 'helpers/pump_test_app.dart';
 
-/// Seeds the session with the account id the `/doctors` fixture links to.
+/// Seeds the session so the settings header shows a doctor.
 class _SeededSession extends SessionController {
   @override
   DoctorProfile? build() =>
@@ -32,7 +32,7 @@ Future<FakeApiAdapter> _openEditForm(
     },
     overrides: {
       // The saga reports `Completed` immediately; the screen still verifies by
-      // re-fetching the profile (roster endpoint).
+      // re-fetching the profile (`GET /doctors/me`).
       'GET /profile/update': MockedResponse(
         200,
         FakeApiAdapter.envelope({
@@ -134,20 +134,14 @@ void main() {
       overrides: {
         // Real enum wire values so the degree chips map back and forth.
         // `firstName` matches the edited value so the post-saga verification
-        // (which re-fetches the roster) succeeds.
-        'GET /doctors': MockedResponse(
+        // (which re-fetches `GET /doctors/me`) succeeds.
+        'GET /doctors/me': MockedResponse(
           200,
-          FakeApiAdapter.doctorsEnvelope(
+          FakeApiAdapter.envelope(
             FakeApiAdapter.doctorProfile(
               firstName: 'Lan',
               degrees: const ['Master', 'Doctor'],
             ),
-          ),
-        ),
-        'GET /doctors/': MockedResponse(
-          200,
-          FakeApiAdapter.envelope(
-            FakeApiAdapter.doctorProfile(firstName: 'Lan'),
           ),
         ),
       },

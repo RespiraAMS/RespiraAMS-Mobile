@@ -6,12 +6,13 @@ part of 'current_doctor_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$currentDoctorHash() => r'692b9f45312a061d601ef9b2ee1e932e8d1dbfe4';
+String _$currentDoctorHash() => r'7105f9753ab42e74acdd0465702ed7e3f2eea32f';
 
-/// Profile of the signed-in doctor, resolved through the account-id bridge.
+/// Profile of the signed-in doctor (`GET /doctors/me`), kept alive for the
+/// session.
 ///
-/// The JWT only carries the *account* id, while `GET /doctors/{id}` takes the
-/// *profile* id, so the roster is walked once and kept alive for the session.
+/// The JWT only carries the *account* id; the backend maps it to the doctor
+/// profile, so no roster lookup is needed.
 ///
 /// Copied from [currentDoctor].
 @ProviderFor(currentDoctor)

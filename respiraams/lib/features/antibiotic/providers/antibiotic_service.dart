@@ -22,11 +22,9 @@ class AntibioticRepository {
     String? classification,
   }) async {
     try {
-      final search = name?.trim() ?? '';
       final queryParams = <String, dynamic>{
         'page': page,
         'size': pageSize,
-        if (search.isNotEmpty) 'searchTerm': search,
       };
 
       // Free-text search lives on `/antibiotics/search`; the paged endpoint
@@ -35,7 +33,7 @@ class AntibioticRepository {
       if (classification != null) queryParams['Classification'] = classification;
 
       final response = await apiClient.dio.get(
-        search.isEmpty ? '/antibiotics' : '/antibiotics/search',
+        '/antibiotics',
         queryParameters: queryParams,
       );
 
@@ -57,7 +55,7 @@ class AntibioticRepository {
         '/antibiotics/search',
         queryParameters: {
           'page': page,
-          'pageSize': pageSize,
+          'size': pageSize,
           'SearchTerm': searchTerm,
         },
       );

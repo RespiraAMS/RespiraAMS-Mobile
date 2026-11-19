@@ -20,18 +20,16 @@ class ClinicalMetricRepository {
     bool? isApplied,
   }) async {
     try {
-      final search = (name ?? code ?? '').trim();
       final queryParams = <String, dynamic>{
         'page': page,
         'size': pageSize,
-        if (search.isNotEmpty) 'searchTerm': search,
       };
 
       // Free-text search lives on `/clinical-metrics/search`.
       if (isApplied != null) queryParams['IsApplied'] = isApplied;
 
       final response = await apiClient.dio.get(
-        search.isEmpty ? '/clinical-metrics' : '/clinical-metrics/search',
+        '/clinical-metrics',
         queryParameters: queryParams,
       );
 
@@ -53,7 +51,7 @@ class ClinicalMetricRepository {
         '/clinical-metrics/search',
         queryParameters: {
           'page': page,
-          'pageSize': pageSize,
+          'size': pageSize,
           'SearchTerm': searchTerm,
         },
       );

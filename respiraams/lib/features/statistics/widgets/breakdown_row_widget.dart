@@ -4,16 +4,18 @@ import 'package:respiraams/design_system/design_system.dart';
 
 import '../models/statistics_view.dart';
 
-/// One "Tác nhân thường gặp" row: name · progress track · bold count.
+/// One breakdown row: label · progress track · bold count.
 /// Fill width is proportional to the max count; color follows the rank.
-class PathogenRowWidget extends StatelessWidget {
-  const PathogenRowWidget({
+class BreakdownRowWidget extends StatelessWidget {
+  const BreakdownRowWidget({
     super.key,
     required this.stat,
+    required this.label,
     required this.maxCount,
   });
 
-  final PathogenStat stat;
+  final BreakdownStat stat;
+  final String label;
   final int maxCount;
 
   @override
@@ -33,7 +35,7 @@ class PathogenRowWidget extends StatelessWidget {
         Expanded(
           flex: 3,
           child: Text(
-            stat.name,
+            label,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: TypographyTokens.label(context)

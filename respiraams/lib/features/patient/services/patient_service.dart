@@ -212,19 +212,4 @@ class PatientService {
     );
     unwrapResult(res);
   }
-
-  /// `PUT /treatment-plans/{id}/review` — records the adherence review.
-  ///
-  /// [adherenceState] is `Adhere` | `NotAdhere` | `NotAdhereValid` |
-  /// `NotAdhereInvalid`.
-  Future<void> reviewTreatmentPlan({
-    required String id,
-    required String adherenceState,
-  }) async {
-    final res = await _dio.put(
-      '/treatment-plans/$id/review',
-      data: {'adherenceState': adherenceState},
-    );
-    unwrapResult(res);
-  }
 }

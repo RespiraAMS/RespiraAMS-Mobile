@@ -49,9 +49,9 @@ extension PeriodRangeL10n on PeriodRange {
 
 extension KpiIdL10n on KpiId {
   String label(AppLocalizations l10n) => switch (this) {
-        KpiId.diagnoses => l10n.kpiDiagnoses,
-        KpiId.saved => l10n.kpiSaved,
-        KpiId.microbiology => l10n.kpiMicrobiology,
+        KpiId.patients => l10n.statisticsKpiPatients,
+        KpiId.inTreatment => l10n.statisticsKpiInTreatment,
+        KpiId.recovered => l10n.statisticsKpiRecovered,
       };
 }
 
@@ -260,6 +260,9 @@ extension LocalizedApiErrorX on String {
     }
     if (this == LocalApiError.selectMedicineRequired) {
       return l10n.diagnosisSelectMedicineRequired;
+    }
+    if (this == LocalApiError.roleNotAllowed) {
+      return l10n.authRoleNotAllowed;
     }
     return this;
   }

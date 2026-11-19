@@ -188,6 +188,12 @@ abstract class AppLocalizations {
   /// **'Hủy'**
   String get commonCancel;
 
+  /// No description provided for @commonPickDate.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chọn ngày'**
+  String get commonPickDate;
+
   /// No description provided for @commonBack.
   ///
   /// In vi, this message translates to:
@@ -433,6 +439,12 @@ abstract class AppLocalizations {
   /// In vi, this message translates to:
   /// **'Bác sĩ'**
   String get doctorProfileRoleDoctor;
+
+  /// No description provided for @doctorProfileRoleHeadDepartmentDoctor.
+  ///
+  /// In vi, this message translates to:
+  /// **'Trưởng khoa'**
+  String get doctorProfileRoleHeadDepartmentDoctor;
 
   /// No description provided for @doctorProfileRoleAdmin.
   ///
@@ -889,6 +901,12 @@ abstract class AppLocalizations {
   /// In vi, this message translates to:
   /// **'Không thể kết nối máy chủ. Vui lòng thử lại.'**
   String get authServerUnreachable;
+
+  /// No description provided for @authRoleNotAllowed.
+  ///
+  /// In vi, this message translates to:
+  /// **'Ứng dụng di động chỉ dành cho tài khoản bác sĩ. Vui lòng đăng nhập bằng tài khoản bác sĩ hoặc liên hệ quản trị viên.'**
+  String get authRoleNotAllowed;
 
   /// No description provided for @authForgotTitle.
   ///
@@ -1556,6 +1574,12 @@ abstract class AppLocalizations {
   /// **'Ngày sinh không hợp lệ (định dạng dd/MM/yyyy).'**
   String get patientErrDobFormat;
 
+  /// No description provided for @patientErrDobFuture.
+  ///
+  /// In vi, this message translates to:
+  /// **'Ngày sinh không được ở tương lai.'**
+  String get patientErrDobFuture;
+
   /// No description provided for @patientErrPhone.
   ///
   /// In vi, this message translates to:
@@ -2138,6 +2162,18 @@ abstract class AppLocalizations {
   /// **'Căn nguyên cần lưu ý'**
   String get suspectedWorth;
 
+  /// No description provided for @diagnosisSuspectedHeavyEmpty.
+  ///
+  /// In vi, this message translates to:
+  /// **'Không có căn nguyên nghi ngờ cao'**
+  String get diagnosisSuspectedHeavyEmpty;
+
+  /// No description provided for @diagnosisSuspectedWorthEmpty.
+  ///
+  /// In vi, this message translates to:
+  /// **'Không có căn nguyên cần lưu ý'**
+  String get diagnosisSuspectedWorthEmpty;
+
   /// No description provided for @evidenceSection.
   ///
   /// In vi, this message translates to:
@@ -2575,6 +2611,18 @@ abstract class AppLocalizations {
   /// In vi, this message translates to:
   /// **'Chọn kháng sinh'**
   String get diagnosisSelectDrugs;
+
+  /// No description provided for @diagnosisTabAdherentProtocols.
+  ///
+  /// In vi, this message translates to:
+  /// **'Phác đồ tuân thủ'**
+  String get diagnosisTabAdherentProtocols;
+
+  /// No description provided for @diagnosisTabAllDrugs.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tất cả thuốc'**
+  String get diagnosisTabAllDrugs;
 
   /// No description provided for @diagnosisDrugSearch.
   ///
@@ -3212,6 +3260,300 @@ abstract class AppLocalizations {
   /// **'Chi tiết ngưỡng được hiển thị tại tab Nhập liệu.'**
   String get calcThresholdNote;
 
+  /// No description provided for @calcFormulaTitle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Công thức'**
+  String get calcFormulaTitle;
+
+  /// No description provided for @calcSex.
+  ///
+  /// In vi, this message translates to:
+  /// **'Giới tính'**
+  String get calcSex;
+
+  /// No description provided for @calcWeight.
+  ///
+  /// In vi, this message translates to:
+  /// **'Cân nặng'**
+  String get calcWeight;
+
+  /// No description provided for @calcWeightUnit.
+  ///
+  /// In vi, this message translates to:
+  /// **'kg'**
+  String get calcWeightUnit;
+
+  /// No description provided for @calcHeight.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chiều cao'**
+  String get calcHeight;
+
+  /// No description provided for @calcHeightUnit.
+  ///
+  /// In vi, this message translates to:
+  /// **'cm'**
+  String get calcHeightUnit;
+
+  /// No description provided for @calcCreatinine.
+  ///
+  /// In vi, this message translates to:
+  /// **'Creatinin'**
+  String get calcCreatinine;
+
+  /// No description provided for @calcCreatinineUnit.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đơn vị creatinin'**
+  String get calcCreatinineUnit;
+
+  /// No description provided for @calcUnitUmol.
+  ///
+  /// In vi, this message translates to:
+  /// **'µmol/L'**
+  String get calcUnitUmol;
+
+  /// No description provided for @calcUnitMgDl.
+  ///
+  /// In vi, this message translates to:
+  /// **'mg/dL'**
+  String get calcUnitMgDl;
+
+  /// No description provided for @calcInvalidInput.
+  ///
+  /// In vi, this message translates to:
+  /// **'Vui lòng nhập đầy đủ và đúng giá trị.'**
+  String get calcInvalidInput;
+
+  /// No description provided for @calcEgfrUnit.
+  ///
+  /// In vi, this message translates to:
+  /// **'mL/phút/1,73m²'**
+  String get calcEgfrUnit;
+
+  /// No description provided for @calcCrclUnit.
+  ///
+  /// In vi, this message translates to:
+  /// **'mL/phút'**
+  String get calcCrclUnit;
+
+  /// No description provided for @calcBmiUnit.
+  ///
+  /// In vi, this message translates to:
+  /// **'kg/m²'**
+  String get calcBmiUnit;
+
+  /// No description provided for @calcEgfrG1.
+  ///
+  /// In vi, this message translates to:
+  /// **'G1 · Bình thường hoặc cao'**
+  String get calcEgfrG1;
+
+  /// No description provided for @calcEgfrG2.
+  ///
+  /// In vi, this message translates to:
+  /// **'G2 · Giảm nhẹ'**
+  String get calcEgfrG2;
+
+  /// No description provided for @calcEgfrG3a.
+  ///
+  /// In vi, this message translates to:
+  /// **'G3a · Giảm nhẹ đến trung bình'**
+  String get calcEgfrG3a;
+
+  /// No description provided for @calcEgfrG3b.
+  ///
+  /// In vi, this message translates to:
+  /// **'G3b · Giảm trung bình đến nặng'**
+  String get calcEgfrG3b;
+
+  /// No description provided for @calcEgfrG4.
+  ///
+  /// In vi, this message translates to:
+  /// **'G4 · Giảm nặng'**
+  String get calcEgfrG4;
+
+  /// No description provided for @calcEgfrG5.
+  ///
+  /// In vi, this message translates to:
+  /// **'G5 · Suy thận'**
+  String get calcEgfrG5;
+
+  /// No description provided for @calcCrclNormal.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bình thường'**
+  String get calcCrclNormal;
+
+  /// No description provided for @calcCrclMild.
+  ///
+  /// In vi, this message translates to:
+  /// **'Giảm nhẹ'**
+  String get calcCrclMild;
+
+  /// No description provided for @calcCrclModerate.
+  ///
+  /// In vi, this message translates to:
+  /// **'Giảm trung bình'**
+  String get calcCrclModerate;
+
+  /// No description provided for @calcCrclSevere.
+  ///
+  /// In vi, this message translates to:
+  /// **'Giảm nặng'**
+  String get calcCrclSevere;
+
+  /// No description provided for @calcCrclFailure.
+  ///
+  /// In vi, this message translates to:
+  /// **'Suy thận'**
+  String get calcCrclFailure;
+
+  /// No description provided for @calcBmiUnderweight.
+  ///
+  /// In vi, this message translates to:
+  /// **'Gầy'**
+  String get calcBmiUnderweight;
+
+  /// No description provided for @calcBmiNormal.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bình thường'**
+  String get calcBmiNormal;
+
+  /// No description provided for @calcBmiOverweight.
+  ///
+  /// In vi, this message translates to:
+  /// **'Thừa cân'**
+  String get calcBmiOverweight;
+
+  /// No description provided for @calcBmiObese.
+  ///
+  /// In vi, this message translates to:
+  /// **'Béo phì'**
+  String get calcBmiObese;
+
+  /// No description provided for @calcQsofaRespRate.
+  ///
+  /// In vi, this message translates to:
+  /// **'Nhịp thở ≥ 22 lần/phút'**
+  String get calcQsofaRespRate;
+
+  /// No description provided for @calcQsofaRespRateDesc.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tiêu chí hô hấp'**
+  String get calcQsofaRespRateDesc;
+
+  /// No description provided for @calcQsofaSbp.
+  ///
+  /// In vi, this message translates to:
+  /// **'Huyết áp tâm thu ≤ 100 mmHg'**
+  String get calcQsofaSbp;
+
+  /// No description provided for @calcQsofaSbpDesc.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tiêu chí tuần hoàn'**
+  String get calcQsofaSbpDesc;
+
+  /// No description provided for @calcQsofaGcs.
+  ///
+  /// In vi, this message translates to:
+  /// **'GCS < 15'**
+  String get calcQsofaGcs;
+
+  /// No description provided for @calcQsofaGcsDesc.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tiêu chí tri giác'**
+  String get calcQsofaGcsDesc;
+
+  /// No description provided for @calcQsofaLow.
+  ///
+  /// In vi, this message translates to:
+  /// **'Nguy cơ thấp'**
+  String get calcQsofaLow;
+
+  /// No description provided for @calcQsofaHigh.
+  ///
+  /// In vi, this message translates to:
+  /// **'Nguy cơ cao (≥ 2 tiêu chí)'**
+  String get calcQsofaHigh;
+
+  /// No description provided for @calcEgfrFormula.
+  ///
+  /// In vi, this message translates to:
+  /// **'eGFR = 142 × min(Scr/κ, 1)^α × max(Scr/κ, 1)^−1,200 × 0,9938^Tuổi × (1,012 nếu nữ)'**
+  String get calcEgfrFormula;
+
+  /// No description provided for @calcCrclFormula.
+  ///
+  /// In vi, this message translates to:
+  /// **'CrCl = ((140 − Tuổi) × Cân nặng) / (72 × Scr) × 0,85 (nữ)'**
+  String get calcCrclFormula;
+
+  /// No description provided for @calcBmiFormula.
+  ///
+  /// In vi, this message translates to:
+  /// **'BMI = Cân nặng (kg) / Chiều cao (m)²'**
+  String get calcBmiFormula;
+
+  /// No description provided for @calcQsofaFormula.
+  ///
+  /// In vi, this message translates to:
+  /// **'Điểm = (Nhịp thở ≥ 22) + (HATT ≤ 100) + (GCS < 15)'**
+  String get calcQsofaFormula;
+
+  /// No description provided for @calcEgfrExplain.
+  ///
+  /// In vi, this message translates to:
+  /// **'CKD-EPI 2021 ước tính mức lọc cầu thận từ creatinin huyết thanh, tuổi và giới; không dùng hệ số chủng tộc.'**
+  String get calcEgfrExplain;
+
+  /// No description provided for @calcCrclExplain.
+  ///
+  /// In vi, this message translates to:
+  /// **'Cockcroft-Gault ước tính độ thanh thải creatinin, dùng để hiệu chỉnh liều kháng sinh theo chức năng thận.'**
+  String get calcCrclExplain;
+
+  /// No description provided for @calcBmiExplain.
+  ///
+  /// In vi, this message translates to:
+  /// **'BMI đánh giá tình trạng dinh dưỡng; phân loại theo ngưỡng châu Á – Thái Bình Dương.'**
+  String get calcBmiExplain;
+
+  /// No description provided for @calcQsofaExplain.
+  ///
+  /// In vi, this message translates to:
+  /// **'qSOFA đánh giá nhanh nguy cơ tử vong ở bệnh nhân nghi nhiễm khuẩn; từ 2 tiêu chí trở lên là nguy cơ cao.'**
+  String get calcQsofaExplain;
+
+  /// No description provided for @calcEgfrNote.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chỉ số ước tính, không thay thế đo mức lọc cầu thận thực tế.'**
+  String get calcEgfrNote;
+
+  /// No description provided for @calcCrclNote.
+  ///
+  /// In vi, this message translates to:
+  /// **'Dùng cho hiệu chỉnh liều thuốc; cân nặng nên là cân nặng thực tế.'**
+  String get calcCrclNote;
+
+  /// No description provided for @calcBmiNote.
+  ///
+  /// In vi, this message translates to:
+  /// **'Thừa cân từ 23 và béo phì từ 25 theo ngưỡng châu Á – Thái Bình Dương.'**
+  String get calcBmiNote;
+
+  /// No description provided for @calcQsofaNote.
+  ///
+  /// In vi, this message translates to:
+  /// **'qSOFA ≥ 2 gợi ý nguy cơ cao, cần đánh giá và xử trí sớm.'**
+  String get calcQsofaNote;
+
   /// No description provided for @calcScorePoints.
   ///
   /// In vi, this message translates to:
@@ -3451,6 +3793,78 @@ abstract class AppLocalizations {
   /// In vi, this message translates to:
   /// **'Cập nhật lúc 19:28 hôm nay'**
   String get statisticsUpdated;
+
+  /// No description provided for @statisticsKpiPatients.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tổng bệnh nhân'**
+  String get statisticsKpiPatients;
+
+  /// No description provided for @statisticsKpiInTreatment.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đang điều trị'**
+  String get statisticsKpiInTreatment;
+
+  /// No description provided for @statisticsKpiRecovered.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đã khỏi'**
+  String get statisticsKpiRecovered;
+
+  /// No description provided for @statisticsAgeDistribution.
+  ///
+  /// In vi, this message translates to:
+  /// **'Phân bố nhóm tuổi'**
+  String get statisticsAgeDistribution;
+
+  /// No description provided for @statisticsOutcomes.
+  ///
+  /// In vi, this message translates to:
+  /// **'Ca theo kết cục điều trị'**
+  String get statisticsOutcomes;
+
+  /// No description provided for @statisticsLatestReport.
+  ///
+  /// In vi, this message translates to:
+  /// **'Báo cáo gần nhất'**
+  String get statisticsLatestReport;
+
+  /// No description provided for @statisticsLatestReportEmpty.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chưa có báo cáo phân tích trong kỳ này.'**
+  String get statisticsLatestReportEmpty;
+
+  /// No description provided for @statisticsAdherenceRate.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tỷ lệ tuân thủ'**
+  String get statisticsAdherenceRate;
+
+  /// No description provided for @statisticsTreatmentPlans.
+  ///
+  /// In vi, this message translates to:
+  /// **'Ca điều trị'**
+  String get statisticsTreatmentPlans;
+
+  /// No description provided for @statisticsReportPatients.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bệnh nhân'**
+  String get statisticsReportPatients;
+
+  /// No description provided for @statisticsOpenReport.
+  ///
+  /// In vi, this message translates to:
+  /// **'Xem chi tiết báo cáo'**
+  String get statisticsOpenReport;
+
+  /// No description provided for @statisticsEmpty.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chưa có dữ liệu thống kê.'**
+  String get statisticsEmpty;
 
   /// No description provided for @periodLast30Days.
   ///

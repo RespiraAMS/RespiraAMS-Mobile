@@ -2,11 +2,13 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/network/api_client.dart';
-import '../../../core/network/pagination_dto.dart';
+import '../../../core/network/api_response.dart';
 
-import '../../../../core/network/api_response.dart';
-
-/// Doctor profile + list endpoints of Respira.Doctor (`/doctors/*`).
+/// Doctor profile endpoints of Respira.Doctor (`/doctors/*`).
+///
+/// The mobile app is doctor-facing only, so the signed-in profile is always
+/// resolved through `GET /doctors/me`; the roster endpoint (`GET /doctors`)
+/// is Admin-only and must not be used here.
 ///
 /// Paths are relative to [kApiRootUrl] (`/api/v1`).
 class DoctorService {
@@ -14,55 +16,26 @@ class DoctorService {
 
   final Dio _dio;
 
-  /// `GET /doctors/{id}` — profile used to enrich the session.
+  /// `GET /doctors/me` — profile of the authenticated doctor.
+  ///
+  /// The JWT carries the *account* id; this endpoint maps it to the profile,
+  /// so the app never has to walk the roster.
+  ///
+  /// Returns `null` when the account has no doctor profile (HTTP 404).
+  Future<DoctorProfileDto?> getMe() async {
+    try {
+      final res = await _dio.get('/doctors/me');
+      return unwrapData(res, DoctorProfileDto.fromJson);
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 404) return null;
+      rethrow;
+    }
+  }
+
+  /// `GET /doctors/{id}` — profile by its *profile* id.
   Future<DoctorProfileDto> getDoctor(String id) async {
     final res = await _dio.get('/doctors/$id');
     return unwrapData(res, DoctorProfileDto.fromJson);
-  }
-
-  /// `GET /doctors` — paged roster.
-  ///
-  /// The JWT carries the *account* id, while profile endpoints take the
-  /// *profile* id; [findByAccountId] bridges the two.
-  Future<List<DoctorProfileDto>> listDoctors({
-    int page = 1,
-    int size = 100,
-  }) async {
-    final res = await _dio.get(
-      '/doctors',
-      queryParameters: {'page': page, 'size': size},
-    );
-    final data = unwrapEnvelope(res);
-    final items = data['items'] as List<dynamic>? ?? [];
-    return items
-        .map((e) => DoctorProfileDto.fromJson(e as Map<String, dynamic>))
-        .toList();
-  }
-
-  /// Resolves the doctor profile linked to the JWT's account id.
-  ///
-  /// The roster endpoint has no account-id filter, so walk every page instead
-  /// of only looking at the first 100 profiles.
-  Future<DoctorProfileDto?> findByAccountId(String accountId) async {
-    var page = 1;
-    while (true) {
-      final res = await _dio.get(
-        '/doctors',
-        queryParameters: {'page': page, 'size': 100},
-      );
-      final data = unwrapEnvelope(res);
-      final items = data['items'] as List<dynamic>? ?? [];
-      for (final item in items) {
-        final doctor = DoctorProfileDto.fromJson(item as Map<String, dynamic>);
-        if (doctor.accountId == accountId) return doctor;
-      }
-
-      final metadata = PaginationMetadata.fromJson(
-        data['metadata'] as Map<String, dynamic>? ?? {},
-      );
-      if (!metadata.hasNextPage) return null;
-      page++;
-    }
   }
 }
 

@@ -31,6 +31,7 @@ class AppTextField extends StatelessWidget {
     this.minLines,
     this.maxLength,
     this.inputFormatters,
+    this.suffixIcon,
   });
 
   final String label;
@@ -60,6 +61,9 @@ class AppTextField extends StatelessWidget {
   /// Hard character limit; the counter is hidden (callers render their own).
   final int? maxLength;
   final List<TextInputFormatter>? inputFormatters;
+
+  /// Trailing affordance inside the field (e.g. the date-picker button).
+  final Widget? suffixIcon;
 
   bool get _isMultiline => maxLines > 1;
 
@@ -106,6 +110,13 @@ class AppTextField extends StatelessWidget {
               hintText: hintText,
               hintStyle: TextStyle(fontSize: 15, color: c.textTertiary),
               counterText: '',
+              suffixIcon: suffixIcon,
+              suffixIconConstraints: suffixIcon == null
+                  ? null
+                  : const BoxConstraints(
+                      minWidth: ControlSize.touchTargetMin,
+                      minHeight: ControlSize.touchTargetMin,
+                    ),
               // Component-internal geometry (§17 allows raw values in
               // component implementations): 22px text line + 2×14 vertical
               // padding + 2px border == ControlSize.inputDefault, so the

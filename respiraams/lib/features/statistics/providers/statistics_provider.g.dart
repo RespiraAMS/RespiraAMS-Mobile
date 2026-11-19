@@ -6,14 +6,15 @@ part of 'statistics_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$statisticsViewHash() => r'f3b4e8e006887158d4889b64f1443bff47821ce1';
+String _$statisticsViewHash() => r'7dc6a14ffecc06b34d366ba60310254aab55bca4';
 
-/// Demo datasets per range — swap for a repository call once the
-/// networking layer exists.
+/// Overview built from the real endpoints:
+/// * `GET /patients` for the roster KPIs plus the age/outcome distributions;
+/// * `GET /analysis/reports?createdFrom=…` for the latest adherence report.
 ///
 /// Copied from [statisticsView].
 @ProviderFor(statisticsView)
-final statisticsViewProvider = Provider<StatisticsView>.internal(
+final statisticsViewProvider = FutureProvider<StatisticsView>.internal(
   statisticsView,
   name: r'statisticsViewProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -25,11 +26,14 @@ final statisticsViewProvider = Provider<StatisticsView>.internal(
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-typedef StatisticsViewRef = ProviderRef<StatisticsView>;
+typedef StatisticsViewRef = FutureProviderRef<StatisticsView>;
 String _$statisticsPeriodControllerHash() =>
     r'279530f4a593ce2e08477b8a4327c14c5cf46cce';
 
 /// Selected overview range of the statistics screen.
+///
+/// The range only filters the analysis report (the roster endpoint has no date
+/// filter); the patient KPIs are lifetime totals.
 ///
 /// Copied from [StatisticsPeriodController].
 @ProviderFor(StatisticsPeriodController)

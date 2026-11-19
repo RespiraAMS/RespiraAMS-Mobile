@@ -68,15 +68,21 @@ class _AppUnitFieldState extends State<AppUnitField> {
   @override
   void didUpdateWidget(covariant AppUnitField oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.initialValue != _controller.text) {
-      // External reset (e.g. controller cleared); defer to avoid notifying
-      // listeners mid-layout.
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted && _controller.text != widget.initialValue) {
-          _controller.text = widget.initialValue;
-        }
-      });
-    }
+    if (widget.initialValue == _controller.text) return;
+
+    // External reset (e.g. controller cleared); defer to avoid notifying
+    // listeners mid-layout and keep the caret where the user left it.
+    final selection = _controller.selection;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || _controller.text == widget.initialValue) return;
+      final max = widget.initialValue.length;
+      final rawOffset = selection.baseOffset;
+      final offset = rawOffset < 0 ? max : rawOffset.clamp(0, max).toInt();
+      _controller.value = TextEditingValue(
+        text: widget.initialValue,
+        selection: TextSelection.collapsed(offset: offset),
+      );
+    });
   }
 
   @override
@@ -163,32 +169,38 @@ class _AppUnitFieldState extends State<AppUnitField> {
     );
 
     final warning = widget.warningText;
-    if (warning == null || warning.isEmpty) return row;
+    final hasWarning = warning != null && warning.isNotEmpty;
 
+    // Always keep the same widget structure: swapping the root between `Row`
+    // and `Column` would remount the TextField and drop focus while the doctor
+    // is still typing a value that crosses the accepted range (temperature,
+    // FiO2, SpO2 all warn on the very first digit).
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
       children: [
         row,
-        const SizedBox(height: Spacing.xxxs),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Icon(
-              LucideIcons.alertTriangle,
-              size: ControlSize.iconSm,
-              color: c.warning,
-            ),
-            const SizedBox(width: Spacing.xxxs),
-            Expanded(
-              child: Text(
-                warning,
-                style:
-                    TypographyTokens.caption(context).copyWith(color: c.warning),
+        if (hasWarning) ...[
+          const SizedBox(height: Spacing.xxxs),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(
+                LucideIcons.alertTriangle,
+                size: ControlSize.iconSm,
+                color: c.warning,
               ),
-            ),
-          ],
-        ),
+              const SizedBox(width: Spacing.xxxs),
+              Expanded(
+                child: Text(
+                  warning,
+                  style: TypographyTokens.caption(context)
+                      .copyWith(color: c.warning),
+                ),
+              ),
+            ],
+          ),
+        ],
       ],
     );
   }

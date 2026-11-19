@@ -74,7 +74,10 @@ void attachDebugTrust(Dio dio) {
 
 /// Raw Dio instance shared by every service. Handles:
 /// 1. Bearer header injection from [TokenStorage]
-/// 2. Single-flight 401/403 recovery: POST /auth/refresh then retry once
+/// 2. Single-flight 401 recovery: POST /auth/refresh then retry once
+///
+/// A 403 is a permission problem, not an expired session, so it is surfaced
+/// unchanged (refreshing would fail again and clear the session).
 ///
 /// Its base URL already includes [kApiBasePath], so feature services use
 /// paths relative to `/api/v1` (e.g. `/patients`, `/diagnose`).
@@ -98,7 +101,7 @@ final Provider<Dio> apiClientProvider = Provider<Dio>((ref) {
         final status = error.response?.statusCode;
         final isAuthRoute = error.requestOptions.path.contains('/auth/');
 
-        if ((status == 401 || status == 403) &&
+        if (status == 401 &&
             !isAuthRoute &&
             storage.refreshToken != null) {
           final retried = await refreshAndRetry(dio, storage, error);
@@ -210,7 +213,7 @@ class ApiClient {
       onError: (error, handler) async {
         final status = error.response?.statusCode;
         final isAuthRoute = error.requestOptions.path.contains('/auth/');
-        if ((status == 401 || status == 403) && !isAuthRoute) {
+        if (status == 401 && !isAuthRoute) {
           final storage = await loadStorage();
           if (storage.refreshToken != null) {
             try {

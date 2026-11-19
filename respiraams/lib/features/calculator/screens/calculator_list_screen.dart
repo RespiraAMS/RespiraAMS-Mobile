@@ -12,7 +12,6 @@ import 'package:respiraams/features/statistics/routes.dart';
 import '../../../../core/navigation/app_nav_items.dart';
 import '../../../../design_system/design_system.dart';
 import '../../../../l10n/l10n.dart';
-import '../models/calculator.dart';
 import '../providers/calculator_providers.dart';
 import '../widgets/calculator_entry_row_widget.dart';
 
@@ -81,14 +80,8 @@ class CalculatorListScreen extends ConsumerWidget {
                     final entry = entries[index];
                     return CalculatorEntryRowWidget(
                       calculator: entry,
-                      onTap: () {
-                        if (entry == CalculatorId.curb65) {
-                          context.push(CalculatorRoutes.curb65);
-                        } else {
-                          showAppToast(context,
-                              l10n.calculatorComingSoon(entry.title));
-                        }
-                      },
+                      onTap: () =>
+                          context.push(CalculatorRoutes.pathFor(entry)),
                     );
                   },
                 ),

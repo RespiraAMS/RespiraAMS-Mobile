@@ -11,20 +11,15 @@ import 'package:respiraams/features/settings/settings_sheet.dart';
 import 'helpers/fake_api_adapter.dart';
 import 'helpers/pump_test_app.dart';
 
-/// Seeds the session with the account id the `/doctors` fixture links to.
+/// Seeds the session so the settings header shows a doctor.
 class _SeededSession extends SessionController {
-  _SeededSession({this.accountId = 'account-1'});
-
-  final String accountId;
-
   @override
   DoctorProfile? build() =>
-      DoctorProfile(id: accountId, name: 'BS. Lê Hoàng Minh');
+      const DoctorProfile(id: 'account-1', name: 'BS. Lê Hoàng Minh');
 }
 
 Future<void> _openProfile(
   WidgetTester tester, {
-  String accountId = 'account-1',
   Map<String, MockedResponse> overrides = const {},
 }) async {
   await pumpTestApp(
@@ -32,9 +27,7 @@ Future<void> _openProfile(
     initialLocation: PatientRoutes.list,
     overrides: overrides,
     providerOverrides: [
-      sessionControllerProvider.overrideWith(
-        () => _SeededSession(accountId: accountId),
-      ),
+      sessionControllerProvider.overrideWith(_SeededSession.new),
     ],
   );
   await settleApi(tester);
@@ -56,7 +49,7 @@ void main() {
     expect(find.byType(DoctorProfileScreen), findsOneWidget);
     expect(find.text('Hồ sơ bác sĩ'), findsOneWidget);
 
-    // Identity block from the enriched roster fixture.
+    // Identity block from the `GET /doctors/me` fixture.
     expect(find.text('Minh Nguyễn'), findsOneWidget);
     expect(find.text('PGS.TS · Trưởng khoa Hô hấp'), findsOneWidget);
     expect(find.text('Chuyên môn'), findsOneWidget);
@@ -84,9 +77,9 @@ void main() {
     await _openProfile(
       tester,
       overrides: {
-        'GET /doctors': MockedResponse(
+        'GET /doctors/me': MockedResponse(
           200,
-          FakeApiAdapter.doctorsEnvelope(
+          FakeApiAdapter.envelope(
             FakeApiAdapter.doctorProfile(
               degrees: const ['Master', 'Doctor'],
               academicTitle: 'AssociateProfessor',
@@ -113,11 +106,13 @@ void main() {
     expect(find.byType(SettingsMenuButton), findsOneWidget);
   });
 
-  testWidgets('shows the error state when the roster fails', (tester) async {
+  testWidgets('shows the error state when the profile request fails', (
+    tester,
+  ) async {
     await _openProfile(
       tester,
       overrides: {
-        'GET /doctors': const MockedResponse(500, {
+        'GET /doctors/me': const MockedResponse(500, {
           'statusCode': 'FAILURE',
           'error': {'description': 'boom'},
           'data': null,
@@ -129,10 +124,22 @@ void main() {
     expect(find.widgetWithText(AppButton, 'Thử lại'), findsOneWidget);
   });
 
-  testWidgets('shows the empty state when no profile matches the account', (
+  testWidgets('shows the empty state when the account has no profile', (
     tester,
   ) async {
-    await _openProfile(tester, accountId: 'account-missing');
+    await _openProfile(
+      tester,
+      overrides: {
+        'GET /doctors/me': const MockedResponse(404, {
+          'statusCode': 'FAILURE-RESOURCE-NOT-FOUND',
+          'error': {
+            'statusCode': 'FAILURE-RESOURCE-NOT-FOUND',
+            'description': 'No doctor profile for this account',
+          },
+          'data': null,
+        }),
+      },
+    );
 
     expect(find.text('Chưa có thông tin hồ sơ.'), findsOneWidget);
     expect(find.widgetWithText(AppButton, 'Thử lại'), findsOneWidget);

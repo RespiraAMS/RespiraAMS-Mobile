@@ -108,6 +108,12 @@ class FakeApiAdapter implements HttpClientAdapter {
         'refreshToken': 'refresh-token-2',
       }),
     ),
+    // Doctor-facing clients resolve their own profile through `/doctors/me`.
+    // It must precede the by-id handler, which also matches this path.
+    'GET /doctors/me': MockedResponse(
+      200,
+      envelope(doctorProfile()),
+    ),
     // Placed before the list handler: `/doctors` is a substring of the
     // by-id path, and the first match wins.
     'GET /doctors/': MockedResponse(
@@ -251,7 +257,7 @@ class FakeApiAdapter implements HttpClientAdapter {
     ),
   };
 
-  /// Doctor of the `/doctors` fixture; override individual fields to model
+  /// Doctor of the `/doctors/me` fixture; override individual fields to model
   /// the profile after an edit.
   static Map<String, dynamic> doctorProfile({
     String firstName = 'Minh',

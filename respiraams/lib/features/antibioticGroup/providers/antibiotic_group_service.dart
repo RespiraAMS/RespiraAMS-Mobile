@@ -22,11 +22,9 @@ class AntibioticGroupRepository {
     String? parentId,
   }) async {
     try {
-      final search = name?.trim() ?? '';
       final queryParams = <String, dynamic>{
         'page': page,
         'size': pageSize,
-        if (search.isNotEmpty) 'searchTerm': search,
       };
 
       // Free-text search lives on `/antibiotic-groups/search`; the paged
@@ -36,7 +34,7 @@ class AntibioticGroupRepository {
       }
 
       final response = await apiClient.dio.get(
-        search.isEmpty ? '/antibiotic-groups' : '/antibiotic-groups/search',
+        '/antibiotic-groups',
         queryParameters: queryParams,
       );
 
@@ -58,7 +56,7 @@ class AntibioticGroupRepository {
         '/antibiotic-groups/search',
         queryParameters: {
           'page': page,
-          'pageSize': pageSize,
+          'size': pageSize,
           'SearchTerm': searchTerm,
         },
       );
