@@ -91,7 +91,26 @@ void main() {
     await _enter(tester, 'Mã bệnh án *', '');
     await _tapSave(tester);
 
-    expect(find.text('Vui lòng nhập mã bệnh án.'), findsOneWidget);
+    // The message is rendered inline under the field and echoed in the toast.
+    expect(find.text('Vui lòng nhập mã bệnh án.'), findsWidgets);
     expect(_lastPut(adapter), isNull);
+  });
+
+  testWidgets('opens the date picker from the calendar button', (tester) async {
+    await _openEditForm(tester);
+
+    expect(_fieldText(tester, 'Ngày sinh *'), '12/04/1971');
+
+    await tester.tap(find.byTooltip('Chọn ngày'));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(DatePickerDialog), findsOneWidget);
+
+    // Confirming keeps the date the dialog opened on.
+    await tester.tap(find.text('OK'));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(DatePickerDialog), findsNothing);
+    expect(_fieldText(tester, 'Ngày sinh *'), '12/04/1971');
   });
 }

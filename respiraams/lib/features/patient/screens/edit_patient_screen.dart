@@ -6,6 +6,8 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/network/api_client.dart';
 import '../../../../core/network/api_response.dart';
 import '../../../../core/utils/context_extensions.dart';
+import '../../../../core/validation/input_formatters.dart';
+import '../../../../core/validation/validators.dart';
 import '../../../../design_system/design_system.dart';
 import '../../../../l10n/l10n.dart';
 import '../models/patient.dart';
@@ -99,10 +101,6 @@ class _EditPatientForm extends ConsumerStatefulWidget {
 }
 
 class _EditPatientFormState extends ConsumerState<_EditPatientForm> {
-  static final _phonePattern =
-      RegExp(r'^(0[35789]|84[35789]|\+84[35789])\d{8}$');
-  static final _insurancePattern = RegExp(r'^\d{10}$');
-
   late String _name;
   late String _recordCode;
   late String _dob;
@@ -116,6 +114,18 @@ class _EditPatientFormState extends ConsumerState<_EditPatientForm> {
 
   bool _saving = false;
 
+  /// Field key → error message (null = valid).
+  final Map<String, String?> _errors = {};
+
+  /// Owns the date-of-birth text so the picker can write into the same field
+  /// the keyboard edits.
+  late final TextEditingController _dobController;
+
+  void _clearError(String key) {
+    if (_errors[key] == null) return;
+    setState(() => _errors.remove(key));
+  }
+
   /// Clinical fields are immutable once the patient has a treatment plan.
   bool get _clinicalLocked => widget.dto.treatmentPlans.isNotEmpty;
 
@@ -126,6 +136,7 @@ class _EditPatientFormState extends ConsumerState<_EditPatientForm> {
     _name = dto.fullName;
     _recordCode = dto.medicalRecordCode;
     _dob = isoDateToDdMmYyyy(dto.dateOfBirth);
+    _dobController = TextEditingController(text: _dob);
     _insurance = dto.healthInsuranceCard;
     _phone = dto.phoneNumber;
     _address = dto.address;
@@ -140,25 +151,50 @@ class _EditPatientFormState extends ConsumerState<_EditPatientForm> {
     return value.toString();
   }
 
+  @override
+  void dispose() {
+    _dobController.dispose();
+    super.dispose();
+  }
+
+  /// Validates every field, stores the messages and returns the first one.
   String? _validate(AppLocalizations l10n) {
-    if (_name.trim().split(RegExp(r'\s+')).length < 2) {
-      return l10n.patientErrName;
+    final dobIso = ddMmYyyyToIsoDate(_dob);
+    final errors = <String, String?>{
+      'name': _name.trim().split(RegExp(r'\s+')).length < 2
+          ? l10n.patientErrName
+          : null,
+      'code': _recordCode.trim().isEmpty ? l10n.patientErrCode : null,
+      'dob': _dob.trim().isEmpty
+          ? l10n.patientErrDob
+          : dobIso == null
+              ? l10n.patientErrDobFormat
+              : isNotFutureDate(dobIso)
+                  ? null
+                  : l10n.patientErrDobFuture,
+      'phone': isValidVietnamesePhone(_phone) ? null : l10n.patientErrPhone,
+      'insurance': isValidHealthInsuranceCard(_insurance)
+          ? null
+          : l10n.patientErrInsurance,
+      'height': (double.tryParse(_height.replaceAll(',', '.')) ?? 0) <= 0
+          ? l10n.patientErrHeight
+          : null,
+      'weight': (double.tryParse(_weight.replaceAll(',', '.')) ?? 0) <= 0
+          ? l10n.patientErrWeight
+          : null,
+      'address': _address.trim().isEmpty ? l10n.patientErrAddress : null,
+      'city': _city.trim().isEmpty ? l10n.patientErrCity : null,
+    };
+
+    setState(() {
+      _errors
+        ..clear()
+        ..addAll(errors);
+    });
+
+    for (final message in errors.values) {
+      if (message != null) return message;
     }
-    if (_recordCode.trim().isEmpty) return l10n.patientErrCode;
-    if (_dob.trim().isEmpty) return l10n.patientErrDob;
-    if (ddMmYyyyToIsoDate(_dob) == null) return l10n.patientErrDobFormat;
-    if (!_phonePattern.hasMatch(_phone.trim())) return l10n.patientErrPhone;
-    if (!_insurancePattern.hasMatch(_insurance.trim())) {
-      return l10n.patientErrInsurance;
-    }
-    if ((double.tryParse(_height.replaceAll(',', '.')) ?? 0) <= 0) {
-      return l10n.patientErrHeight;
-    }
-    if ((double.tryParse(_weight.replaceAll(',', '.')) ?? 0) <= 0) {
-      return l10n.patientErrWeight;
-    }
-    if (_address.trim().isEmpty) return l10n.patientErrAddress;
-    if (_city.trim().isEmpty) return l10n.patientErrCity;
     return null;
   }
 
@@ -286,23 +322,47 @@ class _EditPatientFormState extends ConsumerState<_EditPatientForm> {
                             AppTextField(
                               label: '${l10n.patientFullName}$requiredMark',
                               initialValue: _name,
-                              onChanged: (value) => _name = value,
+                              errorText: _errors['name'],
+                              inputFormatters: personNameInputFormatters(),
+                              onChanged: (value) {
+                                _name = value;
+                                _clearError('name');
+                              },
                             ),
                             const SizedBox(height: Spacing.group),
                             AppTextField(
                               label: '${l10n.patientRecordCode}$requiredMark',
                               initialValue: _recordCode,
                               hintText: l10n.patientRecordCodeHint,
-                              onChanged: (value) => _recordCode = value,
+                              errorText: _errors['code'],
+                              inputFormatters: codeInputFormatters(),
+                              onChanged: (value) {
+                                _recordCode = value;
+                                _clearError('code');
+                              },
                             ),
                             const SizedBox(height: Spacing.group),
                             AppTextField(
                               label: '${l10n.patientDob}$requiredMark',
-                              initialValue: _dob,
+                              controller: _dobController,
                               hintText: 'dd/MM/yyyy',
                               keyboardType: TextInputType.datetime,
                               enabled: !_clinicalLocked,
-                              onChanged: (value) => _dob = value,
+                              errorText: _errors['dob'],
+                              inputFormatters: dateInputFormatters(),
+                              onChanged: (value) {
+                                _dob = value;
+                                _clearError('dob');
+                              },
+                              suffixIcon: _clinicalLocked
+                                  ? null
+                                  : DatePickerButton(
+                                      controller: _dobController,
+                                      onPicked: (value) {
+                                        _dob = value;
+                                        _clearError('dob');
+                                      },
+                                    ),
                             ),
                             const SizedBox(height: Spacing.group),
                             _GenderField(
@@ -316,26 +376,46 @@ class _EditPatientFormState extends ConsumerState<_EditPatientForm> {
                               label: l10n.patientInsuranceCard,
                               initialValue: _insurance,
                               keyboardType: TextInputType.number,
-                              onChanged: (value) => _insurance = value,
+                              errorText: _errors['insurance'],
+                              inputFormatters: digitsInputFormatters(10),
+                              onChanged: (value) {
+                                _insurance = value;
+                                _clearError('insurance');
+                              },
                             ),
                             const SizedBox(height: Spacing.group),
                             AppTextField(
                               label: '${l10n.patientPhone}$requiredMark',
                               initialValue: _phone,
                               keyboardType: TextInputType.phone,
-                              onChanged: (value) => _phone = value,
+                              errorText: _errors['phone'],
+                              inputFormatters: phoneInputFormatters(),
+                              onChanged: (value) {
+                                _phone = value;
+                                _clearError('phone');
+                              },
                             ),
                             const SizedBox(height: Spacing.group),
                             AppTextField(
                               label: '${l10n.patientAddress}$requiredMark',
                               initialValue: _address,
-                              onChanged: (value) => _address = value,
+                              errorText: _errors['address'],
+                              inputFormatters: addressInputFormatters(),
+                              onChanged: (value) {
+                                _address = value;
+                                _clearError('address');
+                              },
                             ),
                             const SizedBox(height: Spacing.group),
                             AppTextField(
                               label: '${l10n.patientProvince}$requiredMark',
                               initialValue: _city,
-                              onChanged: (value) => _city = value,
+                              errorText: _errors['city'],
+                              inputFormatters: addressInputFormatters(max: 100),
+                              onChanged: (value) {
+                                _city = value;
+                                _clearError('city');
+                              },
                             ),
                           ],
                         ),
@@ -354,8 +434,19 @@ class _EditPatientFormState extends ConsumerState<_EditPatientForm> {
                               initialValue: _weight,
                               enabled: !_clinicalLocked,
                               expanded: true,
-                              onChanged: (value) => _weight = value,
+                              onChanged: (value) {
+                                _weight = value;
+                                _clearError('weight');
+                              },
                             ),
+                            if (_errors['weight'] != null) ...[
+                              const SizedBox(height: Spacing.xxxs),
+                              AppText(
+                                _errors['weight']!,
+                                type: AppTextType.caption,
+                                color: c.error,
+                              ),
+                            ],
                             const SizedBox(height: Spacing.group),
                             AppUnitField(
                               label: l10n.patientHeight,
@@ -363,8 +454,19 @@ class _EditPatientFormState extends ConsumerState<_EditPatientForm> {
                               initialValue: _height,
                               enabled: !_clinicalLocked,
                               expanded: true,
-                              onChanged: (value) => _height = value,
+                              onChanged: (value) {
+                                _height = value;
+                                _clearError('height');
+                              },
                             ),
+                            if (_errors['height'] != null) ...[
+                              const SizedBox(height: Spacing.xxxs),
+                              AppText(
+                                _errors['height']!,
+                                type: AppTextType.caption,
+                                color: c.error,
+                              ),
+                            ],
                           ],
                         ),
                       ),
