@@ -21,7 +21,7 @@ LoginFormState _$LoginFormStateFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$LoginFormState {
-  /// Email or staff code ("Email hoặc mã nhân viên").
+  /// Email used to sign in.
   String get identifier => throw _privateConstructorUsedError;
   String get password => throw _privateConstructorUsedError;
 
@@ -125,7 +125,7 @@ class _$LoginFormStateImpl implements _LoginFormState {
   factory _$LoginFormStateImpl.fromJson(Map<String, dynamic> json) =>
       _$$LoginFormStateImplFromJson(json);
 
-  /// Email or staff code ("Email hoặc mã nhân viên").
+  /// Email used to sign in.
   @override
   @JsonKey()
   final String identifier;
@@ -179,7 +179,7 @@ abstract class _LoginFormState implements LoginFormState {
   factory _LoginFormState.fromJson(Map<String, dynamic> json) =
       _$LoginFormStateImpl.fromJson;
 
-  /// Email or staff code ("Email hoặc mã nhân viên").
+  /// Email used to sign in.
   @override
   String get identifier;
   @override
