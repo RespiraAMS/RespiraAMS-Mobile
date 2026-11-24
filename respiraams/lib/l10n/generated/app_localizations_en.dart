@@ -431,7 +431,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get authRoleNotAllowed =>
-      'The mobile app is for doctor accounts only. Sign in with a doctor account or contact your administrator.';
+      'The mobile app is for doctor and head-of-department accounts only. Sign in with a supported account or contact your administrator.';
 
   @override
   String get authForgotTitle => 'Forgot password?';
