@@ -18,6 +18,17 @@ class DoctorProfile {
   final String? avatarUrl;
 }
 
+/// Roles the mobile client supports. Both have a doctor profile and are
+/// accepted by the patient/clinical service role matrix; Admin and
+/// MedicalRegulationReviewer are rejected.
+const _allowedRoles = {'doctor', 'headdepartmentdoctor'};
+
+bool _isAllowedRole(String? role) {
+  final normalized = role?.trim().toLowerCase();
+  if (normalized == null || normalized.isEmpty) return false;
+  return _allowedRoles.contains(normalized);
+}
+
 /// Holds the active session (null = logged out). The login screen drives
 /// [login]; the app header's logout button drives [logout].
 @Riverpod(keepAlive: true)
@@ -30,10 +41,10 @@ class SessionController extends _$SessionController {
     final id = storage.doctorId;
     if (!storage.hasSession || id == null) return null;
 
-    // The mobile client is doctor-facing only: a session restored from a
-    // non-doctor account (e.g. saved before this restriction) is discarded.
+    // The mobile client is doctor-facing only: a session restored from an
+    // unsupported account (e.g. saved before this restriction) is discarded.
     final role = storage.role?.trim().toLowerCase();
-    if (role != null && role.isNotEmpty && role != 'doctor') return null;
+    if (role != null && role.isNotEmpty && !_isAllowedRole(role)) return null;
 
     final name = storage.doctorName ?? storage.email ?? id;
     return DoctorProfile(id: id, name: name);
@@ -50,10 +61,10 @@ class SessionController extends _$SessionController {
         .read(authServiceProvider)
         .login(email: email, password: password);
 
-    // The mobile client is doctor-facing only. Other roles are blocked by the
-    // service-level role matrix, so reject them before entering the workspace
+    // Only Doctor and HeadDepartmentDoctor may enter the workspace; the other
+    // roles are blocked by the service-level role matrix, so reject them here
     // instead of letting every screen fail with 403.
-    if ((session.role ?? '').trim().toLowerCase() != 'doctor') {
+    if (!_isAllowedRole(session.role)) {
       await ref.read(authServiceProvider).logout();
       throw const ApiException(403, LocalApiError.roleNotAllowed);
     }
