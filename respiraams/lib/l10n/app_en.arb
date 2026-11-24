@@ -140,7 +140,7 @@
   "authMissingCredentials": "Enter your email and password.",
   "authEmailInvalid": "That email address is not valid.",
   "authServerUnreachable": "Couldn't reach the server. Please try again.",
-  "authRoleNotAllowed": "The mobile app is for doctor accounts only. Sign in with a doctor account or contact your administrator.",
+  "authRoleNotAllowed": "The mobile app is for doctor and head-of-department accounts only. Sign in with a supported account or contact your administrator.",
 
   "authForgotTitle": "Forgot password?",
   "authForgotBody": "Enter your work email. We'll send a 6-digit verification code.",

@@ -175,7 +175,7 @@
   "authMissingCredentials": "Vui lòng nhập email và mật khẩu.",
   "authEmailInvalid": "Email chưa đúng định dạng.",
   "authServerUnreachable": "Không thể kết nối máy chủ. Vui lòng thử lại.",
-  "authRoleNotAllowed": "Ứng dụng di động chỉ dành cho tài khoản bác sĩ. Vui lòng đăng nhập bằng tài khoản bác sĩ hoặc liên hệ quản trị viên.",
+  "authRoleNotAllowed": "Ứng dụng di động chỉ dành cho tài khoản bác sĩ hoặc trưởng khoa. Vui lòng đăng nhập bằng tài khoản phù hợp hoặc liên hệ quản trị viên.",
 
   "authForgotTitle": "Quên mật khẩu?",
   "authForgotBody": "Nhập email công việc. Hệ thống sẽ gửi mã xác thực gồm 6 chữ số.",

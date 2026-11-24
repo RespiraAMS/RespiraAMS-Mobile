@@ -905,7 +905,7 @@ abstract class AppLocalizations {
   /// No description provided for @authRoleNotAllowed.
   ///
   /// In vi, this message translates to:
-  /// **'Ứng dụng di động chỉ dành cho tài khoản bác sĩ. Vui lòng đăng nhập bằng tài khoản bác sĩ hoặc liên hệ quản trị viên.'**
+  /// **'Ứng dụng di động chỉ dành cho tài khoản bác sĩ hoặc trưởng khoa. Vui lòng đăng nhập bằng tài khoản phù hợp hoặc liên hệ quản trị viên.'**
   String get authRoleNotAllowed;
 
   /// No description provided for @authForgotTitle.

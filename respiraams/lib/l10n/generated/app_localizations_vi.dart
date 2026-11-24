@@ -430,7 +430,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get authRoleNotAllowed =>
-      'Ứng dụng di động chỉ dành cho tài khoản bác sĩ. Vui lòng đăng nhập bằng tài khoản bác sĩ hoặc liên hệ quản trị viên.';
+      'Ứng dụng di động chỉ dành cho tài khoản bác sĩ hoặc trưởng khoa. Vui lòng đăng nhập bằng tài khoản phù hợp hoặc liên hệ quản trị viên.';
 
   @override
   String get authForgotTitle => 'Quên mật khẩu?';
