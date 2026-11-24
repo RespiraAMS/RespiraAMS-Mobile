@@ -37,6 +37,26 @@ class DoctorService {
     final res = await _dio.get('/doctors/$id');
     return unwrapData(res, DoctorProfileDto.fromJson);
   }
+
+  /// `GET /doctors/subordinates` — paged roster of the doctors managed by the
+  /// signed-in head of department.
+  ///
+  /// HeadDepartmentDoctor-only endpoint; used to resolve the doctor names that
+  /// appear in the analysis reports (the full roster is Admin-only).
+  Future<List<DoctorProfileDto>> getSubordinates({
+    int page = 1,
+    int size = 100,
+  }) async {
+    final res = await _dio.get(
+      '/doctors/subordinates',
+      queryParameters: {'page': page, 'size': size},
+    );
+    final data = unwrapEnvelope(res);
+    final items = data['items'] as List<dynamic>? ?? [];
+    return items
+        .map((e) => DoctorProfileDto.fromJson(e as Map<String, dynamic>))
+        .toList();
+  }
 }
 
 /// Mirrors `Respira.Doctor...GetById.Result.DoctorResult` /

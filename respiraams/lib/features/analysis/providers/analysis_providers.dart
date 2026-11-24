@@ -3,7 +3,9 @@ import 'package:dio/dio.dart';
 
 import '../../../core/network/api_client.dart';
 import '../../../core/network/api_response.dart';
+import '../../../core/network/token_storage.dart';
 import '../../authentication/providers/current_doctor_provider.dart';
+import '../../authentication/services/doctor_service.dart';
 import '../models/analysis_report.dart';
 import '../services/analysis_service.dart';
 
@@ -134,18 +136,44 @@ final analysisReportProvider =
 
 /// `accountId → doctor display name`.
 ///
-/// The analysis payload only carries the doctor's **account** id. The mobile
-/// app is doctor-facing only and the backend scopes a Doctor account to its
-/// own reports, so the signed-in profile covers every row; unknown ids fall
-/// back to a shortened id in the UI.
+/// The analysis payload only carries the doctor's **account** id. A Doctor
+/// account is scoped by the backend to its own reports, so the signed-in
+/// profile covers every row. A HeadDepartmentDoctor sees every report, so the
+/// subordinate roster is walked as well (the full roster is Admin-only);
+/// anything still unresolved falls back to a shortened id in the UI.
 final doctorNamesProvider = FutureProvider<Map<String, String>>((ref) async {
+  final names = <String, String>{};
+
   try {
     final current = await ref.watch(currentDoctorProvider.future);
-    if (current == null || current.accountId.isEmpty) return const {};
-    final name = current.fullName.trim();
-    return name.isEmpty ? const {} : {current.accountId: name};
+    if (current != null && current.accountId.isNotEmpty) {
+      final name = current.fullName.trim();
+      if (name.isNotEmpty) names[current.accountId] = name;
+    }
   } catch (_) {
     // Names are cosmetic: fall back to the ids already displayed.
-    return const {};
   }
+
+  final role = TokenStorage(ref.read(sharedPreferencesProvider)).role
+      ?.trim()
+      .toLowerCase();
+  if (role == 'headdepartmentdoctor') {
+    try {
+      final service = ref.read(doctorServiceProvider);
+      const pageSize = 100;
+      for (var page = 1; page <= 10; page++) {
+        final doctors = await service.getSubordinates(page: page, size: pageSize);
+        for (final doctor in doctors) {
+          if (doctor.accountId.isEmpty) continue;
+          final name = doctor.fullName.trim();
+          if (name.isNotEmpty) names[doctor.accountId] = name;
+        }
+        if (doctors.length < pageSize) break;
+      }
+    } catch (_) {
+      // Restricted or unavailable roster — keep the names already collected.
+    }
+  }
+
+  return names;
 });

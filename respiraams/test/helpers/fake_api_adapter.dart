@@ -108,6 +108,35 @@ class FakeApiAdapter implements HttpClientAdapter {
         'refreshToken': 'refresh-token-2',
       }),
     ),
+    // HeadDepartmentDoctor-only roster used to resolve doctor names in the
+    // analysis reports. Must precede `/doctors/` (substring match).
+    'GET /doctors/subordinates': MockedResponse(
+      200,
+      envelope({
+        'metadata': {
+          'hasNextPage': false,
+          'hasPreviousPage': false,
+          'totalItemCount': 2,
+          'pageCount': 1,
+          'currentPage': 1,
+          'pageSize': 100,
+        },
+        'items': [
+          doctorProfile(
+            id: 'doctor-2',
+            accountId: 'account-2',
+            firstName: 'Lan',
+            lastName: 'Trần',
+          ),
+          doctorProfile(
+            id: 'doctor-3',
+            accountId: 'account-3',
+            firstName: 'Hùng',
+            lastName: 'Phạm',
+          ),
+        ],
+      }),
+    ),
     // Doctor-facing clients resolve their own profile through `/doctors/me`.
     // It must precede the by-id handler, which also matches this path.
     'GET /doctors/me': MockedResponse(
@@ -260,6 +289,8 @@ class FakeApiAdapter implements HttpClientAdapter {
   /// Doctor of the `/doctors/me` fixture; override individual fields to model
   /// the profile after an edit.
   static Map<String, dynamic> doctorProfile({
+    String id = 'doctor-1',
+    String accountId = 'account-1',
     String firstName = 'Minh',
     String lastName = 'Nguyễn',
     String email = 'bs.minh@respira.vn',
@@ -273,8 +304,8 @@ class FakeApiAdapter implements HttpClientAdapter {
     String? dateOfBirth = '1971-04-12',
     String? avatarUrl,
   }) => {
-        'id': 'doctor-1',
-        'accountId': 'account-1',
+        'id': id,
+        'accountId': accountId,
         'firstName': firstName,
         'lastName': lastName,
         'degrees': degrees,
