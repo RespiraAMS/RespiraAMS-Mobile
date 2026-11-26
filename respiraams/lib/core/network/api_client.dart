@@ -54,12 +54,18 @@ const String kApiBasePath = '/api/$kApiVersion';
 String get kApiRootUrl => '$kApiBaseUrl$kApiBasePath';
 
 /// Base options shared by every Dio instance in the app.
-BaseOptions gatewayBaseOptions({String? baseUrl}) => BaseOptions(
-      baseUrl: baseUrl ?? kApiBaseUrl,
-      connectTimeout: const Duration(seconds: 15),
-      receiveTimeout: const Duration(seconds: 20),
-      headers: {'Accept': 'application/json'},
-    );
+BaseOptions gatewayBaseOptions({String? baseUrl}) {
+  final root = baseUrl ?? kApiBaseUrl;
+  return BaseOptions(
+    baseUrl: root,
+    connectTimeout: const Duration(seconds: 20), // ngrok thêm latency
+    receiveTimeout: const Duration(seconds: 30),
+    headers: {
+      'Accept': 'application/json',
+      if (root.contains('ngrok')) 'ngrok-skip-browser-warning': 'true',
+    },
+  );
+}
 
 /// Trusts the .NET dev certificate in debug builds only (Aspire's
 /// `CN=localhost` cert fails hostname validation for `10.0.2.2` / LAN
@@ -67,8 +73,8 @@ BaseOptions gatewayBaseOptions({String? baseUrl}) => BaseOptions(
 void attachDebugTrust(Dio dio) {
   if (!kDebugMode) return;
   dio.httpClientAdapter = IOHttpClientAdapter(
-    createHttpClient: () => HttpClient()
-      ..badCertificateCallback = (cert, host, port) => true,
+    createHttpClient: () =>
+        HttpClient()..badCertificateCallback = (cert, host, port) => true,
   );
 }
 
@@ -101,9 +107,7 @@ final Provider<Dio> apiClientProvider = Provider<Dio>((ref) {
         final status = error.response?.statusCode;
         final isAuthRoute = error.requestOptions.path.contains('/auth/');
 
-        if (status == 401 &&
-            !isAuthRoute &&
-            storage.refreshToken != null) {
+        if (status == 401 && !isAuthRoute && storage.refreshToken != null) {
           final retried = await refreshAndRetry(dio, storage, error);
           return handler.resolve(retried);
         }
