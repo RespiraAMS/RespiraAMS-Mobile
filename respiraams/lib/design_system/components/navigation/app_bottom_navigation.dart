@@ -33,26 +33,37 @@ class AppBottomNavigation extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = context.respiraColors;
 
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: Spacing.inline,
-        vertical: Spacing.xxs,
-      ),
-      decoration: BoxDecoration(
-        color: c.surface,
-        borderRadius: AppRadius.lg,
-        border: Border.all(color: c.borderSubtle),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          for (var i = 0; i < items.length; i++)
-            _NavItem(
-              item: items[i],
-              active: i == activeIndex,
-              onTap: () => onTap(i),
-            ),
-        ],
+    // Five labelled destinations at the OS/in-app text scale can be wider than
+    // a narrow phone (e.g. a Galaxy A34 at 1.15×), which used to overflow the
+    // row. The labels are therefore clamped and every destination takes an
+    // equal share of the bar instead of its intrinsic width.
+    return MediaQuery.withClampedTextScaling(
+      maxScaleFactor: 1.3,
+      child: SafeArea(
+        top: false,
+        child: Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: Spacing.xxxs,
+            vertical: Spacing.xxs,
+          ),
+          decoration: BoxDecoration(
+            color: c.surface,
+            borderRadius: AppRadius.lg,
+            border: Border.all(color: c.borderSubtle),
+          ),
+          child: Row(
+            children: [
+              for (var i = 0; i < items.length; i++)
+                Expanded(
+                  child: _NavItem(
+                    item: items[i],
+                    active: i == activeIndex,
+                    onTap: () => onTap(i),
+                  ),
+                ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -86,7 +97,7 @@ class _NavItem extends StatelessWidget {
             ),
             child: Padding(
               padding: const EdgeInsets.symmetric(
-                horizontal: Spacing.control - 4,
+                horizontal: Spacing.xxxs,
                 vertical: Spacing.xxs,
               ),
               child: Column(
@@ -99,14 +110,25 @@ class _NavItem extends StatelessWidget {
                     color: active ? c.primary : c.iconMuted,
                   ),
                   const SizedBox(height: Spacing.xxxs),
-                  Text(
-                    item.label,
-                    maxLines: 1,
-                    style: TypographyTokens.label(context).copyWith(
-                      // Active keeps the Label weight; inactive relaxes it
-                      // while staying inside the type scale (component impl).
-                      fontWeight: active ? FontWeight.w600 : FontWeight.w400,
-                      color: active ? c.primary : c.textSecondary,
+                  // Long labels ("Calculators") shrink to the destination
+                  // width instead of pushing the bar past the screen edge.
+                  SizedBox(
+                    width: double.infinity,
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        item.label,
+                        maxLines: 1,
+                        softWrap: false,
+                        style: TypographyTokens.label(context).copyWith(
+                          // Active keeps the Label weight; inactive relaxes it
+                          // while staying inside the type scale (component
+                          // impl).
+                          fontWeight:
+                              active ? FontWeight.w600 : FontWeight.w400,
+                          color: active ? c.primary : c.textSecondary,
+                        ),
+                      ),
                     ),
                   ),
                 ],
